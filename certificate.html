@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate of Completion</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="brand">MATRIX <span class="accent">COURSE VIEWER</span></a>
+    <nav>
+      <a href="index.html">Catalog</a>
+      <a id="back-link" href="#">Back to course</a>
+    </nav>
+  </header>
+
+  <main class="cert-shell">
+    <div class="cert-controls">
+      <input type="text" class="cert-input" id="name-input" placeholder="Enter your full name">
+      <button class="btn btn-primary" id="print-btn">Print certificate</button>
+    </div>
+
+    <div class="cert" id="certificate">
+      <div class="crest">MATRIX</div>
+      <div>
+        <div class="title">Certificate of Completion</div>
+        <div class="subtitle">This is to certify that</div>
+        <div class="recipient" id="cert-name">&nbsp;</div>
+        <p class="body" id="cert-body">Has completed a Continuing Professional Development training course on E-blocks 3 and Flowcode</p>
+        <div class="subtitle" style="margin-top:0.8rem;">on <span id="cert-date"></span></div>
+      </div>
+      <div class="signoff">
+        <div class="col">
+          <div class="line"></div>
+          <strong>Time spent</strong>
+          <div id="cert-hours">— hours</div>
+        </div>
+        <div class="col">
+          <div class="line"></div>
+          <strong>Completion</strong>
+          <div id="cert-completion">100%</div>
+        </div>
+        <div class="col">
+          <div class="line"></div>
+          <strong>Signed</strong>
+          <div>The Matrix team</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (async function () {
+      const params = new URLSearchParams(location.search);
+      const courseId = params.get('id');
+      if (!courseId) { location.replace('index.html'); return; }
+
+      document.getElementById('back-link').href = 'course.html?id=' + encodeURIComponent(courseId);
+
+      const res = await fetch('data/courses.json');
+      const data = await res.json();
+      const course = data.courses.find((c) => c.id === courseId);
+
+      const titleSlot = document.querySelector('.cert .title');
+      const bodySlot = document.getElementById('cert-body');
+      if (course) {
+        if (course.id === 'CO0001') {
+          bodySlot.textContent = 'Has completed a Continuing Professional Development training course on E-blocks 3 and Flowcode';
+        } else {
+          bodySlot.textContent = `Has completed the ${course.title} course`;
+        }
+      }
+
+      const today = new Date();
+      document.getElementById('cert-date').textContent = today.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+
+      const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + courseId) || '{}');
+      const completedCount = course ? course.screens.filter((s) => progress[s.id]).length : 0;
+      const total = course ? course.screens.length : 0;
+      const pct = total ? Math.round((completedCount / total) * 100) : 0;
+      const totalHours = course ? course.screens.filter((s) => progress[s.id]).reduce((sum, s) => sum + (Number(s.hours) || 0), 0) : 0;
+      document.getElementById('cert-completion').textContent = pct + '% (' + completedCount + ' of ' + total + ')';
+      document.getElementById('cert-hours').textContent = totalHours.toFixed(1) + ' hours';
+
+      const nameInput = document.getElementById('name-input');
+      const nameKey = 'matrix-lms:cert-name:' + courseId;
+      const stored = localStorage.getItem(nameKey);
+      if (stored) nameInput.value = stored;
+      const nameSlot = document.getElementById('cert-name');
+      const setName = () => {
+        const v = nameInput.value.trim();
+        nameSlot.textContent = v || ' ';
+        localStorage.setItem(nameKey, v);
+      };
+      nameInput.addEventListener('input', setName);
+      setName();
+
+      document.getElementById('print-btn').addEventListener('click', () => window.print());
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="brand">MATRIX <span class="accent">COURSE VIEWER</span></a>
+    <nav>
+      <a href="index.html">Catalog</a>
+    </nav>
+  </header>
+
+  <div class="viewer-shell" id="viewer-shell">
+    <aside class="viewer-sidebar">
+      <div class="viewer-course-info">
+        <span class="code" id="course-code">&nbsp;</span>
+        <h1 id="course-title">Loading course&hellip;</h1>
+        <div class="progress"><span id="progress-bar"></span></div>
+        <div class="progress-label">
+          <span><strong id="progress-completed">0</strong> of <strong id="progress-total">0</strong> complete</span>
+          <span id="progress-percent">0%</span>
+        </div>
+      </div>
+      <ul class="screen-list" id="screen-list"></ul>
+      <div class="certificate-cta" id="certificate-cta" hidden>
+        <a class="btn btn-primary" id="certificate-link" style="width:100%;text-align:center;">Get your certificate</a>
+      </div>
+    </aside>
+
+    <section class="viewer-main">
+      <div class="screen-bar">
+        <div>
+          <h2 id="screen-title">&nbsp;</h2>
+          <div class="meta" id="screen-meta">&nbsp;</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-secondary" id="prev-btn">&larr; Previous</button>
+          <button class="btn btn-primary" id="complete-btn">Mark complete &amp; next</button>
+        </div>
+      </div>
+      <div class="screen-stage" id="screen-stage">
+        <p class="stage-loading">Loading&hellip;</p>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

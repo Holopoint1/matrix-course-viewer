@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matrix Course Viewer</title>
+  <meta name="description" content="Matrix TSL Course Viewer - browser-based courses for engineering education.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="brand">MATRIX <span class="accent">COURSE VIEWER</span></a>
+    <nav>
+      <a href="index.html">Catalog</a>
+    </nav>
+  </header>
+
+  <section class="catalog-hero">
+    <span class="eyebrow">Matrix TSL · Course Library</span>
+    <h1>Browser-based learning, built on Flowcode &amp; E-blocks 3</h1>
+    <p>Engineering education courses for college and university — pick a course to start.</p>
+  </section>
+
+  <main class="catalog" id="catalog">
+    <p class="stage-loading">Loading courses&hellip;</p>
+  </main>
+
+  <script>
+    (async function () {
+      const root = document.getElementById('catalog');
+      try {
+        const res = await fetch('data/courses.json');
+        const data = await res.json();
+        root.innerHTML = '';
+        for (const course of data.courses) {
+          const screenCount = course.screens.length;
+          const totalHours = course.screens.reduce((sum, s) => sum + (Number(s.hours) || 0), 0);
+          const card = document.createElement('article');
+          card.className = 'course-card';
+          const missing = course.screens.filter((s) => s.missing).length;
+          card.innerHTML = `
+            <div class="thumb" style="background-image:url('content/${course.id}/opening.svg')"></div>
+            <div class="body">
+              <span class="code">${course.code}</span>
+              <h2>${course.title}</h2>
+              <p>${course.shortDescription}</p>
+              <div class="meta">
+                <span class="chip"><strong>${screenCount}</strong> screens</span>
+                <span class="chip"><strong>${totalHours.toFixed(1)}</strong> hours</span>
+                ${missing ? `<span class="chip" style="background:var(--warn-bg);border-color:var(--warn-border);color:var(--warn);"><strong>${missing}</strong> missing</span>` : ''}
+              </div>
+              <div class="actions">
+                <a class="btn btn-primary" href="course.html?id=${course.id}">Start course</a>
+              </div>
+            </div>`;
+          root.appendChild(card);
+        }
+      } catch (err) {
+        root.innerHTML = '<p class="stage-loading">Could not load courses. ' + err.message + '</p>';
+      }
+    })();
+  </script>
+</body>
+</html>
