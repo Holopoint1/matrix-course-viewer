@@ -91,6 +91,7 @@
       const data = await res.json();
       course = data.courses.find((c) => c.id === courseId);
       if (!course) throw new Error('Course not found: ' + courseId);
+      if (window.MatrixCMS) course = window.MatrixCMS.applyOverrides(course);
       if (window.Gamify) {
         await window.Gamify.init();
         window.Gamify.trackCourseVisit(courseId);
@@ -115,7 +116,15 @@
     renderSidebar();
     renderProgress();
 
-    const startIndex = restoreLastIndex();
+    /* Deep-link via ?screen=<id> takes priority over the saved last-viewed index */
+    const screenIdParam = params.get('screen');
+    let startIndex;
+    if (screenIdParam) {
+      const idx = course.screens.findIndex((s) => s.id === screenIdParam);
+      startIndex = idx >= 0 ? idx : restoreLastIndex();
+    } else {
+      startIndex = restoreLastIndex();
+    }
     showScreen(startIndex);
 
     els.prevBtn.addEventListener('click', () => {
@@ -518,9 +527,15 @@
     stage.appendChild(wrap);
     const inner = wrap.querySelector('.stage-doc-inner');
     try {
-      const res = await fetch(screen.src);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
+      let text;
+      const cmsOverride = window.MatrixCMS ? window.MatrixCMS.getHtmlOverride(screen.src) : null;
+      if (cmsOverride != null) {
+        text = cmsOverride;
+      } else {
+        const res = await fetch(screen.src);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        text = await res.text();
+      }
       const doc = new DOMParser().parseFromString(text, 'text/html');
       const pageEl = doc.querySelector('.page');
       let bodyHtml = pageEl ? pageEl.innerHTML : (doc.body ? doc.body.innerHTML : text);

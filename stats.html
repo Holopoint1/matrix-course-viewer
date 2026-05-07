@@ -17,6 +17,7 @@
       <a href="index.html">Catalog</a>
       <a href="stats.html" class="active">My Stats</a>
       <a href="preview.html">Preview</a>
+      <a href="admin.html">Admin</a>
     </nav>
   </header>
 
@@ -91,6 +92,7 @@
   </footer>
 
   <script src="assets/gamify.js"></script>
+  <script src="assets/cms-overrides.js"></script>
   <script>
     (async function () {
       function escapeHtml(s) {
@@ -101,6 +103,9 @@
 
       await window.Gamify.init();
       const data = await fetch('data/courses.json').then((r) => r.json());
+      if (window.MatrixCMS) {
+        data.courses = data.courses.map((c) => window.MatrixCMS.applyOverrides(c));
+      }
       const stats = window.Gamify.getStats();
       const streak = window.Gamify.getStreak();
       const fmt = window.Gamify.formatDuration;

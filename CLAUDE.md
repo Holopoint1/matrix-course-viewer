@@ -20,18 +20,36 @@ This applies to:
 ## Architecture
 
 ```
-data/courses.json   ← source of truth for course structure. Edit this to add/edit screens.
-data/achievements.json ← achievement catalog. Each entry has a `test` string evaluated by gamify.js.
+data/courses.json       ← source of truth for course structure. Edit this to add/edit screens.
+data/achievements.json  ← achievement catalog. Each entry has a `test` string evaluated by gamify.js.
 
-assets/app.js       ← course viewer (renders sidebar, screens, handles completion).
-                      Owns the worksheet enhancer (`enhanceWorksheetHtml`) that
-                      transforms .htm and mammoth-converted .docx output.
-assets/gamify.js    ← achievement engine, toast/confetti, streaks.
-                      Globally exposed as `window.Gamify`.
-assets/styles.css   ← all site styles. Uses CSS custom properties — change palette
-                      via the `:root` block.
+assets/app.js           ← course viewer (renders sidebar, screens, handles completion).
+                          Owns the worksheet enhancer (`enhanceWorksheetHtml`) that
+                          transforms .htm and mammoth-converted .docx output.
+                          Includes the per-screen time tracker.
+assets/gamify.js        ← achievement engine, toast/confetti, streaks, time stats.
+                          Globally exposed as `window.Gamify`.
+assets/cms-overrides.js ← admin edits persistence layer (localStorage Phase 1).
+                          `window.MatrixCMS.applyOverrides(course)` is called by
+                          every page that loads courses.json. Phase 2 swaps the
+                          storage layer for a real backend without touching callers.
+assets/sidebar.js       ← shared left-rail renderer used by dashboard.html
+                          (course.html still has its own sidebar logic in app.js).
+                          Globally exposed as `window.MatrixSidebar`.
+assets/styles.css       ← all site styles. Uses CSS custom properties — change palette
+                          via the `:root` block.
 
-server.js           ← static server with .docx, .pptx mime types. Port 4173 by default.
+index.html              ← catalog + achievements grid + Resources-to-send panel
+dashboard.html          ← per-course landing (hero, prep, promo cards, wiki refs, worksheet grid)
+course.html             ← per-screen viewer
+certificate.html        ← printable certificate of completion
+stats.html              ← My Stats — totals, per-course, per-screen, achievements, reset
+preview.html            ← author drop-to-preview tool (file → mammoth → enhancer → render)
+                          plus per-card "Download as PDF" button
+admin.html              ← CMS admin (login + course meta + screen editor + HTML body editor + export)
+
+server.js               ← static server with .docx, .pptx mime types. Port 4173 by default.
+tools/build-scorm.js    ← author-time SCORM 1.2 zip builder (npm install jszip)
 ```
 
 The mammoth library is loaded from a CDN in `course.html`. The site has **no build step**; refresh = deploy.
@@ -69,9 +87,14 @@ When adding a course, also create:
 
 - `.htm` source files (split-doc output) embed their own `<style>` block. The renderer strips it by extracting only the `.page` div's innerHTML — keep that behaviour unless you have a reason to change it.
 - The `screen-checkbox` is a `<button>` (not `<div>`) so keyboard users can toggle. Don't regress this.
-- `localStorage` keys are namespaced: `matrix-lms:progress:<courseId>`, `matrix-lms:unlocked`, `matrix-lms:visited-courses`, `matrix-lms:streak`. Don't change these keys — existing user data will be lost.
+- `localStorage` keys are namespaced. Don't change these keys — existing user data will be lost:
+  - Progress / time / streak: `matrix-lms:progress:<courseId>`, `matrix-lms:time:<courseId>`, `matrix-lms:streak`
+  - Gamification: `matrix-lms:unlocked`, `matrix-lms:visited-courses`
+  - CMS: `matrix-lms:cms:courses`, `matrix-lms:cms:screens`, `matrix-lms:cms:html`, `matrix-lms:cms:auth`
 - Mammoth runs in the browser. Large `.docx` files (with embedded images > a few MB) may stutter on first render. Caching is in `docCache` (in-memory only — clears on page reload).
 - The viewer fetches `data/courses.json` on every page load. Browsers cache it for 5 minutes per the server's `Cache-Control` header. Hard-refresh after editing.
+- **Always apply CMS overrides** when loading courses.json: `data.courses = data.courses.map((c) => window.MatrixCMS.applyOverrides(c))`. Skipping this means admin edits don't show on that page.
+- HTML override in worksheet renderer: `window.MatrixCMS.getHtmlOverride(path)` is called before fetching — if non-null, use it instead of fetching. Keep this hook intact.
 
 ## When in doubt
 

@@ -206,14 +206,24 @@ Adding a new test type means editing `passes()` in `assets/gamify.js` and adding
 
 ## Removing demo data / resetting state
 
-There's no UI button yet. From the browser DevTools console:
+Two equivalent options:
 
+**UI** — open any course or the Stats page; click **Reset all progress** in the sidebar / page footer. Confirms before wiping.
+
+**DevTools console** — same effect, no clicks:
 ```js
-// Wipe all progress, achievements, streak, visit history for this site
-Object.keys(localStorage)
-  .filter(k => k.startsWith('matrix-lms:'))
-  .forEach(k => localStorage.removeItem(k));
+Object.keys(localStorage).filter((k) => k.startsWith('matrix-lms:')).forEach((k) => localStorage.removeItem(k));
 location.reload();
 ```
 
-(See `ROADMAP.md` — a Settings → Reset progress button is on the planned list.)
+## Editing without code: the Admin CMS
+
+For non-technical edits use **`/admin.html`** (sign in with the pre-filled `admin` / `matrix` credentials). Full guide in [`ADMIN.md`](ADMIN.md). Briefly:
+
+- Edit course meta, per-screen fields, intro/reference HTML pages
+- Live preview iframe for HTML edits
+- Edits persist to localStorage and apply across the whole site
+- "Export changes" downloads files for a developer to commit
+- Phase 1 (current): per-browser. Phase 2 (real multi-user backend) on the roadmap.
+
+When edits are exported and committed, they overwrite the originals — at which point the localStorage overrides become redundant for those fields. Clear them via the admin sidebar's "Clear all overrides" if you want to test from a clean slate.

@@ -299,5 +299,13 @@ Things this implementation adds that the master doc does not specify:
 - **Toast popups + confetti** on completion / unlock
 - **Worksheet enhancer** — promotes pseudo-headings (`Design brief:`, `Hardware:`, etc.) into icon-chip `<h2>`s, embeds bare YouTube URLs inline, collapses layout-only header tables
 - **Tier inference** — per `assets/gamify.js`, derives tier from `CP####-N.docx` filename pattern
+- **Per-screen time tracker** — real elapsed time written to `cmi.core.session_time` inside SCORM and shown on the certificate
+- **Stats page** (`/stats.html`) — totals, per-course / per-screen breakdown, achievements, reset
+- **Author preview tool** (`/preview.html`) — drop-to-render with inline mammoth + the same enhancer; per-card "Download as PDF"
+- **Course Dashboard** (`/dashboard.html?id=...`) — per-course landing with hero, prep, promo cards, wiki refs, worksheet grid (the "before-you-start" experience the master doc describes prose-only as the "Preparation" worksheet, here surfaced as a real page)
+- **Admin CMS** (`/admin.html`) — non-technical content editing with localStorage persistence and export
+- **Resources-to-send panel** — dashboard widget listing every missing asset with destination paths
+- **SCORM 1.2 packaging** — `tools/build-scorm.js` produces self-contained zips per `CO` course; addresses master-doc § "AI instructions for Introduction to microcontrollers SCORM content course"
+- **Combined-PDF bundle generator** — addresses master-doc § "AI instructions for Introduction to microcontrollers worksheets.pdf" (the head + cont + 1-12 + TN bundle)
 
 These are additive — none of them changes a master-doc requirement.

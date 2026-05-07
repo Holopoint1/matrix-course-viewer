@@ -58,6 +58,32 @@ At render time the viewer rewrites docx / htm output for readability:
 - "Download all worksheets PDF" button in the course-viewer sidebar
 - Renders every `document` screen via mammoth → composed HTML → PDF via `html2pdf.js`
 - Filename pattern: `<course>-worksheets.pdf`
+- Per-screen "Download as PDF" button on every worksheet
+- "Download as PDF" on every Preview-page card
+
+**Course Dashboard (`/dashboard.html?id=...`)**
+- Per-course landing page reached from the catalog "Start course" button
+- Hero with title / description / Bronze-Silver-Gold tier counts
+- Verbatim "Before you start" preparation block from the master doc, with the Flowcode Embedded intro video embedded
+- Promo cards: Matrix Multimedia YouTube channel, Flowcode YouTube channel, Flowcode software download
+- Reference: Flowcode Wiki + matrixtsl.com / flowcode.co.uk links
+- Worksheets grid grouped by tier with progress
+- Persistent left sidebar (Dashboard / All Courses / per-tier numbered worksheet list / SCORM compliance / Worksheet compiler / Admin / Reset)
+
+**Admin CMS (`/admin.html`)**
+- Browser-based content editor for non-technical users — sign in with pre-filled `admin` / `matrix` credentials
+- Edit course meta (title, code, description, hours, certificate)
+- Per-screen editor (title, type, hours, path, missing flag)
+- HTML page editor with live preview iframe (welcome / learning objectives / equipment / CPD objectives etc.)
+- Edits persist to localStorage and apply live across the whole site
+- "Export changes" downloads the merged `courses.json` + edited HTML files for a developer to commit
+- Phase 1 (current): static-host friendly, per-browser. Phase 2 (real backend) on the roadmap.
+- Full guide: [ADMIN.md](ADMIN.md)
+
+**Resource-missing surfacing**
+- "Resources to send" panel on the dashboard listing every missing file across courses with destination paths
+- Per-screen "Resource missing — please send `<filename>`" panel inside the viewer
+- Opening images flagged missing per master-doc filenames; catalog cards keep a thumbnail placeholder (`thumbnail` field) for visual continuity
 
 ## Quick start
 
@@ -106,10 +132,12 @@ lms/
 ## Documentation
 
 - **[MASTER-DOC-SPEC.md](MASTER-DOC-SPEC.md)** — bulletproof verbatim mapping of `master_doc.docx` to this implementation; flags master-doc inconsistencies and decisions still owed
+- **[ADMIN.md](ADMIN.md)** — admin CMS guide (sign-in, what's editable, export workflow, Phase 1 vs Phase 2)
 - **[AUTHORING.md](AUTHORING.md)** — how `courses.json` works, four-pack worksheet ecosystem, hardware spec, adding courses or screens, where missing assets go
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** — local + GitHub Pages, Cloudflare/Netlify alternatives
-- **[ROADMAP.md](ROADMAP.md)** — what's still missing, the 12 master-doc discussion points, planned work
+- **[ROADMAP.md](ROADMAP.md)** — what's still missing, the 12 master-doc discussion points, Phase 2 backend plan, planned work
 - **[CLAUDE.md](CLAUDE.md)** — guidance for AI assistants working in this repo
+- **[tools/README.md](tools/README.md)** — SCORM build pipeline + bridge protocol
 
 ## Tech
 

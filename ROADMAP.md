@@ -105,14 +105,34 @@ These are tensions in the master doc the team needs to resolve before another pu
 
 ## Planned UX features (not in master doc)
 
-- **Settings → Reset progress** button (currently requires DevTools — see `AUTHORING.md`).
+- **Settings → Reset progress** button — ✅ **Done.** In the course-viewer / dashboard sidebar footer; also on the Stats page.
 - **Sound effect** on tick / unlock (off by default, opt-in).
 - **Hint reveals** — the "Hints:" section currently auto-expands. Turning it into click-to-reveal would unlock the **Hint Seeker** achievement and add real pedagogy value.
 - **Rapid-streak timer** for the **On a Roll** achievement (3 ticks in 60 s).
-- **Persistent left sidebar** across both catalog and course pages (Northbrick-reference style).
-- **Real course thumbnails** — replacing the SVG opening art with photographs (engineering board, aircraft, …).
-- **Per-course completion email** to a tutor / admin.
-- **Account / login** so progress syncs across devices instead of being per-browser.
+- **Real course thumbnails** — replacing the SVG opening art with photographs (engineering board, aircraft, …). Awaiting `CO0001 - opening.png`, `CO002 - opening.png`, `CO0003 - opening.png` from author.
+- **Per-course completion email** to a tutor / admin — Phase 2 (needs backend).
+- **Account / login** so progress syncs across devices instead of being per-browser — Phase 2.
+
+## Phase 2 — real backend
+
+Phase 1 of the CMS (in `admin.html` + `assets/cms-overrides.js`) is **localStorage-only**. Edits persist per browser; multi-admin / multi-device sync requires a real backend. Three viable hosting paths:
+
+| Option                  | Approx cost     | Effort | Pros                                                                | Cons                                                          |
+|-------------------------|-----------------|--------|---------------------------------------------------------------------|---------------------------------------------------------------|
+| **Vercel free + Blob**  | £0 (free tier)  | ~1 day | Auto-deploys on push, serverless functions, 1 GB Blob, 100 GB-h bw | Eventually consistent writes; not great for very large media |
+| **Cloudflare Pages + Workers + R2** | £0 / very low | ~1 day | Generous free tier, R2 for media, Workers for API                | Extra learning curve if not familiar with Cloudflare DX        |
+| **Liam's £10/mo VPS**   | £10/mo          | ~½ day | Full Node.js, filesystem, can use existing `server.js` extended     | You manage updates, backups, certs                            |
+
+What needs to change for Phase 2:
+
+- **`assets/cms-overrides.js`** — replace localStorage reads/writes with `fetch('/api/cms/...')` calls
+- **Auth** — replace the local-only password gate with a real session (NextAuth / Lucia / simple JWT)
+- **DB** — store course overrides + HTML body edits in a DB (Postgres / SQLite / Vercel KV)
+- **Blob storage** — handle media (PowerPoints, opening PNGs, future video uploads) in S3-compatible storage
+- **API endpoints** — `GET / POST / PATCH /api/courses/:id`, `GET / PUT /api/html/<path>`, `POST /api/upload`
+- **Deploy hooks** — when an admin saves, optionally bump the live build (or rely on always-on serverless rendering)
+
+The CMS frontend stays the same — only the persistence layer changes.
 
 ## Tech debt
 

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Dashboard | Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <img src="assets/matrix-logo.svg" alt="Matrix TSL" class="brand-logo">
+      <span class="brand-divider">|</span>
+      <span class="brand-sub">Course Viewer</span>
+    </a>
+    <nav>
+      <a href="index.html">Catalog</a>
+      <a href="stats.html">My Stats</a>
+      <a href="preview.html">Preview</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <div class="viewer-shell">
+    <aside class="viewer-sidebar" id="sidebar"></aside>
+    <main class="viewer-main dashboard-main">
+      <div class="dashboard-breadcrumb" id="breadcrumb"></div>
+
+      <section class="dash-hero" id="dash-hero">
+        <p class="dash-hero-eyebrow">Course hero</p>
+        <h1 id="dash-title">Loading&hellip;</h1>
+        <p id="dash-desc"></p>
+        <div class="dash-tier-counts" id="dash-tier-counts"></div>
+        <div class="dash-hero-actions">
+          <a class="btn btn-primary" id="dash-start-btn" href="#">Start course →</a>
+          <a class="btn btn-secondary" href="index.html">← All courses</a>
+        </div>
+      </section>
+
+      <section class="dash-section">
+        <div class="dash-section-head">
+          <h2 class="dash-section-eyebrow">Before you start</h2>
+          <h3 class="dash-section-title">Preparation</h3>
+        </div>
+        <div class="dash-prep">
+          <p>Before tackling the worksheets you will need to understand some basic information:</p>
+          <ul class="dash-prep-list">
+            <li><strong>Microcontroller basics</strong> &mdash; This document gives a basic explanation as to how microcontrollers work.</li>
+            <li><strong>Introduction to E-blocks</strong> &mdash; This document explains how the E-blocks system works.</li>
+            <li><strong>E-blocks datasheet</strong> &mdash; This document gives the full schematics of all the E-blocks 3 circuit boards.</li>
+            <li><strong>Flowcode Embedded getting started guide</strong> &mdash; This document shows you how to construct your first program from scratch.</li>
+            <li><strong>Introduction to Flowcode Embedded video</strong></li>
+          </ul>
+          <div class="inline-youtube" style="max-width:560px;margin:1.2rem 0 1rem;">
+            <iframe src="https://www.youtube.com/embed/_9WAcrK9LjE" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="dash-callout">
+            <strong>IMPORTANT</strong>
+            <p>Before you start using Flowcode make sure that you have the latest libraries by selecting <code>HELP&hellip;LIBRARY UPDATES&hellip;FULL DATABASE (FILES IN USE DROP BOX)&hellip;DOWNLOAD</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="dash-promos">
+        <a class="dash-promo dash-promo-yt" href="https://www.youtube.com/@MatrixTSLtd" target="_blank" rel="noopener">
+          <div class="dash-promo-icon">▶</div>
+          <div class="dash-promo-body">
+            <div class="dash-promo-eyebrow">YouTube</div>
+            <strong>Matrix Multimedia channel</strong>
+            <span>All course videos, walkthroughs and tutorials.</span>
+            <span class="dash-promo-link">Visit channel →</span>
+          </div>
+        </a>
+        <a class="dash-promo dash-promo-fc" href="https://www.youtube.com/user/MatrixMultimediaLtd" target="_blank" rel="noopener">
+          <div class="dash-promo-icon">▶</div>
+          <div class="dash-promo-body">
+            <div class="dash-promo-eyebrow">YouTube</div>
+            <strong>Flowcode channel</strong>
+            <span>Tutorials and demos directly from the Flowcode team.</span>
+            <span class="dash-promo-link">Visit channel →</span>
+          </div>
+        </a>
+        <a class="dash-promo dash-promo-dl" href="https://www.flowcode.co.uk/download/login/" target="_blank" rel="noopener">
+          <div class="dash-promo-icon">⤓</div>
+          <div class="dash-promo-body">
+            <div class="dash-promo-eyebrow">Software</div>
+            <strong>Download Flowcode</strong>
+            <span>Get the latest Flowcode build to complete the worksheets.</span>
+            <span class="dash-promo-link">Download ↓</span>
+          </div>
+        </a>
+      </section>
+
+      <section class="dash-section">
+        <div class="dash-section-head">
+          <h2 class="dash-section-eyebrow">Reference</h2>
+          <h3 class="dash-section-title">Flowcode Wiki &amp; documentation</h3>
+        </div>
+        <p class="dash-prep" style="margin-bottom:1rem;">The Flowcode Wiki is your go-to reference for everything from getting started to advanced component creation. Use these resources alongside the worksheets.</p>
+        <div class="dash-wiki-grid" id="dash-wiki-grid">
+          <a href="https://www.flowcode.co.uk/wiki/" target="_blank" rel="noopener">Wiki Home →</a>
+          <a href="https://www.flowcode.co.uk/wiki/index.php?title=Embedded_Getting_Started_Guide" target="_blank" rel="noopener">Embedded Getting Started Guide →</a>
+          <a href="https://www.flowcode.co.uk/wiki/index.php?title=Component_Library" target="_blank" rel="noopener">Component Library →</a>
+          <a href="https://www.flowcode.co.uk/wiki/index.php?title=Examples_and_Tutorials" target="_blank" rel="noopener">Examples &amp; Tutorials →</a>
+          <a href="https://www.flowcode.co.uk/wiki/index.php?title=Glossary" target="_blank" rel="noopener">Glossary →</a>
+          <a href="https://www.flowcode.co.uk" target="_blank" rel="noopener">flowcode.co.uk →</a>
+          <a href="https://www.matrixtsl.com" target="_blank" rel="noopener">matrixtsl.com →</a>
+        </div>
+      </section>
+
+      <section class="dash-section">
+        <div class="dash-section-head">
+          <h2 class="dash-section-eyebrow">Your worksheets</h2>
+          <h3 class="dash-section-title">Tap a worksheet to start</h3>
+        </div>
+        <div class="dash-worksheets" id="dash-worksheets"></div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <a class="btn btn-secondary" href="index.html">← All courses</a>
+        <a class="btn btn-primary" id="dash-start-btn-2" href="#">First worksheet →</a>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/gamify.js"></script>
+  <script src="assets/cms-overrides.js"></script>
+  <script src="assets/sidebar.js"></script>
+  <script>
+    (async function () {
+      const params = new URLSearchParams(location.search);
+      const courseId = params.get('id');
+      if (!courseId) { location.replace('index.html'); return; }
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
+
+      await window.Gamify.init();
+      const data = await fetch('data/courses.json').then((r) => r.json());
+      let course = data.courses.find((c) => c.id === courseId);
+      if (!course) { location.replace('index.html'); return; }
+      course = window.MatrixCMS ? window.MatrixCMS.applyOverrides(course) : course;
+
+      document.title = course.title + ' · Dashboard | Matrix Course Viewer';
+      window.MatrixSidebar.render(document.getElementById('sidebar'), course, 'dashboard');
+
+      /* Breadcrumb */
+      document.getElementById('breadcrumb').innerHTML = `
+        <span class="dashboard-breadcrumb-code">${escapeHtml(course.code)}</span>
+        <span class="dashboard-breadcrumb-sep">›</span>
+        <span class="dashboard-breadcrumb-cur">Dashboard</span>
+      `;
+
+      /* Hero */
+      document.getElementById('dash-title').textContent = course.title;
+      document.getElementById('dash-desc').textContent = course.shortDescription || '';
+
+      const tierCounts = { bronze: 0, silver: 0, gold: 0 };
+      const worksheets = course.screens.filter((s) => s.type === 'document');
+      for (const w of worksheets) {
+        const t = window.Gamify.inferTier(w);
+        if (t && tierCounts[t] !== undefined) tierCounts[t] += 1;
+      }
+      document.getElementById('dash-tier-counts').innerHTML = `
+        <div class="dash-tier-count tier-bronze"><span class="num">${tierCounts.bronze}</span><span class="label">Bronze worksheets</span></div>
+        <div class="dash-tier-count tier-silver"><span class="num">${tierCounts.silver}</span><span class="label">Silver worksheets</span></div>
+        <div class="dash-tier-count tier-gold"><span class="num">${tierCounts.gold}</span><span class="label">Gold worksheets</span></div>
+      `;
+
+      const firstScreen = course.screens.find((s) => !s.missing && s.type !== 'image') || course.screens[0];
+      const startUrl = 'course.html?id=' + course.id + (firstScreen ? '&screen=' + firstScreen.id : '');
+      document.getElementById('dash-start-btn').href = startUrl;
+      document.getElementById('dash-start-btn-2').href = startUrl;
+
+      /* Worksheet grid */
+      const wsRoot = document.getElementById('dash-worksheets');
+      const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + course.id) || '{}');
+      let displayNum = 0;
+      let currentTier = null;
+      const grouped = { bronze: [], silver: [], gold: [], other: [] };
+      for (const screen of worksheets) {
+        const tier = window.Gamify.inferTier(screen) || 'other';
+        grouped[tier].push(screen);
+      }
+      for (const tier of ['bronze', 'silver', 'gold', 'other']) {
+        const items = grouped[tier];
+        if (items.length === 0) continue;
+        const tierLabel = tier === 'other' ? 'Additional' : tier;
+        for (let i = 0; i < items.length; i++) {
+          const s = items[i];
+          displayNum += 1;
+          const done = Boolean(progress[s.id]);
+          const card = document.createElement('a');
+          card.className = 'dash-ws-card tier-' + tier + (done ? ' done' : '') + (s.missing ? ' missing' : '');
+          card.href = s.missing ? 'javascript:void(0)' : ('course.html?id=' + course.id + '&screen=' + s.id);
+          card.innerHTML = `
+            <div class="dash-ws-tier">${tierLabel.toUpperCase()} · WORKSHEET ${displayNum}</div>
+            <div class="dash-ws-title">${escapeHtml(s.title)}</div>
+            <div class="dash-ws-progress">
+              <div class="dash-ws-bar"><span style="width:${done ? 100 : 0}%;"></span></div>
+              <div class="dash-ws-status">${s.missing ? 'Resource missing' : (done ? '100% complete' : '0% complete')}</div>
+            </div>
+          `;
+          wsRoot.appendChild(card);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
