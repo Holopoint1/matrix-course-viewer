@@ -38,6 +38,10 @@
       const data = await res.json();
       course = data.courses.find((c) => c.id === courseId);
       if (!course) throw new Error('Course not found: ' + courseId);
+      if (window.Gamify) {
+        await window.Gamify.init();
+        window.Gamify.trackCourseVisit(courseId);
+      }
     } catch (err) {
       els.screenStage.innerHTML = '<p class="stage-loading">Could not load course. ' + err.message + '</p>';
       return;
@@ -79,7 +83,19 @@
 
   function renderSidebar() {
     els.screenList.innerHTML = '';
+    let lastSection = null;
+    let sectionPos = 0;
     course.screens.forEach((screen, idx) => {
+      const section = window.Gamify ? window.Gamify.inferSection(screen) : 'all';
+      if (section !== lastSection) {
+        lastSection = section;
+        sectionPos = 0;
+        const header = document.createElement('li');
+        header.className = 'section-header section-' + section;
+        header.innerHTML = `<span class="section-dot"></span><span class="section-label">${sectionTitle(section)}</span>`;
+        els.screenList.appendChild(header);
+      }
+      sectionPos += 1;
       const li = document.createElement('li');
       li.className = 'screen-item';
       li.dataset.index = String(idx);
@@ -87,8 +103,11 @@
       if (isComplete(screen.id)) li.classList.add('completed');
       li.innerHTML = `
         <button type="button" class="screen-checkbox" aria-label="Toggle complete"></button>
-        <span class="screen-title">${escapeHtml(screen.title)}</span>
-        <span class="screen-type-badge ${screen.type}">${screen.type}</span>
+        <span class="screen-title">
+          <span class="screen-num">${sectionPos}</span>
+          <span class="screen-title-text">${escapeHtml(screen.title)}</span>
+        </span>
+        <span class="screen-type-dot ${screen.type}" title="${escapeHtml(screen.type)}"></span>
       `;
       li.addEventListener('click', () => showScreen(idx));
       li.querySelector('.screen-checkbox').addEventListener('click', (ev) => {
@@ -99,13 +118,25 @@
     });
   }
 
+  function sectionTitle(section) {
+    return ({
+      intro: 'Welcome',
+      bronze: 'Bronze',
+      silver: 'Silver',
+      gold: 'Gold',
+      assessment: 'Assessment',
+      homework: 'Homework',
+      project: 'Project'
+    })[section] || section;
+  }
+
   function showScreen(idx) {
     currentIndex = idx;
     persistLastIndex(idx);
     const screen = course.screens[idx];
 
-    Array.from(els.screenList.children).forEach((node) => node.classList.remove('active'));
-    const active = els.screenList.children[idx];
+    els.screenList.querySelectorAll('.screen-item.active').forEach((node) => node.classList.remove('active'));
+    const active = els.screenList.querySelector(`.screen-item[data-index="${idx}"]`);
     if (active) {
       active.classList.add('active');
       active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -159,7 +190,7 @@
         renderIframe(stage, screen.src);
         return;
       case 'html':
-        renderIframe(stage, screen.src);
+        renderHtmlContent(stage, screen);
         return;
       case 'document':
         renderDocument(stage, screen);
@@ -204,6 +235,147 @@
     stage.appendChild(iframe);
   }
 
+  async function renderHtmlContent(stage, screen) {
+    if (screen.external || /^https?:/i.test(screen.src || '')) {
+      return renderIframe(stage, screen.src);
+    }
+    const wrap = document.createElement('div');
+    wrap.className = 'stage-doc';
+    wrap.innerHTML = '<div class="stage-doc-inner"><p class="stage-loading">Loading&hellip;</p></div>';
+    stage.appendChild(wrap);
+    const inner = wrap.querySelector('.stage-doc-inner');
+    try {
+      const res = await fetch(screen.src);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const doc = new DOMParser().parseFromString(text, 'text/html');
+      const pageEl = doc.querySelector('.page');
+      let bodyHtml = pageEl ? pageEl.innerHTML : (doc.body ? doc.body.innerHTML : text);
+      bodyHtml = enhanceWorksheetHtml(bodyHtml);
+      inner.innerHTML = bodyHtml;
+    } catch (err) {
+      /* graceful fallback: iframe the file as-is */
+      wrap.remove();
+      renderIframe(stage, screen.src);
+    }
+  }
+
+  /* Promote pseudo-heading paragraphs ("Design brief:", "Hardware:", etc.) into real headings.
+     Source text is preserved verbatim — only the tag changes. */
+  function enhanceWorksheetHtml(html) {
+    let parsed;
+    try {
+      parsed = new DOMParser().parseFromString('<!DOCTYPE html><html><body>' + html + '</body></html>', 'text/html');
+    } catch (_) {
+      return html;
+    }
+    const root = parsed.body;
+    if (!root) return html;
+
+    /* 1. Convert layout-only header tables (the "Worksheet 7 / Title / Course" strip) into a
+          subdued metadata header. mammoth-rendered docs always have a small sparse table at the top. */
+    Array.from(root.querySelectorAll('table')).forEach((table) => {
+      const cells = Array.from(table.querySelectorAll('td, th'));
+      const filled = cells
+        .map((c) => (c.textContent || '').trim())
+        .filter((t) => t && t.length > 0);
+      const allShort = filled.every((t) => t.length < 120);
+      const hasParagraphTexts = filled.some((t) => t.length >= 120);
+      /* If the table is small and contains short labels (worksheet header) — convert.
+         If it's a large table with long descriptive paragraphs — leave it alone. */
+      if (cells.length <= 16 && filled.length <= 8 && allShort && !hasParagraphTexts) {
+        const meta = parsed.createElement('div');
+        meta.className = 'worksheet-header';
+        meta.innerHTML = filled.map((t) => `<span>${escapeHtml(t)}</span>`).join('');
+        table.replaceWith(meta);
+      } else if (cells.length <= 6 && filled.length <= 4 && allShort) {
+        /* Short overview table → header */
+        const meta = parsed.createElement('div');
+        meta.className = 'worksheet-header';
+        meta.innerHTML = filled.map((t) => `<span>${escapeHtml(t)}</span>`).join('');
+        table.replaceWith(meta);
+      }
+    });
+
+    /* 2. Embed bare YouTube URLs as inline iframes */
+    Array.from(root.querySelectorAll('a')).forEach((a) => {
+      const href = a.getAttribute('href') || '';
+      const m = href.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
+      if (!m) return;
+      const aText = (a.textContent || '').trim();
+      if (aText !== href.trim() && !/youtu/.test(aText)) return; /* leave styled inline links */
+      const wrap = parsed.createElement('div');
+      wrap.className = 'inline-youtube';
+      wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen loading="lazy"></iframe>';
+      const parent = a.parentElement;
+      if (parent && parent.tagName === 'P' && (parent.textContent || '').trim() === aText) {
+        parent.replaceWith(wrap);
+      } else {
+        a.replaceWith(wrap);
+      }
+    });
+
+    /* 3. "There is no video..." → small subdued note */
+    Array.from(root.querySelectorAll('p')).forEach((p) => {
+      const t = (p.textContent || '').trim().toLowerCase();
+      if (/^there\s+is\s+no\s+video/i.test(t)) {
+        p.classList.add('no-video');
+      }
+    });
+
+    /* 4. Promote pseudo-headings */
+    const patterns = [
+      { tag: 'h1', cls: 'doc-h1', re: /^(Homework\s*\d+|Assessment\s*\d+|Project|Assessment marking schemes)$/i },
+      { tag: 'h2', cls: 'doc-section design-brief',  re: /^Design brief:?$/i },
+      { tag: 'h2', cls: 'doc-section hardware',      re: /^Hardware:?$/i },
+      { tag: 'h2', cls: 'doc-section software',      re: /^Software:?$/i },
+      { tag: 'h2', cls: 'doc-section challenges',    re: /^Challenges:?$/i },
+      { tag: 'h2', cls: 'doc-section hints',         re: /^Hints:?$/i },
+      { tag: 'h2', cls: 'doc-section over-to-you',   re: /^Over to you:?$/i },
+      { tag: 'h2', cls: 'doc-section risk',          re: /^Technical risk:?$/i }
+    ];
+
+    Array.from(root.querySelectorAll('p')).forEach((p) => {
+      const text = (p.textContent || '').trim();
+      if (!text) return;
+      for (const pat of patterns) {
+        if (pat.re.test(text)) {
+          const tag = parsed.createElement(pat.tag);
+          tag.className = pat.cls;
+          tag.textContent = text;
+          p.replaceWith(tag);
+          return;
+        }
+      }
+    });
+
+    /* 5. Group consecutive bullet-like paragraphs after a hardware/topics heading into a list */
+    Array.from(root.querySelectorAll('h2.hardware, h1.doc-h1')).forEach((h) => {
+      const collected = [];
+      let n = h.nextElementSibling;
+      while (n && n.tagName === 'P') {
+        const txt = (n.textContent || '').trim();
+        if (!txt || txt.length > 90) break;
+        if (/^(Design brief|Hardware|Software|Challenges|Hints|Over to you|Technical risk):?$/i.test(txt)) break;
+        collected.push(n);
+        n = n.nextElementSibling;
+      }
+      if (collected.length >= 2) {
+        const ul = parsed.createElement('ul');
+        ul.className = 'doc-list';
+        collected.forEach((p) => {
+          const li = parsed.createElement('li');
+          li.innerHTML = p.innerHTML;
+          ul.appendChild(li);
+          p.remove();
+        });
+        h.after(ul);
+      }
+    });
+
+    return root.innerHTML;
+  }
+
   function renderDownload(stage, screen) {
     const wrap = document.createElement('div');
     wrap.className = 'stage-pptx';
@@ -238,7 +410,7 @@
         if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
         const buf = await res.arrayBuffer();
         const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
-        html = result.value || '';
+        html = enhanceWorksheetHtml(result.value || '');
         docCache.set(screen.src, html);
       }
       inner.innerHTML = html;
@@ -293,6 +465,7 @@
   }
   function setComplete(screenId, value) {
     const p = loadProgress();
+    const wasComplete = Boolean(p[screenId]);
     if (value) {
       if (!p[screenId]) p[screenId] = { ts: Date.now() };
     } else {
@@ -300,10 +473,13 @@
     }
     saveProgress(p);
     const idx = course.screens.findIndex((s) => s.id === screenId);
-    const li = els.screenList.querySelector(`[data-index="${idx}"]`);
+    const li = els.screenList.querySelector(`.screen-item[data-index="${idx}"]`);
     if (li) li.classList.toggle('completed', value);
     renderProgress();
     if (idx === currentIndex) updateCompleteButton();
+    if (window.Gamify && value && !wasComplete) {
+      window.Gamify.onComplete(courseId, course.screens[idx]);
+    }
   }
   function toggleComplete(screenId) {
     setComplete(screenId, !isComplete(screenId));

@@ -1,0 +1,24 @@
+{
+  "achievements": [
+    { "id": "first_steps",      "title": "First Steps",       "desc": "Tick your first challenge",            "icon": "🎯", "test": "totalCompleted>=1" },
+    { "id": "getting_started",  "title": "Getting Started",   "desc": "Complete 5 challenges",                "icon": "⚡", "test": "totalCompleted>=5" },
+    { "id": "page_turner",      "title": "Page Turner",       "desc": "Finish your first worksheet",          "icon": "📖", "test": "documentsCompleted>=1" },
+    { "id": "hint_seeker",      "title": "Hint Seeker",       "desc": "Reveal hints on any worksheet",        "icon": "💡", "test": "hintsRevealed>=1" },
+    { "id": "on_a_roll",        "title": "On a Roll",         "desc": "3 challenges in 60 seconds",            "icon": "🔥", "test": "rapidStreak>=3" },
+    { "id": "halfway_there",    "title": "Halfway There",     "desc": "Reach 50% in any course",               "icon": "🚀", "test": "anyCourse>=50" },
+    { "id": "bronze_champion",  "title": "Bronze Champion",   "desc": "All Bronze worksheets done",            "icon": "🥉", "test": "tierDone:bronze" },
+    { "id": "silver_champion",  "title": "Silver Champion",   "desc": "All Silver worksheets done",            "icon": "🥈", "test": "tierDone:silver" },
+    { "id": "gold_champion",    "title": "Gold Champion",     "desc": "All Gold worksheets done",              "icon": "🥇", "test": "tierDone:gold" },
+    { "id": "tier_trifecta",    "title": "Tier Trifecta",     "desc": "A worksheet from each tier",            "icon": "🌈", "test": "tierTrifecta" },
+    { "id": "perfectionist",    "title": "Perfectionist",     "desc": "Every challenge ticked in a course",    "icon": "✨", "test": "anyCourse>=100" },
+    { "id": "course_master",    "title": "Course Master",     "desc": "Reach 100% in any course",              "icon": "🎓", "test": "anyCourse>=100" },
+    { "id": "explorer",         "title": "Explorer",          "desc": "Open more than one course",             "icon": "🗝️", "test": "coursesVisited>=2" },
+    { "id": "multi_discipline", "title": "Multi-Discipline",  "desc": "Tick challenges in 2 courses",          "icon": "🧩", "test": "coursesWithTicks>=2" },
+    { "id": "double_trouble",   "title": "Double Trouble",    "desc": "Complete a worksheet in 2 courses",     "icon": "🃏", "test": "coursesWithDocTicks>=2" },
+    { "id": "embedded_expert",  "title": "Embedded Expert",   "desc": "Finish CO0002 in full",                  "icon": "🔌", "test": "courseDone:CO0002" },
+    { "id": "aviation_ace",     "title": "Aviation Ace",      "desc": "Finish CO0003 in full",                  "icon": "✈️", "test": "courseDone:CO0003" },
+    { "id": "course_collector", "title": "Course Collector",  "desc": "Finish 2 courses",                       "icon": "🏛️", "test": "coursesDone>=2" },
+    { "id": "dedicated",        "title": "Dedicated",         "desc": "50 challenges ticked",                   "icon": "💪", "test": "totalCompleted>=50" },
+    { "id": "century_club",     "title": "Century Club",      "desc": "100 challenges ticked",                  "icon": "💯", "test": "totalCompleted>=100" }
+  ]
+}
