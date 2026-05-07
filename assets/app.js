@@ -107,6 +107,9 @@
 
     if (course.certificate && course.certificate.enabled) {
       els.certificateLink.href = 'certificate.html?id=' + encodeURIComponent(course.id);
+      els.certificateCta.hidden = false;
+    } else if (els.certificateCta) {
+      els.certificateCta.remove();
     }
 
     renderSidebar();
@@ -142,6 +145,43 @@
           'Download ' + docCount + ' worksheets PDF';
         els.bundleBtn.addEventListener('click', () => downloadBundle(course, els.bundleBtn));
       }
+    }
+  }
+
+  async function downloadSingleAsPdf(screen, innerEl, btn) {
+    if (!window.html2pdf) {
+      alert('PDF library not yet loaded. Please wait a moment and try again.');
+      return;
+    }
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Building PDF…';
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:30px 40px;';
+    wrap.innerHTML =
+      '<div style="font-size:0.78rem;letter-spacing:2px;color:#7c3aed;text-transform:uppercase;font-weight:700;">' +
+      escapeHtml((course && course.code) || '') + '</div>' +
+      '<h1 style="font-family:\'Segoe UI\',Inter,Arial,sans-serif;font-size:22pt;color:#1e1b4b;margin:6px 0 18px;font-weight:800;">' +
+      escapeHtml(screen.title) + '</h1>' +
+      innerEl.innerHTML;
+    document.body.appendChild(wrap);
+    try {
+      await window.html2pdf()
+        .set({
+          margin: [10, 12, 14, 12],
+          filename: filename(screen.src).replace(/\.docx?$/i, '') + '.pdf',
+          image: { type: 'jpeg', quality: 0.95 },
+          html2canvas: { scale: 1.6, letterRendering: true, useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4' }
+        })
+        .from(wrap)
+        .save();
+    } catch (err) {
+      alert('PDF generation failed: ' + err.message);
+    } finally {
+      wrap.remove();
+      btn.disabled = false;
+      btn.textContent = original;
     }
   }
 
@@ -290,7 +330,7 @@
     }
 
     els.screenTitle.textContent = screen.title;
-    els.screenMeta.textContent = formatMeta(screen);
+    els.screenMeta.innerHTML = formatMeta(screen);
     els.prevBtn.disabled = idx === 0;
     updateCompleteButton();
 
@@ -335,7 +375,7 @@
         renderYoutube(stage, screen);
         return;
       case 'pdf':
-        renderIframe(stage, screen.src);
+        renderPdf(stage, screen);
         return;
       case 'html':
         renderHtmlContent(stage, screen);
@@ -381,6 +421,89 @@
     iframe.src = src;
     iframe.referrerPolicy = 'no-referrer';
     stage.appendChild(iframe);
+  }
+
+  function renderPdf(stage, screen) {
+    const wrap = document.createElement('div');
+    wrap.className = 'stage-pdf';
+    const safeSrc = escapeAttr(screen.src);
+    const fname = filename(screen.src) || 'document.pdf';
+    wrap.innerHTML = `
+      <div class="stage-pdf-toolbar">
+        <span class="stage-pdf-name" title="${safeSrc}">${escapeHtml(fname)}</span>
+        <div class="stage-pdf-actions">
+          <a class="btn btn-secondary" href="${safeSrc}" target="_blank" rel="noopener">↗ Open in new tab</a>
+          <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
+        </div>
+      </div>
+      <div class="stage-pdf-frame">
+        <iframe class="stage-pdf-iframe" src="${safeSrc}#view=FitH" referrerpolicy="no-referrer" title="${escapeAttr(screen.title)}"></iframe>
+        <object class="stage-pdf-object" data="${safeSrc}" type="application/pdf" hidden>
+          <embed src="${safeSrc}" type="application/pdf" />
+        </object>
+        <div class="stage-pdf-fallback" hidden>
+          <div class="stage-pdf-fallback-icon">📄</div>
+          <h2>PDF couldn't be displayed inline</h2>
+          <p>Some browsers block embedded PDFs, or the file isn't reachable from this page. Try one of these:</p>
+          <div class="stage-pdf-fallback-actions">
+            <a class="btn btn-primary" href="${safeSrc}" target="_blank" rel="noopener">Open in new tab</a>
+            <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
+          </div>
+          <p class="stage-pdf-fallback-src"><code>${escapeHtml(screen.src)}</code></p>
+        </div>
+      </div>
+    `;
+    stage.appendChild(wrap);
+
+    const iframe = wrap.querySelector('.stage-pdf-iframe');
+    const obj = wrap.querySelector('.stage-pdf-object');
+    const fallback = wrap.querySelector('.stage-pdf-fallback');
+    let resolved = false;
+
+    function showFallback() {
+      if (resolved) return;
+      resolved = true;
+      iframe.style.display = 'none';
+      obj.hidden = true;
+      fallback.hidden = false;
+    }
+    function tryObject() {
+      iframe.style.display = 'none';
+      obj.hidden = false;
+      /* If <object> also fails, the fallback above shows after the second timer */
+    }
+
+    /* If the URL is unreachable (404, DNS, CORS-network-error) we get an error event. */
+    iframe.addEventListener('error', tryObject);
+
+    /* Iframes fire `load` even for blocked content, so we additionally check
+       whether anything actually rendered. After a short timeout, if the iframe's
+       contentDocument is empty / null (cross-origin throws — that's fine, content
+       is loading), or its body height is suspiciously zero, we surface the fallback. */
+    iframe.addEventListener('load', () => {
+      resolved = true; /* iframe at least settled */
+      try {
+        const cw = iframe.contentWindow;
+        const cd = cw && cw.document;
+        if (cd && cd.body) {
+          const empty = !cd.body.innerHTML.trim() && cd.body.scrollHeight < 50;
+          if (empty) tryObject();
+        }
+      } catch (_) {
+        /* Cross-origin — can't introspect. The iframe is showing whatever the
+           browser PDF viewer rendered. The toolbar above already gives the user
+           a working escape hatch, so this is fine. */
+      }
+    });
+
+    /* Final safety net: if neither load nor error has fired in 8s, the request
+       is dead in the water — show the fallback. */
+    setTimeout(() => {
+      if (!resolved) showFallback();
+    }, 8000);
+
+    /* If <object> swap-in also doesn't render anything, escalate to fallback. */
+    obj.addEventListener('error', showFallback);
   }
 
   async function renderHtmlContent(stage, screen) {
@@ -546,10 +669,14 @@
     wrap.innerHTML = `
       <div class="stage-doc-toolbar">
         <a class="btn btn-secondary" href="${escapeAttr(screen.src)}" download>Download as Word</a>
+        <button type="button" class="btn btn-secondary" data-action="download-pdf">Download as PDF</button>
       </div>
       <div class="stage-doc-inner"><p class="stage-loading">Rendering document&hellip;</p></div>`;
     stage.appendChild(wrap);
     const inner = wrap.querySelector('.stage-doc-inner');
+    wrap.querySelector('[data-action="download-pdf"]').addEventListener('click', (ev) => {
+      downloadSingleAsPdf(screen, inner, ev.currentTarget);
+    });
 
     try {
       let html = docCache.get(screen.src);
@@ -590,10 +717,22 @@
 
   function formatMeta(screen) {
     const parts = [];
-    parts.push(screen.type.toUpperCase());
-    if (screen.hours) parts.push(screen.hours + ' hr');
-    if (screen.equipment) parts.push(screen.equipment);
+    parts.push('<span class="meta-type">' + escapeHtml(screen.type.toUpperCase()) + '</span>');
+    if (screen.hours) parts.push('<span class="meta-hours">' + escapeHtml(String(screen.hours)) + ' hr</span>');
+    if (screen.equipment) parts.push('<span class="meta-equip">' + escapeHtml(screen.equipment) + '</span>');
+    const fname = screen.src ? filename(screen.src) : '';
+    if (fname && !/^https?:/i.test(screen.src)) {
+      parts.push('<span class="meta-file"><code>' + escapeHtml(fname) + '</code></span>');
+    } else if (/^https?:/i.test(screen.src)) {
+      parts.push('<span class="meta-file"><code>' + escapeHtml(shortUrl(screen.src)) + '</code></span>');
+    }
     return parts.join(' · ');
+  }
+  function shortUrl(u) {
+    try {
+      const url = new URL(u);
+      return url.hostname + url.pathname.replace(/^\/.*\//, '/…/');
+    } catch (_) { return u; }
   }
 
   /* Progress / persistence */
@@ -657,10 +796,22 @@
     els.progressTotal.textContent = String(total);
     els.progressPercent.textContent = pct + '%';
 
-    if (course.certificate && course.certificate.enabled && completed === total && total > 0) {
-      els.certificateCta.hidden = false;
-    } else {
-      els.certificateCta.hidden = true;
+    if (els.certificateCta && course.certificate && course.certificate.enabled) {
+      const ready = completed === total && total > 0;
+      const link = els.certificateLink;
+      if (ready) {
+        link.classList.remove('btn-secondary');
+        link.classList.add('btn-primary');
+        link.textContent = '🎓 Get your certificate';
+        link.removeAttribute('aria-disabled');
+        link.style.opacity = '';
+      } else {
+        link.classList.remove('btn-primary');
+        link.classList.add('btn-secondary');
+        link.textContent = 'Certificate at 100% (' + (total - completed) + ' to go)';
+        link.setAttribute('aria-disabled', 'true');
+        link.style.opacity = '0.7';
+      }
     }
   }
 

@@ -865,8 +865,20 @@ a:hover { text-decoration: underline; }
   font-weight: 700;
   letter-spacing: -0.005em;
 }
-.progress { height: 6px; }
-.progress-label { font-size: 0.72rem; margin-top: 0.4rem; }
+.progress { height: 8px; }
+.progress-label {
+  font-size: 0.92rem;
+  margin-top: 0.55rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.progress-label strong { color: var(--primary); font-weight: 800; }
+.progress-label #progress-percent {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--primary);
+  font-weight: 800;
+}
 .progress {
   background: var(--primary-100);
   border-radius: 99px;
@@ -1045,8 +1057,28 @@ a:hover { text-decoration: underline; }
 .screen-bar .meta {
   font-size: 0.78rem;
   color: var(--text-muted);
-  margin-top: 0.2rem;
+  margin-top: 0.25rem;
   letter-spacing: 0.2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+.screen-bar .meta > span { display: inline-flex; align-items: center; }
+.screen-bar .meta > span + span::before {
+  content: "·";
+  margin-right: 0.45rem;
+  color: var(--text-subtle);
+}
+.screen-bar .meta-file code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.74rem;
+  background: var(--primary-50);
+  color: var(--primary-dark);
+  padding: 0.12rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--primary-100);
+  font-weight: 600;
 }
 .screen-bar .actions {
   margin-left: auto;
@@ -1285,6 +1317,78 @@ a:hover { text-decoration: underline; }
   text-align: center;
   font-size: 0.95rem;
 }
+/* ---------- PDF viewer (always-on toolbar + iframe + fallback) ---------- */
+.stage-pdf {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #2d2b40;
+  min-height: 0;
+}
+.stage-pdf-toolbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.95rem;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+.stage-pdf-name {
+  flex: 1;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.8rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stage-pdf-actions { display: flex; gap: 0.4rem; flex: 0 0 auto; }
+.stage-pdf-actions .btn { padding: 0.4rem 0.75rem; font-size: 0.82rem; }
+.stage-pdf-frame {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.stage-pdf-iframe,
+.stage-pdf-object {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+.stage-pdf-fallback {
+  position: absolute;
+  inset: 0;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+.stage-pdf-fallback-icon { font-size: 3rem; line-height: 1; }
+.stage-pdf-fallback h2 { margin: 0; font-family: var(--font-display); color: var(--primary-dark); font-size: 1.4rem; }
+.stage-pdf-fallback p { margin: 0; max-width: 540px; color: var(--text-muted); }
+.stage-pdf-fallback-actions { display: flex; gap: 0.55rem; flex-wrap: wrap; justify-content: center; }
+.stage-pdf-fallback-src code {
+  font-size: 0.78rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.55rem;
+  border-radius: 4px;
+  color: var(--text-muted);
+  max-width: 540px;
+  word-break: break-all;
+  display: inline-block;
+}
+
 .stage-missing,
 .stage-pptx {
   flex: 1;
