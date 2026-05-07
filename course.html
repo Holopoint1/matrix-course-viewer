@@ -15,6 +15,7 @@
     </a>
     <nav>
       <a href="index.html">Catalog</a>
+      <a href="stats.html">My Stats</a>
     </nav>
   </header>
 
@@ -30,8 +31,13 @@
         </div>
       </div>
       <ul class="screen-list" id="screen-list"></ul>
-      <div class="certificate-cta" id="certificate-cta" hidden>
-        <a class="btn btn-primary" id="certificate-link" style="width:100%;text-align:center;">Get your certificate</a>
+      <div class="sidebar-actions">
+        <div class="certificate-cta" id="certificate-cta" hidden>
+          <a class="btn btn-primary" id="certificate-link" style="width:100%;text-align:center;">Get your certificate</a>
+        </div>
+        <button type="button" class="btn btn-secondary" id="bundle-btn" style="width:100%;">
+          <span>Download all worksheets PDF</span>
+        </button>
       </div>
     </aside>
 
@@ -53,6 +59,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="assets/gamify.js"></script>
   <script src="assets/app.js"></script>
 </body>

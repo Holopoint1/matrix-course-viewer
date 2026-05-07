@@ -42,9 +42,26 @@ At render time the viewer rewrites docx / htm output for readability:
 - Day-streak counter
 - Achievements grid on the dashboard (locked / unlocked states)
 
+**My Stats page**
+- Real per-screen time tracking (Page Visibility API, paused on tab hide)
+- Per-course time totals + per-screen table
+- All achievements + unlocked count + day streak (current + longest)
+- Reset-all-progress button
+
+**SCORM 1.2 packages**
+- One self-contained zip per course at `dist/SC<id>-<slug>.zip`
+- Built via `npm run build:scorm` (uses `jszip`)
+- Each zip includes the full course viewer, mammoth.js vendored, the filtered course definition, and an `imsmanifest.xml`
+- `scorm-api.js` bridge maps screen completion → `cmi.core.lesson_status`, `cmi.core.score.raw`, `cmi.core.session_time` etc.
+
+**Combined PDF bundle**
+- "Download all worksheets PDF" button in the course-viewer sidebar
+- Renders every `document` screen via mammoth → composed HTML → PDF via `html2pdf.js`
+- Filename pattern: `<course>-worksheets.pdf`
+
 ## Quick start
 
-No npm install required — uses only Node built-ins.
+The runtime needs **no npm install** — uses only Node built-ins:
 
 ```sh
 node server.js
@@ -53,6 +70,14 @@ node server.js
 Default port `4173`. Override with `PORT=4000 node server.js`.
 
 Open <http://localhost:4173/>.
+
+**Build SCORM packages** (one-off, requires `npm install`):
+
+```sh
+npm install                          # installs jszip dev-dep
+npm run build:scorm                  # builds all 3 SCORM zips into dist/
+npm run build:scorm:CO0002           # just one course
+```
 
 ## Project structure
 

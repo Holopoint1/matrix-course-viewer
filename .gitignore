@@ -4,3 +4,5 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+# Vendored mammoth — fetched on first build, regenerable
+tools/scorm-template/mammoth.browser.min.js

@@ -16,6 +16,7 @@
     </a>
     <nav>
       <a href="index.html" class="active">Catalog</a>
+      <a href="stats.html">My Stats</a>
     </nav>
   </header>
 
@@ -26,7 +27,7 @@
       <p>Choose a course to get started. Your progress is saved separately for each course.</p>
       <div class="hero-stats" id="hero-stats" aria-hidden="true">
         <div class="stat"><span class="stat-num" data-stat="courses">—</span><span class="stat-label">Courses</span></div>
-        <div class="stat"><span class="stat-num" data-stat="screens">—</span><span class="stat-label">Screens</span></div>
+        <div class="stat"><span class="stat-num" data-stat="time">—</span><span class="stat-label">Time logged</span></div>
         <div class="stat"><span class="stat-num" data-stat="streak">—</span><span class="stat-label">Day streak</span></div>
       </div>
     </div>
@@ -127,13 +128,17 @@
                   <span class="btn-arrow" aria-hidden="true">→</span>
                 </a>
               </div>
+              <div class="card-extras">
+                <a class="btn btn-secondary" href="dist/${course.id.replace('CO', 'SC')}-${course.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.zip" download title="SCORM 1.2 package — drop into any SCORM-compliant LMS">↓ SCORM</a>
+              </div>
             </div>`;
           root.appendChild(card);
         }
 
         const streak = window.Gamify.getStreak();
+        const totalTime = window.Gamify.getTotalSecondsAllCourses();
         stats.querySelector('[data-stat="courses"]').textContent = data.courses.length;
-        stats.querySelector('[data-stat="screens"]').textContent = totalScreens;
+        stats.querySelector('[data-stat="time"]').textContent = totalTime > 0 ? window.Gamify.formatDuration(totalTime) : '0m';
         stats.querySelector('[data-stat="streak"]').textContent = streak.days || 0;
 
         /* Render achievements */

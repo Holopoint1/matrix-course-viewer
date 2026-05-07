@@ -45,21 +45,26 @@ These are explicitly described in `master_doc.docx` but not implemented. See `MA
 ### Course Viewer features
 - **Spreadsheet screen type** — listed by master doc as a supported screen type but no course currently uses one. Renderer is a download-only stub like PowerPoint.
 - **PowerPoint inline render** — master doc says "appears in the Course Viewer with scroll bars". Currently download-only. No good in-browser pptx renderer without a paid SDK; possible workaround = pre-convert pptx → PDF at content-author time, then use the PDF renderer.
-- **Hours-based certificate** — the master doc says "What we could do is use the time spend and % completeness and put that on the certificate." Currently we print the **estimated** `hours` from the course definition + completion %. **Actual** time-tracking would need an interval timer per screen.
+- **Hours-based certificate** — ✅ **Done.** Real per-screen time tracking implemented (Page Visibility API, paused on tab hide). Certificate now shows actual time spent + completion %.
 - **PDF certificate generation** — currently an HTML print-stylesheet page. The master doc references a `CP4807-CPDcert.docx` template file. Optional: render the cert as a true PDF download via something like `jspdf` or browser `window.print → save as PDF`.
 - **CPD self vs. third-party assessment**: master doc raises "CPD can take one of two forms: Self assessed, or assessed by a third party … We don't have that which is a kind of weakness." Currently fully self-assessed. Adding tutor sign-off would need accounts.
 
 ### Courses not yet built
-- **CP4807 worksheets PDF bundle** (a single combined PDF of head + cont + 1–12 + TN). Master doc requests it as `"CP4807- worksheets.pdf"`.
+- **CP4807 worksheets PDF bundle** — ✅ **Done.** "Download all worksheets PDF" button in the course viewer sidebar — uses `html2pdf.js` + the existing mammoth render path. Filename pattern: `<course>-worksheets.pdf`.
 - **CP7244 — EASA Unit 5 Digital Techniques worksheets**. Master doc says "Needs assembling".
 - **T-level course set** (`CPXXX`, `COXXX`, `SCXXX`) — explicitly marked "T level stuff not complete" in the master doc.
 
-### SCORM packages (not started)
-- **SC0001** — Intro to Microcontrollers as SCORM 1.2 package
-- **SC0001 (sic)** — EASA Unit 5 SCORM (note: master doc gives this the same code as the Intro course's SCORM — see `MASTER-DOC-SPEC.md` § Inconsistencies)
-- **SCXXX** — T-level SCORM
+### SCORM packages — ✅ Done
 
-The master doc has a SCORM `imsmanifest` skeleton; producing real SCORM zips is a separate workstream (likely a build script that wraps the existing course content with the manifest + SCORM API JS shim).
+`tools/build-scorm.js` produces a SCORM 1.2 zip per CO course:
+
+- `dist/SC0001-flowcode-and-e-blocks-3-cpd-course.zip`
+- `dist/SC0002-introduction-to-microcontrollers.zip`
+- `dist/SC0003-digital-techniques-for-aviation-technicians.zip`
+
+Each zip is self-contained (mammoth.js vendored locally) and reports completion to `window.API` via `cmi.core.lesson_status`, `cmi.core.score.raw`, `cmi.core.session_time`. See `tools/README.md`.
+
+T-level SCORM (`SCXXX`) still pending — gated on T-level course content existing.
 
 ## Open discussion points (verbatim from master doc)
 

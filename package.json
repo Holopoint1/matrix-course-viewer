@@ -1,0 +1,16 @@
+{
+  "name": "matrix-course-viewer",
+  "version": "1.0.0",
+  "description": "Browser-based learning management system for Matrix TSL engineering education courses.",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "build:scorm": "node tools/build-scorm.js",
+    "build:scorm:CO0001": "node tools/build-scorm.js CO0001",
+    "build:scorm:CO0002": "node tools/build-scorm.js CO0002",
+    "build:scorm:CO0003": "node tools/build-scorm.js CO0003"
+  },
+  "devDependencies": {
+    "jszip": "^3.10.1"
+  }
+}

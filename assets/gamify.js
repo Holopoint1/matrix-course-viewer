@@ -346,6 +346,38 @@ window.Gamify = (function () {
     }[c]));
   }
 
+  /* ---------- Time stats ---------- */
+  function getCourseTime(courseId) {
+    try {
+      const data = JSON.parse(localStorage.getItem('matrix-lms:time:' + courseId) || '{}');
+      return data;
+    } catch (_) { return {}; }
+  }
+  function getCourseTotalSeconds(courseId) {
+    const data = getCourseTime(courseId);
+    return Object.values(data).reduce((a, v) => a + (Number(v) || 0), 0);
+  }
+  function getTotalSecondsAllCourses() {
+    if (!coursesData) return 0;
+    return coursesData.reduce((a, c) => a + getCourseTotalSeconds(c.id), 0);
+  }
+  function formatDuration(secs) {
+    secs = Math.max(0, Math.floor(secs || 0));
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
+    if (h > 0) return h + 'h ' + String(m).padStart(2, '0') + 'm';
+    if (m > 0) return m + 'm ' + String(s).padStart(2, '0') + 's';
+    return s + 's';
+  }
+
+  /* ---------- Reset ---------- */
+  function resetAll() {
+    Object.keys(localStorage)
+      .filter((k) => k.indexOf('matrix-lms:') === 0)
+      .forEach((k) => localStorage.removeItem(k));
+  }
+
   return {
     init,
     onComplete,
@@ -356,6 +388,11 @@ window.Gamify = (function () {
     getStats,
     getStreak,
     inferTier,
-    inferSection
+    inferSection,
+    getCourseTime,
+    getCourseTotalSeconds,
+    getTotalSecondsAllCourses,
+    formatDuration,
+    resetAll
   };
 })();

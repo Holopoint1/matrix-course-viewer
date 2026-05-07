@@ -23,12 +23,65 @@
     screenMeta: document.getElementById('screen-meta'),
     screenStage: document.getElementById('screen-stage'),
     prevBtn: document.getElementById('prev-btn'),
-    completeBtn: document.getElementById('complete-btn')
+    completeBtn: document.getElementById('complete-btn'),
+    bundleBtn: document.getElementById('bundle-btn')
   };
 
   let course = null;
   let currentIndex = 0;
   const docCache = new Map();
+
+  /* ---------- Time tracker ---------- */
+  const timeTracker = (function () {
+    const SAVE_INTERVAL_MS = 15000;
+    const KEY_PREFIX = 'matrix-lms:time:';
+    let trackingCourseId = null;
+    let trackingScreenId = null;
+    let segmentStartedAt = null;
+    let intervalId = null;
+
+    function start(cId, sId) {
+      stop();
+      trackingCourseId = cId;
+      trackingScreenId = sId;
+      if (document.visibilityState === 'visible') {
+        segmentStartedAt = Date.now();
+      }
+      intervalId = setInterval(flush, SAVE_INTERVAL_MS);
+    }
+    function stop() {
+      if (intervalId) clearInterval(intervalId);
+      flush();
+      trackingCourseId = trackingScreenId = segmentStartedAt = intervalId = null;
+    }
+    function flush() {
+      if (!segmentStartedAt || !trackingCourseId || !trackingScreenId) return;
+      const elapsedSec = Math.floor((Date.now() - segmentStartedAt) / 1000);
+      if (elapsedSec < 1) return;
+      addSeconds(trackingCourseId, trackingScreenId, elapsedSec);
+      segmentStartedAt = Date.now();
+    }
+    function addSeconds(cId, sId, secs) {
+      try {
+        const key = KEY_PREFIX + cId;
+        const data = JSON.parse(localStorage.getItem(key) || '{}');
+        data[sId] = (data[sId] || 0) + secs;
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (_) {}
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (!trackingCourseId) return;
+      if (document.visibilityState === 'visible') {
+        segmentStartedAt = Date.now();
+      } else {
+        flush();
+        segmentStartedAt = null;
+      }
+    });
+    window.addEventListener('beforeunload', flush);
+    window.addEventListener('pagehide', flush);
+    return { start, stop, flush };
+  })();
 
   init();
 
@@ -79,6 +132,100 @@
         }
       }
     });
+
+    if (els.bundleBtn) {
+      const docCount = course.screens.filter((s) => s.type === 'document' && !s.missing).length;
+      if (docCount === 0) {
+        els.bundleBtn.hidden = true;
+      } else {
+        els.bundleBtn.querySelector('span').textContent =
+          'Download ' + docCount + ' worksheets PDF';
+        els.bundleBtn.addEventListener('click', () => downloadBundle(course, els.bundleBtn));
+      }
+    }
+  }
+
+  /* ---------- Combined-PDF bundle generator ---------- */
+  async function downloadBundle(course, btn) {
+    if (!window.html2pdf || !window.mammoth) {
+      alert('PDF library not yet loaded. Please wait a moment and try again.');
+      return;
+    }
+    const documents = course.screens.filter((s) => s.type === 'document' && !s.missing);
+    if (!documents.length) return;
+
+    const originalLabel = btn.querySelector('span').textContent;
+    btn.disabled = true;
+    btn.querySelector('span').textContent = 'Building PDF…';
+
+    /* Hidden offscreen container; html2pdf will render from it */
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;';
+    document.body.appendChild(wrap);
+
+    /* Cover */
+    const cover = document.createElement('div');
+    cover.style.cssText = 'padding:120px 60px 60px;text-align:center;';
+    cover.innerHTML = `
+      <div style="font-size:0.85rem;letter-spacing:3px;color:#7c3aed;font-weight:700;">${escapeHtml(course.code)}</div>
+      <h1 style="font-family:'Segoe UI',Inter,Arial,sans-serif;font-size:34pt;color:#1e1b4b;margin:8px 0 20px;font-weight:800;">${escapeHtml(course.title)}</h1>
+      <p style="color:#5d5b78;font-size:13pt;margin:0 auto;max-width:520px;">${escapeHtml(course.shortDescription || '')}</p>
+      <p style="margin-top:80px;font-size:10pt;color:#8a87a6;">Combined worksheets bundle &middot; ${documents.length} worksheets</p>
+      <p style="margin-top:8px;font-size:9pt;color:#8a87a6;">Generated ${new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+    `;
+    wrap.appendChild(cover);
+
+    /* Each worksheet on a fresh page */
+    for (let i = 0; i < documents.length; i++) {
+      const screen = documents[i];
+      try {
+        let html = docCache.get(screen.src);
+        if (!html) {
+          const res = await fetch(screen.src);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const buf = await res.arrayBuffer();
+          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+          html = enhanceWorksheetHtml(result.value || '');
+          docCache.set(screen.src, html);
+        }
+        const sec = document.createElement('div');
+        sec.style.cssText = 'page-break-before:always;padding:30px 40px;';
+        sec.innerHTML =
+          '<div style="font-size:0.78rem;letter-spacing:2px;color:#7c3aed;text-transform:uppercase;font-weight:700;">' +
+          escapeHtml(course.code) + ' &middot; Worksheet ' + (i + 1) +
+          '</div>' +
+          '<h1 style="font-family:\'Segoe UI\',Inter,Arial,sans-serif;font-size:20pt;color:#1e1b4b;margin:6px 0 18px;">' +
+          escapeHtml(screen.title) + '</h1>' +
+          html;
+        wrap.appendChild(sec);
+      } catch (err) {
+        const sec = document.createElement('div');
+        sec.style.cssText = 'page-break-before:always;padding:30px;color:#b45309;';
+        sec.textContent = 'Could not render ' + screen.title + ' (' + err.message + ')';
+        wrap.appendChild(sec);
+      }
+    }
+
+    try {
+      await window.html2pdf()
+        .set({
+          margin: [10, 12, 14, 12],
+          filename: course.code + '-worksheets.pdf',
+          image: { type: 'jpeg', quality: 0.95 },
+          html2canvas: { scale: 1.6, letterRendering: true, useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        })
+        .from(wrap)
+        .save();
+    } catch (err) {
+      console.error(err);
+      alert('PDF generation failed: ' + err.message);
+    } finally {
+      wrap.remove();
+      btn.disabled = false;
+      btn.querySelector('span').textContent = originalLabel;
+    }
   }
 
   function renderSidebar() {
@@ -147,6 +294,7 @@
     els.prevBtn.disabled = idx === 0;
     updateCompleteButton();
 
+    timeTracker.start(courseId, screen.id);
     renderStage(screen);
   }
 
@@ -479,6 +627,12 @@
     if (idx === currentIndex) updateCompleteButton();
     if (window.Gamify && value && !wasComplete) {
       window.Gamify.onComplete(courseId, course.screens[idx]);
+    }
+    /* SCORM: report completion progress to the host LMS, if any */
+    if (window.MatrixSCORM && window.MatrixSCORM.isActive && window.MatrixSCORM.isActive()) {
+      const completed = course.screens.filter((s) => isComplete(s.id)).length;
+      window.MatrixSCORM.screenComplete(completed, course.screens.length);
+      if (completed >= course.screens.length) window.MatrixSCORM.courseComplete();
     }
   }
   function toggleComplete(screenId) {

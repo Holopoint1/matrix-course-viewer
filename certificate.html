@@ -15,6 +15,7 @@
     </a>
     <nav>
       <a href="index.html">Catalog</a>
+      <a href="stats.html">My Stats</a>
       <a id="back-link" href="#">Back to course</a>
     </nav>
   </header>
@@ -54,6 +55,7 @@
     </div>
   </main>
 
+  <script src="assets/gamify.js"></script>
   <script>
     (async function () {
       const params = new URLSearchParams(location.search);
@@ -62,6 +64,7 @@
 
       document.getElementById('back-link').href = 'course.html?id=' + encodeURIComponent(courseId);
 
+      await window.Gamify.init();
       const res = await fetch('data/courses.json');
       const data = await res.json();
       const course = data.courses.find((c) => c.id === courseId);
@@ -83,9 +86,9 @@
       const completedCount = course ? course.screens.filter((s) => progress[s.id]).length : 0;
       const total = course ? course.screens.length : 0;
       const pct = total ? Math.round((completedCount / total) * 100) : 0;
-      const totalHours = course ? course.screens.filter((s) => progress[s.id]).reduce((sum, s) => sum + (Number(s.hours) || 0), 0) : 0;
+      const realSeconds = window.Gamify.getCourseTotalSeconds(courseId);
       document.getElementById('cert-completion').textContent = pct + '% (' + completedCount + ' of ' + total + ')';
-      document.getElementById('cert-hours').textContent = totalHours.toFixed(1) + ' hours';
+      document.getElementById('cert-hours').textContent = realSeconds > 0 ? window.Gamify.formatDuration(realSeconds) : '— hours';
 
       const nameInput = document.getElementById('name-input');
       const nameKey = 'matrix-lms:cert-name:' + courseId;
