@@ -80,9 +80,10 @@ lms/
 
 ## Documentation
 
-- **[AUTHORING.md](AUTHORING.md)** — how `courses.json` works, adding courses or screens, where missing assets go
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** — local + GitHub Pages
-- **[ROADMAP.md](ROADMAP.md)** — what's still missing, open questions, planned work
+- **[MASTER-DOC-SPEC.md](MASTER-DOC-SPEC.md)** — bulletproof verbatim mapping of `master_doc.docx` to this implementation; flags master-doc inconsistencies and decisions still owed
+- **[AUTHORING.md](AUTHORING.md)** — how `courses.json` works, four-pack worksheet ecosystem, hardware spec, adding courses or screens, where missing assets go
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** — local + GitHub Pages, Cloudflare/Netlify alternatives
+- **[ROADMAP.md](ROADMAP.md)** — what's still missing, the 12 master-doc discussion points, planned work
 - **[CLAUDE.md](CLAUDE.md)** — guidance for AI assistants working in this repo
 
 ## Tech

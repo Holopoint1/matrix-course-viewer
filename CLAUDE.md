@@ -75,6 +75,6 @@ When adding a course, also create:
 
 ## When in doubt
 
-Read `master_doc.docx` (in `Matrix May LMS\assets\`) — it is the source of truth for what each course should contain, including screen lists, naming, certificate behaviour, and the open discussion points from the original brief.
+Read **[`MASTER-DOC-SPEC.md`](MASTER-DOC-SPEC.md)** first — it captures every master-doc requirement verbatim, maps it onto current implementation, and flags master-doc inconsistencies. If `MASTER-DOC-SPEC.md` doesn't answer your question, fall back to `master_doc.docx` itself (in `Matrix May LMS\assets\`).
 
 Open questions are tracked in `ROADMAP.md`.

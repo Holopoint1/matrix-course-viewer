@@ -88,17 +88,62 @@ Say you want to add **CO0004 — Robotics with Allcode** (per the master doc's 1
 
 That's it. Refresh the dashboard — the new course appears in the catalog grid.
 
+## The four worksheet packs (master-doc reference)
+
+The master doc's Teacher's-notes section lists four worksheet packs. Three have `CP` codes; the fourth ("PC interfacing") does not yet have a code assigned.
+
+| Pack code  | Pack name                                        | Worksheets                                                                                  |
+|------------|--------------------------------------------------|---------------------------------------------------------------------------------------------|
+| **CP4807** | Introduction to microcontrollers                 | 12 worksheets (Bronze 1-7, Silver 8-10, Gold 11-12)                                         |
+| **CP1972** | Sensors and Microcontrollers                     | 11 worksheets (Bronze 1-5, Silver 6, Gold 7-11 mechanical-sensor projects)                  |
+| **CP0507** | Motors and microcontrollers                      | 5 worksheets (Bronze 1-4, Gold 5 DC motor speed control)                                    |
+| *(none)*   | PC interfacing                                   | 4 worksheets (Bronze 1-3, Silver 4)                                                         |
+
+See `MASTER-DOC-SPEC.md` § 7 for the verbatim worksheet titles for each pack.
+
 ## The Bronze / Silver / Gold tiering
 
-The sidebar groups screens by tier. **Tier is inferred from the worksheet filename**, not stored in `courses.json`:
+The sidebar groups screens by tier. **Tier is inferred from the worksheet filename** in `inferTier()` (`assets/gamify.js`), not stored in `courses.json`:
 
 | Worksheet pack | Bronze | Silver | Gold     |
 |----------------|--------|--------|----------|
 | CP4807         | 1–7    | 8–10   | 11–12    |
-| CP1972         | 1–5    | 6      | 7+       |
+| CP1972         | 1–5    | 6      | 7–11     |
 | CP0507         | 1–4    | —      | 5        |
 
-If you introduce a **new CP code**, edit `inferTier()` in `assets/gamify.js` to add the rules.
+If you introduce a **new CP code** (e.g. for the PC interfacing pack), edit `inferTier()` in `assets/gamify.js` to add the rules.
+
+## Hardware reference
+
+The master doc spec says courses are designed to run on a Matrix Microcontroller development centre. Three flavours, sharing a common board set:
+
+| Code      | Variant                                       |
+|-----------|-----------------------------------------------|
+| `BL5394`  | ESP32 microcontroller development centre      |
+| `BL8624`  | PIC microcontroller development centre        |
+| `BL3797`  | Arduino microcontroller development centre    |
+
+Common boards (referenced inside worksheets):
+
+| Code      | Board                                         |
+|-----------|-----------------------------------------------|
+| `BL0082`  | PIC upstream board                            |
+| `BL0040`  | Arduino upstream board                        |
+| `BL0070`  | ESP32 upstream board                          |
+| `BL0114`  | Combo board                                   |
+| `BL0117`  | Prototype board                               |
+| `BL0118`  | Project board                                 |
+| `BL0127`  | Actuators board                               |
+| `BL0135`  | 9-axis motion / accelerometer board           |
+| `BL0144`  | Temp / humidity board                         |
+| `BL0145`  | Switch board                                  |
+| `BL0156`  | Splitter board                                |
+| `BL0167`  | LED board                                     |
+| `BL0172`  | Logic analyser with ribbon cable              |
+| `BL0183`  | Relay board                                   |
+| `BL0189`  | Analogue board                                |
+
+These BL codes appear inline in worksheet bodies. Verbatim text is preserved in the rendered output — the renderer does not annotate them.
 
 Non-document screens (image / html / youtube / pdf / pptx) fall into:
 - `intro` — anything that isn't a worksheet, homework or assessment
