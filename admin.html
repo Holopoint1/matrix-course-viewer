@@ -90,12 +90,19 @@
       }
       document.getElementById('cms-login-form').addEventListener('submit', (ev) => {
         ev.preventDefault();
-        const pw = document.getElementById('cms-password').value;
-        if (window.MatrixCMS.unlock(pw)) {
+        try {
+          const pw = document.getElementById('cms-password').value;
+          window.MatrixCMS.unlock(pw); /* Phase 1: always succeeds */
           showShell();
-          init();
-        } else {
-          alert('Wrong password. (Default: matrix)');
+          init().catch((e) => {
+            console.error('Admin init failed:', e);
+            document.getElementById('cms-main').innerHTML =
+              '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
+              (e && e.message ? e.message : String(e)) + '</p>';
+          });
+        } catch (err) {
+          console.error('Admin sign-in error:', err);
+          alert('Sign in failed: ' + (err && err.message ? err.message : err));
         }
       });
       document.getElementById('cms-logout-btn').addEventListener('click', () => {

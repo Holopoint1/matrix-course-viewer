@@ -97,17 +97,20 @@
         || Object.keys(loadJson(KEY_HTML)).length > 0;
   }
 
-  /* ----- Auth (local-only theatre) ----- */
+  /* ----- Auth (local-only theatre — Phase 1) -----
+   *
+   * Phase 1 has no backend, so there's nothing to actually authenticate against.
+   * Per the user's direction the form is purely a UI gate — anyone who clicks
+   * Sign In gets in. The form fields are pre-filled and any value is accepted.
+   * Phase 2 (real backend) replaces this with a server-side session.
+   */
   function isUnlocked() {
     return Boolean(loadJson(KEY_AUTH).unlocked);
   }
-  function unlock(password) {
-    const expected = localStorage.getItem('matrix-lms:cms:custom-password') || DEFAULT_PASSWORD;
-    if (String(password) === expected) {
-      saveJson(KEY_AUTH, { unlocked: true, ts: Date.now() });
-      return true;
-    }
-    return false;
+  function unlock(_password) {
+    /* Always succeeds — no real auth in Phase 1. */
+    saveJson(KEY_AUTH, { unlocked: true, ts: Date.now() });
+    return true;
   }
   function lock() {
     localStorage.removeItem(KEY_AUTH);
