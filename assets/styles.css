@@ -54,6 +54,12 @@
 html, body { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
+/* HTML `hidden` attribute should always trump `display: flex`/`grid` set on the
+   same element by class selectors. Without this, the admin login & shell —
+   both flex / grid containers with the `hidden` attribute — render on top of
+   each other and the Sign-in toggle becomes a no-op. */
+[hidden] { display: none !important; }
+
 body {
   font-family: var(--font-sans);
   color: var(--text);
