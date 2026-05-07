@@ -2019,7 +2019,8 @@ a:hover { text-decoration: underline; }
   font-weight: 800;
 }
 
-.stage-doc-inner .inline-youtube {
+/* Inline YouTube embed — works anywhere on the site (worksheet bodies, dashboard prep, etc.) */
+.inline-youtube {
   position: relative;
   width: 100%;
   aspect-ratio: 16/9;
@@ -2029,7 +2030,7 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow-md);
   background: #000;
 }
-.stage-doc-inner .inline-youtube iframe {
+.inline-youtube iframe {
   position: absolute;
   inset: 0;
   width: 100%;
