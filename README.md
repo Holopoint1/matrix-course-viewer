@@ -85,6 +85,13 @@ At render time the viewer rewrites docx / htm output for readability:
 - Per-screen "Resource missing — please send `<filename>`" panel inside the viewer
 - Opening images flagged missing per master-doc filenames; catalog cards keep a thumbnail placeholder (`thumbnail` field) for visual continuity
 
+**File manager (`/files.html`)**
+- Resource browser that runs HEAD probes against the server to confirm exactly which files are present (✓) and which are missing (✗) — verifies your "is `Opening.png` really missing?" suspicion in seconds
+- Drag-drop staging zone — files are auto-routed to the right folder based on filename (`CP4807-N.docx` → `content/CP4807/`, `CO002 - opening.png` → `content/CO0002/`, etc.)
+- Click "Send file →" next to any missing row to upload directly into that path
+- Editable target path per staged file
+- "Download zip" produces `matrix-files.zip` with the correct folder structure and a README — drop the zip on a developer, they unzip into `lms/` and commit, the missing-resource panels disappear automatically
+
 ## Quick start
 
 The runtime needs **no npm install** — uses only Node built-ins:

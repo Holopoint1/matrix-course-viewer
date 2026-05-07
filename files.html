@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Files | Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <img src="assets/matrix-logo.svg" alt="Matrix TSL" class="brand-logo">
+      <span class="brand-divider">|</span>
+      <span class="brand-sub">Course Viewer</span>
+    </a>
+    <nav>
+      <a href="index.html">Catalog</a>
+      <a href="stats.html">My Stats</a>
+      <a href="preview.html">Preview</a>
+      <a href="files.html" class="active">Files</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <section class="stats-hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Author tools</span>
+      <h1>Files</h1>
+      <p>Check exactly which resource files are present on the server, see what's still missing, and stage new files (drop them in — they're auto-routed to the right folder). Export the staging area as a zip for a developer to drop into the project.</p>
+    </div>
+  </section>
+
+  <main class="files-section">
+    <!-- Drop zone -->
+    <div class="dropzone files-dropzone" id="dropzone">
+      <div class="dropzone-icon">⤓</div>
+      <div class="dropzone-title">Drop files to stage</div>
+      <div class="dropzone-sub">or <button class="btn btn-primary" type="button" id="pick-btn">choose files</button></div>
+      <input type="file" id="file-input" multiple hidden>
+      <div class="dropzone-types">Auto-routes by filename (CP4807-N.docx → content/CP4807/, CO002 - opening.png → content/CO0002/, etc.)</div>
+    </div>
+
+    <!-- Staging area -->
+    <div class="files-staging" id="files-staging" hidden>
+      <div class="files-staging-head">
+        <h2 class="stats-h2">Staging area</h2>
+        <span class="files-staging-count" id="staging-count">0 files</span>
+        <button class="btn btn-secondary" id="clear-staging">Clear</button>
+        <button class="btn btn-primary" id="export-zip">↓ Download zip</button>
+      </div>
+      <p class="files-staging-hint">These files are held in your browser. Click <strong>Download zip</strong> and send the resulting <code>matrix-files.zip</code> to a developer — they unzip it into <code>lms/</code> and the missing-resource panels disappear automatically.</p>
+      <ul class="files-staging-list" id="staging-list"></ul>
+    </div>
+
+    <!-- File tree -->
+    <div class="files-tree-card">
+      <div class="files-tree-head">
+        <h2 class="stats-h2">Resource files</h2>
+        <div class="files-tree-legend">
+          <span class="files-status ok">✓ present</span>
+          <span class="files-status missing">✗ missing</span>
+          <span class="files-status staged">↑ staged</span>
+        </div>
+        <button class="btn btn-secondary" id="rescan-btn">Rescan</button>
+      </div>
+      <p class="files-tree-hint">Re-scans the server with HEAD probes whenever you click <strong>Rescan</strong>. Click <strong>✗ missing</strong> rows to upload directly into that path.</p>
+      <div class="files-tree" id="files-tree">
+        <p class="stage-loading">Scanning&hellip;</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <strong>Matrix Course Viewer</strong>
+        <span>© Matrix TSL · Engineering education resources</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Catalog</a>
+        <a href="stats.html">My Stats</a>
+        <a href="preview.html">Preview</a>
+        <a href="files.html">Files</a>
+        <a href="admin.html">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    (async function () {
+      'use strict';
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
+      function formatSize(n) {
+        if (n < 1024) return n + ' B';
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+        return (n / 1024 / 1024).toFixed(1) + ' MB';
+      }
+
+      /* ---------- Build the expected-file tree from courses.json ---------- */
+      const data = await fetch('data/courses.json').then((r) => r.json());
+
+      /* Each entry: { path, filename, type, status: 'unknown' | 'ok' | 'missing' | 'staged', usedBy: [{course, screen}] } */
+      const expectedMap = new Map();
+      function expect(path, type, courseId, screenTitle) {
+        if (!path || /^https?:/i.test(path)) return;
+        if (!expectedMap.has(path)) {
+          expectedMap.set(path, {
+            path,
+            filename: path.split('/').pop(),
+            type,
+            status: 'unknown',
+            usedBy: []
+          });
+        }
+        if (courseId) expectedMap.get(path).usedBy.push({ courseId, screenTitle });
+      }
+      for (const course of data.courses) {
+        for (const s of course.screens) {
+          expect(s.src, s.type, course.id, s.title);
+          if (s.thumbnail) expect(s.thumbnail, 'image', course.id, s.title + ' (thumbnail)');
+        }
+      }
+
+      /* Also include the standard intro stubs (welcome / LO / equipment / cpd-objectives) */
+      const stubExpected = [
+        'content/CO0001/cpd-objectives.html',
+        'content/CO0001/opening.svg',
+        'content/CO0002/welcome.html',
+        'content/CO0002/learning-objectives.html',
+        'content/CO0002/equipment.html',
+        'content/CO0002/opening.svg',
+        'content/CO0003/welcome.html',
+        'content/CO0003/opening.svg'
+      ];
+      for (const p of stubExpected) expect(p, 'html', null, null);
+
+      const expectedList = Array.from(expectedMap.values());
+
+      /* ---------- HEAD-probe each expected file to set status ---------- */
+      async function rescan() {
+        const tree = document.getElementById('files-tree');
+        tree.innerHTML = '<p class="stage-loading">Scanning&hellip; (' + expectedList.length + ' files)</p>';
+        let done = 0;
+        await Promise.all(expectedList.map(async (entry) => {
+          try {
+            const res = await fetch(entry.path, { method: 'HEAD', cache: 'no-store' });
+            entry.status = res.ok ? 'ok' : 'missing';
+            entry.size = Number(res.headers.get('content-length') || 0) || null;
+          } catch (_) {
+            entry.status = 'missing';
+          } finally {
+            done += 1;
+          }
+        }));
+        renderTree();
+      }
+      document.getElementById('rescan-btn').addEventListener('click', rescan);
+      rescan();
+
+      /* ---------- Render the tree, grouped by folder ---------- */
+      function renderTree() {
+        const tree = document.getElementById('files-tree');
+        const byFolder = new Map();
+        for (const entry of expectedList) {
+          const folder = entry.path.replace(/\/[^/]+$/, '');
+          if (!byFolder.has(folder)) byFolder.set(folder, []);
+          byFolder.get(folder).push(entry);
+        }
+        const folders = Array.from(byFolder.keys()).sort();
+        let html = '';
+        for (const folder of folders) {
+          const items = byFolder.get(folder).sort((a, b) => a.filename.localeCompare(b.filename));
+          const ok = items.filter((e) => e.status === 'ok').length;
+          const missing = items.filter((e) => e.status === 'missing').length;
+          const staged = items.filter((e) => e.status === 'staged').length;
+          html += '<div class="files-folder">';
+          html += '<div class="files-folder-head">';
+          html += '<span class="files-folder-name">' + escapeHtml(folder) + '/</span>';
+          html += '<span class="files-folder-counts">';
+          if (ok) html += '<span class="files-status ok">' + ok + ' ✓</span>';
+          if (missing) html += '<span class="files-status missing">' + missing + ' ✗</span>';
+          if (staged) html += '<span class="files-status staged">' + staged + ' ↑</span>';
+          html += '</span>';
+          html += '</div>';
+          html += '<ul class="files-folder-list">';
+          for (const entry of items) {
+            const cls = 'files-row files-row-' + entry.status;
+            const usage = entry.usedBy.length
+              ? entry.usedBy.map((u) => u.courseId + (u.screenTitle ? ' · ' + u.screenTitle : '')).join(', ')
+              : 'intro / reference page';
+            html += '<li class="' + cls + '" data-path="' + escapeHtml(entry.path) + '">';
+            html += '<span class="files-row-icon">' + (entry.status === 'ok' ? '✓' : entry.status === 'staged' ? '↑' : '✗') + '</span>';
+            html += '<div class="files-row-body">';
+            html += '<div class="files-row-name"><code>' + escapeHtml(entry.filename) + '</code></div>';
+            html += '<div class="files-row-meta">' + escapeHtml(usage) + '</div>';
+            html += '</div>';
+            html += '<span class="files-row-action">';
+            if (entry.status === 'missing') {
+              html += '<button class="btn btn-secondary" type="button" data-action="upload-here" data-path="' + escapeHtml(entry.path) + '">Send file →</button>';
+            } else if (entry.status === 'staged') {
+              html += '<span class="files-row-staged">staged for upload</span>';
+            } else if (entry.size) {
+              html += '<span class="files-row-size">' + formatSize(entry.size) + '</span>';
+            }
+            html += '</span>';
+            html += '</li>';
+          }
+          html += '</ul></div>';
+        }
+        tree.innerHTML = html;
+
+        tree.querySelectorAll('[data-action="upload-here"]').forEach((btn) => {
+          btn.addEventListener('click', () => promptUploadForPath(btn.dataset.path));
+        });
+      }
+
+      function promptUploadForPath(path) {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.addEventListener('change', () => {
+          if (input.files.length) addFileToStaging(input.files[0], path);
+        });
+        input.click();
+      }
+
+      /* ---------- Staging ---------- */
+      const staged = []; /* { id, file, targetPath, fillsMissing } */
+      let nextId = 1;
+
+      const dz = document.getElementById('dropzone');
+      const input = document.getElementById('file-input');
+      document.getElementById('pick-btn').addEventListener('click', () => input.click());
+      input.addEventListener('change', (e) => Array.from(e.target.files).forEach((f) => addFileToStaging(f)));
+
+      ['dragenter', 'dragover'].forEach((ev) =>
+        dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.add('drag'); }));
+      ['dragleave', 'drop'].forEach((ev) =>
+        dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.remove('drag'); }));
+      dz.addEventListener('drop', (e) => {
+        Array.from(e.dataTransfer.files).forEach((f) => addFileToStaging(f));
+      });
+
+      function suggestPath(filename) {
+        /* 1. Exact match against any expected file → fills a missing slot */
+        for (const e of expectedList) {
+          if (e.filename === filename) return { path: e.path, fills: e.status === 'missing' };
+        }
+        /* 2. Derive folder from CP-code prefix */
+        let m = /^(CP\d+)-/.exec(filename);
+        if (m) return { path: 'content/' + m[1] + '/' + filename, fills: false };
+        /* 3. Derive from "CO000X" prefix */
+        m = /^(CO\d{3,4})/i.exec(filename);
+        if (m) return { path: 'content/' + m[1].toUpperCase() + '/' + filename, fills: false };
+        /* 4. PowerPoints / Microcontroller basics → CO0002 */
+        if (/microcontroller basics/i.test(filename)) return { path: 'content/CO0002/' + filename, fills: false };
+        /* 5. Fall back: place at content/ root with a sensible-but-flagged path */
+        return { path: 'content/' + filename, fills: false };
+      }
+
+      function addFileToStaging(file, forcedPath) {
+        const id = 's-' + (nextId++);
+        const suggestion = forcedPath ? { path: forcedPath, fills: true } : suggestPath(file.name);
+        staged.push({ id, file, targetPath: suggestion.path, fillsMissing: suggestion.fills });
+        /* Mark the corresponding expected entry as 'staged' */
+        const match = expectedList.find((e) => e.path === suggestion.path);
+        if (match) match.status = 'staged';
+        renderStaging();
+        renderTree();
+      }
+
+      function renderStaging() {
+        const wrap = document.getElementById('files-staging');
+        const list = document.getElementById('staging-list');
+        document.getElementById('staging-count').textContent = staged.length + ' file' + (staged.length === 1 ? '' : 's');
+        if (staged.length === 0) { wrap.hidden = true; return; }
+        wrap.hidden = false;
+        list.innerHTML = '';
+        for (const item of staged) {
+          const li = document.createElement('li');
+          li.className = 'files-staged-row' + (item.fillsMissing ? ' fills' : '');
+          li.innerHTML = '\n            <span class="files-staged-name"><code>' + escapeHtml(item.file.name) + '</code> <span class="files-staged-size">' + formatSize(item.file.size) + '</span></span>\n            <input class="files-staged-path" value="' + escapeHtml(item.targetPath) + '">\n            <span class="files-staged-tag">' + (item.fillsMissing ? '✓ fills a missing slot' : '⚠ new path') + '</span>\n            <button class="btn btn-ghost files-staged-remove" type="button" aria-label="Remove">×</button>\n          ';
+          li.querySelector('.files-staged-path').addEventListener('input', (ev) => {
+            item.targetPath = ev.target.value;
+            const match = expectedList.find((e) => e.path === item.targetPath);
+            item.fillsMissing = !!match;
+          });
+          li.querySelector('.files-staged-remove').addEventListener('click', () => {
+            const idx = staged.findIndex((s) => s.id === item.id);
+            if (idx >= 0) staged.splice(idx, 1);
+            const match = expectedList.find((e) => e.path === item.targetPath);
+            if (match) match.status = 'missing'; /* revert */
+            renderStaging();
+            renderTree();
+          });
+          list.appendChild(li);
+        }
+      }
+
+      document.getElementById('clear-staging').addEventListener('click', () => {
+        if (!staged.length) return;
+        if (!confirm('Clear all staged files?')) return;
+        for (const item of staged) {
+          const match = expectedList.find((e) => e.path === item.targetPath);
+          if (match) match.status = 'missing';
+        }
+        staged.length = 0;
+        renderStaging();
+        renderTree();
+      });
+
+      document.getElementById('export-zip').addEventListener('click', async () => {
+        if (!staged.length) { alert('No files staged.'); return; }
+        if (typeof window.JSZip === 'undefined') { alert('Zip library failed to load — check your internet connection.'); return; }
+        const zip = new window.JSZip();
+        for (const item of staged) {
+          const buf = await item.file.arrayBuffer();
+          zip.file(item.targetPath, buf);
+        }
+        /* Top-level README so the dev knows what to do */
+        const readme = '# Matrix LMS — staged resources\n\nGenerated by /files.html on ' + new Date().toISOString() + '\n\nDrop the contents of this zip into your `lms/` folder, then commit and push.\n\nFiles included:\n\n' + staged.map((s) => '- ' + s.targetPath + (s.fillsMissing ? ' (fills a missing slot)' : '')).join('\n') + '\n';
+        zip.file('README.txt', readme);
+        const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'matrix-files.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    })();
+  </script>
+</body>
+</html>
