@@ -11,7 +11,7 @@
         "templateName": "Flowcode and E-blocks 3 CPD"
       },
       "screens": [
-        { "id": "co1-s01", "type": "image",      "title": "Introduction to microcontrollers", "hours": 0,   "equipment": "Flowcode / E-blocks3", "src": "content/CO0001/opening.svg" },
+        { "id": "co1-s01", "type": "image",      "title": "Introduction to microcontrollers", "hours": 0,   "equipment": "Flowcode / E-blocks3", "src": "content/CO0001/CO0001 - opening.png", "missing": true, "thumbnail": "content/CO0001/opening.svg" },
         { "id": "co1-s02", "type": "html",       "title": "Learning objectives",               "hours": 0.1, "equipment": "Flowcode / E-blocks3", "src": "content/CO0002/learning-objectives.html" },
         { "id": "co1-s03", "type": "html",       "title": "Equipment",                          "hours": 0.1, "equipment": "Flowcode / E-blocks3", "src": "content/CO0002/equipment.html" },
         { "id": "co1-s04", "type": "html",       "title": "Welcome",                            "hours": 0.2, "equipment": "Flowcode / E-blocks3", "src": "content/CO0001/cpd-objectives.html" },
@@ -39,7 +39,7 @@
         "templateName": "Introduction to Microcontrollers"
       },
       "screens": [
-        { "id": "co2-s01", "type": "image",      "title": "Introduction to microcontrollers", "hours": 0,   "equipment": "Flowcode / E-blocks3", "src": "content/CO0002/opening.svg" },
+        { "id": "co2-s01", "type": "image",      "title": "Introduction to microcontrollers", "hours": 0,   "equipment": "Flowcode / E-blocks3", "src": "content/CO0002/CO002 - opening.png", "missing": true, "thumbnail": "content/CO0002/opening.svg" },
         { "id": "co2-s02", "type": "html",       "title": "Welcome",                           "hours": 0.1, "equipment": "Flowcode / E-blocks3", "src": "content/CO0002/welcome.html" },
         { "id": "co2-s03", "type": "html",       "title": "Learning objectives",               "hours": 0.1, "equipment": "Flowcode / E-blocks3", "src": "content/CO0002/learning-objectives.html" },
         { "id": "co2-s04", "type": "html",       "title": "Equipment",                         "hours": 0.1, "equipment": "Flowcode / E-blocks3", "src": "content/CO0002/equipment.html" },
@@ -93,7 +93,7 @@
         "enabled": false
       },
       "screens": [
-        { "id": "co3-s01", "type": "image",      "title": "Introduction to microcontrollers", "hours": 0,   "equipment": "Flowcode / E-blocks3", "src": "content/CO0003/opening.svg" },
+        { "id": "co3-s01", "type": "image",      "title": "Introduction to microcontrollers", "hours": 0,   "equipment": "Flowcode / E-blocks3", "src": "content/CO0003/CO0003 - opening.png", "missing": true, "thumbnail": "content/CO0003/opening.svg" },
         { "id": "co3-s02", "type": "html",       "title": "Welcome",                           "hours": 0.1, "equipment": "Flowcode / E-blocks3", "src": "content/CO0003/welcome.html" },
         { "id": "co3-s03", "type": "youtube",    "title": "Introducing E-blocks 3",            "hours": 0.2, "equipment": "Flowcode / E-blocks3", "src": "https://youtu.be/KmpyVmv6J_Y" },
         { "id": "co3-s04", "type": "youtube",    "title": "Introducing Flowcode",              "hours": 0.2, "equipment": "Flowcode / E-blocks3", "src": "https://youtu.be/tDdptTbvDM0" },

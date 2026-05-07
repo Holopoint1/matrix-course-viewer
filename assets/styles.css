@@ -252,6 +252,82 @@ a:hover { text-decoration: underline; }
 }
 .catalog-heading p { margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.9rem; }
 
+/* ---------- Missing media (author-facing to-do list) ---------- */
+.missing-section {
+  max-width: 1180px;
+  margin: 0 auto 2rem;
+  padding: 0 1.5rem;
+}
+.missing-card {
+  background: linear-gradient(180deg, #fffaf0, #fff);
+  border: 1px solid var(--warn-border);
+  border-radius: var(--r-lg);
+  padding: 1.2rem 1.4rem 1.4rem;
+  box-shadow: var(--shadow-xs);
+}
+.missing-card-head {
+  display: flex; align-items: center; gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.missing-card-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--primary-dark);
+  font-weight: 800;
+  display: flex; align-items: center; gap: 0.55rem;
+}
+.missing-card-pill {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  color: var(--warn);
+  font-size: 0.7rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 99px;
+  font-weight: 800;
+}
+.missing-card-counter {
+  margin-left: auto;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  color: var(--warn);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.32rem 0.75rem;
+  border-radius: 99px;
+}
+.missing-card-hint { color: var(--text-muted); font-size: 0.9rem; margin: 0 0 1rem; }
+.missing-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.missing-row {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 0.7rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.6rem 0.85rem;
+}
+.missing-row-icon { font-size: 1.2rem; opacity: 0.85; }
+.missing-row-name code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+.missing-row-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+.missing-row-meta code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+.missing-row-usage { font-size: 0.78rem; color: var(--text-subtle); margin-top: 0.2rem; }
+
 /* ---------- Achievements ---------- */
 .achievements-section {
   max-width: 1180px;
@@ -789,6 +865,172 @@ a:hover { text-decoration: underline; }
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 1px solid var(--border);
+}
+
+/* ---------- Preview page (drop-to-preview author tool) ---------- */
+.preview-section {
+  max-width: 1100px;
+  margin: 0 auto 4rem;
+  padding: 0 1.5rem;
+}
+.dropzone {
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  padding: 2.4rem 1.5rem 2.6rem;
+  text-align: center;
+  transition: border-color 180ms ease, background-color 180ms ease;
+  margin-bottom: 1.6rem;
+}
+.dropzone.drag {
+  border-color: var(--primary);
+  background: var(--primary-50);
+}
+.dropzone-icon {
+  font-size: 2.2rem;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 0.7rem;
+}
+.dropzone-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+.dropzone-sub {
+  margin-top: 0.6rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.dropzone-types {
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--text-subtle);
+  letter-spacing: 0.4px;
+}
+.preview-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+.preview-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+.preview-card-head {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.preview-card-head > div:first-child { display: flex; align-items: center; gap: 0.55rem; flex: 1; min-width: 0; }
+.preview-card-name {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.86rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.preview-card-size { color: var(--text-subtle); font-size: 0.78rem; }
+.preview-card-type {
+  font-size: 0.66rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.18rem 0.5rem;
+  border-radius: 99px;
+  background: var(--primary-100);
+  color: var(--primary);
+}
+.preview-card-type.document { background: #dbeafe; color: #1d4ed8; }
+.preview-card-type.html { background: #dcfce7; color: #15803d; }
+.preview-card-type.pdf { background: #ffedd5; color: #c2410c; }
+.preview-card-type.image { background: #ede9fe; color: #6d28d9; }
+.preview-card-type.powerpoint { background: #fce7f3; color: #be185d; }
+.preview-card-type.spreadsheet { background: #ecfdf5; color: #047857; }
+.preview-card-remove {
+  background: transparent; border: none;
+  font-size: 1.4rem; color: var(--text-subtle);
+  width: 28px; height: 28px; padding: 0; cursor: pointer;
+  border-radius: 6px;
+}
+.preview-card-remove:hover { background: var(--surface-2); color: var(--warn); }
+.preview-card-body {
+  min-height: 200px;
+  max-height: 600px;
+  overflow: auto;
+  background: var(--bg);
+}
+.preview-card-body .stage-doc { padding: 1rem; background: transparent; }
+.preview-card-body .stage-doc-inner { padding: 1.5rem 2rem 2rem; }
+.preview-card-body .preview-iframe { width: 100%; height: 600px; border: none; background: #fff; }
+.preview-card-body .preview-image { display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+.preview-card-body .preview-image img { max-width: 100%; max-height: 540px; border-radius: var(--r-md); box-shadow: var(--shadow-sm); }
+.preview-card-foot {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.preview-card-foot label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-subtle);
+}
+.preview-card-foot input {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: normal;
+}
+.preview-card-foot input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
+}
+.preview-snippet-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+  padding: 1.2rem 1.4rem 1.4rem;
+}
+.preview-snippet-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.6rem; }
+.preview-snippet-head .stats-h2 { margin: 0; flex: 1; }
+.preview-snippet-hint { color: var(--text-muted); font-size: 0.86rem; margin: 0 0 0.7rem; }
+.preview-snippet-hint code { font-family: ui-monospace, monospace; font-size: 0.85em; background: var(--primary-50); padding: 0.1rem 0.35rem; border-radius: 3px; color: var(--primary-dark); }
+#snippet {
+  width: 100%;
+  min-height: 220px;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.85rem;
+  padding: 1rem;
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  border-radius: var(--r-sm);
+  resize: vertical;
+  color: var(--primary-dark);
+  line-height: 1.5;
 }
 
 /* ---------- Course-card download row ---------- */

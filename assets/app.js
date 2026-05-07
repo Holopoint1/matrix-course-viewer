@@ -358,11 +358,13 @@
     stage.innerHTML = '';
 
     if (screen.missing) {
+      const fname = filename(screen.src) || 'this file';
       stage.innerHTML = `
         <div class="stage-missing">
-          <span class="badge">Asset not yet available</span>
+          <span class="badge">Resource missing</span>
           <h2>${escapeHtml(screen.title)}</h2>
-          <p>This screen is defined in the course outline but the source file <code>${escapeHtml(filename(screen.src))}</code> has not yet been added.</p>
+          <p>This screen is defined in the course outline, but the source file <code>${escapeHtml(fname)}</code> hasn't been added to the media zip yet.</p>
+          <p><strong>Please send <code>${escapeHtml(fname)}</code></strong> and it'll appear here automatically.</p>
         </div>`;
       return;
     }

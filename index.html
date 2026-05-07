@@ -17,6 +17,7 @@
     <nav>
       <a href="index.html" class="active">Catalog</a>
       <a href="stats.html">My Stats</a>
+      <a href="preview.html">Preview</a>
     </nav>
   </header>
 
@@ -42,6 +43,17 @@
       <p class="stage-loading">Loading courses&hellip;</p>
     </div>
   </main>
+
+  <section class="missing-section" id="missing-section" hidden>
+    <div class="missing-card">
+      <div class="missing-card-head">
+        <h2><span class="missing-card-pill">Awaiting</span> Resources to send</h2>
+        <span class="missing-card-counter" id="missing-counter">— files</span>
+      </div>
+      <p class="missing-card-hint">These files are referenced by the course outline but haven't been added to the media zip yet. Drop them into the indicated folder and they'll appear automatically — no rebuild needed.</p>
+      <ul class="missing-list" id="missing-list"></ul>
+    </div>
+  </section>
 
   <section class="achievements-section">
     <div class="achievements-card">
@@ -105,8 +117,13 @@
 
           const card = document.createElement('article');
           card.className = 'course-card';
+          /* Catalog thumbnail: prefer the first image-screen's thumbnail (if it
+             explicitly provides one for placeholder use) or src; fall back to a
+             generic per-course opening.svg. */
+          const firstImage = course.screens.find((s) => s.type === 'image');
+          const thumbSrc = (firstImage && (firstImage.thumbnail || (!firstImage.missing && firstImage.src))) || ('content/' + course.id + '/opening.svg');
           card.innerHTML = `
-            <a class="thumb" href="course.html?id=${course.id}" style="background-image:url('content/${course.id}/opening.svg')" aria-label="Start ${escapeHtml(course.title)}">
+            <a class="thumb" href="course.html?id=${course.id}" style="background-image:url('${thumbSrc}')" aria-label="Start ${escapeHtml(course.title)}">
               ${hasCert ? '<span class="thumb-tag" title="Includes certificate of completion">★ Certificate</span>' : ''}
             </a>
             <div class="body">
@@ -140,6 +157,41 @@
         stats.querySelector('[data-stat="courses"]').textContent = data.courses.length;
         stats.querySelector('[data-stat="time"]').textContent = totalTime > 0 ? window.Gamify.formatDuration(totalTime) : '0m';
         stats.querySelector('[data-stat="streak"]').textContent = streak.days || 0;
+
+        /* ---------- Missing media panel ---------- */
+        const missingSection = document.getElementById('missing-section');
+        const missingList = document.getElementById('missing-list');
+        const missingCounter = document.getElementById('missing-counter');
+        const allMissing = new Map(); /* src -> { filename, screens: [{ courseCode, title }] } */
+        for (const course of data.courses) {
+          for (const screen of course.screens) {
+            if (!screen.missing) continue;
+            const src = screen.src;
+            if (!allMissing.has(src)) {
+              allMissing.set(src, { src, filename: src.split(/[\\/]/).pop(), screens: [] });
+            }
+            allMissing.get(src).screens.push({ courseCode: course.code, title: screen.title });
+          }
+        }
+        if (allMissing.size > 0) {
+          missingSection.hidden = false;
+          missingCounter.textContent = allMissing.size + ' file' + (allMissing.size === 1 ? '' : 's');
+          missingList.innerHTML = '';
+          for (const item of allMissing.values()) {
+            const li = document.createElement('li');
+            li.className = 'missing-row';
+            const usage = item.screens.map((s) => s.courseCode + ' · ' + s.title).join(' · ');
+            li.innerHTML = `
+              <div class="missing-row-icon">📦</div>
+              <div class="missing-row-body">
+                <div class="missing-row-name"><code>${escapeHtml(item.filename)}</code></div>
+                <div class="missing-row-meta">Drop into <code>${escapeHtml(item.src)}</code></div>
+                <div class="missing-row-usage">${escapeHtml(usage)}</div>
+              </div>
+            `;
+            missingList.appendChild(li);
+          }
+        }
 
         /* Render achievements */
         const achievements = window.Gamify.getAchievements();
