@@ -8,7 +8,7 @@ Browser-based learning management system for Matrix TSL engineering education co
 
 | Code     | Title                                            | Screens | Hours  | Certificate |
 |----------|--------------------------------------------------|---------|--------|-------------|
-| `CO0001` | Flowcode & E-blocks 3 CPD course                 | 15      | ~3.6   | ✓           |
+| `CO0001` | Flowcode & E-blocks 3 CPD course                 | 17      | ~3.8   | ✓           |
 | `CO0002` | Introduction to Microcontrollers                 | 42      | ~86    | ✓           |
 | `CO0003` | Digital Techniques for Aviation Technicians      | 26      | ~36    | —           |
 

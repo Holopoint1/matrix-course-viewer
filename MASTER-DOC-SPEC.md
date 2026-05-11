@@ -1,6 +1,6 @@
 # Master-doc → implementation mapping
 
-This document is the **canonical, bulletproof mapping** between Matrix TSL's `master_doc.docx` (in `Matrix May LMS\assets\master_doc.docx`) and what this LMS implements.
+This document is the **canonical, bulletproof mapping** between Matrix TSL's master doc (now at `Matrix May LMS\assets\masterdoc.docx`) and what this LMS implements.
 
 Master-doc text is quoted verbatim. Where the master doc is internally inconsistent, the inconsistency is called out. Where this implementation differs from the master doc, the difference is called out.
 
@@ -9,27 +9,48 @@ Master-doc text is quoted verbatim. Where the master doc is internally inconsist
 > 18 02 26  Second release with schemes of work
 > 05 04 26  with AI mark up instructions
 > 10 04 26  More courses
+> 11 05 26  Restructured around Word styles ("Info for humans" / "AI instructions" / Heading 1/2/3); 13 resources; SCORM IDs renumbered to SC0002 / SC0003; CO0001 expanded with "Now try the worksheets" + "Other resources" screens and Welcome filename moved to CP4807 prefix.
+
+## Reading the new master doc
+
+The 11 May revision **uses Word paragraph styles** to delimit structural sections — a step closer to the marker-based scheme proposed in `ROADMAP.md`. Three custom styles do most of the work:
+
+| Style                | Meaning                                                          |
+|----------------------|------------------------------------------------------------------|
+| `Heading 1`          | Top-level division (Introduction / Media file definitions / AI splitter instructions / Media definitions for the Splitter) |
+| `Heading 2`          | One per resource (e.g. `CO0001 - Flowcode / E-blocks 3 teacher CPD course`) or one per content section (`Over to you:`, `Challenges:`, `Hints:`) inside the Splitter |
+| `Heading 3`          | Sub-section inside the Introduction (`About naming`, `Screen types`, `Discussion points`) |
+| `Info for humans`    | Custom-paragraph style — author commentary, not for the AI       |
+| `AI instructions`    | Custom-paragraph style — the actual screen-list tables and split instructions |
+| `Normal`             | Worksheet body content (paragraphs that the splitter outputs verbatim) |
+
+The legacy `<HTML>...</HTML>`, `<worksheet>...</worksheet>`, `<filename>...</filename>` tags still appear inside `AI instructions` paragraphs, but the new Word styles mean **structural section boundaries no longer rely on the tags surviving copy-paste / round-trips**. The tags are now content, not load-bearing structure.
 
 ---
 
-## 1. The nine resources
+## 1. The thirteen resources
 
-> "This will be a single resource file that uses AI to create 9 separate resources:"
+> "This will be a single resource file that uses AI to create 13 separate resources:"
 
-The master doc lists ten under three groupings (the count of "9" is itself slightly off — see § Inconsistencies below):
+The 11 May revision lists 13 resources (the previous "9" count is gone).
 
 | Code        | Title                                                                       | Implemented?                       |
 |-------------|-----------------------------------------------------------------------------|------------------------------------|
-| `CO0001`    | Flowcode and E-blocks 3 CPD course                                          | ✅ Yes — 15 screens, 3.6 hr        |
-| `CP4807`    | Introduction to microcontrollers worksheets.pdf                             | ❌ Not built (combined PDF bundle) |
-| `CO0002`    | Introduction to microcontrollers Matrix AI Course Viewer course             | ✅ Yes — 42 screens, 86.5 hr       |
-| `SC0001`    | Introduction to microcontrollers SCORM content course                       | ❌ Not built                       |
-| `CP7244`    | EASA unit 5 Digital Techniques microcontrollers worksheets                  | ❌ Master doc says "Needs assembling" |
-| `CO0003`    | EASA unit 5 Digital Techniques microcontrollers Matrix AI Course Viewer course | ✅ Yes — 26 screens, 36.3 hr (master doc spells this `CO003` in one place — see Inconsistencies) |
-| `SC0001`    | EASA unit 5 Digital Techniques SCORM compliant resource                     | ❌ Master doc says "Needs assembling" — also same code as CO0001's SCORM (see Inconsistencies) |
-| `CPXXX`     | T level microcontrollers worksheets                                         | ❌ Master doc: "T level stuff not complete" |
-| `COXXX`     | T level microcontrollers Matrix AI Course Viewer course                     | ❌ Same                             |
-| `SCXXX`     | T level SCORM compliant resource                                            | ❌ Same                             |
+| `CO0001`    | Flowcode and E-blocks 3 CPD course                                          | ✅ Yes — 17 screens, 3.8 hr        |
+| `CP4807`    | Introduction to microcontrollers worksheets.pdf                             | ✅ Generated on demand via the Course-viewer "Download all worksheets PDF" button |
+| `CP4807`    | Introduction to microcontrollers worksheets.docx                            | ❌ Not built (combined DOCX bundle) |
+| `CO0002`    | Introduction to microcontrollers Matrix course                              | ✅ Yes — 42 screens, 86.5 hr       |
+| `SC0002`    | Introduction to microcontrollers SCORM content definition                   | ✅ `dist/SC0002-introduction-to-microcontrollers.zip` |
+| `CP7244`    | EASA unit 5 Digital Techniques microcontrollers worksheets.pdf              | ❌ Not built (combined PDF bundle) |
+| `CP7244`    | EASA unit 5 Digital Techniques microcontrollers worksheets.docx             | ❌ Not built                       |
+| `CO0003`    | EASA unit 5 Digital Techniques microcontrollers course                      | ✅ Yes — 26 screens, 36.3 hr (master doc spells this `CO003` in one place — see Inconsistencies) |
+| `SC0003`    | EASA unit 5 Digital Techniques SCORM content definition                     | ✅ `dist/SC0003-digital-techniques-for-aviation-technicians.zip` |
+| `CPXXX`     | T level microcontrollers worksheets.pdf                                     | ❌ Master doc: "T level stuff not complete" |
+| `CPXXX`     | T level microcontrollers worksheets.docx                                    | ❌ Same                             |
+| `COXXX`     | T level microcontrollers Matrix course                                      | ❌ Same                             |
+| `SCXXX`     | T level SCORM content definition                                            | ❌ Same                             |
+
+> Our engineers will complete the media underlined. They are already doing that. A Publisher (to be appointed, or external) will create the rest. This will necessitate creating quite a lot of videos on how equipment is used.
 
 ---
 
@@ -75,18 +96,20 @@ Implementation status of each:
 
 ## 4. CO0001 — CPD course screen list
 
-Master doc verbatim:
+Updated **11 May** master-doc revision adds two new HTML screens and renames the Welcome filename to a `CP4807` prefix:
 
 > Screen type | Hours | Equipment | Title | File
 > Image | 0 | Flowcode / E-blocks3 | Introduction to microcontrollers | "CO002 – opening.png"
 > HTML | 0.1 | Flowcode / E-blocks3 | Learning objectives | "CO002 – LO.HTM"
 > HTML | 0.1 | Flowcode / E-blocks3 | Equipment | "CO002 – Equip.HTM"
-> HTML | 0.2 | Flowcode / E-blocks3 | Welcome | "CO0001 – CPD objectives.HTM"
+> **HTML | 0.2 | Flowcode / E-blocks3 | Welcome | "CP4807 – CPD objectives.HTM"** *(was "CO0001 – CPD objectives.HTM" before 11 May)*
 > YouTube | 0.2 | Flowcode / E-blocks3 | Introducing E-blocks 3 | https://youtu.be/KmpyVmv6J_Y
 > YouTube | 0.2 | Flowcode / E-blocks3 | Introducing Flowcode | https://youtu.be/tDdptTbvDM0
 > PDF | 0.2 | Flowcode / E-blocks3 | E-blocks datasheet | https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf
 > Powerpoint | 0.3 | Flowcode / E-blocks3 | Microcontroller basics 1 | "Microcontroller basics 1 24 02 26.pptx"
 > Powerpoint | 0.3 | Flowcode / E-blocks3 | Microcontroller basics 2 | "Microcontroller basics 2 24 02 26.pptx"
+> **HTML | 0.1 | Flowcode / E-blocks3 | Now try the worksheets | "Now try the worksheets.HTM"** *(new in 11 May)*
+> **HTML | 0.1 | Flowcode / E-blocks3 | Other resources | "Other resources.HTM"** *(new in 11 May)*
 > Document | 1 | Flowcode / E-blocks3 | First program | "CP4807-1.docx"
 > Document | 0.2 | Flowcode / E-blocks3 | Performing calculations | "CP4807-2.docx"
 > Document | 0.2 | Flowcode / E-blocks3 | Connection points | "CP4807-3.docx"
@@ -96,7 +119,11 @@ Master doc verbatim:
 >
 > When the client has gone through all screens and marked them as complete please print them a certificate of completion using "CP4807-CPDcert.docx" and insert the candidate name in the &lt;name&gt; field and the date in the &lt;date&gt; field.
 
-This implementation: 15 screens in `data/courses.json` → `CO0001`. **Match.** Filename in master doc is `"CO0001- FC-EB CPD.pdf"` for the course as a whole — the implementation uses `CO0001` as the course id rather than as a `.pdf` filename.
+This implementation: 17 screens in `data/courses.json` → `CO0001`. **Match.**
+
+- `content/CP4807/CP4807 - CPD objectives.htm` — Welcome (verbatim from master doc § Media definitions for the Splitter)
+- `content/CO0001/Now try the worksheets.htm` — verbatim
+- `content/CO0001/Other resources.htm` — verbatim, with the wiki / forum / docs URLs preserved as anchor links
 
 **Certificate**: implemented in `certificate.html`. Triggers when 100% complete, prompts for name, prints. The "insert in `<name>` and `<date>` fields" requirement is fulfilled — but we do not currently use the source `.docx` template from the master doc as the visual basis. See `ROADMAP.md`.
 

@@ -6,12 +6,15 @@ Tracks what's still missing to fully satisfy `master_doc.docx`, plus open questi
 
 ## Missing assets (referenced but not yet present)
 
-These are flagged with `"missing": true` in `data/courses.json` and render a placeholder panel.
+These are flagged with `"missing": true` in `data/courses.json` and render a placeholder panel. The fastest way to send them on is the **/files.html** drop-zone — auto-routes by filename and exports a zip for a dev to commit.
 
 | File                                  | Used by              | Master-doc title                       |
 |---------------------------------------|----------------------|----------------------------------------|
-| `Microcontroller-basics-1.pptx`       | CO0001, CO0002, CO0003 | Microcontroller basics 1 24 02 26.pptx |
-| `Microcontroller-basics-2.pptx`       | CO0001, CO0002, CO0003 | Microcontroller basics 2 24 02 26.pptx |
+| `CO0001 - opening.png`                | CO0001 (catalog thumb falls back to placeholder SVG)  | Opening artwork for CO0001 |
+| `CO002 - opening.png`                 | CO0002 (catalog thumb falls back to placeholder SVG)  | Opening artwork for CO0002 |
+| `CO0003 - opening.png`                | CO0003 (catalog thumb falls back to placeholder SVG)  | Opening artwork for CO0003 |
+| `Microcontroller basics 1 24 02 26.pptx` | CO0001, CO0002, CO0003 | Microcontroller basics 1 (full filename per master doc) |
+| `Microcontroller basics 2 24 02 26.pptx` | CO0001, CO0002, CO0003 | Microcontroller basics 2 (full filename per master doc) |
 | `CP1972-1.docx` Analogue inputs       | CO0002, CO0003       | Sensors Bronze worksheet 1             |
 | `CP1972-2.docx` Light sensor          | CO0002, CO0003       | Sensors Bronze worksheet 2             |
 | `CP1972-3.docx` Analogue temp sensor  | CO0002, CO0003       | Sensors Bronze worksheet 3             |
@@ -51,8 +54,9 @@ These are explicitly described in `master_doc.docx` but not implemented. See `MA
 
 ### Courses not yet built
 - **CP4807 worksheets PDF bundle** — ✅ **Done.** "Download all worksheets PDF" button in the course viewer sidebar — uses `html2pdf.js` + the existing mammoth render path. Filename pattern: `<course>-worksheets.pdf`.
-- **CP7244 — EASA Unit 5 Digital Techniques worksheets**. Master doc says "Needs assembling".
-- **T-level course set** (`CPXXX`, `COXXX`, `SCXXX`) — explicitly marked "T level stuff not complete" in the master doc.
+- **CP4807 worksheets DOCX bundle** *(new in 11 May master doc)* — combined Word document of `head + cont + 1-12 + TN`. Not built. Needs a docx-merging step.
+- **CP7244 EASA worksheets PDF + DOCX bundles** *(now both variants per 11 May master doc)*. Not built. The 11 May master doc gives a screen list using CP4807 source files plus selected CP1972/CP0507 entries.
+- **T-level course set** (`CPXXX`, `COXXX`, `SCXXX`, plus the new PDF/DOCX variants) — master doc still says "T level stuff not complete".
 
 ### SCORM packages — ✅ Done
 
