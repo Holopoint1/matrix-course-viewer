@@ -89,8 +89,8 @@
         <a class="sidebar-foot-link" href="dist/${course.id.replace('CO', 'SC')}-${slug(course.title)}.zip" download>
           <span>📦</span><span>SCORM compliance</span>
         </a>
-        <a class="sidebar-foot-link" href="preview.html">
-          <span>🛠</span><span>Worksheet compiler</span>
+        <a class="sidebar-foot-link" href="files.html">
+          <span>🛠</span><span>Files &amp; preview</span>
         </a>
         <a class="sidebar-foot-link" href="admin.html">
           <span>⚙</span><span>Admin (CMS)</span>

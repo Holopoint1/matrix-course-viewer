@@ -16,7 +16,6 @@
     <nav>
       <a href="index.html">Catalog</a>
       <a href="stats.html">My Stats</a>
-      <a href="preview.html">Preview</a>
       <a href="files.html" class="active">Files</a>
       <a href="admin.html">Admin</a>
     </nav>
@@ -26,7 +25,7 @@
     <div class="hero-inner">
       <span class="eyebrow">Author tools</span>
       <h1>Files</h1>
-      <p>Check exactly which resource files are present on the server, see what's still missing, and stage new files (drop them in — they're auto-routed to the right folder). Export the staging area as a zip for a developer to drop into the project.</p>
+      <p>Check exactly which resource files are present, preview new files as they'll render in a course, route them to the right folder, and export everything as a zip for a developer to commit. Files stay in your browser — nothing is uploaded to a server.</p>
     </div>
   </section>
 
@@ -34,28 +33,37 @@
     <!-- Drop zone -->
     <div class="dropzone files-dropzone" id="dropzone">
       <div class="dropzone-icon">⤓</div>
-      <div class="dropzone-title">Drop files to stage</div>
+      <div class="dropzone-title">Drop files to preview &amp; stage</div>
       <div class="dropzone-sub">or <button class="btn btn-primary" type="button" id="pick-btn">choose files</button></div>
-      <input type="file" id="file-input" multiple hidden>
-      <div class="dropzone-types">Auto-routes by filename (CP4807-N.docx → content/CP4807/, CO002 - opening.png → content/CO0002/, etc.)</div>
+      <input type="file" id="file-input" multiple accept=".docx,.htm,.html,.pdf,.png,.jpg,.jpeg,.gif,.webp,.svg,.pptx,.xlsx" hidden>
+      <div class="dropzone-types">.docx · .htm · .pdf · images · .pptx — auto-routes by filename (CP4807-N.docx → content/CP4807/, CO002 - opening.png → content/CO0002/, …)</div>
     </div>
 
-    <!-- Staging area -->
+    <!-- Staging area: preview cards + JSON snippet + zip export -->
     <div class="files-staging" id="files-staging" hidden>
       <div class="files-staging-head">
-        <h2 class="stats-h2">Staging area</h2>
+        <h2 class="stats-h2">Staged files</h2>
         <span class="files-staging-count" id="staging-count">0 files</span>
         <button class="btn btn-secondary" id="clear-staging">Clear</button>
         <button class="btn btn-primary" id="export-zip">↓ Download zip</button>
       </div>
-      <p class="files-staging-hint">These files are held in your browser. Click <strong>Download zip</strong> and send the resulting <code>matrix-files.zip</code> to a developer — they unzip it into <code>lms/</code> and the missing-resource panels disappear automatically.</p>
-      <ul class="files-staging-list" id="staging-list"></ul>
+      <p class="files-staging-hint">Each dropped file is rendered exactly as the course viewer will render it. Click <strong>Download zip</strong> and send <code>matrix-files.zip</code> to a developer — they unzip into <code>lms/</code> and the missing-resource panels disappear automatically.</p>
+      <div class="preview-list" id="staging-list"></div>
+
+      <div class="preview-snippet-card" id="snippet-card" hidden>
+        <div class="preview-snippet-head">
+          <h2 class="stats-h2">courses.json snippet</h2>
+          <button class="btn btn-secondary" type="button" id="copy-all">Copy all</button>
+        </div>
+        <p class="preview-snippet-hint">Paste these objects into the <code>screens</code> array of the relevant course in <code>data/courses.json</code> when authoring a new screen.</p>
+        <textarea id="snippet" readonly spellcheck="false"></textarea>
+      </div>
     </div>
 
     <!-- File tree -->
     <div class="files-tree-card">
       <div class="files-tree-head">
-        <h2 class="stats-h2">Resource files</h2>
+        <h2 class="stats-h2">Resource files on the server</h2>
         <div class="files-tree-legend">
           <span class="files-status ok">✓ present</span>
           <span class="files-status missing">✗ missing</span>
@@ -63,7 +71,7 @@
         </div>
         <button class="btn btn-secondary" id="rescan-btn">Rescan</button>
       </div>
-      <p class="files-tree-hint">Re-scans the server with HEAD probes whenever you click <strong>Rescan</strong>. Click <strong>✗ missing</strong> rows to upload directly into that path.</p>
+      <p class="files-tree-hint">Verified by HEAD-probe against the server. Click <strong>✗ missing</strong> rows to upload directly into that path.</p>
       <div class="files-tree" id="files-tree">
         <p class="stage-loading">Scanning&hellip;</p>
       </div>
@@ -79,44 +87,39 @@
       <div class="footer-links">
         <a href="index.html">Catalog</a>
         <a href="stats.html">My Stats</a>
-        <a href="preview.html">Preview</a>
         <a href="files.html">Files</a>
         <a href="admin.html">Admin</a>
       </div>
     </div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script>
     (async function () {
       'use strict';
 
+      /* ---------- Helpers ---------- */
       function escapeHtml(s) {
         return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
           '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         }[c]));
       }
+      function escapeAttr(s) { return escapeHtml(s); }
       function formatSize(n) {
         if (n < 1024) return n + ' B';
         if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
         return (n / 1024 / 1024).toFixed(1) + ' MB';
       }
 
-      /* ---------- Build the expected-file tree from courses.json ---------- */
+      /* ---------- Expected files (from courses.json + standard stubs) ---------- */
       const data = await fetch('data/courses.json').then((r) => r.json());
-
-      /* Each entry: { path, filename, type, status: 'unknown' | 'ok' | 'missing' | 'staged', usedBy: [{course, screen}] } */
       const expectedMap = new Map();
       function expect(path, type, courseId, screenTitle) {
         if (!path || /^https?:/i.test(path)) return;
         if (!expectedMap.has(path)) {
-          expectedMap.set(path, {
-            path,
-            filename: path.split('/').pop(),
-            type,
-            status: 'unknown',
-            usedBy: []
-          });
+          expectedMap.set(path, { path, filename: path.split('/').pop(), type, status: 'unknown', usedBy: [] });
         }
         if (courseId) expectedMap.get(path).usedBy.push({ courseId, screenTitle });
       }
@@ -126,9 +129,7 @@
           if (s.thumbnail) expect(s.thumbnail, 'image', course.id, s.title + ' (thumbnail)');
         }
       }
-
-      /* Also include the standard intro stubs (welcome / LO / equipment / cpd-objectives) */
-      const stubExpected = [
+      for (const p of [
         'content/CO0001/cpd-objectives.html',
         'content/CO0001/opening.svg',
         'content/CO0002/welcome.html',
@@ -137,16 +138,13 @@
         'content/CO0002/opening.svg',
         'content/CO0003/welcome.html',
         'content/CO0003/opening.svg'
-      ];
-      for (const p of stubExpected) expect(p, 'html', null, null);
-
+      ]) expect(p, 'html', null, null);
       const expectedList = Array.from(expectedMap.values());
 
-      /* ---------- HEAD-probe each expected file to set status ---------- */
+      /* ---------- HEAD-probe ---------- */
       async function rescan() {
         const tree = document.getElementById('files-tree');
         tree.innerHTML = '<p class="stage-loading">Scanning&hellip; (' + expectedList.length + ' files)</p>';
-        let done = 0;
         await Promise.all(expectedList.map(async (entry) => {
           try {
             const res = await fetch(entry.path, { method: 'HEAD', cache: 'no-store' });
@@ -154,8 +152,6 @@
             entry.size = Number(res.headers.get('content-length') || 0) || null;
           } catch (_) {
             entry.status = 'missing';
-          } finally {
-            done += 1;
           }
         }));
         renderTree();
@@ -163,7 +159,6 @@
       document.getElementById('rescan-btn').addEventListener('click', rescan);
       rescan();
 
-      /* ---------- Render the tree, grouped by folder ---------- */
       function renderTree() {
         const tree = document.getElementById('files-tree');
         const byFolder = new Map();
@@ -179,16 +174,13 @@
           const ok = items.filter((e) => e.status === 'ok').length;
           const missing = items.filter((e) => e.status === 'missing').length;
           const staged = items.filter((e) => e.status === 'staged').length;
-          html += '<div class="files-folder">';
-          html += '<div class="files-folder-head">';
+          html += '<div class="files-folder"><div class="files-folder-head">';
           html += '<span class="files-folder-name">' + escapeHtml(folder) + '/</span>';
           html += '<span class="files-folder-counts">';
           if (ok) html += '<span class="files-status ok">' + ok + ' ✓</span>';
           if (missing) html += '<span class="files-status missing">' + missing + ' ✗</span>';
           if (staged) html += '<span class="files-status staged">' + staged + ' ↑</span>';
-          html += '</span>';
-          html += '</div>';
-          html += '<ul class="files-folder-list">';
+          html += '</span></div><ul class="files-folder-list">';
           for (const entry of items) {
             const cls = 'files-row files-row-' + entry.status;
             const usage = entry.usedBy.length
@@ -196,10 +188,8 @@
               : 'intro / reference page';
             html += '<li class="' + cls + '" data-path="' + escapeHtml(entry.path) + '">';
             html += '<span class="files-row-icon">' + (entry.status === 'ok' ? '✓' : entry.status === 'staged' ? '↑' : '✗') + '</span>';
-            html += '<div class="files-row-body">';
-            html += '<div class="files-row-name"><code>' + escapeHtml(entry.filename) + '</code></div>';
-            html += '<div class="files-row-meta">' + escapeHtml(usage) + '</div>';
-            html += '</div>';
+            html += '<div class="files-row-body"><div class="files-row-name"><code>' + escapeHtml(entry.filename) + '</code></div>';
+            html += '<div class="files-row-meta">' + escapeHtml(usage) + '</div></div>';
             html += '<span class="files-row-action">';
             if (entry.status === 'missing') {
               html += '<button class="btn btn-secondary" type="button" data-action="upload-here" data-path="' + escapeHtml(entry.path) + '">Send file →</button>';
@@ -208,106 +198,263 @@
             } else if (entry.size) {
               html += '<span class="files-row-size">' + formatSize(entry.size) + '</span>';
             }
-            html += '</span>';
-            html += '</li>';
+            html += '</span></li>';
           }
           html += '</ul></div>';
         }
         tree.innerHTML = html;
-
         tree.querySelectorAll('[data-action="upload-here"]').forEach((btn) => {
           btn.addEventListener('click', () => promptUploadForPath(btn.dataset.path));
         });
       }
-
       function promptUploadForPath(path) {
         const input = document.createElement('input');
         input.type = 'file';
         input.addEventListener('change', () => {
-          if (input.files.length) addFileToStaging(input.files[0], path);
+          if (input.files.length) addFile(input.files[0], path);
         });
         input.click();
       }
 
-      /* ---------- Staging ---------- */
-      const staged = []; /* { id, file, targetPath, fillsMissing } */
+      /* ---------- Staging (with full preview) ---------- */
+      const staged = []; /* { id, file, targetPath, fillsMissing, type, screen } */
       let nextId = 1;
 
       const dz = document.getElementById('dropzone');
-      const input = document.getElementById('file-input');
-      document.getElementById('pick-btn').addEventListener('click', () => input.click());
-      input.addEventListener('change', (e) => Array.from(e.target.files).forEach((f) => addFileToStaging(f)));
-
+      const fileInput = document.getElementById('file-input');
+      document.getElementById('pick-btn').addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', (e) => Array.from(e.target.files).forEach((f) => addFile(f)));
       ['dragenter', 'dragover'].forEach((ev) =>
         dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.add('drag'); }));
       ['dragleave', 'drop'].forEach((ev) =>
         dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.remove('drag'); }));
-      dz.addEventListener('drop', (e) => {
-        Array.from(e.dataTransfer.files).forEach((f) => addFileToStaging(f));
-      });
+      dz.addEventListener('drop', (e) => Array.from(e.dataTransfer.files).forEach((f) => addFile(f)));
 
+      function inferScreenType(ext) {
+        ext = ext.toLowerCase();
+        if (ext === 'docx' || ext === 'doc') return 'document';
+        if (ext === 'htm' || ext === 'html') return 'html';
+        if (ext === 'pdf') return 'pdf';
+        if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico'].includes(ext)) return 'image';
+        if (ext === 'pptx' || ext === 'ppt') return 'powerpoint';
+        if (ext === 'xlsx' || ext === 'xls') return 'spreadsheet';
+        return 'unknown';
+      }
+      function defaultHours(type) {
+        return ({ document: 1, html: 0.2, pdf: 0.2, image: 0, powerpoint: 0.3, spreadsheet: 0.2 })[type] || 0.2;
+      }
       function suggestPath(filename) {
-        /* 1. Exact match against any expected file → fills a missing slot */
         for (const e of expectedList) {
           if (e.filename === filename) return { path: e.path, fills: e.status === 'missing' };
         }
-        /* 2. Derive folder from CP-code prefix */
         let m = /^(CP\d+)-/.exec(filename);
         if (m) return { path: 'content/' + m[1] + '/' + filename, fills: false };
-        /* 3. Derive from "CO000X" prefix */
         m = /^(CO\d{3,4})/i.exec(filename);
         if (m) return { path: 'content/' + m[1].toUpperCase() + '/' + filename, fills: false };
-        /* 4. PowerPoints / Microcontroller basics → CO0002 */
         if (/microcontroller basics/i.test(filename)) return { path: 'content/CO0002/' + filename, fills: false };
-        /* 5. Fall back: place at content/ root with a sensible-but-flagged path */
         return { path: 'content/' + filename, fills: false };
       }
 
-      function addFileToStaging(file, forcedPath) {
+      async function addFile(file, forcedPath) {
         const id = 's-' + (nextId++);
+        const ext = (file.name.split('.').pop() || '').toLowerCase();
+        const type = inferScreenType(ext);
         const suggestion = forcedPath ? { path: forcedPath, fills: true } : suggestPath(file.name);
-        staged.push({ id, file, targetPath: suggestion.path, fillsMissing: suggestion.fills });
-        /* Mark the corresponding expected entry as 'staged' */
+        const titleGuess = file.name.replace(/\.[a-z0-9]+$/i, '');
+
+        const item = {
+          id, file, type,
+          targetPath: suggestion.path,
+          fillsMissing: suggestion.fills,
+          screen: {
+            id: 's-' + nextId,
+            type,
+            title: titleGuess,
+            hours: defaultHours(type),
+            equipment: 'Flowcode / E-blocks3',
+            src: suggestion.path
+          }
+        };
+        staged.push(item);
+
+        /* Mark expected entry as 'staged' so the tree updates */
         const match = expectedList.find((e) => e.path === suggestion.path);
         if (match) match.status = 'staged';
+
         renderStaging();
         renderTree();
+        await renderCardPreview(item);
       }
 
       function renderStaging() {
         const wrap = document.getElementById('files-staging');
         const list = document.getElementById('staging-list');
         document.getElementById('staging-count').textContent = staged.length + ' file' + (staged.length === 1 ? '' : 's');
-        if (staged.length === 0) { wrap.hidden = true; return; }
+        if (staged.length === 0) { wrap.hidden = true; rebuildSnippet(); return; }
         wrap.hidden = false;
         list.innerHTML = '';
         for (const item of staged) {
-          const li = document.createElement('li');
-          li.className = 'files-staged-row' + (item.fillsMissing ? ' fills' : '');
-          li.innerHTML = '\n            <span class="files-staged-name"><code>' + escapeHtml(item.file.name) + '</code> <span class="files-staged-size">' + formatSize(item.file.size) + '</span></span>\n            <input class="files-staged-path" value="' + escapeHtml(item.targetPath) + '">\n            <span class="files-staged-tag">' + (item.fillsMissing ? '✓ fills a missing slot' : '⚠ new path') + '</span>\n            <button class="btn btn-ghost files-staged-remove" type="button" aria-label="Remove">×</button>\n          ';
-          li.querySelector('.files-staged-path').addEventListener('input', (ev) => {
-            item.targetPath = ev.target.value;
-            const match = expectedList.find((e) => e.path === item.targetPath);
-            item.fillsMissing = !!match;
-          });
-          li.querySelector('.files-staged-remove').addEventListener('click', () => {
+          const card = document.createElement('article');
+          card.className = 'preview-card';
+          card.id = item.id;
+          card.innerHTML = `
+            <header class="preview-card-head">
+              <div>
+                <span class="preview-card-type ${item.type}">${item.type}</span>
+                <span class="preview-card-name">${escapeHtml(item.file.name)}</span>
+                <span class="preview-card-size">${formatSize(item.file.size)}</span>
+                ${item.fillsMissing ? '<span class="files-staged-tag" style="margin-left:0.4rem;background:var(--success-50);color:var(--success);border:1px solid #bbf7d0;">✓ fills missing</span>' : ''}
+              </div>
+              <div class="preview-card-actions">
+                <button class="btn btn-secondary preview-card-pdf" type="button">Download as PDF</button>
+                <button class="btn btn-ghost preview-card-remove" type="button" aria-label="Remove">×</button>
+              </div>
+            </header>
+            <div class="preview-card-body" data-role="body">
+              <p class="stage-loading">Rendering preview&hellip;</p>
+            </div>
+            <footer class="preview-card-foot">
+              <label>Title <input class="preview-card-title-input" value="${escapeHtml(item.screen.title)}"></label>
+              <label>Path <input class="preview-card-path-input" value="${escapeHtml(item.targetPath)}"></label>
+              <label>Hours <input class="preview-card-hours-input" type="number" min="0" step="0.1" value="${item.screen.hours}"></label>
+            </footer>
+          `;
+          list.appendChild(card);
+
+          card.querySelector('.preview-card-remove').addEventListener('click', () => {
             const idx = staged.findIndex((s) => s.id === item.id);
             if (idx >= 0) staged.splice(idx, 1);
             const match = expectedList.find((e) => e.path === item.targetPath);
-            if (match) match.status = 'missing'; /* revert */
+            if (match) match.status = 'missing';
             renderStaging();
             renderTree();
           });
-          list.appendChild(li);
+          card.querySelector('.preview-card-pdf').addEventListener('click', (ev) => {
+            downloadCardAsPdf(card, item.file, ev.currentTarget);
+          });
+          card.querySelector('.preview-card-title-input').addEventListener('input', (ev) => {
+            item.screen.title = ev.target.value;
+            rebuildSnippet();
+          });
+          card.querySelector('.preview-card-path-input').addEventListener('input', (ev) => {
+            const oldMatch = expectedList.find((e) => e.path === item.targetPath);
+            if (oldMatch) oldMatch.status = 'missing';
+            item.targetPath = ev.target.value;
+            item.screen.src = ev.target.value;
+            const newMatch = expectedList.find((e) => e.path === item.targetPath);
+            if (newMatch) { newMatch.status = 'staged'; item.fillsMissing = true; }
+            else { item.fillsMissing = false; }
+            rebuildSnippet();
+            renderTree();
+          });
+          card.querySelector('.preview-card-hours-input').addEventListener('input', (ev) => {
+            item.screen.hours = Number(ev.target.value) || 0;
+            rebuildSnippet();
+          });
+        }
+        rebuildSnippet();
+      }
+
+      async function renderCardPreview(item) {
+        const card = document.getElementById(item.id);
+        if (!card) return;
+        const body = card.querySelector('[data-role="body"]');
+        try {
+          if (item.type === 'document') await renderDocxPreview(item.file, body);
+          else if (item.type === 'html') await renderHtmlPreview(item.file, body);
+          else if (item.type === 'pdf') renderPdfPreview(item.file, body);
+          else if (item.type === 'image') renderImagePreview(item.file, body);
+          else if (item.type === 'powerpoint' || item.type === 'spreadsheet') {
+            const url = URL.createObjectURL(item.file);
+            body.innerHTML = `
+              <div class="stage-pptx" style="padding:1.5rem;">
+                <p>${item.type === 'powerpoint' ? 'PowerPoint' : 'Spreadsheet'} files cannot be rendered inline.</p>
+                <a class="btn btn-secondary" href="${url}" download="${escapeAttr(item.file.name)}">Download</a>
+              </div>`;
+          } else {
+            body.innerHTML = '<p class="stage-loading">No preview available for this type.</p>';
+          }
+        } catch (err) {
+          body.innerHTML = '<p style="padding:1.5rem;color:var(--warn);">Preview failed: ' + escapeHtml(err.message) + '</p>';
         }
       }
+
+      async function renderDocxPreview(file, body) {
+        const buf = await file.arrayBuffer();
+        const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+        body.innerHTML = '<div class="stage-doc"><div class="stage-doc-inner">' + enhanceWorksheetHtml(result.value || '') + '</div></div>';
+      }
+      async function renderHtmlPreview(file, body) {
+        const text = await file.text();
+        const doc = new DOMParser().parseFromString(text, 'text/html');
+        const pageEl = doc.querySelector('.page');
+        let bodyHtml = pageEl ? pageEl.innerHTML : (doc.body ? doc.body.innerHTML : text);
+        body.innerHTML = '<div class="stage-doc"><div class="stage-doc-inner">' + enhanceWorksheetHtml(bodyHtml) + '</div></div>';
+      }
+      function renderPdfPreview(file, body) {
+        const url = URL.createObjectURL(file);
+        body.innerHTML = '<iframe class="preview-iframe" src="' + url + '" title="' + escapeAttr(file.name) + '"></iframe>';
+      }
+      function renderImagePreview(file, body) {
+        const url = URL.createObjectURL(file);
+        body.innerHTML = '<div class="preview-image"><img src="' + url + '" alt="' + escapeAttr(file.name) + '"></div>';
+      }
+
+      async function downloadCardAsPdf(card, file, btn) {
+        if (!window.html2pdf) { alert('PDF library not loaded yet — refresh and try again.'); return; }
+        const body = card.querySelector('[data-role="body"]');
+        if (!body || !body.innerHTML.trim()) { alert('Wait for the preview to render.'); return; }
+        const original = btn.textContent;
+        btn.disabled = true; btn.textContent = 'Building PDF…';
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:30px 40px;';
+        wrap.innerHTML =
+          '<h1 style="font-family:\'Segoe UI\',Inter,Arial,sans-serif;font-size:22pt;color:#1e1b4b;margin:0 0 18px;font-weight:800;">' +
+          escapeHtml(file.name.replace(/\.[a-z0-9]+$/i, '')) + '</h1>' + body.innerHTML;
+        document.body.appendChild(wrap);
+        try {
+          await window.html2pdf().set({
+            margin: [10, 12, 14, 12],
+            filename: file.name.replace(/\.[a-z0-9]+$/i, '') + '.pdf',
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 1.6, letterRendering: true, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4' }
+          }).from(wrap).save();
+        } catch (err) {
+          alert('PDF generation failed: ' + err.message);
+        } finally {
+          wrap.remove();
+          btn.disabled = false;
+          btn.textContent = original;
+        }
+      }
+
+      function rebuildSnippet() {
+        const card = document.getElementById('snippet-card');
+        const snippet = document.getElementById('snippet');
+        if (staged.length === 0) { card.hidden = true; return; }
+        card.hidden = false;
+        snippet.value = staged.map((s) => JSON.stringify(s.screen, null, 2)).join(',\n');
+      }
+      document.getElementById('copy-all').addEventListener('click', async () => {
+        const ta = document.getElementById('snippet');
+        try {
+          await navigator.clipboard.writeText(ta.value);
+          const btn = document.getElementById('copy-all');
+          const orig = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => { btn.textContent = orig; }, 1400);
+        } catch (_) {
+          ta.select(); document.execCommand('copy');
+        }
+      });
 
       document.getElementById('clear-staging').addEventListener('click', () => {
         if (!staged.length) return;
         if (!confirm('Clear all staged files?')) return;
         for (const item of staged) {
-          const match = expectedList.find((e) => e.path === item.targetPath);
-          if (match) match.status = 'missing';
+          const m = expectedList.find((e) => e.path === item.targetPath);
+          if (m) m.status = 'missing';
         }
         staged.length = 0;
         renderStaging();
@@ -316,13 +463,12 @@
 
       document.getElementById('export-zip').addEventListener('click', async () => {
         if (!staged.length) { alert('No files staged.'); return; }
-        if (typeof window.JSZip === 'undefined') { alert('Zip library failed to load — check your internet connection.'); return; }
+        if (typeof window.JSZip === 'undefined') { alert('Zip library failed to load.'); return; }
         const zip = new window.JSZip();
         for (const item of staged) {
           const buf = await item.file.arrayBuffer();
           zip.file(item.targetPath, buf);
         }
-        /* Top-level README so the dev knows what to do */
         const readme = '# Matrix LMS — staged resources\n\nGenerated by /files.html on ' + new Date().toISOString() + '\n\nDrop the contents of this zip into your `lms/` folder, then commit and push.\n\nFiles included:\n\n' + staged.map((s) => '- ' + s.targetPath + (s.fillsMissing ? ' (fills a missing slot)' : '')).join('\n') + '\n';
         zip.file('README.txt', readme);
         const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
@@ -335,6 +481,62 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       });
+
+      /* ---------- Worksheet enhancer (mirrors app.js) ---------- */
+      function enhanceWorksheetHtml(html) {
+        let parsed;
+        try { parsed = new DOMParser().parseFromString('<!DOCTYPE html><html><body>' + html + '</body></html>', 'text/html'); }
+        catch (_) { return html; }
+        const root = parsed.body;
+        if (!root) return html;
+        Array.from(root.querySelectorAll('table')).forEach((table) => {
+          const cells = Array.from(table.querySelectorAll('td, th'));
+          const filled = cells.map((c) => (c.textContent || '').trim()).filter(Boolean);
+          if (cells.length <= 16 && filled.length <= 8 && filled.every((t) => t.length < 120)) {
+            const meta = parsed.createElement('div');
+            meta.className = 'worksheet-header';
+            meta.innerHTML = filled.map((t) => `<span>${escapeHtml(t)}</span>`).join('');
+            table.replaceWith(meta);
+          }
+        });
+        Array.from(root.querySelectorAll('a')).forEach((a) => {
+          const href = a.getAttribute('href') || '';
+          const m = href.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
+          if (!m) return;
+          const aText = (a.textContent || '').trim();
+          if (aText !== href.trim() && !/youtu/.test(aText)) return;
+          const wrap = parsed.createElement('div');
+          wrap.className = 'inline-youtube';
+          wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen loading="lazy"></iframe>';
+          if (a.parentElement && a.parentElement.tagName === 'P' && (a.parentElement.textContent || '').trim() === aText) {
+            a.parentElement.replaceWith(wrap);
+          } else { a.replaceWith(wrap); }
+        });
+        const patterns = [
+          { tag: 'h1', cls: 'doc-h1', re: /^(Homework\s*\d+|Assessment\s*\d+|Project|Assessment marking schemes)$/i },
+          { tag: 'h2', cls: 'doc-section design-brief', re: /^Design brief:?$/i },
+          { tag: 'h2', cls: 'doc-section hardware', re: /^Hardware:?$/i },
+          { tag: 'h2', cls: 'doc-section software', re: /^Software:?$/i },
+          { tag: 'h2', cls: 'doc-section challenges', re: /^Challenges:?$/i },
+          { tag: 'h2', cls: 'doc-section hints', re: /^Hints:?$/i },
+          { tag: 'h2', cls: 'doc-section over-to-you', re: /^Over to you:?$/i },
+          { tag: 'h2', cls: 'doc-section risk', re: /^Technical risk:?$/i }
+        ];
+        Array.from(root.querySelectorAll('p')).forEach((p) => {
+          const text = (p.textContent || '').trim();
+          if (!text) return;
+          for (const pat of patterns) {
+            if (pat.re.test(text)) {
+              const tag = parsed.createElement(pat.tag);
+              tag.className = pat.cls;
+              tag.textContent = text;
+              p.replaceWith(tag);
+              return;
+            }
+          }
+        });
+        return root.innerHTML;
+      }
     })();
   </script>
 </body>
