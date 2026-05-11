@@ -7,19 +7,7 @@
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <a href="index.html" class="brand">
-      <img src="assets/matrix-logo.svg" alt="Matrix TSL" class="brand-logo">
-      <span class="brand-divider">|</span>
-      <span class="brand-sub">Course Viewer</span>
-    </a>
-    <nav>
-      <a href="index.html">Catalog</a>
-      <a href="stats.html">My Stats</a>
-      <a href="files.html" class="active">Files</a>
-      <a href="admin.html">Admin</a>
-    </nav>
-  </header>
+  <header class="site-header" id="site-header"></header>
 
   <section class="stats-hero">
     <div class="hero-inner">
@@ -78,21 +66,9 @@
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <strong>Matrix Course Viewer</strong>
-        <span>© Matrix TSL · Engineering education resources</span>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Catalog</a>
-        <a href="stats.html">My Stats</a>
-        <a href="files.html">Files</a>
-        <a href="admin.html">Admin</a>
-      </div>
-    </div>
-  </footer>
+  <footer class="site-footer" id="site-footer"></footer>
 
+  <script src="assets/chrome.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
