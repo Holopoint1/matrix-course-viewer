@@ -83,18 +83,10 @@
     }
     html += '</ul>';
 
-    /* Footer actions */
+    /* Footer actions — learner-facing only.
+       Admin / Files / SCORM access lives in the top nav. */
     html += `
       <div class="sidebar-actions">
-        <a class="sidebar-foot-link" href="dist/${course.id.replace('CO', 'SC')}-${slug(course.title)}.zip" download>
-          <span>📦</span><span>SCORM compliance</span>
-        </a>
-        <a class="sidebar-foot-link" href="files.html">
-          <span>🛠</span><span>Files &amp; preview</span>
-        </a>
-        <a class="sidebar-foot-link" href="admin.html">
-          <span>⚙</span><span>Admin (CMS)</span>
-        </a>
         <button type="button" class="sidebar-foot-link sidebar-foot-danger" id="sidebar-reset">
           <span>↺</span><span>Reset all progress</span>
         </button>

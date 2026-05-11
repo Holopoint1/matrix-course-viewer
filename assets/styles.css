@@ -2499,9 +2499,15 @@ a:hover { text-decoration: underline; }
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 980px) {
+/* Narrow viewport — only switch to single-column below 700px.
+   980px was too aggressive: a normal browser window at 900-1100px
+   wide hit this and the sidebar got capped at 60vh, which made the
+   internal screen-list scroll inside a tiny window.
+   Anything wider than 700px keeps the two-column desktop layout so
+   the sidebar gets full viewport height for its internal scroll. */
+@media (max-width: 700px) {
   .viewer-shell { grid-template-columns: 1fr; height: auto; }
-  .viewer-sidebar { max-height: 60vh; }
+  .viewer-sidebar { max-height: none; }
   .screen-bar { flex-wrap: wrap; }
   .screen-bar .actions { margin-left: 0; width: 100%; }
   .screen-bar .actions .btn { flex: 1; }
