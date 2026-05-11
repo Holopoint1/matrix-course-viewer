@@ -1057,6 +1057,7 @@ a:hover { text-decoration: underline; }
   padding: 0.4rem 0.55rem;
   background: var(--surface-2);
   display: flex; flex-direction: column; gap: 0.2rem;
+  flex-shrink: 0; /* nav block reserves its space; never squashed */
 }
 .sidebar-nav-item {
   display: flex; align-items: center; gap: 0.55rem;
@@ -1772,11 +1773,13 @@ a:hover { text-decoration: underline; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0; /* flex container must allow shrinking for inner scroll */
 }
 .viewer-course-info {
   padding: 1rem 1.15rem 0.95rem;
   border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  flex-shrink: 0; /* header reserves its space; never squashed */
 }
 .viewer-course-info .code {
   font-size: 0.66rem;
@@ -1837,7 +1840,11 @@ a:hover { text-decoration: underline; }
   margin: 0;
   padding: 0.35rem 0 0.5rem;
   overflow-y: auto;
-  flex: 1;
+  overflow-x: hidden;
+  flex: 1 1 auto;
+  min-height: 0; /* THE FIX — flex children default to min-height:auto,
+                    which blocks the scrollable list from shrinking and
+                    therefore prevents the scrollbar from ever appearing. */
 }
 
 .screen-item {
@@ -1952,6 +1959,7 @@ a:hover { text-decoration: underline; }
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
+  flex-shrink: 0; /* footer reserves its space; never squashed by long list */
 }
 .certificate-cta { padding: 0; background: transparent; border: none; }
 .certificate-cta .btn { width: 100%; padding: 0.7rem 1rem; }
