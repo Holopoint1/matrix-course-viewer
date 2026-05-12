@@ -148,6 +148,26 @@
         { "id": "cp1972-s12", "type": "document", "title": "Worksheet 10 — Cantilever strain sensors", "hours": 2,   "equipment": "Flowcode / E-blocks3", "src": "content/CP1972/CP1972-10.docx" },
         { "id": "cp1972-s13", "type": "document", "title": "Worksheet 11 — Pressure sensors",          "hours": 2,   "equipment": "Flowcode / E-blocks3", "src": "content/CP1972/CP1972-11.docx" }
       ]
+    },
+    {
+      "id": "CP0507",
+      "code": "CP0507",
+      "title": "Motors and Microcontrollers",
+      "shortDescription": "Five worksheets on motor control with Flowcode and E-blocks 3 — basic DC motors, full bridge control, stepper and servo motors, plus closed-loop speed control.",
+      "estimatedHours": 11,
+      "certificate": {
+        "enabled": true,
+        "templateName": "Motors and Microcontrollers"
+      },
+      "screens": [
+        { "id": "cp0507-s01", "type": "document", "title": "Preparation",                              "hours": 0.5, "equipment": "Flowcode / E-blocks3", "src": "content/CP0507/CP0507-Prep.docx", "missing": true },
+        { "id": "cp0507-s02", "type": "document", "title": "Contents",                                 "hours": 0.1, "equipment": "Flowcode / E-blocks3", "src": "content/CP0507/CP0507-Cont.docx", "missing": true },
+        { "id": "cp0507-s03", "type": "document", "title": "Worksheet 1 — Basic DC motor control",     "hours": 2,   "equipment": "Flowcode / E-blocks3", "src": "content/CP0507/CP0507-1.docx", "missing": true },
+        { "id": "cp0507-s04", "type": "document", "title": "Worksheet 2 — Full bridge motor control",  "hours": 2,   "equipment": "Flowcode / E-blocks3", "src": "content/CP0507/CP0507-2.docx", "missing": true },
+        { "id": "cp0507-s05", "type": "document", "title": "Worksheet 3 — Stepper motor control",      "hours": 2,   "equipment": "Flowcode / E-blocks3", "src": "content/CP0507/CP0507-3.docx", "missing": true },
+        { "id": "cp0507-s06", "type": "document", "title": "Worksheet 4 — Servo motor control",        "hours": 2,   "equipment": "Flowcode / E-blocks3", "src": "content/CP0507/CP0507-4.docx", "missing": true },
+        { "id": "cp0507-s07", "type": "document", "title": "Worksheet 5 — DC motor speed control",     "hours": 2,   "equipment": "Flowcode / E-blocks3", "src": "content/CP0507/CP0507-5.docx", "missing": true }
+      ]
     }
   ]
 }
