@@ -316,8 +316,8 @@
       <nav class="ms-nav">
         ${buildTopNav(currentPage)}
         ${showCourseCard ? buildCourseCard(course, expanded, currentScreenId, isCourseOpen) : ''}
-        ${buildFooterTools(showCourseCard ? course : null)}
       </nav>
+      ${buildFooterTools(showCourseCard ? course : null)}
       ${showCourseCard ? buildResetBar() : ''}
     `;
     root.innerHTML = html;

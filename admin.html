@@ -81,19 +81,10 @@
 
       /* ----- Login -----
          The admin area is intentionally open to anyone visiting the site
-         during this build phase. We auto-unlock with the default creds so
-         the editor opens straight away; the login form stays in the DOM
-         only for the "Sign out" → reload round-trip. */
-      try {
-        window.MatrixCMS.unlock('matrix');
-      } catch (_) { /* unlock is idempotent */ }
-      showShell();
-      init().catch((e) => {
-        console.error('Admin init failed:', e);
-        document.getElementById('cms-main').innerHTML =
-          '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
-          (e && e.message ? e.message : String(e)) + '</p>';
-      });
+         during this build phase. We auto-unlock + call init() at the BOTTOM
+         of this IIFE so the 'let courses' / 'async function init' bindings
+         below are fully initialised before init() runs (a Temporal Dead
+         Zone error broke this previously). */
       document.getElementById('cms-login-form').addEventListener('submit', (ev) => {
         ev.preventDefault();
         try {
@@ -377,7 +368,16 @@
         location.reload();
       });
 
-      if (window.MatrixCMS.isUnlocked()) init();
+      /* Auto-unlock + open the editor for everyone (Phase 1 access policy).
+         Placed at the bottom of the IIFE so every binding above is ready. */
+      try { window.MatrixCMS.unlock('matrix'); } catch (_) { /* idempotent */ }
+      showShell();
+      init().catch((e) => {
+        console.error('Admin init failed:', e);
+        document.getElementById('cms-main').innerHTML =
+          '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
+          (e && e.message ? e.message : String(e)) + '</p>';
+      });
     })();
   </script>
 </body>

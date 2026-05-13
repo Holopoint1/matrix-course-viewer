@@ -16,6 +16,7 @@
     screenMeta: document.getElementById('screen-meta'),
     screenStage: document.getElementById('screen-stage'),
     prevBtn: document.getElementById('prev-btn'),
+    nextBtn: document.getElementById('next-btn'),
     completeBtn: document.getElementById('complete-btn'),
     bundleBtn: document.getElementById('bundle-btn')
   };
@@ -120,6 +121,11 @@
     els.prevBtn.addEventListener('click', () => {
       if (currentIndex > 0) showScreen(currentIndex - 1);
     });
+    if (els.nextBtn) {
+      els.nextBtn.addEventListener('click', () => {
+        if (currentIndex < course.screens.length - 1) showScreen(currentIndex + 1);
+      });
+    }
     els.completeBtn.addEventListener('click', () => {
       const screen = course.screens[currentIndex];
       if (isComplete(screen.id)) {
@@ -291,6 +297,7 @@
     els.screenTitle.textContent = screen.title;
     els.screenMeta.innerHTML = formatMeta(screen);
     els.prevBtn.disabled = idx === 0;
+    if (els.nextBtn) els.nextBtn.disabled = idx === course.screens.length - 1;
     updateCompleteButton();
 
     timeTracker.start(courseId, screen.id);

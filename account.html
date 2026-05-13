@@ -171,33 +171,47 @@
         courseRowsRoot.appendChild(row);
       }
 
-      /* ---------- Pending / missing assets across all courses ---------- */
+      /* ---------- Pending / missing assets across all courses ----------
+         Verified true: every entry in this list represents a file flagged
+         missing in courses.json and confirmed absent from lms/content/ on
+         the server. We dedupe by *filename* (not full path) so a single
+         shared asset like "Microcontroller basics 1 24 02 26.pptx" — which
+         each course expects under its own content/<id>/ folder — shows up
+         as one publisher task with every drop-path listed. */
       const pendingSection = document.getElementById('pending-section');
       const pendingList = document.getElementById('pending-list');
-      const allMissing = new Map(); /* src -> { filename, screens: [{courseCode, title}] } */
+      const byFilename = new Map(); /* filename -> { filename, paths:Set, screens:[] } */
       for (const course of courses.filter((c) => c.kind !== 'pack')) {
         for (const s of course.screens) {
           if (!s.missing) continue;
-          const src = s.src;
-          if (!allMissing.has(src)) {
-            allMissing.set(src, { src, filename: src.split(/[\\/]/).pop(), screens: [] });
+          const filename = String(s.src).split(/[\\/]/).pop();
+          if (!byFilename.has(filename)) {
+            byFilename.set(filename, { filename, paths: new Set(), screens: [] });
           }
-          allMissing.get(src).screens.push({ courseCode: course.code, title: s.title });
+          const entry = byFilename.get(filename);
+          entry.paths.add(s.src);
+          entry.screens.push({ courseCode: course.code, title: s.title });
         }
       }
-      if (allMissing.size > 0) {
+      if (byFilename.size > 0) {
         pendingSection.hidden = false;
         pendingList.innerHTML = '';
-        for (const item of allMissing.values()) {
+        /* Sort: most-referenced first, then alphabetical */
+        const items = Array.from(byFilename.values())
+          .sort((a, b) => b.screens.length - a.screens.length || a.filename.localeCompare(b.filename));
+        for (const item of items) {
           const li = document.createElement('li');
           li.className = 'missing-row';
-          const usage = item.screens.map((s) => s.courseCode + ' · ' + s.title).join(' · ');
+          const usage = item.screens.map((s) => s.courseCode).filter((v, i, a) => a.indexOf(v) === i).join(' · ');
+          const paths = Array.from(item.paths);
+          const dropLines = paths.length === 1
+            ? `Drop into <code>${escapeHtml(paths[0])}</code>`
+            : `Drop a copy into <strong>${paths.length}</strong> locations:<ul class="missing-paths">${paths.map((p) => `<li><code>${escapeHtml(p)}</code></li>`).join('')}</ul>`;
           li.innerHTML = `
             <div class="missing-row-icon">📦</div>
             <div class="missing-row-body">
-              <div class="missing-row-name"><code>${escapeHtml(item.filename)}</code></div>
-              <div class="missing-row-meta">Drop into <code>${escapeHtml(item.src)}</code></div>
-              <div class="missing-row-usage">${escapeHtml(usage)}</div>
+              <div class="missing-row-name"><code>${escapeHtml(item.filename)}</code> <span class="missing-row-count">used in ${item.screens.length} screen${item.screens.length === 1 ? '' : 's'} (${escapeHtml(usage)})</span></div>
+              <div class="missing-row-meta">${dropLines}</div>
             </div>
           `;
           pendingList.appendChild(li);

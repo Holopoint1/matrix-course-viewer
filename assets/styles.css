@@ -485,14 +485,17 @@ a:hover { text-decoration: underline; }
 .section-silver     .section-label { color: var(--silver); }
 .section-gold       .section-label { color: var(--gold); }
 
-/* ---------- Toasts ---------- */
+/* ---------- Toasts ----------
+   Pinned to the BOTTOM-right so they never cover the sticky screen-bar
+   actions (Previous / Next / Mark complete). They stack upward as new
+   ones arrive. */
 .toast-root {
   position: fixed;
-  top: 80px;
+  bottom: 18px;
   right: 18px;
-  z-index: 1000;
+  z-index: 50;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 0.55rem;
   pointer-events: none;
   max-width: 360px;
@@ -2430,7 +2433,11 @@ a:hover { text-decoration: underline; }
   align-items: center;
   gap: 1rem;
   box-shadow: var(--shadow-xs);
-  z-index: 1;
+  /* Stick to the top of the viewer so the screen title, hours and file
+     reference stay visible while learners scroll long worksheets. */
+  position: sticky;
+  top: var(--header-h);
+  z-index: 5;
 }
 .screen-bar h2 {
   margin: 0;
@@ -3134,10 +3141,15 @@ a:hover { text-decoration: underline; }
   padding: 0.15rem 0.65rem;
   margin-bottom: 0.35rem;
 }
+/* Tools (SCORM Compliance) live OUTSIDE the scrolling nav now, so they
+   anchor to the bottom of the sidebar regardless of how many items the
+   nav has. A divider line sits above to separate them from the nav. */
 .ms-section-tools {
-  margin-top: 0.45rem;
+  flex-shrink: 0;
   border-top: 1px solid var(--border);
-  padding-top: 0.7rem;
+  padding: 0.65rem 0.65rem 0.7rem;
+  margin: 0;
+  background: var(--surface);
 }
 
 /* Top-level nav items (Dashboard, All Courses, Tools) */
