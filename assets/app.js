@@ -17,6 +17,7 @@
     screenStage: document.getElementById('screen-stage'),
     prevBtn: document.getElementById('prev-btn'),
     nextBtn: document.getElementById('next-btn'),
+    nextBtnBottom: document.getElementById('next-btn-bottom'),
     completeBtn: document.getElementById('complete-btn'),
     bundleBtn: document.getElementById('bundle-btn')
   };
@@ -126,6 +127,14 @@
         if (currentIndex < course.screens.length - 1) showScreen(currentIndex + 1);
       });
     }
+    if (els.nextBtnBottom) {
+      els.nextBtnBottom.addEventListener('click', () => {
+        if (currentIndex < course.screens.length - 1) {
+          showScreen(currentIndex + 1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
     els.completeBtn.addEventListener('click', () => {
       const screen = course.screens[currentIndex];
       if (isComplete(screen.id)) {
@@ -162,9 +171,9 @@
     btn.disabled = true;
     btn.textContent = 'Building PDF…';
     const wrap = document.createElement('div');
-    /* top:0 (with left far off-screen) so html2canvas can still rasterise.
-       Extreme negative top values (e.g. -99999px) cause blank PDFs. */
-    wrap.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:30px 40px;';
+    /* position:absolute (not fixed) so html2canvas can rasterise it;
+       fixed-positioned elements get skipped and produce blank PDFs. */
+    wrap.style.cssText = 'position:absolute;left:-10000px;top:0;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:30px 40px;z-index:-1;';
     wrap.innerHTML =
       '<div style="font-size:0.78rem;letter-spacing:2px;color:#7c3aed;text-transform:uppercase;font-weight:700;">' +
       escapeHtml((course && course.code) || '') + '</div>' +
@@ -220,18 +229,33 @@
       return;
     }
 
+    /* Sandbox sits in normal document flow but offscreen via absolute
+       positioning + huge negative left. Critical: position:absolute (NOT
+       fixed) — html2canvas skips fixed-positioned elements, producing the
+       blank PDFs we were seeing. With absolute, it's part of the document
+       layer and rasterises correctly. */
     const sandbox = document.createElement('div');
-    sandbox.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:40px;';
+    sandbox.style.cssText = 'position:absolute;left:-10000px;top:0;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:40px;z-index:-1;';
     document.body.appendChild(sandbox);
 
     async function htmlToPdfBytes(innerHtml) {
       sandbox.innerHTML = innerHtml;
+      /* Force a layout flush before html2canvas reads the element so the
+         freshly-set innerHTML has dimensions to capture. */
+      void sandbox.offsetHeight;
       const blob = await window.html2pdf()
         .set({
           margin: [10, 12, 14, 12],
           filename: 'tmp.pdf',
           image: { type: 'jpeg', quality: 0.95 },
-          html2canvas: { scale: 1.6, letterRendering: true, useCORS: true, backgroundColor: '#ffffff' },
+          html2canvas: {
+            scale: 1.6,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            windowWidth: 874, /* 794px content + 40px×2 padding */
+            scrollX: 0,
+            scrollY: 0
+          },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         })
         .from(sandbox)
@@ -335,7 +359,17 @@
     els.screenTitle.textContent = screen.title;
     els.screenMeta.innerHTML = formatMeta(screen);
     els.prevBtn.disabled = idx === 0;
-    if (els.nextBtn) els.nextBtn.disabled = idx === course.screens.length - 1;
+    const isLast = idx === course.screens.length - 1;
+    if (els.nextBtn) els.nextBtn.disabled = isLast;
+    if (els.nextBtnBottom) {
+      els.nextBtnBottom.disabled = isLast;
+      els.nextBtnBottom.hidden = isLast;
+      /* Surface the upcoming screen's title to make navigation explicit. */
+      if (!isLast) {
+        const peek = course.screens[idx + 1];
+        els.nextBtnBottom.innerHTML = 'Next: ' + escapeHtml(peek.title) + ' &rarr;';
+      }
+    }
     updateCompleteButton();
 
     timeTracker.start(courseId, screen.id);

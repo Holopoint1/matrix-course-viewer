@@ -167,42 +167,85 @@
   }
 
   function buildCourseCard(course, expanded, currentScreenId, isCourseOpen) {
-    const worksheets = (course.screens || []).filter((s) => s.type === 'document');
-    const total = worksheets.length;
+    /* Show EVERY screen — image, HTML, YouTube, PDF, document, PowerPoint —
+       so the sidebar is a faithful map of the course and the user always
+       knows where they are. Progress percentage is based on the screens
+       that have been ticked complete. Each row carries a type dot so the
+       learner can distinguish a video from a worksheet at a glance. */
+    const allScreens = course.screens || [];
+    const total = allScreens.length;
     const progress = getProgress(course.id);
-    const done = worksheets.filter((s) => progress[s.id]).length;
+    const done = allScreens.filter((s) => progress[s.id]).length;
     const pct = total ? Math.round((done / total) * 100) : 0;
-    const grouped = { bronze: [], silver: [], gold: [], other: [] };
-    for (const s of worksheets) {
-      const t = (window.Gamify && window.Gamify.inferTier && window.Gamify.inferTier(s)) || 'other';
-      (grouped[t] || grouped.other).push(s);
-    }
     const thumb = thumbForCourse(course);
 
-    let body = '';
-    let n = 0;
-    for (const tier of ['bronze', 'silver', 'gold', 'other']) {
-      const items = grouped[tier];
-      if (!items.length) continue;
-      body += `
-        <div class="ms-tier">
-          <div class="ms-tier-label tier-${tier}"><span class="ms-tier-dot"></span>${escapeHtml(tierLabel(tier))}</div>
-      `;
-      for (const s of items) {
-        n += 1;
-        const isDone = Boolean(progress[s.id]);
-        const isActive = s.id === currentScreenId;
-        const isMissing = Boolean(s.missing);
-        const href = isMissing ? 'javascript:void(0)' : ('course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(s.id));
-        body += `
-          <a class="ms-ws-item${isDone ? ' done' : ''}${isActive ? ' active' : ''}${isMissing ? ' missing' : ''}" href="${href}">
-            <span class="ms-ws-num">${n}</span>
-            <span class="ms-ws-title">${escapeHtml(s.title)}</span>
-          </a>
-        `;
-      }
-      body += '</div>';
+    /* Classify each screen into a section. Tier inference (bronze/silver/
+       gold) wins for document worksheets that match the CP*-N pattern.
+       Otherwise we use a contextual section name based on title +/ type. */
+    function sectionFor(s) {
+      const tier = (window.Gamify && window.Gamify.inferTier && window.Gamify.inferTier(s));
+      if (tier) return tier;
+      const t = (s.title || '').toLowerCase();
+      if (/homework/i.test(t)) return 'homework';
+      if (/assessment/i.test(t)) return 'assessment';
+      if (/certificate/i.test(t)) return 'certificate';
+      return 'intro';
     }
+    /* Type-dot CSS class — colours match .screen-type-dot in styles.css */
+    function typeClass(t) {
+      switch (t) {
+        case 'document':   return 'document';
+        case 'html':       return 'html';
+        case 'pdf':        return 'pdf';
+        case 'youtube':    return 'youtube';
+        case 'image':      return 'image';
+        case 'powerpoint': return 'powerpoint';
+        case 'spreadsheet':return 'document';
+        default:           return 'document';
+      }
+    }
+    /* Walk screens in order, emitting a section header whenever the
+       section changes. This preserves authoring order so users navigate
+       the course linearly. */
+    let body = '';
+    let lastSection = null;
+    let n = 0;
+    const sectionLabels = {
+      intro: 'Intro & welcome',
+      bronze: 'Bronze',
+      silver: 'Silver',
+      gold: 'Gold',
+      homework: 'Homework',
+      assessment: 'Assessment',
+      certificate: 'Certificate',
+      other: 'Additional'
+    };
+    for (const s of allScreens) {
+      n += 1;
+      const sec = sectionFor(s);
+      if (sec !== lastSection) {
+        if (lastSection !== null) body += '</div>';
+        body += `
+          <div class="ms-tier">
+            <div class="ms-tier-label tier-${sec}"><span class="ms-tier-dot"></span>${escapeHtml(sectionLabels[sec] || sec)}</div>
+        `;
+        lastSection = sec;
+      }
+      const isDone = Boolean(progress[s.id]);
+      const isActive = s.id === currentScreenId;
+      const isMissing = Boolean(s.missing);
+      const href = isMissing
+        ? 'javascript:void(0)'
+        : ('course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(s.id));
+      body += `
+        <a class="ms-ws-item${isDone ? ' done' : ''}${isActive ? ' active' : ''}${isMissing ? ' missing' : ''}" href="${href}">
+          <span class="ms-ws-num">${n}</span>
+          <span class="ms-ws-title">${escapeHtml(s.title)}</span>
+          <span class="ms-ws-type-dot ${typeClass(s.type)}" title="${escapeHtml(s.type)}"></span>
+        </a>
+      `;
+    }
+    if (lastSection !== null) body += '</div>';
 
     const kindLabel = course.kind === 'pack' ? 'PACK' : escapeHtml(course.code || '');
     const isPack = course.kind === 'pack';
@@ -280,9 +323,13 @@
     if (!root) return;
     if (course) setLastCourse(course.id);
 
-    /* Is the user actively viewing this specific course right now?
-       (course.html / dashboard.html / certificate.html) */
-    const isCourseOpen = currentPage === 'course' || currentPage === 'dashboard';
+    /* "Course open" = the user is INSIDE the course viewer at worksheet
+       level (course.html). Only then do we expand the worksheet list by
+       default. On the dashboard page the rail is a 'Continue' chip with
+       the worksheet list collapsed; clicking the chip body jumps to the
+       course viewer, clicking the chevron expands the list inline. */
+    const isCourseOpen = currentPage === 'course';
+    const isOnDashboard = currentPage === 'dashboard';
 
     let pct = 0;
     if (course) {
@@ -293,9 +340,10 @@
     }
 
     /* Default expand state:
-       - course open → always expanded (this is the active context)
-       - elsewhere   → respect the user's last toggle (defaults to collapsed
-                       so the "return to" dropdown stays compact) */
+       - course viewer (course.html) → always expanded (active worksheet
+         path lives in the sub-menu)
+       - dashboard / other pages     → start collapsed, respect the user's
+         last manual toggle so the chevron lets them peek without leaving */
     let expanded = false;
     if (course) {
       const stored = getExpanded();
@@ -303,12 +351,14 @@
       else expanded = stored.has(course.id);
     }
 
-    /* Only render the course card when it's relevant:
-       - course-aware page → always show (this IS the course context)
-       - other pages → only show if the user actually has progress on it
-                       (otherwise the sidebar would clutter with a course
-                       the learner never started) */
-    const showCourseCard = course && (isCourseOpen || isCourseInProgress(course.id));
+    /* Render the course card when:
+       - currently viewing a worksheet (course.html)         OR
+       - on the dashboard for that course (always pin a card) OR
+       - on any other page but the course is in-progress     */
+    const showCourseCard = course && (isCourseOpen || isOnDashboard || isCourseInProgress(course.id));
+    /* Compact "Continue" mode = dashboard + non-course pages.
+       Only the worksheet viewer shows the full expanded course details. */
+    const isCompact = !isCourseOpen;
 
     const html = `
       ${buildHeader(showCourseCard ? course : null)}
@@ -364,23 +414,15 @@
     if (pctEl) pctEl.textContent = pct + '%';
     if (barEl) barEl.style.width = pct + '%';
 
-    /* Mark worksheet items done/active. */
+    /* Mark every screen row's done/active state. Walks the full screen
+       list in authoring order — same order the renderer emits — so the
+       DOM positions match index-for-index. */
     const items = root.querySelectorAll('.ms-ws-item');
-    let n = 0;
-    /* Re-walk in the same order the renderer used so indices match. */
-    const grouped = { bronze: [], silver: [], gold: [], other: [] };
-    const worksheets = screens.filter((s) => s.type === 'document');
-    for (const s of worksheets) {
-      const t = (window.Gamify && window.Gamify.inferTier && window.Gamify.inferTier(s)) || 'other';
-      (grouped[t] || grouped.other).push(s);
-    }
-    const flat = [].concat(grouped.bronze, grouped.silver, grouped.gold, grouped.other);
     items.forEach((el, i) => {
-      const s = flat[i];
+      const s = screens[i];
       if (!s) return;
       el.classList.toggle('done', Boolean(progress[s.id]));
       el.classList.toggle('active', s.id === currentScreenId);
-      n += 1;
     });
   }
 

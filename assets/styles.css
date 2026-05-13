@@ -3304,6 +3304,34 @@ a:hover { text-decoration: underline; }
 .ms-tier-label.tier-bronze .ms-tier-dot { background: var(--bronze); }
 .ms-tier-label.tier-silver .ms-tier-dot { background: var(--silver); }
 .ms-tier-label.tier-gold   .ms-tier-dot { background: var(--gold); }
+.ms-tier-label.tier-intro       { color: var(--text-muted); }
+.ms-tier-label.tier-intro       .ms-tier-dot { background: var(--primary); }
+.ms-tier-label.tier-homework    { color: #b45309; }
+.ms-tier-label.tier-homework    .ms-tier-dot { background: #f59e0b; }
+.ms-tier-label.tier-assessment  { color: #b91c1c; }
+.ms-tier-label.tier-assessment  .ms-tier-dot { background: #dc2626; }
+.ms-tier-label.tier-certificate { color: var(--success); }
+.ms-tier-label.tier-certificate .ms-tier-dot { background: var(--success); }
+.ms-tier-label.tier-other       { color: var(--text-muted); }
+.ms-tier-label.tier-other       .ms-tier-dot { background: var(--text-subtle); }
+
+/* Type indicator dot at the right edge of each sidebar row */
+.ms-ws-type-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  background: var(--primary);
+  opacity: 0.7;
+}
+.ms-ws-type-dot.document   { background: #1d4ed8; }
+.ms-ws-type-dot.html       { background: #16a34a; }
+.ms-ws-type-dot.youtube    { background: #dc2626; }
+.ms-ws-type-dot.pdf        { background: #ea580c; }
+.ms-ws-type-dot.image      { background: #7c3aed; }
+.ms-ws-type-dot.powerpoint { background: #db2777; }
+.ms-ws-item.active .ms-ws-type-dot { opacity: 1; }
 
 /* Worksheet rows */
 .ms-ws-item {
