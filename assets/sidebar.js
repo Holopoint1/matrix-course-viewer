@@ -107,10 +107,6 @@
           <span class="ms-nav-ico ms-nav-ico-blue">${ICONS.check}</span>
           <span class="ms-nav-label">SCORM Compliance</span>
         </a>
-        <a class="ms-nav-item" href="worksheet-compiler.html">
-          <span class="ms-nav-ico ms-nav-ico-amber">${ICONS.doc}</span>
-          <span class="ms-nav-label">Worksheet Compiler</span>
-        </a>
       </div>
     `;
   }
