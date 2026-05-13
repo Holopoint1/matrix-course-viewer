@@ -191,6 +191,11 @@ async function buildCourse(courseId) {
   return {
     id: courseId,
     code: meta.code,
+    /* "course" = full learner experience (CO*), shown in catalog.
+       "pack"   = curriculum building block (CP*), shown in the packs
+                  section. Set by build-courses-json.js based on the
+                  course ID prefix. */
+    kind: /^CO/i.test(courseId) ? 'course' : 'pack',
     title: meta.title,
     shortDescription: meta.shortDescription,
     estimatedHours: Math.round(estimatedHours * 10) / 10,
@@ -213,11 +218,13 @@ async function main() {
       console.log('  SKIP  ' + id + ' — ' + err.message);
     }
   }
-  /* Preserve CP* curriculum packs from the existing file */
+  /* Preserve CP* curriculum packs from the existing file; ensure each
+     gets kind:'pack' even if the previous version didn't carry one. */
   for (const c of existing.courses) {
     if (/^CP/.test(c.id)) {
+      if (c.kind !== 'pack') c.kind = 'pack';
       out.courses.push(c);
-      console.log('  kept  ' + c.id);
+      console.log('  kept  ' + c.id + ' (pack)');
     }
   }
   fs.writeFileSync(COURSES_JSON, JSON.stringify(out, null, 2) + '\n');

@@ -124,10 +124,11 @@
       document.getElementById('ach-count').textContent = unlockedCount;
       document.getElementById('ach-total').textContent = ach.length;
 
-      /* Course rows — with cert button if available and complete */
+      /* Course rows — with cert button if available and complete.
+         Filter out 'pack' kind: those are building blocks, not full courses. */
       const courseRowsRoot = document.getElementById('course-rows');
       courseRowsRoot.innerHTML = '';
-      for (const course of courses) {
+      for (const course of courses.filter((c) => c.kind !== 'pack')) {
         const cs = stats.courseStats[course.id] || { completed: 0, total: course.screens.length, pct: 0 };
         const time = window.Gamify.getCourseTotalSeconds(course.id);
         const isComplete = cs.pct === 100 && cs.total > 0;

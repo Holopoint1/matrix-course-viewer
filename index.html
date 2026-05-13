@@ -23,14 +23,22 @@
 
   <main class="catalog-section">
     <div class="catalog-heading">
-      <h2>All courses</h2>
-      <p>Browser-based courses and curriculum packs across the Flowcode &amp; E-blocks 3 catalogue.</p>
+      <h2>Courses</h2>
+      <p>Full learner-facing courses built on the Flowcode &amp; E-blocks 3 curriculum.</p>
     </div>
     <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
     <div class="catalog" id="catalog">
       <p class="stage-loading">Loading courses&hellip;</p>
     </div>
     <p class="catalog-empty" id="catalog-empty" hidden>No courses match this filter.</p>
+
+    <div class="catalog-heading catalog-heading-packs">
+      <h2>Curriculum packs</h2>
+      <p>Reusable worksheet packs that the courses above are built from. Drop the SCORM zip into your LMS to deliver a pack on its own.</p>
+    </div>
+    <div class="catalog catalog-packs" id="catalog-packs">
+      <p class="stage-loading">Loading curriculum packs&hellip;</p>
+    </div>
   </main>
 
   <section class="missing-section" id="missing-section" hidden>
@@ -112,23 +120,34 @@
 
         function renderCards() {
           root.innerHTML = '';
+          /* Only show top-level CO* courses in the main grid; CP* packs
+             render in their own section below. */
+          const allCourses = data.courses.filter((c) => c.kind !== 'pack');
           const visible = activeCategory
-            ? data.courses.filter((c) => (c.categories || []).indexOf(activeCategory) >= 0)
-            : data.courses.slice();
+            ? allCourses.filter((c) => (c.categories || []).indexOf(activeCategory) >= 0)
+            : allCourses;
           if (visible.length === 0) {
             emptyEl.hidden = false;
             return;
           }
           emptyEl.hidden = true;
-          for (const course of visible) renderCard(course);
+          for (const course of visible) renderCard(course, root);
         }
 
         renderPills();
 
+        /* Render curriculum packs below the courses */
+        const packsRoot = document.getElementById('catalog-packs');
+        packsRoot.innerHTML = '';
+        const packs = data.courses.filter((c) => c.kind === 'pack');
+        for (const p of packs) renderCard(p, packsRoot, { compact: true });
+
         let totalScreens = 0;
         for (const c of data.courses) totalScreens += c.screens.length;
 
-        function renderCard(course) {
+        function renderCard(course, mount, opts) {
+          opts = opts || {};
+          const isPack = course.kind === 'pack';
           const screenCount = course.screens.length;
           const courseHours = course.screens.reduce((sum, s) => sum + (Number(s.hours) || 0), 0);
           const missing = course.screens.filter((s) => s.missing).length;
@@ -140,24 +159,30 @@
           const cats = course.categories || [];
 
           const card = document.createElement('article');
-          card.className = 'course-card';
-          /* Catalog thumbnail: prefer the first image-screen's thumbnail (if it
-             explicitly provides one for placeholder use) or src; fall back to a
-             generic per-course opening.svg. */
+          card.className = 'course-card' + (isPack ? ' course-card-pack' : '');
           const firstImage = course.screens.find((s) => s.type === 'image');
           const thumbSrc = (firstImage && (firstImage.thumbnail || (!firstImage.missing && firstImage.src))) || ('content/' + course.id + '/opening.svg');
+          /* SCORM filename: courses use SC* prefix, packs use their own CP* id */
+          const scormName = isPack
+            ? course.id + '-' + course.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+            : course.id.replace('CO', 'SC') + '-' + course.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+          const continueLabel = isPack
+            ? (completed ? 'Open pack' : 'Browse pack')
+            : (completed ? 'Continue course' : 'Start course');
+
           card.innerHTML = `
-            <a class="thumb" href="course.html?id=${course.id}" style="background-image:url('${thumbSrc}')" aria-label="Start ${escapeHtml(course.title)}">
-              ${hasCert ? '<span class="thumb-tag" title="Includes certificate of completion">★ Certificate</span>' : ''}
+            <a class="thumb" href="dashboard.html?id=${course.id}" style="background-image:url('${thumbSrc}')" aria-label="Open ${escapeHtml(course.title)}">
+              ${isPack ? '<span class="thumb-tag thumb-tag-pack">Pack</span>' : (hasCert ? '<span class="thumb-tag" title="Includes certificate of completion">★ Certificate</span>' : '')}
             </a>
             <div class="body">
-              <span class="code">${course.code}</span>
+              <span class="code">${escapeHtml(course.code)}</span>
               <h3>${escapeHtml(course.title)}</h3>
               <p>${escapeHtml(course.shortDescription)}</p>
               ${cats.length ? `<div class="card-cats">${cats.map((c) => `<span class="card-cat">${escapeHtml(c)}</span>`).join('')}</div>` : ''}
               <div class="meta">
-                <span class="chip"><strong>${ready}</strong>/${screenCount} ready</span>
-                <span class="chip"><strong>${courseHours.toFixed(0)}</strong>h</span>
+                ${screenCount > 0 ? `<span class="chip"><strong>${ready}</strong>/${screenCount} ${isPack ? 'worksheets' : 'ready'}</span>` : '<span class="chip chip-warn">Not yet split</span>'}
+                ${courseHours > 0 ? `<span class="chip"><strong>${courseHours.toFixed(0)}</strong>h</span>` : ''}
                 ${missing ? `<span class="chip chip-warn"><strong>${missing}</strong> missing</span>` : ''}
               </div>
               <div class="card-progress">
@@ -166,22 +191,23 @@
               </div>
               <div class="actions">
                 <a class="btn btn-primary" href="dashboard.html?id=${course.id}">
-                  ${completed ? 'Continue course' : 'Start course'}
+                  ${continueLabel}
                   <span class="btn-arrow" aria-hidden="true">→</span>
                 </a>
               </div>
               <div class="card-extras">
-                <a class="btn btn-secondary" href="dist/${course.id.replace('CO', 'SC')}-${course.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}.zip" download title="SCORM 1.2 package — drop into any SCORM-compliant LMS">↓ SCORM</a>
+                <a class="btn btn-secondary" href="dist/${scormName}.zip" download title="SCORM 1.2 package — drop into any SCORM-compliant LMS">↓ SCORM</a>
               </div>
             </div>`;
-          root.appendChild(card);
+          (mount || root).appendChild(card);
         }
 
         renderCards();
 
         const streak = window.Gamify.getStreak();
         const totalTime = window.Gamify.getTotalSecondsAllCourses();
-        stats.querySelector('[data-stat="courses"]').textContent = data.courses.length;
+        /* Hero counter shows full courses, not packs. */
+        stats.querySelector('[data-stat="courses"]').textContent = data.courses.filter((c) => c.kind !== 'pack').length;
         stats.querySelector('[data-stat="time"]').textContent = totalTime > 0 ? window.Gamify.formatDuration(totalTime) : '0m';
         stats.querySelector('[data-stat="streak"]').textContent = streak.days || 0;
 

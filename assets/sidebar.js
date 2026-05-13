@@ -196,13 +196,15 @@
       body += '</div>';
     }
 
+    const kindLabel = course.kind === 'pack' ? 'PACK' : escapeHtml(course.code || '');
+    const isPack = course.kind === 'pack';
     return `
       <div class="ms-section">
-        <div class="ms-course-group${expanded ? ' expanded' : ''}" data-role="course-group">
+        <div class="ms-course-group${expanded ? ' expanded' : ''}${isPack ? ' ms-course-group-pack' : ''}" data-role="course-group">
           <button type="button" class="ms-course-head" id="ms-course-toggle">
             <img class="ms-course-thumb" src="${escapeHtml(thumb)}" alt="">
             <span class="ms-course-info">
-              <span class="ms-course-info-code">${escapeHtml(course.code || '')}</span>
+              <span class="ms-course-info-code">${kindLabel}${isPack ? ' &middot; ' + escapeHtml(course.code || '') : ''}</span>
               <span class="ms-course-info-title">${escapeHtml(course.title || '')}</span>
               <span class="ms-course-info-progress">${pct}% &middot; ${done}/${total}</span>
             </span>

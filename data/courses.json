@@ -3,6 +3,7 @@
     {
       "id": "CO0001",
       "code": "CO0001",
+      "kind": "course",
       "title": "Flowcode and E-blocks 3 CPD Course",
       "shortDescription": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Includes videos, PowerPoints, key worksheets, and a printable CPD certificate.",
       "estimatedHours": 3.8,
@@ -165,6 +166,7 @@
     {
       "id": "CO0002",
       "code": "CO0002",
+      "kind": "course",
       "title": "Introduction to Microcontrollers",
       "shortDescription": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
       "estimatedHours": 86.5,
@@ -534,6 +536,7 @@
     {
       "id": "CO0003",
       "code": "CO0003",
+      "kind": "course",
       "title": "Digital Techniques for Aviation Technicians",
       "shortDescription": "CP7244 / EASA Unit 5 Digital Techniques for Aviation Technicians, delivered as a SCORM-ready browser course. Mirrors the CO0002 worksheet path adapted for aviation maintenance learners.",
       "estimatedHours": 46.3,
@@ -810,6 +813,7 @@
     {
       "id": "CO0004",
       "code": "CO0004",
+      "kind": "course",
       "title": "Microcontrollers for T-Levels",
       "shortDescription": "T-Level Engineering microcontroller pathway built on the CP2563 / CP4807 worksheet base. Covers digital I/O, analogue sensors, motor control, and project work mapped to the T-Level core skills.",
       "estimatedHours": 46.3,
@@ -1084,8 +1088,83 @@
       ]
     },
     {
+      "id": "CP0507",
+      "code": "CP0507",
+      "kind": "pack",
+      "title": "Motors and Microcontrollers",
+      "shortDescription": "Five worksheets on motor control with Flowcode and E-blocks 3 — basic DC motors, full bridge control, stepper and servo motors, plus closed-loop speed control.",
+      "estimatedHours": 11,
+      "certificate": {
+        "enabled": true,
+        "templateName": "Motors and Microcontrollers"
+      },
+      "screens": [
+        {
+          "id": "cp0507-s01",
+          "type": "document",
+          "title": "Preparation",
+          "hours": 0.5,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP0507/CP0507-Prep.docx"
+        },
+        {
+          "id": "cp0507-s02",
+          "type": "document",
+          "title": "Contents",
+          "hours": 0.1,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP0507/CP0507-Cont.docx"
+        },
+        {
+          "id": "cp0507-s03",
+          "type": "document",
+          "title": "Worksheet 1 — Basic DC motor control",
+          "hours": 2,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP0507/CP0507-1.docx"
+        },
+        {
+          "id": "cp0507-s04",
+          "type": "document",
+          "title": "Worksheet 2 — Full bridge motor control",
+          "hours": 2,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP0507/CP0507-2.docx"
+        },
+        {
+          "id": "cp0507-s05",
+          "type": "document",
+          "title": "Worksheet 3 — Stepper motor control",
+          "hours": 2,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP0507/CP0507-3.docx"
+        },
+        {
+          "id": "cp0507-s06",
+          "type": "document",
+          "title": "Worksheet 4 — Servo motor control",
+          "hours": 2,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP0507/CP0507-4.docx"
+        },
+        {
+          "id": "cp0507-s07",
+          "type": "document",
+          "title": "Worksheet 5 — DC motor speed control",
+          "hours": 2,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP0507/CP0507-5.docx"
+        }
+      ],
+      "categories": [
+        "Motors",
+        "Microcontrollers"
+      ]
+    },
+    {
       "id": "CP1972",
       "code": "CP1972",
+      "kind": "pack",
       "title": "Sensors and Microcontrollers",
       "shortDescription": "Eleven worksheets covering analogue and digital sensors with Flowcode and E-blocks 3 — from light and temperature sensors to accelerometers, flow rate, force, strain and pressure.",
       "estimatedHours": 22,
@@ -1205,76 +1284,145 @@
       ]
     },
     {
-      "id": "CP0507",
-      "code": "CP0507",
-      "title": "Motors and Microcontrollers",
-      "shortDescription": "Five worksheets on motor control with Flowcode and E-blocks 3 — basic DC motors, full bridge control, stepper and servo motors, plus closed-loop speed control.",
-      "estimatedHours": 11,
+      "id": "CP2563",
+      "code": "CP2563",
+      "kind": "pack",
+      "title": "Microcontrollers for T-Levels",
+      "shortDescription": "T-Level Engineering microcontroller worksheets. Content not yet split — see the assets folder for the master doc.",
+      "estimatedHours": 0,
       "certificate": {
-        "enabled": true,
-        "templateName": "Motors and Microcontrollers"
+        "enabled": false
+      },
+      "screens": [],
+      "categories": [
+        "Curriculum pack"
+      ]
+    },
+    {
+      "id": "CP4807",
+      "code": "CP4807",
+      "kind": "pack",
+      "title": "Introduction to Microcontrollers",
+      "shortDescription": "The 12-worksheet master pack underpinning CO0001, CO0002, CO0003 and CO0004. Bronze, Silver and Gold tiered worksheets from first program through web mirror projects.",
+      "estimatedHours": 17,
+      "certificate": {
+        "enabled": false
       },
       "screens": [
         {
-          "id": "cp0507-s01",
+          "id": "cp4807-s01",
           "type": "document",
-          "title": "Preparation",
-          "hours": 0.5,
+          "title": "First program",
+          "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-Prep.docx"
+          "src": "content/CP4807/CP4807-1.docx"
         },
         {
-          "id": "cp0507-s02",
+          "id": "cp4807-s02",
           "type": "document",
-          "title": "Contents",
-          "hours": 0.1,
+          "title": "Performing calculations",
+          "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-Cont.docx"
+          "src": "content/CP4807/CP4807-2.docx"
         },
         {
-          "id": "cp0507-s03",
+          "id": "cp4807-s03",
           "type": "document",
-          "title": "Worksheet 1 — Basic DC motor control",
+          "title": "Connection points",
+          "hours": 1,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP4807/CP4807-3.docx"
+        },
+        {
+          "id": "cp4807-s04",
+          "type": "document",
+          "title": "Digital inputs",
+          "hours": 1,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP4807/CP4807-4.docx"
+        },
+        {
+          "id": "cp4807-s05",
+          "type": "document",
+          "title": "Making decisions",
+          "hours": 1,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP4807/CP4807-5.docx"
+        },
+        {
+          "id": "cp4807-s06",
+          "type": "document",
+          "title": "Macros / subroutines",
+          "hours": 1,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP4807/CP4807-6.docx"
+        },
+        {
+          "id": "cp4807-s07",
+          "type": "document",
+          "title": "Using prototype boards",
+          "hours": 1,
+          "equipment": "Flowcode / E-blocks3",
+          "src": "content/CP4807/CP4807-7.docx"
+        },
+        {
+          "id": "cp4807-s08",
+          "type": "document",
+          "title": "Colour graphical displays",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-1.docx"
+          "src": "content/CP4807/CP4807-8.docx"
         },
         {
-          "id": "cp0507-s04",
+          "id": "cp4807-s09",
           "type": "document",
-          "title": "Worksheet 2 — Full bridge motor control",
+          "title": "Pin interrupts",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-2.docx"
+          "src": "content/CP4807/CP4807-9.docx"
         },
         {
-          "id": "cp0507-s05",
+          "id": "cp4807-s10",
           "type": "document",
-          "title": "Worksheet 3 — Stepper motor control",
+          "title": "Timer interrupts",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-3.docx"
+          "src": "content/CP4807/CP4807-10.docx"
         },
         {
-          "id": "cp0507-s06",
+          "id": "cp4807-s11",
           "type": "document",
-          "title": "Worksheet 4 — Servo motor control",
+          "title": "Touch control systems",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-4.docx"
+          "src": "content/CP4807/CP4807-11.docx"
         },
         {
-          "id": "cp0507-s07",
+          "id": "cp4807-s12",
           "type": "document",
-          "title": "Worksheet 5 — DC motor speed control",
+          "title": "Web mirror",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-5.docx"
+          "src": "content/CP4807/CP4807-12.docx"
         }
       ],
       "categories": [
-        "Motors",
-        "Microcontrollers"
+        "Curriculum pack"
+      ]
+    },
+    {
+      "id": "CP7244",
+      "code": "CP7244",
+      "kind": "pack",
+      "title": "Digital Techniques for Aviation Technicians",
+      "shortDescription": "EASA Unit 5 Digital Techniques worksheets. Content not yet split — see the assets folder for the master doc.",
+      "estimatedHours": 0,
+      "certificate": {
+        "enabled": false
+      },
+      "screens": [],
+      "categories": [
+        "Curriculum pack"
       ]
     }
   ]

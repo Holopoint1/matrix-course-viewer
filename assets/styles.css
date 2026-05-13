@@ -718,6 +718,32 @@ a:hover { text-decoration: underline; }
   border-radius: 99px;
   box-shadow: var(--shadow-xs);
 }
+.course-card .thumb-tag-pack {
+  background: rgba(255,255,255,0.95);
+  color: #b45309;
+  border: 1px solid rgba(180, 83, 9, 0.25);
+}
+
+/* Curriculum-pack catalog: same card layout, but visually de-emphasised */
+.catalog-heading-packs { margin-top: 3rem; }
+.catalog-heading-packs h2 { color: var(--text-muted); }
+.catalog-heading-packs p { color: var(--text-subtle); }
+.catalog-packs .course-card-pack {
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+  box-shadow: none;
+}
+.catalog-packs .course-card-pack:hover { box-shadow: var(--shadow-xs); border-style: solid; }
+.catalog-packs .course-card-pack .thumb {
+  background-color: #fff4e0;
+  background-blend-mode: multiply;
+}
+.catalog-packs .course-card-pack .code { color: #b45309; }
+
+/* Pack badge inside sidebar course-info */
+.ms-course-group-pack .ms-course-info-code {
+  color: #b45309 !important;
+}
 .course-card .body { padding: 1.1rem 1.25rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
 .course-card .code {
   font-size: 0.7rem;
