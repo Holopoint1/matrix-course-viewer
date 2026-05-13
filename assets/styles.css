@@ -3569,6 +3569,215 @@ a:hover { text-decoration: underline; }
   .account-course-actions .btn { flex: 1 1 auto; }
 }
 
+/* ---------- Support page ---------- */
+.support-section {
+  max-width: 1100px;
+  margin: -2rem auto 3rem;
+  padding: 0 1.4rem;
+}
+.support-card-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.4rem 1.4rem 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow-xs);
+}
+.support-card-head { margin-bottom: 1rem; }
+.support-card-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--primary);
+}
+.support-card-head h2 {
+  margin: 0.15rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--text);
+}
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.7rem;
+}
+.support-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.85rem 0.95rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text);
+  text-decoration: none;
+  transition: background 150ms ease, border-color 150ms ease, transform 80ms ease;
+}
+.support-link:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-100);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+.support-link-ico {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--primary-100);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+.support-link-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+.support-link-body strong { font-size: 0.95rem; color: var(--text); }
+.support-link-body span { font-size: 0.78rem; color: var(--text-muted); }
+.support-link-arrow { color: var(--primary); font-weight: 700; flex-shrink: 0; }
+
+/* ---------- Mapping page (BTEC curriculum guide) ---------- */
+.mapping-section {
+  max-width: 1200px;
+  margin: -2rem auto 3rem;
+  padding: 0 1.4rem;
+}
+.mapping-level {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.4rem 1.4rem 1.6rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-xs);
+}
+.mapping-level-head { margin-bottom: 1.1rem; }
+.mapping-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.mapping-level-badge.tier-bronze { background: var(--bronze-bg); color: var(--bronze); }
+.mapping-level-badge.tier-silver { background: var(--silver-bg); color: var(--silver); }
+.mapping-level-badge.tier-gold   { background: var(--gold-bg);   color: var(--gold); }
+.mapping-level-badge .ms-tier-dot { width: 7px; height: 7px; background: currentColor; }
+.mapping-level h2 {
+  margin: 0.2rem 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--primary-dark);
+}
+.mapping-level-sub {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-subtle);
+  letter-spacing: 0;
+}
+.mapping-level-blurb {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  max-width: 780px;
+}
+
+.mapping-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 0.85rem;
+}
+.mapping-unit {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 1rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 150ms ease, border-color 150ms ease, transform 80ms ease;
+}
+.mapping-unit.available {
+  background: linear-gradient(180deg, #ecfdf5, #fff);
+  border-color: #bbf7d0;
+}
+.mapping-unit.available:hover {
+  border-color: #86efac;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.mapping-unit.unavailable { opacity: 0.82; }
+.mapping-unit header { margin-bottom: 0.6rem; }
+.mapping-unit-eyebrow {
+  font-size: 0.66rem;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+.mapping-unit.available .mapping-unit-eyebrow { color: #15803d; }
+.mapping-unit.unavailable .mapping-unit-eyebrow { color: var(--text-subtle); }
+.mapping-unit h3 {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text);
+  line-height: 1.3;
+}
+.mapping-products {
+  margin: 0 0 0.95rem;
+  padding-left: 1.2rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  flex: 1;
+}
+.mapping-products li { margin-bottom: 0.15rem; }
+.mapping-products code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.72rem;
+  background: var(--surface);
+  color: var(--primary);
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  border: 1px solid var(--primary-100);
+  margin-left: 0.3rem;
+}
+.mapping-cta {
+  align-self: flex-start;
+  padding: 0.5rem 0.95rem;
+  background: #15803d;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+.mapping-cta:hover { background: #166534; text-decoration: none; }
+.mapping-cta-disabled {
+  align-self: flex-start;
+  padding: 0.5rem 0.95rem;
+  background: var(--surface-2);
+  color: var(--text-subtle);
+  border: 1px dashed var(--border-strong);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+.mapping-foot {
+  padding: 1.2rem 1.4rem;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-md);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.mapping-foot p { margin: 0.2rem 0; }
+
 /* ---------- Worksheet Compiler page ---------- */
 .compiler-section {
   max-width: 880px;

@@ -31,6 +31,7 @@
 
   const NAV_LINKS = [
     { href: 'index.html',   label: 'Catalog',    match: ['index.html', ''] },
+    { href: 'mapping.html', label: 'Mapping',    match: ['mapping.html'] },
     { href: 'account.html', label: 'My Account', match: ['account.html', 'stats.html'] },
     { href: 'files.html',   label: 'Files',      match: ['files.html', 'preview.html'] },
     { href: 'support.html', label: 'Support',    match: ['support.html'] },
@@ -39,6 +40,7 @@
 
   const FOOTER_LINKS = [
     { href: 'index.html',   label: 'Catalog' },
+    { href: 'mapping.html', label: 'Mapping' },
     { href: 'account.html', label: 'My Account' },
     { href: 'files.html',   label: 'Files' },
     { href: 'support.html', label: 'Support' },
