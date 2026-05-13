@@ -151,6 +151,10 @@
           "equipment": "Flowcode / E-blocks3",
           "src": "content/CP4807/CP4807-5.docx"
         }
+      ],
+      "categories": [
+        "Teacher CPD",
+        "Microcontrollers"
       ]
     },
     {
@@ -505,6 +509,10 @@
           "equipment": "Flowcode / E-blocks3",
           "src": "content/CP4807/CP4807-H9.htm"
         }
+      ],
+      "categories": [
+        "Microcontrollers",
+        "BTEC Level 3"
       ]
     },
     {
@@ -730,6 +738,11 @@
           "equipment": "Flowcode / E-blocks3",
           "src": "content/CP0507/CP0507-4.docx"
         }
+      ],
+      "categories": [
+        "Microcontrollers",
+        "EASA Unit 5",
+        "Aviation"
       ]
     },
     {
@@ -847,6 +860,10 @@
           "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-11.docx"
         }
+      ],
+      "categories": [
+        "Sensors",
+        "Microcontrollers"
       ]
     },
     {
@@ -916,6 +933,10 @@
           "equipment": "Flowcode / E-blocks3",
           "src": "content/CP0507/CP0507-5.docx"
         }
+      ],
+      "categories": [
+        "Motors",
+        "Microcontrollers"
       ]
     }
   ]

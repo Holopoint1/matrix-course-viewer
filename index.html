@@ -29,11 +29,13 @@
       <main class="catalog-section">
         <div class="catalog-heading">
           <h2>All courses</h2>
-          <p>Three courses sharing the CP4807, CP1972 and CP0507 curriculum packs.</p>
+          <p>Browser-based courses and curriculum packs across the Flowcode &amp; E-blocks 3 catalogue.</p>
         </div>
+        <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
         <div class="catalog" id="catalog">
           <p class="stage-loading">Loading courses&hellip;</p>
         </div>
+        <p class="catalog-empty" id="catalog-empty" hidden>No courses match this filter.</p>
       </main>
 
       <section class="missing-section" id="missing-section" hidden>
@@ -93,11 +95,68 @@
         if (window.MatrixCMS) {
           data.courses = data.courses.map((c) => window.MatrixCMS.applyOverrides(c));
         }
-        root.innerHTML = '';
+
+        /* ---------- Build category filter pills ----------
+           Pills are derived from the actual `categories` arrays on each course.
+           A category only appears as a pill if at least one course is tagged
+           with it — no dead links possible. */
+        const filterRoot = document.getElementById('catalog-filter');
+        const emptyEl = document.getElementById('catalog-empty');
+        const counts = new Map(); /* category -> course count */
+        for (const c of data.courses) {
+          for (const cat of (c.categories || [])) {
+            counts.set(cat, (counts.get(cat) || 0) + 1);
+          }
+        }
+        const orderedCats = Array.from(counts.entries())
+          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+        const urlParams = new URLSearchParams(location.search);
+        let activeCategory = urlParams.get('category') || '';
+
+        function renderPills() {
+          let html = '<button type="button" class="catalog-filter-pill' +
+            (activeCategory === '' ? ' active' : '') +
+            '" data-cat="">All <span class="pill-count">' + data.courses.length + '</span></button>';
+          for (const [cat, n] of orderedCats) {
+            html += '<button type="button" class="catalog-filter-pill' +
+              (cat === activeCategory ? ' active' : '') +
+              '" data-cat="' + escapeHtml(cat) + '">' +
+              escapeHtml(cat) + ' <span class="pill-count">' + n + '</span></button>';
+          }
+          filterRoot.innerHTML = html;
+          filterRoot.querySelectorAll('[data-cat]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              activeCategory = btn.dataset.cat;
+              const u = new URL(location.href);
+              if (activeCategory) u.searchParams.set('category', activeCategory);
+              else u.searchParams.delete('category');
+              history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash);
+              renderPills();
+              renderCards();
+            });
+          });
+        }
+
+        function renderCards() {
+          root.innerHTML = '';
+          const visible = activeCategory
+            ? data.courses.filter((c) => (c.categories || []).indexOf(activeCategory) >= 0)
+            : data.courses.slice();
+          if (visible.length === 0) {
+            emptyEl.hidden = false;
+            return;
+          }
+          emptyEl.hidden = true;
+          for (const course of visible) renderCard(course);
+        }
+
+        renderPills();
 
         let totalScreens = 0;
+        for (const c of data.courses) totalScreens += c.screens.length;
 
-        for (const course of data.courses) {
+        function renderCard(course) {
           const screenCount = course.screens.length;
           const courseHours = course.screens.reduce((sum, s) => sum + (Number(s.hours) || 0), 0);
           const missing = course.screens.filter((s) => s.missing).length;
@@ -106,8 +165,7 @@
           const completed = course.screens.filter((s) => progress[s.id]).length;
           const pct = screenCount ? Math.round((completed / screenCount) * 100) : 0;
           const hasCert = course.certificate && course.certificate.enabled;
-
-          totalScreens += screenCount;
+          const cats = course.categories || [];
 
           const card = document.createElement('article');
           card.className = 'course-card';
@@ -124,6 +182,7 @@
               <span class="code">${course.code}</span>
               <h3>${escapeHtml(course.title)}</h3>
               <p>${escapeHtml(course.shortDescription)}</p>
+              ${cats.length ? `<div class="card-cats">${cats.map((c) => `<span class="card-cat">${escapeHtml(c)}</span>`).join('')}</div>` : ''}
               <div class="meta">
                 <span class="chip"><strong>${ready}</strong>/${screenCount} ready</span>
                 <span class="chip"><strong>${courseHours.toFixed(0)}</strong>h</span>
@@ -145,6 +204,8 @@
             </div>`;
           root.appendChild(card);
         }
+
+        renderCards();
 
         const streak = window.Gamify.getStreak();
         const totalTime = window.Gamify.getTotalSecondsAllCourses();

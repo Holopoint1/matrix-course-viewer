@@ -6,11 +6,15 @@ Browser-based learning management system for Matrix TSL engineering education co
 
 ## Courses
 
-| Code     | Title                                            | Screens | Hours  | Certificate |
-|----------|--------------------------------------------------|---------|--------|-------------|
-| `CO0001` | Flowcode & E-blocks 3 CPD course                 | 17      | ~3.8   | ✓           |
-| `CO0002` | Introduction to Microcontrollers                 | 42      | ~86    | ✓           |
-| `CO0003` | Digital Techniques for Aviation Technicians      | 26      | ~36    | —           |
+| Code     | Title                                            | Screens | Hours  | Certificate | Categories                                |
+|----------|--------------------------------------------------|---------|--------|-------------|-------------------------------------------|
+| `CO0001` | Flowcode & E-blocks 3 CPD course                 | 17      | ~3.8   | ✓           | Teacher CPD · Microcontrollers            |
+| `CO0002` | Introduction to Microcontrollers                 | 42      | ~86    | ✓           | Microcontrollers · BTEC Level 3           |
+| `CO0003` | Digital Techniques for Aviation Technicians      | 26      | ~36    | —           | Microcontrollers · EASA Unit 5 · Aviation |
+| `CP1972` | Sensors and Microcontrollers                     | 13      | ~22    | ✓           | Sensors · Microcontrollers                |
+| `CP0507` | Motors and Microcontrollers                      | 7       | ~11    | ✓           | Motors · Microcontrollers                 |
+
+Catalog filter pills auto-derive from the `categories` array on each course — see `AUTHORING.md` § Categories.
 
 Naming convention from the master doc:
 - `CO` — browser-based course

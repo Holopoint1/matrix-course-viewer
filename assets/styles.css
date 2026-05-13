@@ -552,10 +552,85 @@ a:hover { text-decoration: underline; }
   100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
 }
 
+/* Category filter pills */
+.catalog-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+  padding: 0 0.2rem;
+}
+.catalog-filter-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: 99px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 80ms ease;
+}
+.catalog-filter-pill:hover { background: var(--primary-50); border-color: var(--primary-100); color: var(--primary-dark); }
+.catalog-filter-pill:active { transform: translateY(1px); }
+.catalog-filter-pill.active {
+  background: var(--primary-dark);
+  color: #fff;
+  border-color: var(--primary-dark);
+}
+.catalog-filter-pill.active .pill-count {
+  background: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.95);
+}
+.pill-count {
+  background: var(--primary-100);
+  color: var(--primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.05rem 0.45rem;
+  border-radius: 99px;
+  letter-spacing: 0.2px;
+  min-width: 1.5em;
+  text-align: center;
+}
+
+.catalog-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-lg);
+  margin-top: 0;
+}
+
 .catalog {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
   gap: 1.5rem;
+}
+
+/* Course-card category tags (small pills inside the card body) */
+.card-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0 0 0.7rem;
+}
+.card-cat {
+  background: var(--primary-50);
+  color: var(--primary-dark);
+  border: 1px solid var(--primary-100);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.12rem 0.55rem;
+  border-radius: 99px;
+  letter-spacing: 0.2px;
 }
 
 .course-card {

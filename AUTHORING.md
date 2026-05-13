@@ -88,6 +88,32 @@ Say you want to add **CO0004 — Robotics with Allcode** (per the master doc's 1
 
 That's it. Refresh the dashboard — the new course appears in the catalog grid.
 
+## Categories (catalog filter)
+
+Each course can carry a `categories` array — a flat list of free-text tags. These power the **filter pills** on the catalog (`/index.html`). A pill only appears if at least one course is tagged with it, so the bar grows organically as new courses are added.
+
+```jsonc
+{
+  "id": "CO0002",
+  "title": "Introduction to Microcontrollers",
+  "categories": ["Microcontrollers", "BTEC Level 3"]
+}
+```
+
+Current tagging (5 courses):
+
+| Course | Categories |
+|--------|------------|
+| `CO0001` | Teacher CPD, Microcontrollers |
+| `CO0002` | Microcontrollers, BTEC Level 3 |
+| `CO0003` | Microcontrollers, EASA Unit 5, Aviation |
+| `CP1972` | Sensors, Microcontrollers |
+| `CP0507` | Motors, Microcontrollers |
+
+Add `T-Levels`, `EAL`, `Locktronics Electrical`, etc. as new courses land. No code change needed — the filter rebuilds from `courses.json` on every load.
+
+URL-shareable: `?category=Sensors` deep-links straight to a filtered view.
+
 ## The four worksheet packs (master-doc reference)
 
 The master doc's Teacher's-notes section lists four worksheet packs. Three have `CP` codes; the fourth ("PC interfacing") does not yet have a code assigned.
