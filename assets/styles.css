@@ -2498,6 +2498,52 @@ a:hover { text-decoration: underline; }
   background: #fff;
 }
 
+/* YouTube wrapper — responsive 16:9 with a comfortable max-width so
+   the video sits centred on the stage. Includes 'Open on YouTube'
+   and 'Fullscreen' actions below the frame. */
+.stage-youtube {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 1.5rem 1.75rem;
+  background: linear-gradient(180deg, var(--primary-darker), var(--primary-dark));
+}
+.stage-youtube-frame {
+  width: 100%;
+  max-width: 1100px;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+.stage-youtube-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+  flex: none;
+}
+.stage-youtube-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.stage-youtube-actions .btn {
+  background: rgba(255,255,255,0.95);
+  color: var(--primary-dark);
+  border-color: rgba(255,255,255,0.5);
+}
+.stage-youtube-actions .btn:hover {
+  background: #fff;
+  border-color: #fff;
+}
+
 .screen-stage .stage-image {
   flex: 1;
   display: flex;

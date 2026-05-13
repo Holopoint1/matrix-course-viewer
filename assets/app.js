@@ -448,12 +448,34 @@
       stage.innerHTML = `<p class="stage-loading">Could not parse YouTube URL: ${escapeHtml(screen.src)}</p>`;
       return;
     }
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${id}`;
-    iframe.title = screen.title;
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.allowFullscreen = true;
-    stage.appendChild(iframe);
+    /* Wrap the iframe in a responsive 16:9 container with a comfortable
+       max-width so the video sits centred on the stage instead of getting
+       stretched edge-to-edge OR being letterboxed in the middle. Action
+       row at the bottom: 'Open on YouTube' (full external) + 'Fullscreen'. */
+    const wrap = document.createElement('div');
+    wrap.className = 'stage-youtube';
+    wrap.innerHTML = `
+      <div class="stage-youtube-frame">
+        <iframe
+          src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1"
+          title="${escapeAttr(screen.title)}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <div class="stage-youtube-actions">
+        <a class="btn btn-secondary" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">↗ Open on YouTube</a>
+        <button type="button" class="btn btn-secondary" data-action="fullscreen">⛶ Fullscreen</button>
+      </div>
+    `;
+    stage.appendChild(wrap);
+    const fsBtn = wrap.querySelector('[data-action="fullscreen"]');
+    if (fsBtn) {
+      fsBtn.addEventListener('click', () => {
+        const frame = wrap.querySelector('.stage-youtube-frame');
+        if (frame && frame.requestFullscreen) frame.requestFullscreen();
+      });
+    }
   }
 
   function renderIframe(stage, src) {
