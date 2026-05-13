@@ -24,21 +24,13 @@
   <main class="catalog-section">
     <div class="catalog-heading">
       <h2>Courses</h2>
-      <p>Full learner-facing courses built on the Flowcode &amp; E-blocks 3 curriculum.</p>
+      <p>Four learner-facing courses on the Flowcode &amp; E-blocks 3 curriculum.</p>
     </div>
     <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
     <div class="catalog" id="catalog">
       <p class="stage-loading">Loading courses&hellip;</p>
     </div>
     <p class="catalog-empty" id="catalog-empty" hidden>No courses match this filter.</p>
-
-    <div class="catalog-heading catalog-heading-packs">
-      <h2>Curriculum packs</h2>
-      <p>Reusable worksheet packs that the courses above are built from. Drop the SCORM zip into your LMS to deliver a pack on its own.</p>
-    </div>
-    <div class="catalog catalog-packs" id="catalog-packs">
-      <p class="stage-loading">Loading curriculum packs&hellip;</p>
-    </div>
   </main>
 
   <section class="missing-section" id="missing-section" hidden>
@@ -136,14 +128,8 @@
 
         renderPills();
 
-        /* Render curriculum packs below the courses */
-        const packsRoot = document.getElementById('catalog-packs');
-        packsRoot.innerHTML = '';
-        const packs = data.courses.filter((c) => c.kind === 'pack');
-        for (const p of packs) renderCard(p, packsRoot, { compact: true });
-
         let totalScreens = 0;
-        for (const c of data.courses) totalScreens += c.screens.length;
+        for (const c of data.courses.filter((c) => c.kind !== 'pack')) totalScreens += c.screens.length;
 
         function renderCard(course, mount, opts) {
           opts = opts || {};

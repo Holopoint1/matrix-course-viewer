@@ -21,7 +21,7 @@
 
   <main class="stats-section">
     <div class="stats-grid">
-      <div class="stat-card stat-card-lg">
+      <div class="stat-card stat-card-lg stat-card-time">
         <span class="stat-card-eyebrow">Total time</span>
         <span class="stat-card-num" id="total-time">—</span>
         <span class="stat-card-foot">across all courses</span>
@@ -47,6 +47,12 @@
       <h2 class="stats-h2">My courses</h2>
       <p class="account-section-hint">Continue where you left off — and download a certificate the moment a course hits 100%.</p>
       <div class="stats-courses-list" id="course-rows"></div>
+    </div>
+
+    <div class="stats-courses" id="pending-section" hidden>
+      <h2 class="stats-h2">Pending &middot; awaiting publisher</h2>
+      <p class="account-section-hint">Files defined in the course outline but not yet uploaded. Drop them into the indicated folder via <a href="files.html">Files</a> and they will appear in the course automatically.</p>
+      <ul class="missing-list" id="pending-list"></ul>
     </div>
 
     <div class="stats-screens">
@@ -165,9 +171,43 @@
         courseRowsRoot.appendChild(row);
       }
 
+      /* ---------- Pending / missing assets across all courses ---------- */
+      const pendingSection = document.getElementById('pending-section');
+      const pendingList = document.getElementById('pending-list');
+      const allMissing = new Map(); /* src -> { filename, screens: [{courseCode, title}] } */
+      for (const course of courses.filter((c) => c.kind !== 'pack')) {
+        for (const s of course.screens) {
+          if (!s.missing) continue;
+          const src = s.src;
+          if (!allMissing.has(src)) {
+            allMissing.set(src, { src, filename: src.split(/[\\/]/).pop(), screens: [] });
+          }
+          allMissing.get(src).screens.push({ courseCode: course.code, title: s.title });
+        }
+      }
+      if (allMissing.size > 0) {
+        pendingSection.hidden = false;
+        pendingList.innerHTML = '';
+        for (const item of allMissing.values()) {
+          const li = document.createElement('li');
+          li.className = 'missing-row';
+          const usage = item.screens.map((s) => s.courseCode + ' · ' + s.title).join(' · ');
+          li.innerHTML = `
+            <div class="missing-row-icon">📦</div>
+            <div class="missing-row-body">
+              <div class="missing-row-name"><code>${escapeHtml(item.filename)}</code></div>
+              <div class="missing-row-meta">Drop into <code>${escapeHtml(item.src)}</code></div>
+              <div class="missing-row-usage">${escapeHtml(usage)}</div>
+            </div>
+          `;
+          pendingList.appendChild(li);
+        }
+      }
+
       /* Screen-level breakdown */
       const picker = document.getElementById('screen-course-picker');
-      picker.innerHTML = courses.map((c) => `<option value="${c.id}">${escapeHtml(c.code + ' · ' + c.title)}</option>`).join('');
+      const pickerCourses = courses.filter((c) => c.kind !== 'pack');
+      picker.innerHTML = pickerCourses.map((c) => `<option value="${c.id}">${escapeHtml(c.code + ' · ' + c.title)}</option>`).join('');
       const screensRoot = document.getElementById('screen-rows');
 
       function renderScreens(courseId) {
@@ -198,7 +238,7 @@
         }).join('');
       }
       picker.addEventListener('change', () => renderScreens(picker.value));
-      renderScreens(courses[0].id);
+      if (pickerCourses.length > 0) renderScreens(pickerCourses[0].id);
 
       /* Achievements grid */
       const achGrid = document.getElementById('achievements-grid');

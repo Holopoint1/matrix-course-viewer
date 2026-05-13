@@ -135,22 +135,19 @@
   }
 
   function buildHeader(course) {
+    /* The Matrix logo lives in the top header (chrome.js); the sidebar
+       skips its own logo to avoid the duplicate brand. The header still
+       carries an eyebrow + course code/title for context. */
     if (!course) {
       return `
-        <div class="ms-header">
-          <a href="index.html" class="ms-brand">
-            <img src="assets/matrix-logo.svg" alt="Matrix TSL" class="ms-brand-logo">
-            <span class="ms-brand-eyebrow">Matrix Learning</span>
-          </a>
+        <div class="ms-header ms-header-empty">
+          <span class="ms-brand-eyebrow">Matrix Learning</span>
         </div>
       `;
     }
     return `
       <div class="ms-header">
-        <a href="index.html" class="ms-brand">
-          <img src="assets/matrix-logo.svg" alt="Matrix TSL" class="ms-brand-logo">
-          <span class="ms-brand-eyebrow">Matrix Learning</span>
-        </a>
+        <span class="ms-brand-eyebrow">Matrix Learning</span>
         <div class="ms-course-code">${escapeHtml(course.code || '')}</div>
         <div class="ms-course-title">${escapeHtml(course.title || '')}</div>
       </div>

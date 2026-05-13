@@ -40,10 +40,19 @@
         <h2>Intro &amp; reference text</h2>
       </div>
       <ul class="cms-html-list" id="cms-html-list"></ul>
+      <div class="cms-side-section">
+        <span class="cms-side-eyebrow">Assets</span>
+        <h2>Files</h2>
+      </div>
+      <ul class="cms-html-list">
+        <li><a class="cms-html-link" href="files.html">→ File manager &amp; drop-zone</a></li>
+        <li><a class="cms-html-link" href="scorm.html">→ SCORM compliance</a></li>
+        <li><a class="cms-html-link" href="worksheet-compiler.html">→ Worksheet compiler</a></li>
+      </ul>
       <div class="cms-side-foot">
         <button class="btn btn-secondary cms-side-export" id="cms-export-btn">⤓ Export changes</button>
         <button class="btn btn-ghost cms-side-clear" id="cms-clear-btn">Clear all overrides</button>
-        <button class="btn btn-ghost" id="cms-logout-btn">Sign out</button>
+        <button class="btn btn-ghost" id="cms-logout-btn">Reload session</button>
       </div>
     </aside>
 
@@ -70,12 +79,21 @@
       function showLogin() { loginEl.hidden = false; shellEl.hidden = true; }
       function showShell() { loginEl.hidden = true;  shellEl.hidden = false; }
 
-      /* ----- Login ----- */
-      if (window.MatrixCMS.isUnlocked()) {
-        showShell();
-      } else {
-        showLogin();
-      }
+      /* ----- Login -----
+         The admin area is intentionally open to anyone visiting the site
+         during this build phase. We auto-unlock with the default creds so
+         the editor opens straight away; the login form stays in the DOM
+         only for the "Sign out" → reload round-trip. */
+      try {
+        window.MatrixCMS.unlock('matrix');
+      } catch (_) { /* unlock is idempotent */ }
+      showShell();
+      init().catch((e) => {
+        console.error('Admin init failed:', e);
+        document.getElementById('cms-main').innerHTML =
+          '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
+          (e && e.message ? e.message : String(e)) + '</p>';
+      });
       document.getElementById('cms-login-form').addEventListener('submit', (ev) => {
         ev.preventDefault();
         try {

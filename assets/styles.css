@@ -1187,6 +1187,15 @@ a:hover { text-decoration: underline; }
 .stat-card-foot strong { color: var(--text); }
 .stat-card-lg .stat-card-num { font-size: 2.4rem; color: var(--primary); }
 
+/* My Account: Total time card is green to match "session time" semantics
+   used elsewhere on the site. */
+.stat-card-time {
+  background: linear-gradient(135deg, #dcfce7, #f0fdf4);
+  border-color: #bbf7d0;
+}
+.stat-card-time .stat-card-num { color: #15803d; }
+.stat-card-time .stat-card-eyebrow { color: #15803d; }
+
 .stats-h2 {
   font-family: var(--font-display);
   font-size: 0.85rem;
