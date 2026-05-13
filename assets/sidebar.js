@@ -95,12 +95,21 @@
     `;
   }
 
-  function buildFooterTools() {
+  function buildFooterTools(course) {
+    /* When a course is in scope, pass its id through to the SCORM page so
+       its Live Status table shows that course's worksheets. */
+    const scormHref = course && course.id
+      ? `scorm.html?id=${encodeURIComponent(course.id)}`
+      : 'scorm.html';
     return `
       <div class="ms-section ms-section-tools">
-        <a class="ms-nav-item" href="files.html">
+        <a class="ms-nav-item" href="${scormHref}">
           <span class="ms-nav-ico ms-nav-ico-blue">${ICONS.check}</span>
           <span class="ms-nav-label">SCORM Compliance</span>
+        </a>
+        <a class="ms-nav-item" href="worksheet-compiler.html">
+          <span class="ms-nav-ico ms-nav-ico-amber">${ICONS.doc}</span>
+          <span class="ms-nav-label">Worksheet Compiler</span>
         </a>
       </div>
     `;
@@ -259,7 +268,7 @@
       <nav class="ms-nav">
         ${buildTopNav(currentPage)}
         ${course ? buildCourseCard(course, expanded, currentScreenId) : ''}
-        ${buildFooterTools()}
+        ${buildFooterTools(course)}
       </nav>
       ${course ? buildResetBar() : ''}
     `;

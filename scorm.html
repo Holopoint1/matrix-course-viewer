@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCORM Compliance | Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <section class="scorm-hero">
+    <div class="scorm-hero-inner">
+      <div class="scorm-hero-breadcrumb" id="scorm-breadcrumb">SCORM Compliance</div>
+      <div class="scorm-hero-back-row">
+        <a class="btn btn-secondary" href="javascript:history.back()">← Back</a>
+      </div>
+      <span class="scorm-version-pill">SCORM 1.2</span>
+      <h1>SCORM Compliance</h1>
+      <p>How and why this LMS meets the Sharable Content Object Reference Model standard.</p>
+    </div>
+  </section>
+
+  <main class="scorm-main">
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Overview</span>
+      <h2 class="scorm-section-title">What is SCORM?</h2>
+      <p>SCORM (Sharable Content Object Reference Model) is a set of technical standards developed by the ADL Initiative that governs how e-learning content and Learning Management Systems communicate. It defines three things:</p>
+      <ul class="scorm-list">
+        <li><strong>How content is packaged</strong> — so any SCORM-compliant LMS can import it</li>
+        <li><strong>How content is launched</strong> — within an LMS environment</li>
+        <li><strong>How content and the LMS talk at runtime</strong> — tracking progress, scores, time, and completion</li>
+      </ul>
+      <p>This LMS implements <strong>SCORM 1.2</strong>, the most widely adopted version, supported by virtually all authoring tools and learning platforms worldwide.</p>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Benefits</span>
+      <h2 class="scorm-section-title">Why SCORM Compliance Matters</h2>
+      <ul class="scorm-list">
+        <li><strong>Interoperability</strong> — Content authored in Articulate Storyline, Adobe Captivate, Adapt, H5P, or any SCORM-compliant tool can be imported and delivered through this LMS</li>
+        <li><strong>Portability</strong> — Our course content can be exported as a SCORM package and delivered on Moodle, Blackboard, Canvas, SCORM Cloud, or any other compliant platform</li>
+        <li><strong>Standardised tracking</strong> — Learner progress, scores, completion status, session time, and bookmarking all follow the same specification regardless of the authoring tool</li>
+        <li><strong>Institutional acceptance</strong> — Educational institutions and corporate training departments require SCORM support as a baseline for any LMS</li>
+        <li><strong>Future-proof</strong> — SCORM 1.2 has been the stable standard since 2001 with universal support, providing a solid foundation to later add xAPI or cmi5</li>
+      </ul>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Architecture</span>
+      <h2 class="scorm-section-title">Three Pillars of SCORM Compliance</h2>
+      <div class="scorm-pillars">
+        <div class="scorm-pillar">
+          <div class="scorm-pillar-num">1</div>
+          <h3>Content Aggregation Model</h3>
+          <p>Defines how content is structured and packaged. Our LMS includes a valid <code>imsmanifest.xml</code> that declares all worksheets as Sharable Content Objects (SCOs) within a hierarchical organisation (Bronze / Silver / Gold tiers).</p>
+        </div>
+        <div class="scorm-pillar">
+          <div class="scorm-pillar-num">2</div>
+          <h3>Runtime Environment</h3>
+          <p>Defines how SCOs communicate with the LMS during a session. Our LMS exposes the <code>window.API</code> JavaScript object with all 8 required methods. SCOs find this via the standard window hierarchy search.</p>
+        </div>
+        <div class="scorm-pillar">
+          <div class="scorm-pillar-num">3</div>
+          <h3>Sequencing &amp; Navigation</h3>
+          <p>Defines how learners move between SCOs. Our LMS supports free navigation (learners can jump to any worksheet) with prerequisite awareness via the Bronze → Silver → Gold tier structure.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Runtime API</span>
+      <h2 class="scorm-section-title">SCORM 1.2 API Implementation</h2>
+      <p>Our LMS exposes the <code>window.API</code> object that SCOs discover and call. All 8 required methods are implemented:</p>
+      <div class="scorm-table-wrap">
+        <table class="scorm-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th class="num">Status</th></tr></thead>
+          <tbody>
+            <tr><td><code>LMSInitialize("")</code></td><td>Begin a learning session</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+            <tr><td><code>LMSFinish("")</code></td><td>End the session, accumulate time</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+            <tr><td><code>LMSGetValue(element)</code></td><td>Read a data model element</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+            <tr><td><code>LMSSetValue(element, value)</code></td><td>Write a data model element</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+            <tr><td><code>LMSCommit("")</code></td><td>Persist data to storage</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+            <tr><td><code>LMSGetLastError()</code></td><td>Return last error code</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+            <tr><td><code>LMSGetErrorString(code)</code></td><td>Human-readable error message</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+            <tr><td><code>LMSGetDiagnostic(code)</code></td><td>Detailed diagnostic information</td><td class="num"><span class="status-pill done">Implemented</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Data Model</span>
+      <h2 class="scorm-section-title">What We Track (<code>cmi.core</code>)</h2>
+      <p>The SCORM 1.2 data model defines exactly what information flows between each worksheet (SCO) and the LMS. Every element below is supported:</p>
+      <div class="scorm-table-wrap">
+        <table class="scorm-table">
+          <thead><tr><th>Element</th><th>Access</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>cmi.core.student_id</code></td><td>Read</td><td>Unique learner identifier</td></tr>
+            <tr><td><code>cmi.core.student_name</code></td><td>Read</td><td>Learner's name</td></tr>
+            <tr><td><code>cmi.core.lesson_location</code></td><td>Read / Write</td><td>Bookmark — where learner left off</td></tr>
+            <tr><td><code>cmi.core.lesson_status</code></td><td>Read / Write</td><td><code>passed</code> / <code>completed</code> / <code>failed</code> / <code>incomplete</code> / <code>browsed</code> / <code>not&nbsp;attempted</code></td></tr>
+            <tr><td><code>cmi.core.score.raw</code></td><td>Read / Write</td><td>Learner's score (challenge completion %)</td></tr>
+            <tr><td><code>cmi.core.score.max</code></td><td>Read / Write</td><td>Maximum possible score (100)</td></tr>
+            <tr><td><code>cmi.core.total_time</code></td><td>Read</td><td>Cumulative time across all sessions</td></tr>
+            <tr><td><code>cmi.core.session_time</code></td><td>Write</td><td>Time spent in current session</td></tr>
+            <tr><td><code>cmi.core.entry</code></td><td>Read</td><td><code>ab-initio</code> (new) or <code>resume</code> (returning)</td></tr>
+            <tr><td><code>cmi.core.exit</code></td><td>Write</td><td>How learner leaves (<code>suspend</code> / <code>logout</code>)</td></tr>
+            <tr><td><code>cmi.suspend_data</code></td><td>Read / Write</td><td>Free-form state preserved between sessions (up to 4096 chars)</td></tr>
+            <tr><td><code>cmi.interactions.n.*</code></td><td>Write</td><td>Per-challenge interaction tracking (id, type, result, latency)</td></tr>
+            <tr><td><code>cmi.objectives.n.*</code></td><td>Read / Write</td><td>Per-objective tracking (id, score, status)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Packaging</span>
+      <h2 class="scorm-section-title">Content Aggregation Model</h2>
+      <p>The course is packaged with a valid <code>imsmanifest.xml</code> that declares:</p>
+      <ul class="scorm-list">
+        <li><strong>One SCO per course</strong> — each <code>CO</code> / <code>CP</code> code wrapped as a Sharable Content Object with its own tracking lifecycle</li>
+        <li><strong>Tiered organisation</strong> — Bronze / Silver / Gold structure exposed in the manifest's <code>&lt;organization&gt;</code> tree</li>
+        <li><strong>Mastery score</strong> — 40% minimum across all SCOs (Bronze threshold)</li>
+        <li><strong>Resource declarations</strong> — every HTML file, image, and script file is listed with correct types</li>
+        <li><strong>Asset resources</strong> — shared media (logos, cover images) declared as non-trackable assets</li>
+      </ul>
+      <p class="scorm-callout"><strong>Manifest location:</strong> <code>imsmanifest.xml</code> in the package root, following the IMS Content Packaging 1.1.2 specification with ADL SCORM 1.2 extensions.</p>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Session Lifecycle</span>
+      <h2 class="scorm-section-title">How Each Worksheet Communicates</h2>
+      <p>When a learner opens a worksheet, the following SCORM session lifecycle executes:</p>
+      <ol class="scorm-steps">
+        <li><strong><code>LMSInitialize("")</code></strong> — Session begins, previous state is restored (bookmark, suspend data, scores)</li>
+        <li><strong><code>LMSGetValue("cmi.core.entry")</code></strong> — Check if this is a new attempt or a resume</li>
+        <li><strong>Learner interacts</strong> — Completing challenges triggers <code>LMSSetValue</code> for scores, interactions, and status</li>
+        <li><strong><code>LMSSetValue("cmi.core.lesson_status", ...)</code></strong> — Status updates: <code>"incomplete"</code> while working, <code>"completed"</code> when all challenges are done</li>
+        <li><strong><code>LMSSetValue("cmi.interactions.n.*", ...)</code></strong> — Each challenge is logged as a SCORM interaction with ID, type, and result</li>
+        <li><strong><code>LMSCommit("")</code></strong> — Data persisted to storage after each change</li>
+        <li><strong><code>LMSFinish("")</code></strong> — Session time calculated and accumulated into <code>total_time</code></li>
+      </ol>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Error Handling</span>
+      <h2 class="scorm-section-title">SCORM 1.2 Error Codes</h2>
+      <p>The API returns correct error codes for every failure condition:</p>
+      <div class="scorm-table-wrap">
+        <table class="scorm-table scorm-table-narrow">
+          <thead><tr><th class="num">Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td class="num"><code>0</code></td><td>No error</td></tr>
+            <tr><td class="num"><code>101</code></td><td>General exception</td></tr>
+            <tr><td class="num"><code>201</code></td><td>Invalid argument error</td></tr>
+            <tr><td class="num"><code>202</code></td><td>Element cannot have children</td></tr>
+            <tr><td class="num"><code>203</code></td><td>Element not an array</td></tr>
+            <tr><td class="num"><code>301</code></td><td>Not initialized</td></tr>
+            <tr><td class="num"><code>401</code></td><td>Not implemented error</td></tr>
+            <tr><td class="num"><code>402</code></td><td>Invalid set value (keyword)</td></tr>
+            <tr><td class="num"><code>403</code></td><td>Element is read only</td></tr>
+            <tr><td class="num"><code>404</code></td><td>Element is write only</td></tr>
+            <tr><td class="num"><code>405</code></td><td>Incorrect data type</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Conformance</span>
+      <h2 class="scorm-section-title">ADL Conformance Level</h2>
+      <div class="scorm-conformance">
+        <div class="scorm-conformance-row">
+          <span class="scorm-conformance-code">LMS-RTE3</span>
+          <strong>Full Runtime Environment</strong>
+          <span>All 8 API methods + full data model + interactions</span>
+        </div>
+        <div class="scorm-conformance-row">
+          <span class="scorm-conformance-code">LMS-CAM1</span>
+          <strong>Content Aggregation</strong>
+          <span>Valid <code>imsmanifest.xml</code> with organisations &amp; resources</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Course Mapping</span>
+      <h2 class="scorm-section-title" id="course-mapping-title">Course as SCORM SCOs</h2>
+      <p>Each worksheet maps to a SCORM Sharable Content Object with its own tracking lifecycle:</p>
+      <pre class="scorm-tree" id="scorm-tree">Loading course outline…</pre>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Build Pipeline</span>
+      <h2 class="scorm-section-title">From Source DOCX to SCORM Package</h2>
+      <p>The course content originates from a tagged Word document and is processed through a defined pipeline:</p>
+      <ol class="scorm-pipeline">
+        <li><span class="scorm-pipeline-num">1</span><strong>Analyse</strong><span>Find tagged blocks, validate filenames, identify warnings</span></li>
+        <li><span class="scorm-pipeline-num">2</span><strong>Extract</strong><span>Clean text from each block, strip wrappers and teacher notes</span></li>
+        <li><span class="scorm-pipeline-num">3</span><strong>Build</strong><span>Render learner-facing HTML with SCORM API integration</span></li>
+        <li><span class="scorm-pipeline-num">4</span><strong>Validate</strong><span>Check for missing files, broken references, duplicates</span></li>
+        <li><span class="scorm-pipeline-num">5</span><strong>Package</strong><span>Generate <code>imsmanifest.xml</code> and bundle as SCORM ZIP</span></li>
+      </ol>
+      <p class="scorm-callout"><strong>Pipeline rule:</strong> SCORM packaging only runs when all five required decisions are defined: version, launch file, tracking model, completion model, and navigation rules. Otherwise packaging stops safely.</p>
+    </section>
+
+    <section class="scorm-section">
+      <span class="scorm-section-eyebrow">Live Status</span>
+      <h2 class="scorm-section-title">Current SCORM Tracking Data</h2>
+      <p>Real-time view of the SCORM data model for each worksheet in this course. This data is persisted via the <code>LMSCommit</code> and <code>LMSFinish</code> lifecycle.</p>
+      <div class="scorm-table-wrap">
+        <table class="scorm-table scorm-live-status">
+          <thead>
+            <tr>
+              <th>Worksheet</th>
+              <th>Status</th>
+              <th class="num">Score</th>
+              <th class="num">Total Time</th>
+              <th>Entry</th>
+            </tr>
+          </thead>
+          <tbody id="scorm-live-tbody">
+            <tr><td colspan="5" class="stage-loading" style="padding:1rem;text-align:center;">Loading status…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="scorm-bottom-actions">
+      <a class="btn btn-secondary" id="scorm-back-bottom" href="index.html">← Dashboard</a>
+      <a class="btn btn-primary" id="scorm-download-zip" href="#" download style="display:none;">↓ Download SCORM package</a>
+    </p>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="assets/chrome.js"></script>
+  <script src="assets/gamify.js"></script>
+  <script src="assets/cms-overrides.js"></script>
+  <script src="assets/sidebar.js"></script>
+  <script>
+    (async function () {
+      'use strict';
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
+
+      /* SCORM 1.2 time format: HHHH:MM:SS.SS */
+      function secondsToScormTime(secs) {
+        secs = Math.max(0, Math.floor(secs || 0));
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60);
+        const s = secs % 60;
+        return String(h).padStart(4, '0') + ':' +
+               String(m).padStart(2, '0') + ':' +
+               String(s).padStart(2, '0') + '.00';
+      }
+
+      function slug(s) {
+        return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      }
+
+      const params = new URLSearchParams(location.search);
+      const courseId = params.get('id');
+
+      const data = await fetch('data/courses.json').then((r) => r.json());
+      const courses = (data && data.courses) || [];
+
+      let course = courses.find((c) => c.id === courseId) || courses[0];
+      if (course && window.MatrixCMS && window.MatrixCMS.applyOverrides) {
+        course = window.MatrixCMS.applyOverrides(course);
+      }
+      if (!course) return;
+
+      /* Breadcrumb */
+      document.getElementById('scorm-breadcrumb').innerHTML =
+        '<a href="dashboard.html?id=' + encodeURIComponent(course.id) + '">' +
+        escapeHtml(course.code) + '</a> &rsaquo; <span>SCORM Compliance</span>';
+
+      /* Course mapping title + tree */
+      const mapTitle = document.getElementById('course-mapping-title');
+      mapTitle.textContent = course.code + ' as SCORM SCOs';
+
+      const treeEl = document.getElementById('scorm-tree');
+      const treeLines = [];
+      treeLines.push(escapeHtml(course.code) + ' — ' + escapeHtml(course.title));
+      treeLines.push('|');
+      const tierName = { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', other: 'Additional' };
+      const grouped = { bronze: [], silver: [], gold: [], other: [] };
+      let wsCount = 0;
+      for (const s of course.screens) {
+        if (s.type !== 'document') continue;
+        wsCount += 1;
+        const tier = (window.Gamify && window.Gamify.inferTier && window.Gamify.inferTier(s)) || 'other';
+        grouped[tier].push({ num: wsCount, screen: s });
+      }
+      for (const tier of ['bronze', 'silver', 'gold', 'other']) {
+        if (!grouped[tier].length) continue;
+        treeLines.push('+-- ' + tierName[tier] + ' (Organisation Item)');
+        treeLines.push('|');
+        const widest = Math.max.apply(null, grouped[tier].map((x) => x.screen.title.length));
+        for (const item of grouped[tier]) {
+          const label = 'WS' + item.num + ': ' + item.screen.title;
+          const dots = '.'.repeat(Math.max(2, widest + 6 - label.length));
+          const note = item.screen.missing ? '[missing]' : 'SCO  [trackable]';
+          treeLines.push('|   +-- ' + label + ' ' + dots + ' ' + note);
+        }
+        treeLines.push('|');
+      }
+      treeLines.push('+-- Shared Assets ........................ Asset [not tracked]');
+      treeLines.push('    (logos, cover images, media files)');
+      treeEl.textContent = treeLines.join('\n');
+
+      /* Live status table */
+      const tbody = document.getElementById('scorm-live-tbody');
+      const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + course.id) || '{}');
+      const timeData = JSON.parse(localStorage.getItem('matrix-lms:time:' + course.id) || '{}');
+
+      const rows = course.screens.map((s, i) => {
+        const done = Boolean(progress[s.id]);
+        const secs = Number(timeData[s.id] || 0);
+        let status, entry;
+        if (s.missing) {
+          status = '<span class="status-pill missing">missing</span>';
+          entry = '—';
+        } else if (done) {
+          status = '<span class="status-pill done">completed</span>';
+          entry = 'resume';
+        } else if (secs > 0) {
+          status = '<span class="status-pill todo" style="background:#fff5e0;color:#b45309;border-color:#f4d99b;">incomplete</span>';
+          entry = 'resume';
+        } else {
+          status = '<span class="status-pill todo">not attempted</span>';
+          entry = '—';
+        }
+        const score = done ? '100' : (secs > 0 ? '—' : '—');
+        const time = secs > 0 ? secondsToScormTime(secs) : '—';
+        return '<tr>' +
+          '<td><span class="num" style="color:var(--text-subtle);font-weight:600;">' + (i + 1) + '.</span> ' +
+          escapeHtml(s.title) + '</td>' +
+          '<td>' + status + '</td>' +
+          '<td class="num">' + score + '</td>' +
+          '<td class="num"><code>' + time + '</code></td>' +
+          '<td><code>' + entry + '</code></td>' +
+          '</tr>';
+      }).join('');
+      tbody.innerHTML = rows || '<tr><td colspan="5" class="stage-loading" style="padding:1rem;text-align:center;">No worksheets defined.</td></tr>';
+
+      /* Bottom dashboard link */
+      document.getElementById('scorm-back-bottom').href =
+        'dashboard.html?id=' + encodeURIComponent(course.id);
+
+      /* SCORM zip download link (only if a CO course; CP courses share the same naming) */
+      const downloadBtn = document.getElementById('scorm-download-zip');
+      const zipName = 'dist/' + course.id.replace(/^CO/, 'SC') + '-' + slug(course.title) + '.zip';
+      try {
+        const head = await fetch(zipName, { method: 'HEAD' });
+        if (head.ok) {
+          downloadBtn.href = zipName;
+          downloadBtn.style.display = '';
+        }
+      } catch (_) {}
+    })();
+  </script>
+</body>
+</html>
