@@ -10,7 +10,6 @@
   }
 
   const els = {
-    sidebar: document.getElementById('sidebar'),
     certificateCta: document.getElementById('certificate-cta'),
     certificateLink: document.getElementById('certificate-link'),
     screenTitle: document.getElementById('screen-title'),
@@ -269,18 +268,11 @@
   }
 
   function renderSidebar() {
-    /* Sidebar HTML is rendered by sidebar.js (MatrixSidebar). It writes the
-       full DOM into els.sidebar and wires its own internal handlers (expander,
-       reset button). Clicks on worksheet rows are anchors → standard nav.
-       Active worksheet + done states are updated via refreshProgress(). */
-    if (!els.sidebar || !window.MatrixSidebar) return;
+    /* Delegate to chrome.js's MatrixChrome — it owns the sidebar DOM and
+       renders identically on every page. */
+    if (!window.MatrixChrome) return;
     const currentScreen = course.screens[currentIndex];
-    window.MatrixSidebar.render(
-      els.sidebar,
-      course,
-      'course',
-      currentScreen ? currentScreen.id : null
-    );
+    window.MatrixChrome.setCourse(course, currentScreen ? currentScreen.id : null);
   }
 
   function showScreen(idx) {
@@ -288,9 +280,9 @@
     persistLastIndex(idx);
     const screen = course.screens[idx];
 
-    if (window.MatrixSidebar && els.sidebar) {
-      window.MatrixSidebar.refreshProgress(els.sidebar, course, screen.id);
-      const activeRow = els.sidebar.querySelector('.ms-ws-item.active');
+    if (window.MatrixChrome) {
+      window.MatrixChrome.refreshProgress(screen.id);
+      const activeRow = document.querySelector('#sidebar .ms-ws-item.active');
       if (activeRow && activeRow.scrollIntoView) {
         activeRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
@@ -765,13 +757,9 @@
     const total = course.screens.length;
     const pct = total ? Math.round((completed / total) * 100) : 0;
 
-    if (window.MatrixSidebar && els.sidebar) {
+    if (window.MatrixChrome) {
       const currentScreen = course.screens[currentIndex];
-      window.MatrixSidebar.refreshProgress(
-        els.sidebar,
-        course,
-        currentScreen ? currentScreen.id : null
-      );
+      window.MatrixChrome.refreshProgress(currentScreen ? currentScreen.id : null);
     }
 
     if (els.certificateCta && course.certificate && course.certificate.enabled) {

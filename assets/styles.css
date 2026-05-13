@@ -137,6 +137,44 @@ a:hover { text-decoration: underline; }
 .site-header nav a:hover { color: #fff; text-decoration: none; }
 .site-header nav a.active { color: #fff; border-bottom-color: var(--accent); }
 
+/* My Account button — top-right of header */
+.site-header-account {
+  margin-left: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.42rem 0.85rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 99px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.site-header-account:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.32);
+  text-decoration: none;
+}
+.site-header-account-ico {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--primary-darker);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  .site-header-account-label { display: none; }
+  .site-header-account { padding: 0.35rem; }
+}
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
@@ -2946,26 +2984,53 @@ a:hover { text-decoration: underline; }
   background: #fff7ed;
 }
 
-/* When .ms-sidebar lives directly inside .viewer-shell on every page, layout
-   matches dashboard/course. On the catalog (index.html) we add a sibling
-   .catalog-shell wrapper that puts the sidebar next to the main content. */
-.catalog-shell {
+/* =====================================================================
+   Universal app shell — injected by chrome.js on every page.
+   .app-shell wraps the whole page: header on top, then a grid of
+   sidebar + main column. Replaces the old .viewer-shell and .catalog-shell.
+   ===================================================================== */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.app-body {
   display: grid;
   grid-template-columns: var(--sidebar-w) 1fr;
-  min-height: calc(100vh - var(--header-h));
+  flex: 1 1 auto;
+  min-height: 0;
 }
-.catalog-shell > .ms-sidebar {
+.app-shell-bare .app-body { grid-template-columns: 1fr; }
+.app-body > .ms-sidebar {
   position: sticky;
   top: var(--header-h);
   height: calc(100vh - var(--header-h));
+  align-self: start;
 }
-.catalog-shell > .catalog-main {
+.app-main {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+  background: var(--bg);
+}
+.app-main > .site-footer { margin-top: auto; }
+
+/* Viewer pages with internal scroll panes need their viewer-main to fill */
+.app-main > .viewer-shell,
+.app-main > .viewer-main {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 @media (max-width: 900px) {
-  .catalog-shell { grid-template-columns: 1fr; }
-  .catalog-shell > .ms-sidebar { display: none; }
+  .app-body { grid-template-columns: 1fr; }
+  .app-body > .ms-sidebar { display: none; }
+}
+
+/* Legacy compat: old per-page wrappers are passthroughs now. */
+.viewer-shell,
+.catalog-shell {
+  display: contents;
 }
 
 /* Footer actions inside the viewer main column (cert CTA + bundle PDF). */
@@ -2983,4 +3048,120 @@ a:hover { text-decoration: underline; }
 
 /* Hide old sidebar legacy slots if pages still reference them */
 .viewer-sidebar .sidebar-actions { display: none; }
+
+/* ---------- Account page ---------- */
+.account-hero .account-name-row {
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+.account-hero .account-name-row label {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.78);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.account-hero #account-name-input {
+  flex: 1 1 260px;
+  max-width: 360px;
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.account-hero #account-name-input::placeholder { color: rgba(255,255,255,0.55); }
+.account-hero #account-name-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.15);
+}
+
+.account-section-hint {
+  margin: 0.4rem 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.account-course-row {
+  display: grid;
+  grid-template-columns: 88px 1fr auto;
+  gap: 1.1rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+.account-course-row:hover { box-shadow: var(--shadow-sm); border-color: var(--border-strong); }
+.account-course-row .stats-course-row-thumb {
+  width: 88px;
+  height: 64px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--primary-50);
+  display: block;
+  border: 1px solid var(--border);
+}
+.account-course-row .stats-course-row-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.45rem;
+}
+.account-course-row .stats-course-row-head .code {
+  font-size: 0.65rem;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 800;
+}
+.account-course-row .stats-course-row-head strong { font-size: 1rem; color: var(--text); }
+.account-course-row .stats-course-row-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--primary-50);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 0.25rem 0 0.4rem;
+}
+.account-course-row .stats-course-row-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  border-radius: inherit;
+  transition: width 250ms ease;
+}
+.account-course-row .stats-course-row-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.account-course-row .stats-course-row-meta strong { color: var(--text); }
+.account-course-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: stretch;
+  min-width: 200px;
+}
+.account-course-actions .btn { padding: 0.5rem 0.85rem; font-size: 0.82rem; }
+
+@media (max-width: 700px) {
+  .account-course-row { grid-template-columns: 1fr; }
+  .account-course-row .stats-course-row-thumb { width: 100%; height: 100px; }
+  .account-course-actions { flex-direction: row; min-width: 0; }
+  .account-course-actions .btn { flex: 1 1 auto; }
+}
 

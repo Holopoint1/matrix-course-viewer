@@ -1,54 +1,129 @@
-/* Matrix LMS — shared header + footer renderer
+/* Matrix LMS — single source of truth for site chrome.
  *
- * Every page is supposed to have identical chrome. To avoid drift between
- * pages, the header and footer are rendered from this single source of truth.
+ * On every page chrome.js builds the SAME DOM shell:
  *
- * Each page just needs:
- *   <header class="site-header" id="site-header"></header>
- *   ...
- *   <footer class="site-footer" id="site-footer"></footer>
+ *   <div class="app-shell">
+ *     <header class="site-header" id="site-header"></header>
+ *     <div class="app-body">
+ *       <aside class="ms-sidebar" id="sidebar"></aside>
+ *       <div class="app-main">
+ *         ...page-specific content (moved here from <body> on load)...
+ *         <footer class="site-footer" id="site-footer"></footer>
+ *       </div>
+ *     </div>
+ *   </div>
  *
- * Optionally, a page can add right-hand nav extras (e.g. a 'Back to course'
- * link on the certificate page) by putting:
- *   <header class="site-header" id="site-header" data-extras-id="my-extras"></header>
- *   <template id="my-extras"><a id="back-link" href="#">Back to course</a></template>
+ * Pages need to provide nothing — they just write their content directly into
+ * <body>. chrome.js wraps it, injects the header / sidebar / footer, and
+ * highlights the active nav item by filename.
  *
- * Auto-highlights the current page's nav link by matching the file name.
+ * Public API:
+ *   window.MatrixChrome.setCourse(course, currentScreenId)  → re-render sidebar
+ *                                                              in course mode
+ *   window.MatrixChrome.refreshProgress(currentScreenId)    → cheap update
+ *   window.MatrixChrome.getCurrentCourse()                  → last course set
+ *
+ * Pages can opt out of the sidebar with <body data-no-sidebar> (e.g. cert
+ * print page).
  */
 (function () {
   'use strict';
 
   const NAV_LINKS = [
-    { href: 'index.html',     label: 'Catalog',  match: ['index.html', ''] },
-    { href: 'stats.html',     label: 'My Stats', match: ['stats.html'] },
-    { href: 'files.html',     label: 'Files',    match: ['files.html', 'preview.html'] },
-    { href: 'admin.html',     label: 'Admin',    match: ['admin.html'] }
+    { href: 'index.html',   label: 'Catalog',   match: ['index.html', ''] },
+    { href: 'account.html', label: 'My Account', match: ['account.html', 'stats.html'] },
+    { href: 'files.html',   label: 'Files',     match: ['files.html', 'preview.html'] },
+    { href: 'admin.html',   label: 'Admin',     match: ['admin.html'] }
   ];
 
   const FOOTER_LINKS = [
-    { href: 'index.html', label: 'Catalog' },
-    { href: 'stats.html', label: 'My Stats' },
-    { href: 'files.html', label: 'Files' },
-    { href: 'admin.html', label: 'Admin' },
+    { href: 'index.html',   label: 'Catalog' },
+    { href: 'account.html', label: 'My Account' },
+    { href: 'files.html',   label: 'Files' },
+    { href: 'admin.html',   label: 'Admin' },
     { href: 'https://www.matrixtsl.com', label: 'matrixtsl.com', external: true },
     { href: 'https://www.flowcode.co.uk', label: 'flowcode.co.uk', external: true }
   ];
 
+  /* Pages where the sidebar should track a specific course taken from ?id= */
+  const COURSE_AWARE_PAGES = new Set(['dashboard.html', 'course.html', 'certificate.html']);
+
+  let _course = null;
+  let _currentScreenId = null;
+
   function currentFile() {
-    let p = location.pathname.split('/').pop() || 'index.html';
-    /* Treat dashboard / course / certificate as part of the Catalog "section"
-       (no dedicated nav link). */
-    return p;
+    return location.pathname.split('/').pop() || 'index.html';
   }
 
   function isActive(matches, file) {
     return matches.some((m) => m === file);
   }
 
+  /* ---------- DOM shell ---------- */
+  function buildShell() {
+    if (document.querySelector('.app-shell')) return; /* idempotent */
+    const body = document.body;
+    const noSidebar = body.hasAttribute('data-no-sidebar');
+
+    /* Collect existing children — everything except scripts / templates / the
+       old chrome placeholders becomes the page's main content. */
+    const oldHeader = document.getElementById('site-header');
+    const oldFooter = document.getElementById('site-footer');
+    const toMove = [];
+    for (const node of Array.from(body.children)) {
+      if (node === oldHeader || node === oldFooter) continue;
+      if (node.tagName === 'SCRIPT' || node.tagName === 'TEMPLATE' || node.tagName === 'NOSCRIPT') continue;
+      toMove.push(node);
+    }
+
+    const shell = document.createElement('div');
+    shell.className = 'app-shell' + (noSidebar ? ' app-shell-bare' : '');
+
+    const header = document.createElement('header');
+    header.className = 'site-header';
+    header.id = 'site-header';
+    /* Preserve data-extras-id from a placeholder if the page used one. */
+    if (oldHeader && oldHeader.dataset.extrasId) {
+      header.dataset.extrasId = oldHeader.dataset.extrasId;
+    }
+
+    const appBody = document.createElement('div');
+    appBody.className = 'app-body';
+
+    let sidebar = null;
+    if (!noSidebar) {
+      sidebar = document.createElement('aside');
+      sidebar.className = 'ms-sidebar';
+      sidebar.id = 'sidebar';
+    }
+
+    const main = document.createElement('div');
+    main.className = 'app-main';
+
+    const footer = document.createElement('footer');
+    footer.className = 'site-footer';
+    footer.id = 'site-footer';
+
+    /* Move the existing page content into main, then append the footer */
+    for (const n of toMove) main.appendChild(n);
+    main.appendChild(footer);
+
+    if (sidebar) appBody.appendChild(sidebar);
+    appBody.appendChild(main);
+    shell.appendChild(header);
+    shell.appendChild(appBody);
+
+    /* Replace old chrome placeholders */
+    if (oldHeader) oldHeader.remove();
+    if (oldFooter) oldFooter.remove();
+
+    body.insertBefore(shell, body.firstChild);
+  }
+
+  /* ---------- Header + footer renderers ---------- */
   function renderHeader() {
     const root = document.getElementById('site-header');
     if (!root) return;
-    root.classList.add('site-header');
     const file = currentFile();
 
     let extrasHtml = '';
@@ -70,13 +145,16 @@
         <span class="brand-sub">Course Viewer</span>
       </a>
       <nav>${navHtml}${extrasHtml}</nav>
+      <a class="site-header-account" href="account.html" aria-label="My Account" title="My Account">
+        <span class="site-header-account-ico" aria-hidden="true">👤</span>
+        <span class="site-header-account-label">My Account</span>
+      </a>
     `;
   }
 
   function renderFooter() {
     const root = document.getElementById('site-footer');
     if (!root) return;
-    root.classList.add('site-footer');
     const linksHtml = FOOTER_LINKS
       .map((l) => l.external
         ? `<a href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`
@@ -93,9 +171,60 @@
     `;
   }
 
+  /* ---------- Sidebar bootstrap ---------- */
+  async function initSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar || !window.MatrixSidebar) return;
+    const file = currentFile();
+
+    if (COURSE_AWARE_PAGES.has(file)) {
+      const id = new URLSearchParams(location.search).get('id');
+      if (id) {
+        try {
+          const data = await fetch('data/courses.json').then((r) => r.json());
+          let course = (data.courses || []).find((c) => c.id === id);
+          if (course && window.MatrixCMS && window.MatrixCMS.applyOverrides) {
+            course = window.MatrixCMS.applyOverrides(course);
+          }
+          if (course) {
+            _course = course;
+            const mode = file === 'dashboard.html' ? 'dashboard' : 'course';
+            window.MatrixSidebar.render(sidebar, course, mode, _currentScreenId);
+            return;
+          }
+        } catch (_) { /* fall through to catalog mode */ }
+      }
+    }
+
+    /* Default for every other page: last-visited course in catalog mode. */
+    window.MatrixSidebar.renderCatalog(sidebar);
+  }
+
+  /* ---------- Public API ---------- */
+  function setCourse(course, currentScreenId) {
+    _course = course;
+    _currentScreenId = currentScreenId || null;
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar || !course || !window.MatrixSidebar) return;
+    const file = currentFile();
+    const mode = file === 'dashboard.html' ? 'dashboard' : 'course';
+    window.MatrixSidebar.render(sidebar, course, mode, _currentScreenId);
+  }
+
+  function refreshProgress(currentScreenId) {
+    if (currentScreenId) _currentScreenId = currentScreenId;
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar || !_course || !window.MatrixSidebar) return;
+    window.MatrixSidebar.refreshProgress(sidebar, _course, _currentScreenId);
+  }
+
+  function getCurrentCourse() { return _course; }
+
   function render() {
+    buildShell();
     renderHeader();
     renderFooter();
+    initSidebar();
   }
 
   if (document.readyState === 'loading') {
@@ -103,4 +232,6 @@
   } else {
     render();
   }
+
+  window.MatrixChrome = { setCourse, refreshProgress, getCurrentCourse };
 })();

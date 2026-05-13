@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account | Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <section class="stats-hero account-hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Your account</span>
+      <h1 id="account-greeting">My Account</h1>
+      <p>Your progress, time logged, certificates and achievements — all in one place.</p>
+      <div class="account-name-row">
+        <label for="account-name-input">Your name (used on certificates)</label>
+        <input type="text" id="account-name-input" placeholder="Enter your full name">
+      </div>
+    </div>
+  </section>
+
+  <main class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card stat-card-lg">
+        <span class="stat-card-eyebrow">Total time</span>
+        <span class="stat-card-num" id="total-time">—</span>
+        <span class="stat-card-foot">across all courses</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-eyebrow">Day streak</span>
+        <span class="stat-card-num" id="streak-days">—</span>
+        <span class="stat-card-foot"><span id="streak-longest">—</span> longest</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-eyebrow">Screens ticked</span>
+        <span class="stat-card-num" id="total-completed">—</span>
+        <span class="stat-card-foot"><span id="docs-completed">—</span> worksheets</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-eyebrow">Achievements</span>
+        <span class="stat-card-num" id="ach-count">—</span>
+        <span class="stat-card-foot">of <span id="ach-total">—</span> unlocked</span>
+      </div>
+    </div>
+
+    <div class="stats-courses">
+      <h2 class="stats-h2">My courses</h2>
+      <p class="account-section-hint">Continue where you left off — and download a certificate the moment a course hits 100%.</p>
+      <div class="stats-courses-list" id="course-rows"></div>
+    </div>
+
+    <div class="stats-screens">
+      <div class="stats-screens-header">
+        <h2 class="stats-h2">Time per screen</h2>
+        <select id="screen-course-picker" class="stats-select"></select>
+      </div>
+      <div class="stats-screens-table" id="screen-rows"></div>
+    </div>
+
+    <div class="stats-achievements">
+      <h2 class="stats-h2">Achievements</h2>
+      <div class="achievements-grid" id="achievements-grid"></div>
+    </div>
+
+    <div class="stats-actions">
+      <button class="btn btn-secondary" id="reset-btn">Reset all progress</button>
+      <a class="btn btn-ghost" href="index.html">Back to catalog</a>
+    </div>
+  </main>
+
+  <script src="assets/sidebar.js"></script>
+  <script src="assets/chrome.js"></script>
+  <script src="assets/gamify.js"></script>
+  <script src="assets/cms-overrides.js"></script>
+  <script>
+    (async function () {
+      const NAME_KEY = 'matrix-lms:account-name';
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+      }
+
+      await window.Gamify.init();
+      const data = await fetch('data/courses.json').then((r) => r.json());
+      if (window.MatrixCMS) {
+        data.courses = data.courses.map((c) => window.MatrixCMS.applyOverrides(c));
+      }
+      const stats = window.Gamify.getStats();
+      const streak = window.Gamify.getStreak();
+      const fmt = window.Gamify.formatDuration;
+      const courses = data.courses;
+
+      /* Greeting + name input */
+      const nameInput = document.getElementById('account-name-input');
+      const greeting = document.getElementById('account-greeting');
+      const storedName = localStorage.getItem(NAME_KEY) || '';
+      nameInput.value = storedName;
+      function updateGreeting() {
+        const v = nameInput.value.trim();
+        greeting.textContent = v ? 'Hi, ' + v.split(' ')[0] : 'My Account';
+      }
+      nameInput.addEventListener('input', () => {
+        localStorage.setItem(NAME_KEY, nameInput.value);
+        /* Mirror into per-course cert name so existing certificate.html picks it up */
+        for (const c of courses) {
+          localStorage.setItem('matrix-lms:cert-name:' + c.id, nameInput.value);
+        }
+        updateGreeting();
+      });
+      updateGreeting();
+
+      /* Top stats */
+      document.getElementById('total-time').textContent = fmt(window.Gamify.getTotalSecondsAllCourses());
+      document.getElementById('streak-days').textContent = streak.days || 0;
+      document.getElementById('streak-longest').textContent = streak.longest || 0;
+      document.getElementById('total-completed').textContent = stats.totalCompleted;
+      document.getElementById('docs-completed').textContent = stats.documentsCompleted;
+
+      const ach = window.Gamify.getAchievements();
+      let unlockedCount = 0;
+      for (const a of ach) if (window.Gamify.isUnlocked(a.id)) unlockedCount += 1;
+      document.getElementById('ach-count').textContent = unlockedCount;
+      document.getElementById('ach-total').textContent = ach.length;
+
+      /* Course rows — with cert button if available and complete */
+      const courseRowsRoot = document.getElementById('course-rows');
+      courseRowsRoot.innerHTML = '';
+      for (const course of courses) {
+        const cs = stats.courseStats[course.id] || { completed: 0, total: course.screens.length, pct: 0 };
+        const time = window.Gamify.getCourseTotalSeconds(course.id);
+        const isComplete = cs.pct === 100 && cs.total > 0;
+        const hasCert = course.certificate && course.certificate.enabled;
+        const certLabel = isComplete ? '🎓 Download certificate' : 'Certificate at 100%';
+        const certClass = isComplete ? 'btn btn-primary' : 'btn btn-secondary';
+        const status = isComplete ? 'Completed' : (cs.completed > 0 ? 'In progress' : 'Not started');
+        const statusCls = isComplete ? 'status-pill done' : (cs.completed > 0 ? 'status-pill todo' : 'status-pill missing');
+
+        const row = document.createElement('div');
+        row.className = 'account-course-row';
+        row.innerHTML = `
+          <a class="stats-course-row-thumb" href="dashboard.html?id=${encodeURIComponent(course.id)}" style="background-image:url('content/${course.id}/opening.svg')"></a>
+          <div class="stats-course-row-body">
+            <div class="stats-course-row-head">
+              <span class="code">${escapeHtml(course.code)}</span>
+              <strong>${escapeHtml(course.title)}</strong>
+              <span class="${statusCls}">${status}</span>
+            </div>
+            <div class="stats-course-row-bar">
+              <span style="width:${cs.pct}%;"></span>
+            </div>
+            <div class="stats-course-row-meta">
+              <span><strong>${cs.completed}</strong> / ${cs.total} screens</span>
+              <span><strong>${cs.pct}%</strong> complete</span>
+              <span class="time"><strong>${fmt(time)}</strong> spent</span>
+            </div>
+          </div>
+          <div class="account-course-actions">
+            <a class="btn btn-secondary" href="dashboard.html?id=${encodeURIComponent(course.id)}">${cs.completed > 0 ? 'Continue' : 'Start'} →</a>
+            ${hasCert ? `<a class="${certClass}" href="certificate.html?id=${encodeURIComponent(course.id)}" ${isComplete ? '' : 'aria-disabled="true" style="opacity:.6;pointer-events:none;"'}>${certLabel}</a>` : ''}
+          </div>
+        `;
+        courseRowsRoot.appendChild(row);
+      }
+
+      /* Screen-level breakdown */
+      const picker = document.getElementById('screen-course-picker');
+      picker.innerHTML = courses.map((c) => `<option value="${c.id}">${escapeHtml(c.code + ' · ' + c.title)}</option>`).join('');
+      const screensRoot = document.getElementById('screen-rows');
+
+      function renderScreens(courseId) {
+        const course = courses.find((c) => c.id === courseId);
+        if (!course) return;
+        const time = window.Gamify.getCourseTime(courseId);
+        const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + courseId) || '{}');
+        screensRoot.innerHTML = `
+          <div class="stats-screen-row stats-screen-head">
+            <span>#</span>
+            <span>Title</span>
+            <span>Type</span>
+            <span>Status</span>
+            <span class="num">Time</span>
+          </div>
+        ` + course.screens.map((s, i) => {
+          const t = time[s.id] || 0;
+          const done = Boolean(progress[s.id]);
+          return `
+            <div class="stats-screen-row ${done ? 'done' : ''}">
+              <span class="num">${i + 1}</span>
+              <span class="title">${escapeHtml(s.title)}</span>
+              <span><span class="screen-type-dot ${s.type}"></span> <span class="type-label">${escapeHtml(s.type)}</span></span>
+              <span>${done ? '<span class="status-pill done">Complete</span>' : (s.missing ? '<span class="status-pill missing">Missing</span>' : '<span class="status-pill todo">Pending</span>')}</span>
+              <span class="num">${t > 0 ? fmt(t) : '—'}</span>
+            </div>
+          `;
+        }).join('');
+      }
+      picker.addEventListener('change', () => renderScreens(picker.value));
+      renderScreens(courses[0].id);
+
+      /* Achievements grid */
+      const achGrid = document.getElementById('achievements-grid');
+      achGrid.innerHTML = '';
+      for (const a of ach) {
+        const isUnlocked = window.Gamify.isUnlocked(a.id);
+        const div = document.createElement('div');
+        div.className = 'achievement ' + (isUnlocked ? 'unlocked' : 'locked');
+        div.innerHTML = `
+          <div class="achievement-icon">${a.icon}</div>
+          <div class="achievement-title">${escapeHtml(a.title)}</div>
+          <div class="achievement-desc">${escapeHtml(a.desc)}</div>
+        `;
+        achGrid.appendChild(div);
+      }
+
+      /* Reset */
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        if (!confirm('Reset all progress? This will wipe completion, time tracking, achievements and streak — across every course. Cannot be undone.')) return;
+        window.Gamify.resetAll();
+        location.reload();
+      });
+    })();
+  </script>
+</body>
+</html>

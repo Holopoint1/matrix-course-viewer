@@ -8,62 +8,41 @@
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <header class="site-header" id="site-header"></header>
-
-  <div class="catalog-shell">
-    <aside class="ms-sidebar" id="sidebar"></aside>
-    <div class="catalog-main">
-      <section class="catalog-hero">
-        <div class="hero-inner">
-          <span class="eyebrow">Matrix Learning</span>
-          <h1>Matrix Learning Platform</h1>
-          <p>Choose a course to get started. Your progress is saved separately for each course.</p>
-          <div class="hero-stats" id="hero-stats" aria-hidden="true">
-            <div class="stat"><span class="stat-num" data-stat="courses">—</span><span class="stat-label">Courses</span></div>
-            <div class="stat"><span class="stat-num" data-stat="time">—</span><span class="stat-label">Time logged</span></div>
-            <div class="stat"><span class="stat-num" data-stat="streak">—</span><span class="stat-label">Day streak</span></div>
-          </div>
-        </div>
-      </section>
-
-      <main class="catalog-section">
-        <div class="catalog-heading">
-          <h2>All courses</h2>
-          <p>Browser-based courses and curriculum packs across the Flowcode &amp; E-blocks 3 catalogue.</p>
-        </div>
-        <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
-        <div class="catalog" id="catalog">
-          <p class="stage-loading">Loading courses&hellip;</p>
-        </div>
-        <p class="catalog-empty" id="catalog-empty" hidden>No courses match this filter.</p>
-      </main>
-
-      <section class="missing-section" id="missing-section" hidden>
-        <div class="missing-card">
-          <div class="missing-card-head">
-            <h2><span class="missing-card-pill">Awaiting</span> Resources to send</h2>
-            <span class="missing-card-counter" id="missing-counter">— files</span>
-          </div>
-          <p class="missing-card-hint">These files are referenced by the course outline but haven't been added to the media zip yet. Drop them into the indicated folder and they'll appear automatically — no rebuild needed.</p>
-          <ul class="missing-list" id="missing-list"></ul>
-        </div>
-      </section>
-
-      <section class="achievements-section">
-        <div class="achievements-card">
-          <div class="achievements-header">
-            <h2>Achievements</h2>
-            <span class="achievements-counter" id="achievements-counter">0 / 0 unlocked</span>
-          </div>
-          <div class="achievements-grid" id="achievements-grid">
-            <p class="stage-loading">Loading achievements&hellip;</p>
-          </div>
-        </div>
-      </section>
-
-      <footer class="site-footer" id="site-footer"></footer>
+  <section class="catalog-hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Matrix Learning</span>
+      <h1>Matrix Learning Platform</h1>
+      <p>Choose a course to get started. Your progress is saved separately for each course.</p>
+      <div class="hero-stats" id="hero-stats" aria-hidden="true">
+        <div class="stat"><span class="stat-num" data-stat="courses">—</span><span class="stat-label">Courses</span></div>
+        <div class="stat"><span class="stat-num" data-stat="time">—</span><span class="stat-label">Time logged</span></div>
+        <div class="stat"><span class="stat-num" data-stat="streak">—</span><span class="stat-label">Day streak</span></div>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <main class="catalog-section">
+    <div class="catalog-heading">
+      <h2>All courses</h2>
+      <p>Browser-based courses and curriculum packs across the Flowcode &amp; E-blocks 3 catalogue.</p>
+    </div>
+    <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
+    <div class="catalog" id="catalog">
+      <p class="stage-loading">Loading courses&hellip;</p>
+    </div>
+    <p class="catalog-empty" id="catalog-empty" hidden>No courses match this filter.</p>
+  </main>
+
+  <section class="missing-section" id="missing-section" hidden>
+    <div class="missing-card">
+      <div class="missing-card-head">
+        <h2><span class="missing-card-pill">Awaiting</span> Resources to send</h2>
+        <span class="missing-card-counter" id="missing-counter">— files</span>
+      </div>
+      <p class="missing-card-hint">These files are referenced by the course outline but haven't been added to the media zip yet. Drop them into the indicated folder and they'll appear automatically — no rebuild needed.</p>
+      <ul class="missing-list" id="missing-list"></ul>
+    </div>
+  </section>
 
   <script src="assets/chrome.js"></script>
   <script src="assets/gamify.js"></script>
@@ -73,18 +52,11 @@
     (async function () {
       const root = document.getElementById('catalog');
       const stats = document.getElementById('hero-stats');
-      const achGrid = document.getElementById('achievements-grid');
-      const achCounter = document.getElementById('achievements-counter');
 
       function escapeHtml(s) {
         return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
           '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         }[c]));
-      }
-
-      const sidebarEl = document.getElementById('sidebar');
-      if (sidebarEl && window.MatrixSidebar) {
-        window.MatrixSidebar.renderCatalog(sidebarEl);
       }
 
       try {
@@ -248,23 +220,6 @@
           }
         }
 
-        /* Render achievements */
-        const achievements = window.Gamify.getAchievements();
-        achGrid.innerHTML = '';
-        let unlockedCount = 0;
-        for (const a of achievements) {
-          const isUnlocked = window.Gamify.isUnlocked(a.id);
-          if (isUnlocked) unlockedCount += 1;
-          const div = document.createElement('div');
-          div.className = 'achievement ' + (isUnlocked ? 'unlocked' : 'locked');
-          div.innerHTML = `
-            <div class="achievement-icon">${a.icon}</div>
-            <div class="achievement-title">${escapeHtml(a.title)}</div>
-            <div class="achievement-desc">${escapeHtml(a.desc)}</div>
-          `;
-          achGrid.appendChild(div);
-        }
-        achCounter.textContent = `${unlockedCount} / ${achievements.length} unlocked`;
       } catch (err) {
         root.innerHTML = '<p class="stage-loading">Could not load courses. ' + err.message + '</p>';
       }
