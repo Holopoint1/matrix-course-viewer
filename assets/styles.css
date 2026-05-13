@@ -3434,3 +3434,178 @@ a:hover { text-decoration: underline; }
   .account-course-actions .btn { flex: 1 1 auto; }
 }
 
+/* ---------- Worksheet Compiler page ---------- */
+.compiler-section {
+  max-width: 880px;
+  margin: -2rem auto 3rem;
+  padding: 0 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.compiler-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--shadow-xs);
+}
+.compiler-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.85rem;
+}
+.compiler-card-step {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.compiler-card-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text);
+  letter-spacing: 0.2px;
+}
+.compiler-card label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.compiler-card input[type=text] {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  background: var(--surface-2);
+  color: var(--text);
+}
+.compiler-card input[type=text]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+  background: var(--surface);
+}
+
+.compiler-dropzone { padding: 2rem 1.4rem; }
+
+.file-list {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+.file-row .idx {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+.file-row .name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+.file-row .size {
+  color: var(--text-subtle);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+.file-row .row-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1;
+}
+.file-row .row-btn:hover:not(:disabled) { background: var(--primary-50); color: var(--primary); border-color: var(--primary-100); }
+.file-row .row-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.file-row .row-btn-rm:hover { background: #fff1f2; color: #b91c1c; border-color: #fecdd3; }
+
+.compiler-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0 0.2rem;
+}
+.compiler-progress {
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  display: none;
+  margin: 0 0.2rem;
+}
+.compiler-progress.active { display: block; }
+.compiler-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  width: 0;
+  transition: width 0.25s ease;
+}
+.compiler-status {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  min-height: 1.2rem;
+  padding: 0 0.2rem;
+}
+.compiler-status.err { color: #b91c1c; }
+.compiler-status.ok  { color: var(--success); }
+
+/* Offscreen sandbox for docx → canvas conversion */
+#render-sandbox {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 794px;
+  background: #fff;
+  padding: 40px;
+  font-family: Calibri, "Segoe UI", Arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.4;
+  color: #000;
+}
+#render-sandbox h1 { font-size: 20pt; margin: 16px 0 8px; }
+#render-sandbox h2 { font-size: 16pt; margin: 14px 0 6px; }
+#render-sandbox h3 { font-size: 13pt; margin: 12px 0 4px; }
+#render-sandbox p  { margin: 6px 0; }
+#render-sandbox table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+#render-sandbox td, #render-sandbox th { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }
+#render-sandbox img { max-width: 100%; height: auto; }
+#render-sandbox ul, #render-sandbox ol { margin: 6px 0 6px 22px; }
+

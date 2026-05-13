@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worksheet Compiler | Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <section class="stats-hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Author tools</span>
+      <h1>Worksheet Compiler</h1>
+      <p>Merge multiple Word documents into a single, continuously paginated PDF. Content is preserved verbatim — no extra headers, footers, or cover pages. Everything runs in your browser; nothing is uploaded.</p>
+    </div>
+  </section>
+
+  <main class="compiler-section">
+    <div class="compiler-card">
+      <div class="compiler-card-head">
+        <span class="compiler-card-step">1</span>
+        <h2>Output filename</h2>
+      </div>
+      <label for="filename">PDF filename</label>
+      <input id="filename" type="text" value="CP4807-worksheets.pdf" spellcheck="false">
+    </div>
+
+    <div class="compiler-card">
+      <div class="compiler-card-head">
+        <span class="compiler-card-step">2</span>
+        <h2>Source documents</h2>
+      </div>
+      <div class="dropzone compiler-dropzone" id="drop">
+        <div class="dropzone-icon">⤓</div>
+        <div class="dropzone-title">Drop .docx files here</div>
+        <div class="dropzone-sub">or <button type="button" class="btn btn-primary" id="pick-btn">choose files</button></div>
+        <input id="fileInput" type="file" accept=".docx" multiple hidden>
+        <div class="dropzone-types">Files merge in the order shown below. Use ↑ / ↓ to reorder.</div>
+      </div>
+      <div class="file-list" id="fileList"></div>
+    </div>
+
+    <div class="compiler-actions">
+      <button id="compile" class="btn btn-primary" disabled>
+        <span>🪄 Compile PDF</span>
+      </button>
+      <button id="clear" class="btn btn-ghost">Clear</button>
+    </div>
+    <div class="compiler-progress" id="progress"><div class="compiler-progress-bar" id="progressBar"></div></div>
+    <div class="compiler-status" id="status"></div>
+  </main>
+
+  <!-- Hidden render sandbox used to paint each docx to canvas -->
+  <div id="render-sandbox" aria-hidden="true"></div>
+
+  <script src="assets/sidebar.js"></script>
+  <script src="assets/chrome.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const fileInput = document.getElementById('fileInput');
+      const drop = document.getElementById('drop');
+      const pickBtn = document.getElementById('pick-btn');
+      const list = document.getElementById('fileList');
+      const compileBtn = document.getElementById('compile');
+      const clearBtn = document.getElementById('clear');
+      const status = document.getElementById('status');
+      const progress = document.getElementById('progress');
+      const progressBar = document.getElementById('progressBar');
+      const filenameInput = document.getElementById('filename');
+      const sandbox = document.getElementById('render-sandbox');
+
+      let files = [];
+
+      function fmtSize(b) {
+        if (b < 1024) return b + ' B';
+        if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+        return (b / 1048576).toFixed(1) + ' MB';
+      }
+      function setStatus(msg, kind) {
+        status.textContent = msg || '';
+        status.className = 'compiler-status' + (kind ? ' ' + kind : '');
+      }
+      function setProgress(pct) {
+        progress.classList.toggle('active', pct > 0 && pct < 100);
+        progressBar.style.width = pct + '%';
+      }
+
+      function render() {
+        list.innerHTML = '';
+        files.forEach((f, i) => {
+          const row = document.createElement('div');
+          row.className = 'file-row';
+          row.innerHTML =
+            '<div class="idx">' + (i + 1) + '</div>' +
+            '<div class="name"></div>' +
+            '<div class="size">' + fmtSize(f.size) + '</div>' +
+            '<button type="button" class="row-btn" data-a="up" '  + (i === 0 ? 'disabled' : '') + ' aria-label="Move up">↑</button>' +
+            '<button type="button" class="row-btn" data-a="down" ' + (i === files.length - 1 ? 'disabled' : '') + ' aria-label="Move down">↓</button>' +
+            '<button type="button" class="row-btn row-btn-rm" data-a="rm" aria-label="Remove">×</button>';
+          row.querySelector('.name').textContent = f.name;
+          row.querySelector('[data-a=up]').onclick = () => { [files[i - 1], files[i]] = [files[i], files[i - 1]]; render(); };
+          row.querySelector('[data-a=down]').onclick = () => { [files[i + 1], files[i]] = [files[i], files[i + 1]]; render(); };
+          row.querySelector('[data-a=rm]').onclick = () => { files.splice(i, 1); render(); };
+          list.appendChild(row);
+        });
+        compileBtn.disabled = files.length === 0;
+      }
+
+      function addFiles(fl) {
+        for (const f of fl) {
+          if (!f.name.toLowerCase().endsWith('.docx')) {
+            setStatus('Skipped ' + f.name + ' — only .docx files are supported.', 'err');
+            continue;
+          }
+          files.push(f);
+        }
+        render();
+      }
+
+      pickBtn.addEventListener('click', () => fileInput.click());
+      drop.addEventListener('click', (ev) => {
+        /* Avoid double-click loop when clicking the inner button */
+        if (ev.target.closest('button')) return;
+        fileInput.click();
+      });
+      fileInput.addEventListener('change', (e) => { addFiles(e.target.files); fileInput.value = ''; });
+      drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
+      drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+      drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('drag'); addFiles(e.dataTransfer.files); });
+      clearBtn.addEventListener('click', () => { files = []; render(); setStatus(''); setProgress(0); });
+
+      async function docxToPdfBytes(file) {
+        const arrayBuffer = await file.arrayBuffer();
+        const { value: html } = await window.mammoth.convertToHtml({ arrayBuffer });
+        sandbox.innerHTML = html;
+        const opts = {
+          margin: [15, 15, 20, 15],
+          filename: 'tmp.pdf',
+          image: { type: 'jpeg', quality: 0.95 },
+          html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'] }
+        };
+        const blob = await window.html2pdf().set(opts).from(sandbox).output('blob');
+        sandbox.innerHTML = '';
+        return new Uint8Array(await blob.arrayBuffer());
+      }
+
+      async function mergeAndPaginate(partBytesList) {
+        const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+        const merged = await PDFDocument.create();
+        for (const bytes of partBytesList) {
+          const src = await PDFDocument.load(bytes);
+          const pages = await merged.copyPages(src, src.getPageIndices());
+          pages.forEach((p) => merged.addPage(p));
+        }
+        const font = await merged.embedFont(StandardFonts.Helvetica);
+        const pages = merged.getPages();
+        const total = pages.length;
+        pages.forEach((p, i) => {
+          const label = (i + 1) + ' / ' + total;
+          const size = 9;
+          const width = font.widthOfTextAtSize(label, size);
+          const { width: pw } = p.getSize();
+          p.drawText(label, { x: (pw - width) / 2, y: 12, size, font, color: rgb(0.3, 0.3, 0.3) });
+        });
+        return await merged.save();
+      }
+
+      function download(bytes, name) {
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      }
+
+      compileBtn.addEventListener('click', async () => {
+        const outName = (filenameInput.value || 'worksheets.pdf').trim();
+        if (!outName.toLowerCase().endsWith('.pdf')) {
+          setStatus('Filename must end with .pdf', 'err');
+          return;
+        }
+        if (files.length === 0) {
+          setStatus('Add at least one .docx file.', 'err');
+          return;
+        }
+        compileBtn.disabled = true;
+        clearBtn.disabled = true;
+        setStatus('Converting documents…');
+        setProgress(1);
+        try {
+          const parts = [];
+          for (let i = 0; i < files.length; i++) {
+            setStatus('Converting ' + (i + 1) + ' of ' + files.length + ': ' + files[i].name);
+            parts.push(await docxToPdfBytes(files[i]));
+            setProgress(Math.round(((i + 1) / files.length) * 85));
+          }
+          setStatus('Merging and numbering pages…');
+          setProgress(92);
+          const finalBytes = await mergeAndPaginate(parts);
+          setProgress(100);
+          download(finalBytes, outName);
+          setStatus('Done — ' + outName + ' downloaded.', 'ok');
+        } catch (err) {
+          console.error(err);
+          setStatus('Error: ' + (err.message || err), 'err');
+        } finally {
+          compileBtn.disabled = files.length === 0;
+          clearBtn.disabled = false;
+          setTimeout(() => setProgress(0), 1500);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
