@@ -212,127 +212,117 @@
 
     const originalLabel = btn.querySelector('span').textContent;
     btn.disabled = true;
-    btn.querySelector('span').textContent = 'Building PDF (0 of ' + documents.length + ')…';
 
-    /* Render each worksheet to PDF bytes one at a time using a single
-       reusable sandbox div, then merge with pdf-lib. The old approach —
-       stacking every worksheet's HTML into one offscreen wrap and
-       calling html2pdf once — produced blank PDFs because html2canvas
-       fails to rasterise elements positioned at extreme negative
-       offsets (top:-99999px). Rendering each worksheet on its own
-       inside a sandbox at top:0 (just shifted off the visible viewport
-       to the left) reliably captures content. */
-    if (!window.PDFLib) {
-      alert('PDF merger is not loaded yet. Please retry in a moment.');
-      btn.disabled = false;
-      btn.querySelector('span').textContent = originalLabel;
-      return;
-    }
+    /* Browser print-to-PDF approach. Every previous html2canvas/html2pdf
+       attempt produced blank PDFs because the offscreen sandbox couldn't
+       be rasterised correctly. Browsers print fully-styled HTML to PDF
+       natively — far more reliable than canvas, and the output is
+       selectable text rather than baked-in images.
 
-    /* Sandbox sits in normal document flow but offscreen via absolute
-       positioning + huge negative left. Critical: position:absolute (NOT
-       fixed) — html2canvas skips fixed-positioned elements, producing the
-       blank PDFs we were seeing. With absolute, it's part of the document
-       layer and rasterises correctly. */
-    const sandbox = document.createElement('div');
-    sandbox.style.cssText = 'position:absolute;left:-10000px;top:0;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:40px;z-index:-1;';
-    document.body.appendChild(sandbox);
+       Flow:
+         1. Pre-fetch every worksheet docx, run mammoth + the worksheet
+            enhancer to get rich HTML for each.
+         2. Compose a single print-styled HTML document with one
+            worksheet per page-break.
+         3. Drop that document into a hidden iframe, call .print() on
+            the iframe's window. Browser opens its Save-as-PDF dialog. */
 
-    async function htmlToPdfBytes(innerHtml) {
-      sandbox.innerHTML = innerHtml;
-      /* Force a layout flush before html2canvas reads the element so the
-         freshly-set innerHTML has dimensions to capture. */
-      void sandbox.offsetHeight;
-      const blob = await window.html2pdf()
-        .set({
-          margin: [10, 12, 14, 12],
-          filename: 'tmp.pdf',
-          image: { type: 'jpeg', quality: 0.95 },
-          html2canvas: {
-            scale: 1.6,
-            useCORS: true,
-            backgroundColor: '#ffffff',
-            windowWidth: 874, /* 794px content + 40px×2 padding */
-            scrollX: 0,
-            scrollY: 0
-          },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        })
-        .from(sandbox)
-        .output('blob');
-      sandbox.innerHTML = '';
-      return new Uint8Array(await blob.arrayBuffer());
-    }
-
-    try {
-      const parts = [];
-      /* Cover sheet */
-      const coverHtml = `
-        <div style="padding:140px 40px 40px;text-align:center;">
-          <div style="font-size:0.85rem;letter-spacing:3px;color:#7c3aed;font-weight:700;">${escapeHtml(course.code)}</div>
-          <h1 style="font-family:'Segoe UI',Inter,Arial,sans-serif;font-size:34pt;color:#1e1b4b;margin:8px 0 20px;font-weight:800;">${escapeHtml(course.title)}</h1>
-          <p style="color:#5d5b78;font-size:13pt;margin:0 auto;max-width:520px;">${escapeHtml(course.shortDescription || '')}</p>
-          <p style="margin-top:80px;font-size:10pt;color:#8a87a6;">Combined worksheets bundle &middot; ${documents.length} worksheets</p>
-          <p style="margin-top:8px;font-size:9pt;color:#8a87a6;">Generated ${new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-        </div>`;
-      parts.push(await htmlToPdfBytes(coverHtml));
-
-      /* Each worksheet */
-      for (let i = 0; i < documents.length; i++) {
-        const screen = documents[i];
-        btn.querySelector('span').textContent = 'Building PDF (' + (i + 1) + ' of ' + documents.length + ')…';
-        try {
-          let html = docCache.get(screen.src);
-          if (!html) {
-            const res = await fetch(screen.src);
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const buf = await res.arrayBuffer();
-            const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
-            html = enhanceWorksheetHtml(result.value || '');
-            docCache.set(screen.src, html);
-          }
-          const sheet =
-            '<div style="font-size:0.78rem;letter-spacing:2px;color:#7c3aed;text-transform:uppercase;font-weight:700;">' +
-            escapeHtml(course.code) + ' &middot; Worksheet ' + (i + 1) +
-            '</div>' +
-            '<h1 style="font-family:\'Segoe UI\',Inter,Arial,sans-serif;font-size:20pt;color:#1e1b4b;margin:6px 0 18px;">' +
-            escapeHtml(screen.title) + '</h1>' +
-            html;
-          parts.push(await htmlToPdfBytes(sheet));
-        } catch (err) {
-          const errSheet =
-            '<h1 style="color:#b45309;">Could not render ' + escapeHtml(screen.title) + '</h1>' +
-            '<p style="color:#b45309;">' + escapeHtml(err.message) + '</p>';
-          parts.push(await htmlToPdfBytes(errSheet));
+    /* Pre-fetch + render every worksheet */
+    const sheets = [];
+    for (let i = 0; i < documents.length; i++) {
+      const screen = documents[i];
+      btn.querySelector('span').textContent = 'Preparing (' + (i + 1) + ' of ' + documents.length + ')…';
+      try {
+        let html = docCache.get(screen.src);
+        if (!html) {
+          const res = await fetch(screen.src);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const buf = await res.arrayBuffer();
+          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+          html = enhanceWorksheetHtml(result.value || '');
+          docCache.set(screen.src, html);
         }
+        sheets.push({ index: i + 1, screen, html });
+      } catch (err) {
+        sheets.push({
+          index: i + 1, screen,
+          html: '<p style="color:#b45309;">Could not load worksheet: ' + escapeHtml(err.message) + '</p>'
+        });
       }
-
-      /* Merge all PDF parts into one continuously-paginated document. */
-      btn.querySelector('span').textContent = 'Merging pages…';
-      const { PDFDocument } = window.PDFLib;
-      const merged = await PDFDocument.create();
-      for (const bytes of parts) {
-        const src = await PDFDocument.load(bytes);
-        const pages = await merged.copyPages(src, src.getPageIndices());
-        pages.forEach((p) => merged.addPage(p));
-      }
-      const finalBytes = await merged.save();
-      const url = URL.createObjectURL(new Blob([finalBytes], { type: 'application/pdf' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = course.code + '-worksheets.pdf';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-    } catch (err) {
-      console.error(err);
-      alert('PDF generation failed: ' + (err && err.message ? err.message : err));
-    } finally {
-      sandbox.remove();
-      btn.disabled = false;
-      btn.querySelector('span').textContent = originalLabel;
     }
+
+    /* Build the print document */
+    btn.querySelector('span').textContent = 'Opening print dialog…';
+    const printCss =
+      '@page { size: A4; margin: 12mm 14mm 16mm 14mm; }' +
+      '* { box-sizing: border-box; }' +
+      'body { font-family: "Segoe UI", Calibri, Arial, sans-serif; color: #1a1a2e; font-size: 11pt; line-height: 1.55; margin: 0; }' +
+      'h1, h2, h3 { font-family: "Segoe UI", Calibri, Arial, sans-serif; color: #1e1b4b; page-break-after: avoid; }' +
+      '.cover { text-align: center; padding: 100px 30px 40px; page-break-after: always; }' +
+      '.cover .code { font-size: 11pt; letter-spacing: 3px; color: #7c3aed; font-weight: 700; }' +
+      '.cover h1 { font-size: 34pt; margin: 8px 0 18px; font-weight: 800; }' +
+      '.cover p { color: #5d5b78; font-size: 13pt; margin: 0 auto; max-width: 520px; }' +
+      '.cover .meta { margin-top: 80px; font-size: 10pt; color: #8a87a6; }' +
+      '.sheet { page-break-before: always; padding: 0; }' +
+      '.sheet .eyebrow { font-size: 9pt; letter-spacing: 2px; color: #7c3aed; text-transform: uppercase; font-weight: 700; }' +
+      '.sheet h1 { font-size: 20pt; margin: 6px 0 14px; }' +
+      'table { border-collapse: collapse; width: 100%; margin: 8px 0; }' +
+      'td, th { border: 1px solid #333; padding: 4px 6px; vertical-align: top; }' +
+      'img { max-width: 100%; height: auto; }' +
+      'ul, ol { margin: 6px 0 6px 22px; }' +
+      '.doc-section, .doc-h1 { color: #1e1b4b; }' +
+      '.inline-youtube, .worksheet-header { display: none; }' +
+      '.hints-details { page-break-inside: avoid; }' +
+      '.hints-summary { font-weight: 700; color: #a16207; list-style: none; }' +
+      '.hints-summary::before { content: "Hints: "; }';
+
+    const cover =
+      '<div class="cover">' +
+      '<div class="code">' + escapeHtml(course.code) + '</div>' +
+      '<h1>' + escapeHtml(course.title) + '</h1>' +
+      '<p>' + escapeHtml(course.shortDescription || '') + '</p>' +
+      '<div class="meta">' + documents.length + ' worksheets &middot; generated ' +
+      new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) +
+      '</div></div>';
+    const sheetsHtml = sheets.map(function (s) {
+      return '<section class="sheet">' +
+        '<div class="eyebrow">' + escapeHtml(course.code) + ' &middot; Worksheet ' + s.index + '</div>' +
+        '<h1>' + escapeHtml(s.screen.title) + '</h1>' +
+        s.html +
+        '</section>';
+    }).join('');
+
+    const docHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' +
+      escapeHtml(course.code) + ' worksheets</title><style>' + printCss + '</style></head><body>' +
+      cover + sheetsHtml + '</body></html>';
+
+    /* Hidden iframe for the print dialog. iframe-scoped print doesn't
+       affect the parent page styling. */
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;';
+    document.body.appendChild(iframe);
+
+    const finish = function () {
+      setTimeout(function () {
+        try { iframe.remove(); } catch (_) {}
+        btn.disabled = false;
+        btn.querySelector('span').textContent = originalLabel;
+      }, 500);
+    };
+
+    iframe.onload = function () {
+      try {
+        const win = iframe.contentWindow;
+        win.focus();
+        win.print();
+      } catch (err) {
+        console.error('Print bundle failed:', err);
+        alert('Could not open print dialog: ' + err.message);
+      } finally {
+        finish();
+      }
+    };
+    iframe.srcdoc = docHtml;
   }
 
   function renderSidebar() {
