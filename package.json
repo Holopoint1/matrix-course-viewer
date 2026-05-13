@@ -6,12 +6,16 @@
   "scripts": {
     "start": "node server.js",
     "test": "node tools/test-achievements.js",
+    "build:courses": "node tools/build-courses-json.js",
+    "extract:definitions": "node tools/extract-definitions.js",
     "build:scorm": "node tools/build-scorm.js",
     "build:scorm:CO0001": "node tools/build-scorm.js CO0001",
     "build:scorm:CO0002": "node tools/build-scorm.js CO0002",
-    "build:scorm:CO0003": "node tools/build-scorm.js CO0003"
+    "build:scorm:CO0003": "node tools/build-scorm.js CO0003",
+    "build:scorm:CO0004": "node tools/build-scorm.js CO0004"
   },
   "devDependencies": {
-    "jszip": "^3.10.1"
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.0"
   }
 }
