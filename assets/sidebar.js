@@ -56,6 +56,21 @@
     try { return localStorage.getItem(LAST_COURSE_KEY); } catch (_) { return null; }
   }
 
+  /* A course is "in progress" if the learner has ticked at least one screen
+     complete OR has logged any time against it. Visiting alone does not
+     count as in-progress. */
+  function isCourseInProgress(courseId) {
+    try {
+      const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + courseId) || '{}');
+      if (Object.keys(progress).length > 0) return true;
+      const time = JSON.parse(localStorage.getItem('matrix-lms:time:' + courseId) || '{}');
+      for (const k of Object.keys(time)) {
+        if (Number(time[k]) > 0) return true;
+      }
+    } catch (_) {}
+    return false;
+  }
+
   /* SVG icon factory — kept inline so the sidebar has no asset dependencies. */
   const ICONS = {
     home:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
@@ -154,7 +169,7 @@
     `;
   }
 
-  function buildCourseCard(course, expanded, currentScreenId) {
+  function buildCourseCard(course, expanded, currentScreenId, isCourseOpen) {
     const worksheets = (course.screens || []).filter((s) => s.type === 'document');
     const total = worksheets.length;
     const progress = getProgress(course.id);
@@ -194,13 +209,22 @@
 
     const kindLabel = course.kind === 'pack' ? 'PACK' : escapeHtml(course.code || '');
     const isPack = course.kind === 'pack';
+    /* When the course is NOT currently open, the card acts as a 'return to
+       course' shortcut — title chip becomes a "Continue" eyebrow and the
+       progress chip swaps for an explicit CTA. Clicking anywhere on the
+       head jumps to the dashboard; the chevron toggles the worksheet list. */
+    const continueHref = 'dashboard.html?id=' + encodeURIComponent(course.id);
+    const eyebrow = isCourseOpen
+      ? (kindLabel + (isPack ? ' &middot; ' + escapeHtml(course.code || '') : ''))
+      : ('CONTINUE &middot; ' + escapeHtml(course.code || ''));
+    const returnAttr = isCourseOpen ? '' : ' data-return-href="' + escapeHtml(continueHref) + '"';
     return `
       <div class="ms-section">
-        <div class="ms-course-group${expanded ? ' expanded' : ''}${isPack ? ' ms-course-group-pack' : ''}" data-role="course-group">
-          <button type="button" class="ms-course-head" id="ms-course-toggle">
+        <div class="ms-course-group${expanded ? ' expanded' : ''}${isPack ? ' ms-course-group-pack' : ''}${isCourseOpen ? '' : ' ms-course-group-return'}" data-role="course-group">
+          <button type="button" class="ms-course-head" id="ms-course-toggle"${returnAttr}>
             <img class="ms-course-thumb" src="${escapeHtml(thumb)}" alt="">
             <span class="ms-course-info">
-              <span class="ms-course-info-code">${kindLabel}${isPack ? ' &middot; ' + escapeHtml(course.code || '') : ''}</span>
+              <span class="ms-course-info-code">${eyebrow}</span>
               <span class="ms-course-info-title">${escapeHtml(course.title || '')}</span>
               <span class="ms-course-info-progress">${pct}% &middot; ${done}/${total}</span>
             </span>
@@ -218,7 +242,16 @@
     const toggle = root.querySelector('#ms-course-toggle');
     const group = root.querySelector('[data-role="course-group"]');
     if (toggle && group) {
-      toggle.addEventListener('click', () => {
+      toggle.addEventListener('click', (ev) => {
+        /* If this is a "return to course" card (user is on a non-course page),
+           clicking the body of the head jumps back to the course dashboard.
+           Only the chevron toggles the worksheet list. */
+        const returnHref = toggle.dataset.returnHref;
+        const chev = ev.target.closest('.course-nav-arrow');
+        if (returnHref && !chev) {
+          location.href = returnHref;
+          return;
+        }
         const isOpen = group.classList.toggle('expanded');
         const set = getExpanded();
         if (isOpen) set.add(courseId); else set.delete(courseId);
@@ -250,6 +283,10 @@
     if (!root) return;
     if (course) setLastCourse(course.id);
 
+    /* Is the user actively viewing this specific course right now?
+       (course.html / dashboard.html / certificate.html) */
+    const isCourseOpen = currentPage === 'course' || currentPage === 'dashboard';
+
     let pct = 0;
     if (course) {
       const screens = course.screens || [];
@@ -258,28 +295,52 @@
       pct = screens.length ? Math.round((done / screens.length) * 100) : 0;
     }
 
-    const expanded = course ? getExpanded().has(course.id) || true : false;
+    /* Default expand state:
+       - course open → always expanded (this is the active context)
+       - elsewhere   → respect the user's last toggle (defaults to collapsed
+                       so the "return to" dropdown stays compact) */
+    let expanded = false;
+    if (course) {
+      const stored = getExpanded();
+      if (isCourseOpen) expanded = true;
+      else expanded = stored.has(course.id);
+    }
+
+    /* Only render the course card when it's relevant:
+       - course-aware page → always show (this IS the course context)
+       - other pages → only show if the user actually has progress on it
+                       (otherwise the sidebar would clutter with a course
+                       the learner never started) */
+    const showCourseCard = course && (isCourseOpen || isCourseInProgress(course.id));
 
     const html = `
-      ${buildHeader(course)}
-      ${course ? buildProgressBlock(pct) : ''}
+      ${buildHeader(showCourseCard ? course : null)}
+      ${showCourseCard ? buildProgressBlock(pct) : ''}
       <nav class="ms-nav">
         ${buildTopNav(currentPage)}
-        ${course ? buildCourseCard(course, expanded, currentScreenId) : ''}
-        ${buildFooterTools(course)}
+        ${showCourseCard ? buildCourseCard(course, expanded, currentScreenId, isCourseOpen) : ''}
+        ${buildFooterTools(showCourseCard ? course : null)}
       </nav>
-      ${course ? buildResetBar() : ''}
+      ${showCourseCard ? buildResetBar() : ''}
     `;
     root.innerHTML = html;
     root.classList.add('ms-sidebar');
 
-    wireExpanderAndReset(root, course ? course.id : null);
+    wireExpanderAndReset(root, showCourseCard ? course.id : null);
   }
 
   async function renderCatalog(root) {
     if (!root) return;
+    /* Pass the last-visited course in so the renderer can decide whether to
+       show its "return to" dropdown. render() will gate the card on
+       isCourseInProgress() internally — so if the learner has only browsed
+       the course without ticking anything complete, nothing course-related
+       shows in the sidebar. */
     const lastId = getLastCourse();
-    if (!lastId) { render(root, null, 'catalog'); return; }
+    if (!lastId || !isCourseInProgress(lastId)) {
+      render(root, null, 'catalog');
+      return;
+    }
     try {
       const data = await fetch('data/courses.json').then((r) => r.json());
       let course = (data.courses || []).find((c) => c.id === lastId);

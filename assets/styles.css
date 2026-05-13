@@ -744,6 +744,37 @@ a:hover { text-decoration: underline; }
 .ms-course-group-pack .ms-course-info-code {
   color: #b45309 !important;
 }
+
+/* "Return to course" mode: the sidebar card on non-course pages.
+   It's a quick shortcut back into the course the learner started. */
+.ms-course-group-return {
+  background: linear-gradient(180deg, var(--primary-50), transparent);
+  border: 1px solid var(--primary-100);
+  border-radius: var(--r-md);
+  margin: 0.45rem 0.65rem;
+}
+.ms-course-group-return .ms-course-head {
+  padding: 0.65rem 0.85rem;
+}
+.ms-course-group-return .ms-course-head:hover {
+  background: var(--primary-50);
+}
+.ms-course-group-return .ms-course-info-code {
+  color: var(--primary) !important;
+  letter-spacing: 1px;
+}
+.ms-course-group-return .course-nav-arrow {
+  color: var(--primary);
+  /* Larger hit area so users can clearly hit just the chevron to
+     expand vs. clicking the body of the card which jumps back to
+     the course dashboard. */
+  padding: 0.25rem;
+  margin: -0.25rem;
+  border-radius: 50%;
+}
+.ms-course-group-return .course-nav-arrow:hover {
+  background: rgba(124, 58, 237, 0.12);
+}
 .course-card .body { padding: 1.1rem 1.25rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
 .course-card .code {
   font-size: 0.7rem;
