@@ -30,16 +30,18 @@
   'use strict';
 
   const NAV_LINKS = [
-    { href: 'index.html',   label: 'Catalog',   match: ['index.html', ''] },
+    { href: 'index.html',   label: 'Catalog',    match: ['index.html', ''] },
     { href: 'account.html', label: 'My Account', match: ['account.html', 'stats.html'] },
-    { href: 'files.html',   label: 'Files',     match: ['files.html', 'preview.html'] },
-    { href: 'admin.html',   label: 'Admin',     match: ['admin.html'] }
+    { href: 'files.html',   label: 'Files',      match: ['files.html', 'preview.html'] },
+    { href: 'support.html', label: 'Support',    match: ['support.html'] },
+    { href: 'admin.html',   label: 'Admin',      match: ['admin.html'] }
   ];
 
   const FOOTER_LINKS = [
     { href: 'index.html',   label: 'Catalog' },
     { href: 'account.html', label: 'My Account' },
     { href: 'files.html',   label: 'Files' },
+    { href: 'support.html', label: 'Support' },
     { href: 'admin.html',   label: 'Admin' },
     { href: 'https://www.matrixtsl.com', label: 'matrixtsl.com', external: true },
     { href: 'https://www.flowcode.co.uk', label: 'flowcode.co.uk', external: true }
