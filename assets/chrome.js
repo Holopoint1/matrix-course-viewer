@@ -190,6 +190,16 @@
             _course = course;
             const mode = file === 'dashboard.html' ? 'dashboard' : 'course';
             window.MatrixSidebar.render(sidebar, course, mode, _currentScreenId);
+            /* Visiting any course-aware page counts as opening that course —
+               needed for 'Explorer' (open >1) and 'Multi-Discipline'. We wait
+               until Gamify is ready in case the page hasn't initialised it. */
+            const trackVisit = () => {
+              if (window.Gamify && typeof window.Gamify.trackCourseVisit === 'function') {
+                window.Gamify.trackCourseVisit(course.id);
+              }
+            };
+            if (window.Gamify) trackVisit();
+            else window.addEventListener('load', trackVisit);
             return;
           }
         } catch (_) { /* fall through to catalog mode */ }

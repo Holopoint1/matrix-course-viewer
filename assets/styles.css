@@ -2608,6 +2608,62 @@ a:hover { text-decoration: underline; }
   margin: 0 0 0.4rem;
   font-size: 0.95rem;
 }
+
+/* Click-to-reveal Hints section (replaces the always-visible h2.hints).
+   Closed state hides the answers behind a yellow chip; open state reveals
+   the same callout-styled paragraphs. */
+.stage-doc-inner details.hints-details {
+  margin: 1.3em 0 1em;
+}
+.stage-doc-inner details.hints-details > .hints-summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1rem 0.55rem 0.7rem;
+  background: #fffbeb;
+  color: #a16207;
+  border: 1px solid #fde68a;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 150ms ease, border-color 150ms ease, transform 80ms ease;
+  user-select: none;
+}
+.stage-doc-inner details.hints-details > .hints-summary::-webkit-details-marker { display: none; }
+.stage-doc-inner details.hints-details > .hints-summary::marker { content: ''; }
+.stage-doc-inner details.hints-details > .hints-summary:hover {
+  background: #fef3c7;
+  border-color: #fcd34d;
+}
+.stage-doc-inner details.hints-details > .hints-summary:active { transform: translateY(1px); }
+.stage-doc-inner details.hints-details > .hints-summary .hints-summary-ico {
+  width: 22px;
+  height: 22px;
+  background: #fcd34d;
+  color: #78350f;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+.stage-doc-inner details.hints-details[open] > .hints-summary {
+  background: #fef3c7;
+  border-color: #fcd34d;
+  margin-bottom: 0.6rem;
+}
+.stage-doc-inner details.hints-details > p,
+.stage-doc-inner details.hints-details > ul,
+.stage-doc-inner details.hints-details > ol {
+  background: linear-gradient(180deg, #fffbeb, #fff);
+  border-left: 3px solid #f59e0b;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0 6px 6px 0;
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
 .stage-doc-inner h3 { font-size: 1.05rem; color: var(--text); margin: 1.3em 0 0.3em; }
 .stage-doc-inner p { margin: 0 0 0.85em; }
 .stage-doc-inner ul, .stage-doc-inner ol { padding-left: 1.4em; margin: 0 0 0.85em; }

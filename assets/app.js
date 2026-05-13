@@ -587,6 +587,28 @@
       }
     });
 
+    /* 4b. Collapse the Hints section into a click-to-reveal <details>.
+       The .doc-section.hints h2 becomes the <summary>; every following
+       sibling up to the next h1/h2 (or end of section) becomes the body.
+       app.js attaches a one-shot listener after this HTML is mounted so
+       the first reveal unlocks the Hint Seeker achievement. */
+    Array.from(root.querySelectorAll('h2.hints')).forEach((h) => {
+      const det = parsed.createElement('details');
+      det.className = 'hints-details';
+      const sum = parsed.createElement('summary');
+      sum.className = 'hints-summary';
+      sum.innerHTML = '<span class="hints-summary-ico">💡</span><span>Hints (click to reveal)</span>';
+      det.appendChild(sum);
+      /* Move siblings into the details until the next h1/h2 boundary. */
+      let n = h.nextElementSibling;
+      while (n && !/^H[12]$/.test(n.tagName)) {
+        const next = n.nextElementSibling;
+        det.appendChild(n);
+        n = next;
+      }
+      h.replaceWith(det);
+    });
+
     /* 5. Group consecutive bullet-like paragraphs after a hardware/topics heading into a list */
     Array.from(root.querySelectorAll('h2.hardware, h1.doc-h1')).forEach((h) => {
       const collected = [];
@@ -656,6 +678,15 @@
         docCache.set(screen.src, html);
       }
       inner.innerHTML = html;
+      /* Wire Hint Seeker — first reveal of any hints section in this
+         worksheet unlocks the achievement. */
+      inner.querySelectorAll('details.hints-details').forEach((d) => {
+        d.addEventListener('toggle', function onToggle() {
+          if (d.open && window.Gamify && typeof window.Gamify.markHintRevealed === 'function') {
+            window.Gamify.markHintRevealed();
+          }
+        });
+      });
     } catch (err) {
       inner.innerHTML = `<p style="color:var(--warn);">Could not render document: ${escapeHtml(err.message)}</p>`;
     }

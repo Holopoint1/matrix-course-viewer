@@ -13,6 +13,9 @@ window.Gamify = (function () {
   const UNLOCKED_KEY = 'matrix-lms:unlocked';
   const VISITED_KEY = 'matrix-lms:visited-courses';
   const STREAK_KEY = 'matrix-lms:streak';
+  const HINTS_KEY = 'matrix-lms:hints-revealed';
+  const RECENT_TICKS_KEY = 'matrix-lms:recent-ticks';
+  const RAPID_WINDOW_MS = 60 * 1000;
   const COMPLIMENTS = [
     'Nice!', 'Smashed it!', 'Keep going!', 'Boom!', 'Locked in!',
     'On fire!', 'Brilliant!', 'Onto the next!', '+1 XP', 'Crushing it!'
@@ -33,18 +36,51 @@ window.Gamify = (function () {
     }
     bumpStreak();
     ensureToastRoot();
+    /* Catch up on any achievements whose state qualifies but was set before
+       the defs finished loading (e.g. trackCourseVisit racing init). */
+    const newly = evaluateAndPersist();
+    newly.forEach((a, i) => setTimeout(() => unlockAchievement(a), 600 + i * 1200));
   }
 
   function trackCourseVisit(courseId) {
     const v = JSON.parse(localStorage.getItem(VISITED_KEY) || '[]');
+    let changed = false;
     if (!v.includes(courseId)) {
       v.push(courseId);
       localStorage.setItem(VISITED_KEY, JSON.stringify(v));
+      changed = true;
     }
+    /* Re-evaluate after a visit so 'Explorer' (open more than one course) and
+       similar visit-driven achievements fire without needing a tick. */
+    if (changed && achievementDefs) {
+      const newly = evaluateAndPersist();
+      newly.forEach((a, i) => setTimeout(() => unlockAchievement(a), 600 + i * 1200));
+    }
+  }
+
+  function pushRecentTick() {
+    const now = Date.now();
+    let arr;
+    try { arr = JSON.parse(localStorage.getItem(RECENT_TICKS_KEY) || '[]'); }
+    catch (_) { arr = []; }
+    arr = arr.filter((t) => now - t <= RAPID_WINDOW_MS);
+    arr.push(now);
+    localStorage.setItem(RECENT_TICKS_KEY, JSON.stringify(arr));
+    return arr.length;
+  }
+
+  function markHintRevealed() {
+    const already = localStorage.getItem(HINTS_KEY) === '1';
+    if (already) return;
+    localStorage.setItem(HINTS_KEY, '1');
+    if (!achievementDefs) return;
+    const newly = evaluateAndPersist();
+    newly.forEach((a, i) => setTimeout(() => unlockAchievement(a), 600 + i * 1200));
   }
 
   function onComplete(courseId, screen) {
     if (!achievementDefs) return;
+    pushRecentTick();
     showCompletionToast(screen);
     pulseAnyActive();
     const newly = evaluateAndPersist();
@@ -108,6 +144,16 @@ window.Gamify = (function () {
     const anyCoursePct = Math.max(0, ...Object.values(courseStats).map((s) => s.pct));
     const totalUniqueDocs = sumUniqueDocsByTier();
 
+    /* Rolling 60-second tick window for the 'On a Roll' achievement. */
+    let rapidStreak = 0;
+    try {
+      const now = Date.now();
+      const recent = JSON.parse(localStorage.getItem(RECENT_TICKS_KEY) || '[]');
+      rapidStreak = recent.filter((t) => now - t <= RAPID_WINDOW_MS).length;
+    } catch (_) { /* leave at 0 */ }
+
+    const hintsRevealed = localStorage.getItem(HINTS_KEY) === '1' ? 1 : 0;
+
     return {
       totalCompleted,
       documentsCompleted,
@@ -123,6 +169,8 @@ window.Gamify = (function () {
         gold:   tierTicks.gold   >= totalUniqueDocs.gold   && totalUniqueDocs.gold   > 0
       },
       tierTrifecta: tierTicks.bronze > 0 && tierTicks.silver > 0 && tierTicks.gold > 0,
+      rapidStreak,
+      hintsRevealed,
       courseStats
     };
   }
@@ -210,8 +258,8 @@ window.Gamify = (function () {
         case 'coursesWithDocTicks':  return s.coursesWithDocTicks >= v;
         case 'coursesDone':          return s.coursesDone >= v;
         case 'anyCourse':            return s.anyCoursePct >= v;
-        case 'hintsRevealed':        return false; /* hint feature not yet implemented */
-        case 'rapidStreak':          return false; /* TODO */
+        case 'hintsRevealed':        return s.hintsRevealed >= v;
+        case 'rapidStreak':          return s.rapidStreak >= v;
         default: return false;
       }
     }
@@ -383,6 +431,7 @@ window.Gamify = (function () {
     onComplete,
     onUncomplete,
     trackCourseVisit,
+    markHintRevealed,
     getAchievements,
     isUnlocked,
     getStats,
