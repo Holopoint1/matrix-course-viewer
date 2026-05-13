@@ -10,13 +10,7 @@
   }
 
   const els = {
-    courseCode: document.getElementById('course-code'),
-    courseTitle: document.getElementById('course-title'),
-    screenList: document.getElementById('screen-list'),
-    progressBar: document.getElementById('progress-bar'),
-    progressCompleted: document.getElementById('progress-completed'),
-    progressTotal: document.getElementById('progress-total'),
-    progressPercent: document.getElementById('progress-percent'),
+    sidebar: document.getElementById('sidebar'),
     certificateCta: document.getElementById('certificate-cta'),
     certificateLink: document.getElementById('certificate-link'),
     screenTitle: document.getElementById('screen-title'),
@@ -102,9 +96,6 @@
     }
 
     document.title = course.title + ' | Matrix Course Viewer';
-    els.courseCode.textContent = course.code;
-    els.courseTitle.textContent = course.title;
-    els.progressTotal.textContent = course.screens.length;
 
     if (course.certificate && course.certificate.enabled) {
       els.certificateLink.href = 'certificate.html?id=' + encodeURIComponent(course.id);
@@ -278,52 +269,18 @@
   }
 
   function renderSidebar() {
-    els.screenList.innerHTML = '';
-    let lastSection = null;
-    let sectionPos = 0;
-    course.screens.forEach((screen, idx) => {
-      const section = window.Gamify ? window.Gamify.inferSection(screen) : 'all';
-      if (section !== lastSection) {
-        lastSection = section;
-        sectionPos = 0;
-        const header = document.createElement('li');
-        header.className = 'section-header section-' + section;
-        header.innerHTML = `<span class="section-dot"></span><span class="section-label">${sectionTitle(section)}</span>`;
-        els.screenList.appendChild(header);
-      }
-      sectionPos += 1;
-      const li = document.createElement('li');
-      li.className = 'screen-item';
-      li.dataset.index = String(idx);
-      if (screen.missing) li.classList.add('missing');
-      if (isComplete(screen.id)) li.classList.add('completed');
-      li.innerHTML = `
-        <button type="button" class="screen-checkbox" aria-label="Toggle complete"></button>
-        <span class="screen-title">
-          <span class="screen-num">${sectionPos}</span>
-          <span class="screen-title-text">${escapeHtml(screen.title)}</span>
-        </span>
-        <span class="screen-type-dot ${screen.type}" title="${escapeHtml(screen.type)}"></span>
-      `;
-      li.addEventListener('click', () => showScreen(idx));
-      li.querySelector('.screen-checkbox').addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        toggleComplete(screen.id);
-      });
-      els.screenList.appendChild(li);
-    });
-  }
-
-  function sectionTitle(section) {
-    return ({
-      intro: 'Welcome',
-      bronze: 'Bronze',
-      silver: 'Silver',
-      gold: 'Gold',
-      assessment: 'Assessment',
-      homework: 'Homework',
-      project: 'Project'
-    })[section] || section;
+    /* Sidebar HTML is rendered by sidebar.js (MatrixSidebar). It writes the
+       full DOM into els.sidebar and wires its own internal handlers (expander,
+       reset button). Clicks on worksheet rows are anchors → standard nav.
+       Active worksheet + done states are updated via refreshProgress(). */
+    if (!els.sidebar || !window.MatrixSidebar) return;
+    const currentScreen = course.screens[currentIndex];
+    window.MatrixSidebar.render(
+      els.sidebar,
+      course,
+      'course',
+      currentScreen ? currentScreen.id : null
+    );
   }
 
   function showScreen(idx) {
@@ -331,11 +288,12 @@
     persistLastIndex(idx);
     const screen = course.screens[idx];
 
-    els.screenList.querySelectorAll('.screen-item.active').forEach((node) => node.classList.remove('active'));
-    const active = els.screenList.querySelector(`.screen-item[data-index="${idx}"]`);
-    if (active) {
-      active.classList.add('active');
-      active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    if (window.MatrixSidebar && els.sidebar) {
+      window.MatrixSidebar.refreshProgress(els.sidebar, course, screen.id);
+      const activeRow = els.sidebar.querySelector('.ms-ws-item.active');
+      if (activeRow && activeRow.scrollIntoView) {
+        activeRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
     }
 
     els.screenTitle.textContent = screen.title;
@@ -777,8 +735,6 @@
     }
     saveProgress(p);
     const idx = course.screens.findIndex((s) => s.id === screenId);
-    const li = els.screenList.querySelector(`.screen-item[data-index="${idx}"]`);
-    if (li) li.classList.toggle('completed', value);
     renderProgress();
     if (idx === currentIndex) updateCompleteButton();
     if (window.Gamify && value && !wasComplete) {
@@ -808,10 +764,15 @@
     const completed = course.screens.filter((s) => p[s.id]).length;
     const total = course.screens.length;
     const pct = total ? Math.round((completed / total) * 100) : 0;
-    els.progressBar.style.width = pct + '%';
-    els.progressCompleted.textContent = String(completed);
-    els.progressTotal.textContent = String(total);
-    els.progressPercent.textContent = pct + '%';
+
+    if (window.MatrixSidebar && els.sidebar) {
+      const currentScreen = course.screens[currentIndex];
+      window.MatrixSidebar.refreshProgress(
+        els.sidebar,
+        course,
+        currentScreen ? currentScreen.id : null
+      );
+    }
 
     if (els.certificateCta && course.certificate && course.certificate.enabled) {
       const ready = completed === total && total > 0;

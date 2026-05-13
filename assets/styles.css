@@ -2519,3 +2519,393 @@ a:hover { text-decoration: underline; }
   .stage-doc-inner { padding: 1.5rem 1.4rem 2rem; }
   .cert { padding: 1.5rem; }
 }
+
+/* =====================================================================
+   New sidebar design (ms- prefix) — used by sidebar.js
+   Replaces the visual style of .viewer-sidebar contents while keeping
+   the outer .viewer-shell grid layout intact. Old .screen-list / .screen-item
+   styles above are unused once sidebar.js controls all pages.
+   ===================================================================== */
+
+.ms-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* Header */
+.ms-header {
+  padding: 1.25rem 1.1rem 1rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--surface);
+}
+.ms-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+  text-decoration: none;
+}
+.ms-brand:hover { text-decoration: none; }
+.ms-brand-logo {
+  height: 30px;
+  width: auto;
+  display: block;
+}
+.ms-brand-eyebrow {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.ms-course-code {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+.ms-course-title {
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Overall progress */
+.ms-overall {
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.ms-overall-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.ms-overall-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.ms-overall-pct {
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.ms-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--primary-50);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.ms-bar-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  border-radius: 99px;
+  transition: width 350ms ease;
+}
+
+/* Nav scroll area */
+.ms-nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem 0;
+  min-height: 0;
+}
+.ms-section {
+  padding: 0.15rem 0.65rem;
+  margin-bottom: 0.35rem;
+}
+.ms-section-tools {
+  margin-top: 0.45rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.7rem;
+}
+
+/* Top-level nav items (Dashboard, All Courses, Tools) */
+.ms-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.83rem;
+  font-weight: 600;
+  transition: background 120ms ease, color 120ms ease;
+}
+.ms-nav-item:hover {
+  background: var(--primary-50);
+  text-decoration: none;
+}
+.ms-nav-item.active {
+  background: var(--primary-100);
+  color: var(--primary);
+}
+.ms-nav-ico {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #f0f1f5;
+  color: var(--text-muted);
+}
+.ms-nav-ico svg { width: 14px; height: 14px; }
+.ms-nav-ico-primary { background: var(--primary); color: #fff; }
+.ms-nav-ico-mute    { background: #f0f1f5; color: var(--text); }
+.ms-nav-ico-blue    { background: #eff6ff; color: #2563eb; }
+.ms-nav-ico-amber   { background: #fef3c7; color: #b45309; }
+.ms-nav-item.active .ms-nav-ico-primary { background: var(--primary); }
+.ms-nav-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Expandable course card */
+.ms-course-group {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 0.45rem -0.65rem;
+  background: var(--surface);
+}
+.ms-course-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.95rem;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  transition: background 120ms ease;
+}
+.ms-course-head:hover { background: var(--primary-50); }
+.ms-course-group.expanded .ms-course-head {
+  background: linear-gradient(90deg, var(--primary-100), transparent);
+}
+.ms-course-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  background: var(--primary-50);
+}
+.ms-course-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: block;
+}
+.ms-course-info-code {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+.ms-course-info-title {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 3px;
+}
+.ms-course-info-progress {
+  display: block;
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.course-nav-arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s ease;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+.ms-course-group.expanded .course-nav-arrow { transform: rotate(90deg); }
+.ms-course-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ms-course-group.expanded .ms-course-body { max-height: 4000px; }
+
+/* Tier sections */
+.ms-tier { padding: 0.6rem 0.95rem 0.35rem; }
+.ms-tier-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.4rem;
+  color: var(--text-muted);
+}
+.ms-tier-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-subtle);
+}
+.ms-tier-label.tier-bronze { color: var(--bronze); }
+.ms-tier-label.tier-silver { color: var(--silver); }
+.ms-tier-label.tier-gold   { color: var(--gold); }
+.ms-tier-label.tier-bronze .ms-tier-dot { background: var(--bronze); }
+.ms-tier-label.tier-silver .ms-tier-dot { background: var(--silver); }
+.ms-tier-label.tier-gold   .ms-tier-dot { background: var(--gold); }
+
+/* Worksheet rows */
+.ms-ws-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.78rem;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.ms-ws-item:hover {
+  background: var(--primary-50);
+  text-decoration: none;
+}
+.ms-ws-item.active {
+  background: var(--primary-100);
+  color: var(--primary);
+}
+.ms-ws-item.done .ms-ws-num {
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+.ms-ws-item.missing { opacity: 0.6; cursor: not-allowed; }
+.ms-ws-item.missing .ms-ws-title { color: var(--warn); }
+.ms-ws-num {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.ms-ws-item.active .ms-ws-num {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+.ms-ws-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+/* Reset bar at sidebar bottom */
+.ms-reset-bar {
+  padding: 0.7rem 1.1rem 0.9rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.ms-reset-btn {
+  width: 100%;
+  padding: 0.6rem 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-subtle);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
+}
+.ms-reset-btn:hover {
+  border-color: #d97706;
+  color: #c2410c;
+  background: #fff7ed;
+}
+
+/* When .ms-sidebar lives directly inside .viewer-shell on every page, layout
+   matches dashboard/course. On the catalog (index.html) we add a sibling
+   .catalog-shell wrapper that puts the sidebar next to the main content. */
+.catalog-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - var(--header-h));
+}
+.catalog-shell > .ms-sidebar {
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+}
+.catalog-shell > .catalog-main {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .catalog-shell { grid-template-columns: 1fr; }
+  .catalog-shell > .ms-sidebar { display: none; }
+}
+
+/* Footer actions inside the viewer main column (cert CTA + bundle PDF). */
+.viewer-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.85rem 1.4rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.viewer-footer-actions .btn { padding: 0.6rem 1.1rem; }
+.viewer-footer-actions .certificate-cta { padding: 0; background: transparent; border: 0; }
+
+/* Hide old sidebar legacy slots if pages still reference them */
+.viewer-sidebar .sidebar-actions { display: none; }
+

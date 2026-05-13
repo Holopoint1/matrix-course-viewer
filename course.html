@@ -10,26 +10,7 @@
   <header class="site-header" id="site-header"></header>
 
   <div class="viewer-shell" id="viewer-shell">
-    <aside class="viewer-sidebar">
-      <div class="viewer-course-info">
-        <span class="code" id="course-code">&nbsp;</span>
-        <h1 id="course-title">Loading course&hellip;</h1>
-        <div class="progress"><span id="progress-bar"></span></div>
-        <div class="progress-label">
-          <span><strong id="progress-completed">0</strong> of <strong id="progress-total">0</strong> complete</span>
-          <span id="progress-percent">0%</span>
-        </div>
-      </div>
-      <ul class="screen-list" id="screen-list"></ul>
-      <div class="sidebar-actions">
-        <div class="certificate-cta" id="certificate-cta" hidden>
-          <a class="btn btn-primary" id="certificate-link" style="width:100%;text-align:center;">Get your certificate</a>
-        </div>
-        <button type="button" class="btn btn-secondary" id="bundle-btn" style="width:100%;">
-          <span>Download all worksheets PDF</span>
-        </button>
-      </div>
-    </aside>
+    <aside class="viewer-sidebar ms-sidebar" id="sidebar"></aside>
 
     <section class="viewer-main">
       <div class="screen-bar">
@@ -45,6 +26,14 @@
       <div class="screen-stage" id="screen-stage">
         <p class="stage-loading">Loading&hellip;</p>
       </div>
+      <div class="viewer-footer-actions">
+        <div class="certificate-cta" id="certificate-cta" hidden>
+          <a class="btn btn-primary" id="certificate-link">Get your certificate</a>
+        </div>
+        <button type="button" class="btn btn-secondary" id="bundle-btn">
+          <span>Download all worksheets PDF</span>
+        </button>
+      </div>
     </section>
   </div>
 
@@ -53,6 +42,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="assets/gamify.js"></script>
   <script src="assets/cms-overrides.js"></script>
+  <script src="assets/sidebar.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

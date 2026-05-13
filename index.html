@@ -10,57 +10,63 @@
 <body>
   <header class="site-header" id="site-header"></header>
 
-  <section class="catalog-hero">
-    <div class="hero-inner">
-      <span class="eyebrow">Matrix Learning</span>
-      <h1>Matrix Learning Platform</h1>
-      <p>Choose a course to get started. Your progress is saved separately for each course.</p>
-      <div class="hero-stats" id="hero-stats" aria-hidden="true">
-        <div class="stat"><span class="stat-num" data-stat="courses">—</span><span class="stat-label">Courses</span></div>
-        <div class="stat"><span class="stat-num" data-stat="time">—</span><span class="stat-label">Time logged</span></div>
-        <div class="stat"><span class="stat-num" data-stat="streak">—</span><span class="stat-label">Day streak</span></div>
-      </div>
-    </div>
-  </section>
+  <div class="catalog-shell">
+    <aside class="ms-sidebar" id="sidebar"></aside>
+    <div class="catalog-main">
+      <section class="catalog-hero">
+        <div class="hero-inner">
+          <span class="eyebrow">Matrix Learning</span>
+          <h1>Matrix Learning Platform</h1>
+          <p>Choose a course to get started. Your progress is saved separately for each course.</p>
+          <div class="hero-stats" id="hero-stats" aria-hidden="true">
+            <div class="stat"><span class="stat-num" data-stat="courses">—</span><span class="stat-label">Courses</span></div>
+            <div class="stat"><span class="stat-num" data-stat="time">—</span><span class="stat-label">Time logged</span></div>
+            <div class="stat"><span class="stat-num" data-stat="streak">—</span><span class="stat-label">Day streak</span></div>
+          </div>
+        </div>
+      </section>
 
-  <main class="catalog-section">
-    <div class="catalog-heading">
-      <h2>All courses</h2>
-      <p>Three courses sharing the CP4807, CP1972 and CP0507 curriculum packs.</p>
-    </div>
-    <div class="catalog" id="catalog">
-      <p class="stage-loading">Loading courses&hellip;</p>
-    </div>
-  </main>
+      <main class="catalog-section">
+        <div class="catalog-heading">
+          <h2>All courses</h2>
+          <p>Three courses sharing the CP4807, CP1972 and CP0507 curriculum packs.</p>
+        </div>
+        <div class="catalog" id="catalog">
+          <p class="stage-loading">Loading courses&hellip;</p>
+        </div>
+      </main>
 
-  <section class="missing-section" id="missing-section" hidden>
-    <div class="missing-card">
-      <div class="missing-card-head">
-        <h2><span class="missing-card-pill">Awaiting</span> Resources to send</h2>
-        <span class="missing-card-counter" id="missing-counter">— files</span>
-      </div>
-      <p class="missing-card-hint">These files are referenced by the course outline but haven't been added to the media zip yet. Drop them into the indicated folder and they'll appear automatically — no rebuild needed.</p>
-      <ul class="missing-list" id="missing-list"></ul>
-    </div>
-  </section>
+      <section class="missing-section" id="missing-section" hidden>
+        <div class="missing-card">
+          <div class="missing-card-head">
+            <h2><span class="missing-card-pill">Awaiting</span> Resources to send</h2>
+            <span class="missing-card-counter" id="missing-counter">— files</span>
+          </div>
+          <p class="missing-card-hint">These files are referenced by the course outline but haven't been added to the media zip yet. Drop them into the indicated folder and they'll appear automatically — no rebuild needed.</p>
+          <ul class="missing-list" id="missing-list"></ul>
+        </div>
+      </section>
 
-  <section class="achievements-section">
-    <div class="achievements-card">
-      <div class="achievements-header">
-        <h2>Achievements</h2>
-        <span class="achievements-counter" id="achievements-counter">0 / 0 unlocked</span>
-      </div>
-      <div class="achievements-grid" id="achievements-grid">
-        <p class="stage-loading">Loading achievements&hellip;</p>
-      </div>
-    </div>
-  </section>
+      <section class="achievements-section">
+        <div class="achievements-card">
+          <div class="achievements-header">
+            <h2>Achievements</h2>
+            <span class="achievements-counter" id="achievements-counter">0 / 0 unlocked</span>
+          </div>
+          <div class="achievements-grid" id="achievements-grid">
+            <p class="stage-loading">Loading achievements&hellip;</p>
+          </div>
+        </div>
+      </section>
 
-  <footer class="site-footer" id="site-footer"></footer>
+      <footer class="site-footer" id="site-footer"></footer>
+    </div>
+  </div>
 
   <script src="assets/chrome.js"></script>
   <script src="assets/gamify.js"></script>
   <script src="assets/cms-overrides.js"></script>
+  <script src="assets/sidebar.js"></script>
   <script>
     (async function () {
       const root = document.getElementById('catalog');
@@ -72,6 +78,11 @@
         return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
           '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         }[c]));
+      }
+
+      const sidebarEl = document.getElementById('sidebar');
+      if (sidebarEl && window.MatrixSidebar) {
+        window.MatrixSidebar.renderCatalog(sidebarEl);
       }
 
       try {
