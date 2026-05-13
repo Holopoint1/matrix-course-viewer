@@ -3360,8 +3360,23 @@ a:hover { text-decoration: underline; }
   color: #fff;
   border-color: var(--success);
 }
-.ms-ws-item.missing { opacity: 0.6; cursor: not-allowed; }
-.ms-ws-item.missing .ms-ws-title { color: var(--warn); }
+/* Missing screens: visually subdued but still clickable. Clicking
+   takes the learner to the viewer's friendly "Resource missing —
+   please send X" panel, which is more useful than greying out a
+   row and disabling the click entirely. */
+.ms-ws-item.missing { opacity: 0.82; }
+.ms-ws-item.missing .ms-ws-title { color: var(--warn); font-style: italic; }
+.ms-ws-item.missing .ms-ws-title::after {
+  content: " · pending";
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--warn);
+  font-style: normal;
+  opacity: 0.7;
+}
+.ms-ws-item.missing:hover { opacity: 1; background: var(--warn-bg); }
 .ms-ws-num {
   flex: 0 0 auto;
   width: 24px;

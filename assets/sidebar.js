@@ -234,11 +234,15 @@
       const isDone = Boolean(progress[s.id]);
       const isActive = s.id === currentScreenId;
       const isMissing = Boolean(s.missing);
-      const href = isMissing
-        ? 'javascript:void(0)'
-        : ('course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(s.id));
+      /* Missing screens still navigate — they just show the friendly
+         "Resource missing — please send X" panel in the viewer instead
+         of being completely un-clickable. */
+      const href = 'course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(s.id);
+      const titleAttr = isMissing
+        ? 'Resource pending — file not yet uploaded'
+        : escapeHtml(s.type);
       body += `
-        <a class="ms-ws-item${isDone ? ' done' : ''}${isActive ? ' active' : ''}${isMissing ? ' missing' : ''}" href="${href}">
+        <a class="ms-ws-item${isDone ? ' done' : ''}${isActive ? ' active' : ''}${isMissing ? ' missing' : ''}" href="${href}" title="${titleAttr}">
           <span class="ms-ws-num">${n}</span>
           <span class="ms-ws-title">${escapeHtml(s.title)}</span>
           <span class="ms-ws-type-dot ${typeClass(s.type)}" title="${escapeHtml(s.type)}"></span>
@@ -323,13 +327,13 @@
     if (!root) return;
     if (course) setLastCourse(course.id);
 
-    /* "Course open" = the user is INSIDE the course viewer at worksheet
-       level (course.html). Only then do we expand the worksheet list by
-       default. On the dashboard page the rail is a 'Continue' chip with
-       the worksheet list collapsed; clicking the chip body jumps to the
-       course viewer, clicking the chevron expands the list inline. */
-    const isCourseOpen = currentPage === 'course';
-    const isOnDashboard = currentPage === 'dashboard';
+    /* "Course open" = the learner is currently INSIDE the course at any
+       level — either the worksheet viewer (course.html) or its dashboard
+       page (dashboard.html). Both auto-expand the worksheet list so the
+       learner can see every screen and jump anywhere in the course.
+       Off-course pages (catalog / account / files / etc.) collapse to
+       a 'Continue · CO000x' chip instead. */
+    const isCourseOpen = currentPage === 'course' || currentPage === 'dashboard';
 
     let pct = 0;
     if (course) {
@@ -339,26 +343,23 @@
       pct = screens.length ? Math.round((done / screens.length) * 100) : 0;
     }
 
-    /* Default expand state:
-       - course viewer (course.html) → always expanded (active worksheet
-         path lives in the sub-menu)
-       - dashboard / other pages     → start collapsed, respect the user's
-         last manual toggle so the chevron lets them peek without leaving */
-    let expanded = false;
+    /* Default expand state: ALWAYS expanded when the card is shown,
+       unless the user has explicitly collapsed it via the chevron.
+       The chevron toggle is persisted to localStorage so manual choice
+       sticks across navigations. */
+    let expanded = true;
     if (course) {
+      /* If the user has explicitly collapsed this course's card, respect
+         that. Otherwise default-open everywhere the card appears. */
       const stored = getExpanded();
-      if (isCourseOpen) expanded = true;
-      else expanded = stored.has(course.id);
+      if (stored.has('collapsed:' + course.id)) expanded = false;
     }
 
-    /* Render the course card when:
-       - currently viewing a worksheet (course.html)         OR
-       - on the dashboard for that course (always pin a card) OR
-       - on any other page but the course is in-progress     */
-    const showCourseCard = course && (isCourseOpen || isOnDashboard || isCourseInProgress(course.id));
-    /* Compact "Continue" mode = dashboard + non-course pages.
-       Only the worksheet viewer shows the full expanded course details. */
-    const isCompact = !isCourseOpen;
+    /* Show the course card when:
+       - currently viewing a worksheet (course.html)      OR
+       - on the dashboard for that course                 OR
+       - on any other page but the course is in-progress  */
+    const showCourseCard = course && (isCourseOpen || isCourseInProgress(course.id));
 
     const html = `
       ${buildHeader(showCourseCard ? course : null)}
