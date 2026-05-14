@@ -175,6 +175,50 @@ a:hover { text-decoration: underline; }
   .site-header-account { padding: 0.35rem; }
 }
 
+/* Sidebar collapse toggle — sits to the left of the Matrix brand
+   in the top header. Always visible; lets learners hide or show the
+   sidebar without losing their place. The icon flips when collapsed
+   so it's obvious which direction it'll move. */
+.site-header-sidebar-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-right: 0.6rem;
+  padding: 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.site-header-sidebar-toggle:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.32);
+}
+.site-header-sidebar-toggle svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+/* When the shell is collapsed, mirror the icon so the divider line
+   sits on the right edge — implies "the sidebar is hidden, click to
+   bring it back". */
+.app-shell.sidebar-collapsed .site-header-sidebar-toggle svg { transform: scaleX(-1); }
+
+/* Collapsed shell: hide the sidebar, give the main column the
+   reclaimed space. Smooth grid transition keeps the change pleasant. */
+.app-body { transition: grid-template-columns 0.22s ease; }
+.app-shell.sidebar-collapsed .app-body { grid-template-columns: 0 1fr; }
+.app-shell.sidebar-collapsed .app-body > .ms-sidebar {
+  /* visibility:hidden keeps focus management clean (no tab-traps
+     into a hidden sidebar) and lets the grid transition smoothly. */
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;

@@ -142,7 +142,18 @@
       .map((l) => `<a href="${l.href}"${isActive(l.match, file) ? ' class="active"' : ''}>${l.label}</a>`)
       .join('');
 
+    const noSidebar = document.body.hasAttribute('data-no-sidebar');
+    const sidebarToggle = noSidebar ? '' : `
+      <button type="button" class="site-header-sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar" title="Show / hide sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2"/>
+          <line x1="9" y1="4" x2="9" y2="20"/>
+        </svg>
+      </button>
+    `;
+
     root.innerHTML = `
+      ${sidebarToggle}
       <a href="index.html" class="brand">
         <img src="assets/matrix-logo.svg" alt="Matrix TSL" class="brand-logo">
         <span class="brand-divider">|</span>
@@ -154,6 +165,22 @@
         <span class="site-header-account-label">My Account</span>
       </a>
     `;
+
+    /* Apply persisted state + wire the toggle. */
+    const SIDEBAR_KEY = 'matrix-lms:sidebar-collapsed';
+    const shell = document.querySelector('.app-shell');
+    if (shell) {
+      try {
+        if (localStorage.getItem(SIDEBAR_KEY) === '1') shell.classList.add('sidebar-collapsed');
+      } catch (_) {}
+    }
+    const toggle = document.getElementById('sidebar-toggle');
+    if (toggle && shell) {
+      toggle.addEventListener('click', () => {
+        const collapsed = shell.classList.toggle('sidebar-collapsed');
+        try { localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0'); } catch (_) {}
+      });
+    }
   }
 
   function renderFooter() {
