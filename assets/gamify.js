@@ -35,11 +35,9 @@ window.Gamify = (function () {
       coursesData = c.courses;
     }
     bumpStreak();
-    ensureToastRoot();
-    /* Catch up on any achievements whose state qualifies but was set before
-       the defs finished loading (e.g. trackCourseVisit racing init). */
-    const newly = evaluateAndPersist();
-    newly.forEach((a, i) => setTimeout(() => unlockAchievement(a), 600 + i * 1200));
+    /* Silent achievement evaluation — catch up on anything whose state
+       qualifies but was set before the defs finished loading. No popups. */
+    evaluateAndPersist();
   }
 
   function trackCourseVisit(courseId) {
@@ -53,8 +51,7 @@ window.Gamify = (function () {
     /* Re-evaluate after a visit so 'Explorer' (open more than one course) and
        similar visit-driven achievements fire without needing a tick. */
     if (changed && achievementDefs) {
-      const newly = evaluateAndPersist();
-      newly.forEach((a, i) => setTimeout(() => unlockAchievement(a), 600 + i * 1200));
+      evaluateAndPersist(); /* silent — no unlock popup */
     }
   }
 
@@ -74,17 +71,18 @@ window.Gamify = (function () {
     if (already) return;
     localStorage.setItem(HINTS_KEY, '1');
     if (!achievementDefs) return;
-    const newly = evaluateAndPersist();
-    newly.forEach((a, i) => setTimeout(() => unlockAchievement(a), 600 + i * 1200));
+    evaluateAndPersist(); /* silent — no unlock popup */
   }
 
   function onComplete(courseId, screen) {
     if (!achievementDefs) return;
     pushRecentTick();
-    showCompletionToast(screen);
-    pulseAnyActive();
-    const newly = evaluateAndPersist();
-    newly.forEach((a, i) => setTimeout(() => unlockAchievement(a), 600 + i * 1200));
+    /* Per author direction: no completion toast, no checkbox pulse, no
+       achievement unlock popup, no confetti. "The dopamine comes from
+       completing the task." Achievements are still evaluated and
+       recorded silently so they show up on the My Account page; we just
+       don't decorate the completion event itself. */
+    evaluateAndPersist();
   }
 
   function onUncomplete(courseId, screen) {

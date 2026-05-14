@@ -179,18 +179,6 @@
     const pct = total ? Math.round((done / total) * 100) : 0;
     const thumb = thumbForCourse(course);
 
-    /* Classify each screen into a section. Tier inference (bronze/silver/
-       gold) wins for document worksheets that match the CP*-N pattern.
-       Otherwise we use a contextual section name based on title +/ type. */
-    function sectionFor(s) {
-      const tier = (window.Gamify && window.Gamify.inferTier && window.Gamify.inferTier(s));
-      if (tier) return tier;
-      const t = (s.title || '').toLowerCase();
-      if (/homework/i.test(t)) return 'homework';
-      if (/assessment/i.test(t)) return 'assessment';
-      if (/certificate/i.test(t)) return 'certificate';
-      return 'intro';
-    }
     /* Type-dot CSS class — colours match .screen-type-dot in styles.css */
     function typeClass(t) {
       switch (t) {
@@ -204,39 +192,17 @@
         default:           return 'document';
       }
     }
-    /* Walk screens in order, emitting a section header whenever the
-       section changes. This preserves authoring order so users navigate
-       the course linearly. */
-    let body = '';
-    let lastSection = null;
+    /* Flat, in-authoring-order list. No tier / homework / assessment grouping —
+       the course-structure spec doesn't define those buckets and the Bronze /
+       Silver / Gold tiers are specific to one Microcontrollers pack, not a
+       site-wide concept. Simpler is better. */
+    let body = '<div class="ms-tier ms-tier-flat">';
     let n = 0;
-    const sectionLabels = {
-      intro: 'Intro & welcome',
-      bronze: 'Bronze',
-      silver: 'Silver',
-      gold: 'Gold',
-      homework: 'Homework',
-      assessment: 'Assessment',
-      certificate: 'Certificate',
-      other: 'Additional'
-    };
     for (const s of allScreens) {
       n += 1;
-      const sec = sectionFor(s);
-      if (sec !== lastSection) {
-        if (lastSection !== null) body += '</div>';
-        body += `
-          <div class="ms-tier">
-            <div class="ms-tier-label tier-${sec}"><span class="ms-tier-dot"></span>${escapeHtml(sectionLabels[sec] || sec)}</div>
-        `;
-        lastSection = sec;
-      }
       const isDone = Boolean(progress[s.id]);
       const isActive = s.id === currentScreenId;
       const isMissing = Boolean(s.missing);
-      /* Missing screens still navigate — they just show the friendly
-         "Resource missing — please send X" panel in the viewer instead
-         of being completely un-clickable. */
       const href = 'course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(s.id);
       const titleAttr = isMissing
         ? 'Resource pending — file not yet uploaded'
@@ -249,7 +215,7 @@
         </a>
       `;
     }
-    if (lastSection !== null) body += '</div>';
+    body += '</div>';
 
     const kindLabel = course.kind === 'pack' ? 'PACK' : escapeHtml(course.code || '');
     const isPack = course.kind === 'pack';

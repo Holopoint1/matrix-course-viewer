@@ -564,9 +564,16 @@
     }
     const wrap = document.createElement('div');
     wrap.className = 'stage-doc';
-    wrap.innerHTML = '<div class="stage-doc-inner"><p class="stage-loading">Loading&hellip;</p></div>';
+    wrap.innerHTML = `
+      <div class="stage-doc-toolbar">
+        <button type="button" class="btn btn-secondary" data-action="print">🖨 Print</button>
+      </div>
+      <div class="stage-doc-inner"><p class="stage-loading">Loading&hellip;</p></div>`;
     stage.appendChild(wrap);
     const inner = wrap.querySelector('.stage-doc-inner');
+    wrap.querySelector('[data-action="print"]').addEventListener('click', () => {
+      printWorksheet(screen, inner);
+    });
     try {
       let text;
       const cmsOverride = window.MatrixCMS ? window.MatrixCMS.getHtmlOverride(screen.src) : null;
@@ -652,77 +659,9 @@
       }
     });
 
-    /* 4. Promote pseudo-headings */
-    const patterns = [
-      { tag: 'h1', cls: 'doc-h1', re: /^(Homework\s*\d+|Assessment\s*\d+|Project|Assessment marking schemes)$/i },
-      { tag: 'h2', cls: 'doc-section design-brief',  re: /^Design brief:?$/i },
-      { tag: 'h2', cls: 'doc-section hardware',      re: /^Hardware:?$/i },
-      { tag: 'h2', cls: 'doc-section software',      re: /^Software:?$/i },
-      { tag: 'h2', cls: 'doc-section challenges',    re: /^Challenges:?$/i },
-      { tag: 'h2', cls: 'doc-section hints',         re: /^Hints:?$/i },
-      { tag: 'h2', cls: 'doc-section over-to-you',   re: /^Over to you:?$/i },
-      { tag: 'h2', cls: 'doc-section risk',          re: /^Technical risk:?$/i }
-    ];
-
-    Array.from(root.querySelectorAll('p')).forEach((p) => {
-      const text = (p.textContent || '').trim();
-      if (!text) return;
-      for (const pat of patterns) {
-        if (pat.re.test(text)) {
-          const tag = parsed.createElement(pat.tag);
-          tag.className = pat.cls;
-          tag.textContent = text;
-          p.replaceWith(tag);
-          return;
-        }
-      }
-    });
-
-    /* 4b. Collapse the Hints section into a click-to-reveal <details>.
-       The .doc-section.hints h2 becomes the <summary>; every following
-       sibling up to the next h1/h2 (or end of section) becomes the body.
-       app.js attaches a one-shot listener after this HTML is mounted so
-       the first reveal unlocks the Hint Seeker achievement. */
-    Array.from(root.querySelectorAll('h2.hints')).forEach((h) => {
-      const det = parsed.createElement('details');
-      det.className = 'hints-details';
-      const sum = parsed.createElement('summary');
-      sum.className = 'hints-summary';
-      sum.innerHTML = '<span class="hints-summary-ico">💡</span><span>Hints (click to reveal)</span>';
-      det.appendChild(sum);
-      /* Move siblings into the details until the next h1/h2 boundary. */
-      let n = h.nextElementSibling;
-      while (n && !/^H[12]$/.test(n.tagName)) {
-        const next = n.nextElementSibling;
-        det.appendChild(n);
-        n = next;
-      }
-      h.replaceWith(det);
-    });
-
-    /* 5. Group consecutive bullet-like paragraphs after a hardware/topics heading into a list */
-    Array.from(root.querySelectorAll('h2.hardware, h1.doc-h1')).forEach((h) => {
-      const collected = [];
-      let n = h.nextElementSibling;
-      while (n && n.tagName === 'P') {
-        const txt = (n.textContent || '').trim();
-        if (!txt || txt.length > 90) break;
-        if (/^(Design brief|Hardware|Software|Challenges|Hints|Over to you|Technical risk):?$/i.test(txt)) break;
-        collected.push(n);
-        n = n.nextElementSibling;
-      }
-      if (collected.length >= 2) {
-        const ul = parsed.createElement('ul');
-        ul.className = 'doc-list';
-        collected.forEach((p) => {
-          const li = parsed.createElement('li');
-          li.innerHTML = p.innerHTML;
-          ul.appendChild(li);
-          p.remove();
-        });
-        h.after(ul);
-      }
-    });
+    /* Pseudo-heading promotion, hint-collapsing and topic-list grouping
+       removed (per author feedback: "Just present them plain as the
+       documents in Word"). The mammoth output is left as-is from here on. */
 
     return root.innerHTML;
   }
@@ -748,14 +687,14 @@
     wrap.className = 'stage-doc';
     wrap.innerHTML = `
       <div class="stage-doc-toolbar">
-        <a class="btn btn-secondary" href="${escapeAttr(screen.src)}" download>Download as Word</a>
-        <button type="button" class="btn btn-secondary" data-action="download-pdf">Download as PDF</button>
+        <button type="button" class="btn btn-secondary" data-action="print">🖨 Print</button>
+        <a class="btn btn-secondary" href="${escapeAttr(screen.src)}" download>Download Word</a>
       </div>
       <div class="stage-doc-inner"><p class="stage-loading">Rendering document&hellip;</p></div>`;
     stage.appendChild(wrap);
     const inner = wrap.querySelector('.stage-doc-inner');
-    wrap.querySelector('[data-action="download-pdf"]').addEventListener('click', (ev) => {
-      downloadSingleAsPdf(screen, inner, ev.currentTarget);
+    wrap.querySelector('[data-action="print"]').addEventListener('click', () => {
+      printWorksheet(screen, inner);
     });
 
     try {
@@ -910,4 +849,47 @@
     }[c]));
   }
   function escapeAttr(s) { return escapeHtml(s); }
+
+  /* ---------- Worksheet print ----------
+     Opens a new window with just the worksheet content + minimal print
+     CSS, then triggers the browser's native print dialog. That dialog
+     also offers "Save as PDF" on every modern OS, which replaces the
+     unreliable html2pdf path and gives the author the real Word-like
+     view they want. */
+  function printWorksheet(screen, innerEl) {
+    const title = (screen && screen.title) || 'Worksheet';
+    const code = (course && course.code) || '';
+    const body = innerEl && innerEl.innerHTML ? innerEl.innerHTML : '';
+    if (!body.trim()) { alert('Wait for the worksheet to render first, then print.'); return; }
+    const w = window.open('', '_blank', 'noopener,noreferrer,width=900,height=1000');
+    if (!w) { alert('Pop-up blocked. Allow pop-ups for this site to print.'); return; }
+    w.document.open();
+    w.document.write([
+      '<!DOCTYPE html><html><head><meta charset="utf-8">',
+      '<title>', escapeHtml(title), ' — ', escapeHtml(code), '</title>',
+      '<style>',
+        '*,*::before,*::after{box-sizing:border-box}',
+        'body{margin:0;padding:24px 28px;font:11pt/1.55 "Segoe UI",Calibri,Arial,sans-serif;color:#1a1a2e;}',
+        '@media print{body{padding:0}}',
+        'h1{font-size:20pt;margin:0 0 4pt;font-weight:700;color:#1e1b4b}',
+        '.print-meta{font-size:9pt;letter-spacing:1px;text-transform:uppercase;color:#7c3aed;font-weight:700;margin-bottom:14pt}',
+        'h2,h3{margin:1.2em 0 .4em;line-height:1.25}',
+        'p{margin:0 0 .8em}',
+        'ul,ol{margin:0 0 .8em;padding-left:1.5em}',
+        'li{margin-bottom:.25em}',
+        'img{max-width:100%;height:auto}',
+        'table{border-collapse:collapse;margin:.8em 0;width:100%}',
+        'th,td{border:1px solid #c8d5f0;padding:.4em .6em;vertical-align:top}',
+        'a{color:#1d4ed8}',
+        '@page{margin:18mm 16mm}',
+      '</style>',
+      '</head><body>',
+      '<div class="print-meta">', escapeHtml(code), ' &middot; ', escapeHtml(filename(screen.src) || ''), '</div>',
+      '<h1>', escapeHtml(title), '</h1>',
+      body,
+      '<script>window.onload=function(){setTimeout(function(){window.print();},120);};</script>',
+      '</body></html>'
+    ].join(''));
+    w.document.close();
+  }
 })();

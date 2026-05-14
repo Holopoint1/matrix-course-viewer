@@ -22,18 +22,10 @@
     <div class="screen-stage" id="screen-stage">
       <p class="stage-loading">Loading&hellip;</p>
     </div>
-    <div class="viewer-footer-actions">
-      <div class="viewer-footer-row">
-        <div class="certificate-cta" id="certificate-cta" hidden>
-          <a class="btn btn-primary" id="certificate-link">Get your certificate</a>
-        </div>
-        <button type="button" class="btn btn-primary viewer-next-btn" id="next-btn-bottom">
-          Next worksheet &rarr;
-        </button>
-      </div>
-      <button type="button" class="btn btn-secondary viewer-bundle-btn" id="bundle-btn">
-        <span>Download all worksheets PDF</span>
-      </button>
+    <!-- Cert CTA lives here so app.js can still toggle it visible at 100% —
+         hidden by default, no duplicate nav. -->
+    <div class="certificate-cta" id="certificate-cta" hidden>
+      <a class="btn btn-primary" id="certificate-link">Get your certificate</a>
     </div>
   </section>
 

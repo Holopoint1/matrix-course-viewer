@@ -291,28 +291,17 @@
       const treeLines = [];
       treeLines.push(escapeHtml(course.code) + ' — ' + escapeHtml(course.title));
       treeLines.push('|');
-      const tierName = { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', other: 'Additional' };
-      const grouped = { bronze: [], silver: [], gold: [], other: [] };
-      let wsCount = 0;
-      for (const s of course.screens) {
-        if (s.type !== 'document') continue;
-        wsCount += 1;
-        const tier = (window.Gamify && window.Gamify.inferTier && window.Gamify.inferTier(s)) || 'other';
-        grouped[tier].push({ num: wsCount, screen: s });
-      }
-      for (const tier of ['bronze', 'silver', 'gold', 'other']) {
-        if (!grouped[tier].length) continue;
-        treeLines.push('+-- ' + tierName[tier] + ' (Organisation Item)');
-        treeLines.push('|');
-        const widest = Math.max.apply(null, grouped[tier].map((x) => x.screen.title.length));
-        for (const item of grouped[tier]) {
-          const label = 'WS' + item.num + ': ' + item.screen.title;
-          const dots = '.'.repeat(Math.max(2, widest + 6 - label.length));
-          const note = item.screen.missing ? '[missing]' : 'SCO  [trackable]';
-          treeLines.push('|   +-- ' + label + ' ' + dots + ' ' + note);
-        }
-        treeLines.push('|');
-      }
+      const worksheets = course.screens.filter((s) => s.type === 'document');
+      const widest = worksheets.length
+        ? Math.max.apply(null, worksheets.map((s) => s.title.length))
+        : 0;
+      worksheets.forEach((s, i) => {
+        const label = 'WS' + (i + 1) + ': ' + s.title;
+        const dots = '.'.repeat(Math.max(2, widest + 6 - label.length));
+        const note = s.missing ? '[missing]' : 'SCO  [trackable]';
+        treeLines.push('+-- ' + label + ' ' + dots + ' ' + note);
+      });
+      treeLines.push('|');
       treeLines.push('+-- Shared Assets ........................ Asset [not tracked]');
       treeLines.push('    (logos, cover images, media files)');
       treeEl.textContent = treeLines.join('\n');

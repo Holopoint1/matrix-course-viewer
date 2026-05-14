@@ -14,7 +14,6 @@
         <p class="dash-hero-eyebrow">Course hero</p>
         <h1 id="dash-title">Loading&hellip;</h1>
         <p id="dash-desc"></p>
-        <div class="dash-tier-counts" id="dash-tier-counts"></div>
         <div class="dash-hero-actions">
           <a class="btn btn-primary" id="dash-start-btn" href="#">Start course →</a>
           <a class="btn btn-secondary" href="index.html">← All courses</a>
@@ -145,55 +144,32 @@
       document.getElementById('dash-title').textContent = course.title;
       document.getElementById('dash-desc').textContent = course.shortDescription || '';
 
-      const tierCounts = { bronze: 0, silver: 0, gold: 0 };
       const worksheets = course.screens.filter((s) => s.type === 'document');
-      for (const w of worksheets) {
-        const t = window.Gamify.inferTier(w);
-        if (t && tierCounts[t] !== undefined) tierCounts[t] += 1;
-      }
-      document.getElementById('dash-tier-counts').innerHTML = `
-        <div class="dash-tier-count tier-bronze"><span class="num">${tierCounts.bronze}</span><span class="label">Bronze worksheets</span></div>
-        <div class="dash-tier-count tier-silver"><span class="num">${tierCounts.silver}</span><span class="label">Silver worksheets</span></div>
-        <div class="dash-tier-count tier-gold"><span class="num">${tierCounts.gold}</span><span class="label">Gold worksheets</span></div>
-      `;
-
       const firstScreen = course.screens.find((s) => !s.missing && s.type !== 'image') || course.screens[0];
       const startUrl = 'course.html?id=' + course.id + (firstScreen ? '&screen=' + firstScreen.id : '');
       document.getElementById('dash-start-btn').href = startUrl;
       document.getElementById('dash-start-btn-2').href = startUrl;
 
-      /* Worksheet grid */
+      /* Worksheet grid — flat, in authoring order. No tier (Bronze/Silver/Gold)
+         grouping: tiers are specific to one Microcontrollers pack and aren't
+         part of the course-structure spec. Keep it simple. */
       const wsRoot = document.getElementById('dash-worksheets');
       const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + course.id) || '{}');
-      let displayNum = 0;
-      let currentTier = null;
-      const grouped = { bronze: [], silver: [], gold: [], other: [] };
-      for (const screen of worksheets) {
-        const tier = window.Gamify.inferTier(screen) || 'other';
-        grouped[tier].push(screen);
-      }
-      for (const tier of ['bronze', 'silver', 'gold', 'other']) {
-        const items = grouped[tier];
-        if (items.length === 0) continue;
-        const tierLabel = tier === 'other' ? 'Additional' : tier;
-        for (let i = 0; i < items.length; i++) {
-          const s = items[i];
-          displayNum += 1;
-          const done = Boolean(progress[s.id]);
-          const card = document.createElement('a');
-          card.className = 'dash-ws-card tier-' + tier + (done ? ' done' : '') + (s.missing ? ' missing' : '');
-          card.href = s.missing ? 'javascript:void(0)' : ('course.html?id=' + course.id + '&screen=' + s.id);
-          card.innerHTML = `
-            <div class="dash-ws-tier">${tierLabel.toUpperCase()} · WORKSHEET ${displayNum}</div>
-            <div class="dash-ws-title">${escapeHtml(s.title)}</div>
-            <div class="dash-ws-progress">
-              <div class="dash-ws-bar"><span style="width:${done ? 100 : 0}%;"></span></div>
-              <div class="dash-ws-status">${s.missing ? 'Resource missing' : (done ? '100% complete' : '0% complete')}</div>
-            </div>
-          `;
-          wsRoot.appendChild(card);
-        }
-      }
+      worksheets.forEach((s, i) => {
+        const done = Boolean(progress[s.id]);
+        const card = document.createElement('a');
+        card.className = 'dash-ws-card' + (done ? ' done' : '') + (s.missing ? ' missing' : '');
+        card.href = s.missing ? 'javascript:void(0)' : ('course.html?id=' + course.id + '&screen=' + s.id);
+        card.innerHTML = `
+          <div class="dash-ws-tier">WORKSHEET ${i + 1}</div>
+          <div class="dash-ws-title">${escapeHtml(s.title)}</div>
+          <div class="dash-ws-progress">
+            <div class="dash-ws-bar"><span style="width:${done ? 100 : 0}%;"></span></div>
+            <div class="dash-ws-status">${s.missing ? 'Resource missing' : (done ? '100% complete' : '0% complete')}</div>
+          </div>
+        `;
+        wsRoot.appendChild(card);
+      });
     })();
   </script>
 </body>
