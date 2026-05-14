@@ -219,6 +219,118 @@ a:hover { text-decoration: underline; }
   pointer-events: none;
 }
 
+/* ---------- Hamburger / mobile nav ----------
+   Appears <=720px wide. Hides the inline nav links and shows a
+   bottom-anchored drop-down panel with every nav item stacked,
+   plus the My Account button (which is otherwise hidden to save
+   header real-estate). */
+.site-header-hamburger {
+  display: none;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 0.6rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+}
+.site-header-hamburger span {
+  width: 18px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+body.nav-open .site-header-hamburger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+body.nav-open .site-header-hamburger span:nth-child(2) { opacity: 0; }
+body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 720px) {
+  .site-header { padding: 0 0.7rem; gap: 0.4rem; }
+  .site-header .brand-sub { display: none; }
+  .site-header .brand-divider { display: none; }
+  .site-header .brand-logo { height: 26px; }
+
+  /* Hide the inline nav + account by default; the hamburger reveals
+     them as a stacked dropdown. */
+  .site-header nav {
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, var(--primary-dark), var(--primary-darker));
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0.4rem 0;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    box-shadow: var(--shadow-md);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+    z-index: 11;
+  }
+  body.nav-open .site-header nav { max-height: 70vh; overflow-y: auto; }
+  .site-header nav a {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom-color: rgba(255,255,255,0.06);
+    font-size: 1rem;
+  }
+  .site-header nav a.active {
+    background: rgba(124,58,237,0.25);
+    border-bottom-color: var(--accent);
+  }
+
+  .site-header-account { display: none; }
+  .site-header-hamburger { display: inline-flex; margin-left: auto; }
+  .site-header-sidebar-toggle { width: 32px; height: 32px; margin-right: 0.4rem; }
+  .site-header-sidebar-toggle svg { width: 16px; height: 16px; }
+
+  /* Sidebar becomes a drawer: hidden by default, slides in from
+     the left when .app-shell has 'sidebar-mobile-open'. The grid
+     collapses so the main column gets 100% width. */
+  .app-body { grid-template-columns: 1fr !important; }
+  .app-body > .ms-sidebar {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    bottom: 0;
+    width: min(86vw, 320px);
+    z-index: 20;
+    transform: translateX(-110%);
+    transition: transform 0.25s ease;
+    box-shadow: 8px 0 28px rgba(0,0,0,0.25);
+    height: auto;
+  }
+  .app-shell.sidebar-collapsed .app-body > .ms-sidebar { transform: translateX(0); visibility: visible; pointer-events: auto; }
+  /* Inverted logic on mobile: 'sidebar-collapsed' (the default state)
+     means hidden; the toggle button opens the drawer. */
+}
+
+/* Tighten card paddings + grid breakpoints across content sections
+   so narrow viewports don't waste pixels on huge gutters. */
+@media (max-width: 720px) {
+  .stats-hero, .catalog-hero { padding: 2.2rem 1.1rem 3rem; }
+  .stats-hero h1, .catalog-hero h1 { font-size: 1.7rem; }
+  .stats-section, .catalog-section, .mapping-section, .support-section, .compiler-section, .files-section {
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    margin-top: -1.5rem;
+  }
+  .mapping-grid, .support-grid { grid-template-columns: 1fr; gap: 0.55rem; }
+  .mapping-level, .support-card-group { padding: 1rem 0.95rem 1.1rem; }
+  .stat-card { padding: 0.85rem 0.95rem 1rem; }
+  .stat-card-num { font-size: 1.55rem; }
+  .stat-card-lg .stat-card-num { font-size: 1.85rem; }
+  .catalog { grid-template-columns: 1fr; }
+}
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;

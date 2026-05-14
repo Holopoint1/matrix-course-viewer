@@ -152,6 +152,14 @@
       </button>
     `;
 
+    /* Mobile hamburger — appears <=720px via CSS; toggles the nav into
+       a full-screen drop-down panel so every nav item is reachable. */
+    const hamburger = `
+      <button type="button" class="site-header-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    `;
+
     root.innerHTML = `
       ${sidebarToggle}
       <a href="index.html" class="brand">
@@ -159,14 +167,15 @@
         <span class="brand-divider">|</span>
         <span class="brand-sub">Course Viewer</span>
       </a>
-      <nav>${navHtml}${extrasHtml}</nav>
+      <nav id="site-header-nav">${navHtml}${extrasHtml}</nav>
       <a class="site-header-account" href="account.html" aria-label="My Account" title="My Account">
         <span class="site-header-account-ico" aria-hidden="true">👤</span>
         <span class="site-header-account-label">My Account</span>
       </a>
+      ${hamburger}
     `;
 
-    /* Apply persisted state + wire the toggle. */
+    /* Apply persisted state + wire the toggles. */
     const SIDEBAR_KEY = 'matrix-lms:sidebar-collapsed';
     const shell = document.querySelector('.app-shell');
     if (shell) {
@@ -180,6 +189,25 @@
         const collapsed = shell.classList.toggle('sidebar-collapsed');
         try { localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0'); } catch (_) {}
       });
+    }
+    /* Hamburger drives a body-level class so the nav slides down and any
+       open page-shell content scrolls underneath. */
+    const burger = document.getElementById('nav-hamburger');
+    if (burger) {
+      burger.addEventListener('click', () => {
+        const open = document.body.classList.toggle('nav-open');
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      /* Close when a nav link is followed so the panel doesn't linger. */
+      const nav = document.getElementById('site-header-nav');
+      if (nav) {
+        nav.addEventListener('click', (ev) => {
+          if (ev.target.closest('a')) {
+            document.body.classList.remove('nav-open');
+            burger.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
     }
   }
 
