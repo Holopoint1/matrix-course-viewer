@@ -766,18 +766,8 @@ a:hover { text-decoration: underline; }
   color: var(--primary) !important;
   letter-spacing: 1px;
 }
-.ms-course-group-return .course-nav-arrow {
-  color: var(--primary);
-  /* Larger hit area so users can clearly hit just the chevron to
-     expand vs. clicking the body of the card which jumps back to
-     the course dashboard. */
-  padding: 0.25rem;
-  margin: -0.25rem;
-  border-radius: 50%;
-}
-.ms-course-group-return .course-nav-arrow:hover {
-  background: rgba(124, 58, 237, 0.12);
-}
+/* No separate chevron style here — .course-nav-arrow is consistent
+   across every variant so the toggle looks the same on every screen. */
 .course-card .body { padding: 1.1rem 1.25rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
 .course-card .code {
   font-size: 0.7rem;
@@ -3310,12 +3300,25 @@ a:hover { text-decoration: underline; }
   margin-top: 2px;
   font-variant-numeric: tabular-nums;
 }
+/* Chevron toggle on the course card.
+   Sized to be obvious (22px × 22px chevron inside a 32×32 button-shaped
+   hit area with a violet fill) so learners can find and use the toggle
+   at a glance. SAME style on every screen — was previously rendered in
+   two visual states (small grey when in the viewer, larger purple
+   everywhere else), which made it feel inconsistent. */
 .course-nav-arrow {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.25s ease;
-  color: #9ca3af;
+  width: 22px;
+  height: 22px;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--primary-50);
+  color: var(--primary);
+  transition: transform 0.25s ease, background 120ms ease;
   flex-shrink: 0;
+  box-sizing: content-box;
+}
+.ms-course-head:hover .course-nav-arrow {
+  background: var(--primary-100);
 }
 .ms-course-group.expanded .course-nav-arrow { transform: rotate(90deg); }
 .ms-course-body {
