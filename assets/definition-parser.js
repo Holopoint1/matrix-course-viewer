@@ -120,24 +120,68 @@
         }
       }
     } else {
-      /* Course: tab-separated screen table. */
+      /* Course: one screen per line. Anchor-based parse so it works
+         whether the .docx tabs survive (Node mammoth) or get collapsed
+         to spaces (browser mammoth):
+
+           <Type> <Hours> <Equipment> <Title> <File-or-URL>
+
+         - Type: a leading keyword (Image/HTML/YouTube/PDF/Powerpoint/
+           Document/Spreadsheet), case-insensitive.
+         - File: the trailing quoted "…path…" OR a trailing http(s) URL.
+         - Hours: the first number after the type.
+         - Equipment: the fixed "Flowcode / E-blocks3" string if present
+           (used as the title pivot); otherwise inferred.
+         - Title: whatever sits between hours/equipment and the file. */
+      var TYPE_RE = /^\s*(Image|HTML|YouTube|PDF|Powerpoint|PowerPoint|Document|Spreadsheet)\b/i;
       for (var j = 0; j < lines.length; j++) {
-        var line = lines[j];
-        if (!line || line.indexOf("\t") === -1) continue;
-        var cells = line.split("\t").map(function (c) { return c.trim(); }).filter(Boolean);
-        if (cells.length < 3) continue;
-        var typeKey = cells[0].toLowerCase().replace(/[^a-z]/g, "");
-        if (typeKey === "screentype") continue;            // header row
-        if (!SCREEN_TYPES[typeKey]) continue;              // not a screen row
+        var line = stripCurly(lines[j]);
+        if (!line) continue;
+        var tmatch = line.match(TYPE_RE);
+        if (!tmatch) continue;
+        var typeKey = tmatch[1].toLowerCase().replace(/[^a-z]/g, "");
+        if (!SCREEN_TYPES[typeKey]) continue;
         var type = SCREEN_TYPES[typeKey];
-        var file = cells[cells.length - 1];
-        var hours = Number(cells[1]);
+
+        /* rest = everything after the type keyword */
+        var rest = line.slice(tmatch[0].length).replace(/\t/g, " ").replace(/\s{2,}/g, " ").trim();
+
+        /* File ref: trailing quoted path or trailing URL. */
+        var file = "";
+        var urlM = rest.match(/(https?:\/\/\S+)\s*$/i);
+        var quoteM = rest.match(/"([^"]+)"\s*$/);
+        if (quoteM) {
+          file = quoteM[1].trim();
+          rest = rest.slice(0, quoteM.index).trim();
+        } else if (urlM) {
+          file = urlM[1].trim();
+          rest = rest.slice(0, urlM.index).trim();
+        } else {
+          /* last whitespace-token that looks like a path/file */
+          var tail = rest.match(/(\S+\.(?:docx?|html?|htm|pdf|pptx?|xlsx?|png|jpe?g|svg|gif))\s*$/i);
+          if (tail) { file = tail[1].trim(); rest = rest.slice(0, tail.index).trim(); }
+        }
+
+        /* Hours: first number in the remaining text. */
+        var hM = rest.match(/(\d+(?:\.\d+)?)/);
+        var hours = hM ? Number(hM[1]) : 0;
         if (isNaN(hours)) hours = 0;
-        var equipment = cells.length >= 5 ? cells[2] : "Flowcode / E-blocks3";
-        var title = cells.length >= 5
-          ? cells.slice(3, cells.length - 1).join(" ").trim()
-          : cells.slice(2, cells.length - 1).join(" ").trim();
+
+        /* Equipment pivot + title. */
+        var equipment = "Flowcode / E-blocks3";
+        var title = "";
+        var eqIdx = rest.indexOf("Flowcode / E-blocks");
+        if (eqIdx !== -1) {
+          var afterEq = rest.slice(eqIdx).replace(/^Flowcode \/ E-blocks\s*3?/i, "").trim();
+          title = afterEq;
+        } else if (hM) {
+          title = rest.slice((hM.index || 0) + hM[1].length).trim();
+        } else {
+          title = rest.trim();
+        }
+        title = title.replace(/^[\s\-–·|]+/, "").trim();
         if (!title) title = basename(unquote(file)).replace(/\.[a-z0-9]+$/i, "");
+
         var src = deriveSrc(file, courseId);
         var n = screens.length + 1;
         screens.push({
@@ -150,7 +194,7 @@
           file: { raw: unquote(file), folder: folderOf(unquote(file)), basename: basename(unquote(file)), isUrl: isUrl(unquote(file)) }
         });
       }
-      if (!screens.length) warnings.push("No screen rows were detected. Check the definition uses a tab-separated table under “Please make me a browser-based course with the following screens:”.");
+      if (!screens.length) warnings.push("No screen rows were detected. The definition should list one screen per line starting with a type (Image / HTML / YouTube / PDF / Powerpoint / Document) under “Please make me a browser-based course with the following screens:”.");
     }
 
     /* Certificate: a <filename> near the word "certificate". */
@@ -210,20 +254,89 @@
     return L.join("\n");
   }
 
-  /* Parse straight from a .docx File (browser) via mammoth.extractRawText.
-     Falls back to convertToHtml→text if extractRawText is unavailable. */
+  /* Convert a mammoth HTML rendering into the tab-separated text the
+     parser expects. Word tables become <table><tr><td> — we join each
+     row's cells with TAB and each row with newline so parseText()'s
+     tab logic works. Non-table content (the <AI instruction> wrapper,
+     <filename> tokens, pack document lists) is emitted line-by-line
+     from block elements so it's still scannable.
+
+     This is the robust path: mammoth's browser build does NOT preserve
+     tab characters when flattening Word tables via extractRawText, so
+     the old raw-text approach found zero screen rows. */
+  function htmlToTabText(html) {
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    var out = [];
+    var body = doc.body || doc.documentElement;
+
+    function walk(node) {
+      for (var i = 0; i < node.children.length; i++) {
+        var el = node.children[i];
+        var tag = el.tagName.toLowerCase();
+        if (tag === "table") {
+          var rows = el.querySelectorAll("tr");
+          for (var r = 0; r < rows.length; r++) {
+            var cells = rows[r].querySelectorAll("th, td");
+            var vals = [];
+            for (var c = 0; c < cells.length; c++) {
+              vals.push((cells[c].textContent || "").replace(/\s+/g, " ").trim());
+            }
+            out.push(vals.join("\t"));
+          }
+        } else if (tag === "ul" || tag === "ol") {
+          var lis = el.querySelectorAll("li");
+          for (var k = 0; k < lis.length; k++) out.push((lis[k].textContent || "").trim());
+        } else if (el.children.length && (tag === "div" || tag === "section")) {
+          walk(el);
+        } else {
+          var txt = (el.textContent || "").trim();
+          if (txt) out.push(txt);
+        }
+      }
+    }
+    walk(body);
+    return out.join("\n");
+  }
+
+  /* Parse straight from a .docx File (browser).
+     Strategy: get BOTH the HTML (preserves table structure) and the raw
+     text (preserves the AI-instruction prose / pack lists), parse each,
+     and keep whichever yields screens/packDocs. HTML-table parsing is
+     tried first because the screen table is a real Word table. */
   async function parseFile(file) {
     if (typeof mammoth === "undefined") throw new Error("mammoth.js is not loaded.");
     var arrayBuffer = await file.arrayBuffer();
-    var raw;
+
+    var html = "";
+    try { html = (await mammoth.convertToHtml({ arrayBuffer: arrayBuffer })).value || ""; }
+    catch (_) { html = ""; }
+
+    var rawText = "";
     if (mammoth.extractRawText) {
-      raw = (await mammoth.extractRawText({ arrayBuffer: arrayBuffer })).value || "";
-    } else {
-      var html = (await mammoth.convertToHtml({ arrayBuffer: arrayBuffer })).value || "";
-      var doc = new DOMParser().parseFromString(html, "text/html");
-      raw = (doc.body ? doc.body.textContent : html) || "";
+      try { rawText = (await mammoth.extractRawText({ arrayBuffer: arrayBuffer })).value || ""; }
+      catch (_) { rawText = ""; }
     }
-    var result = parseText(raw);
+    if (!rawText && html) {
+      var d = new DOMParser().parseFromString(html, "text/html");
+      rawText = (d.body ? d.body.textContent : html) || "";
+    }
+
+    /* Primary attempt: tab-text reconstructed from the HTML tables. */
+    var fromHtml = html ? parseText(htmlToTabText(html)) : null;
+    /* Secondary: the raw text (covers pack docs whose list is prose). */
+    var fromRaw = rawText ? parseText(rawText) : null;
+
+    var result;
+    if (fromHtml && (fromHtml.screens.length || fromHtml.packDocs.length)) {
+      result = fromHtml;
+    } else if (fromRaw && (fromRaw.screens.length || fromRaw.packDocs.length)) {
+      result = fromRaw;
+    } else {
+      /* Neither found rows — return the HTML attempt (carries warnings)
+         but borrow the raw text's id/kind/intent if richer. */
+      result = fromHtml || fromRaw || parseText("");
+      if (fromRaw && !result.courseId && fromRaw.courseId) result.courseId = fromRaw.courseId;
+    }
     result.sourceName = file.name;
     return result;
   }

@@ -90,24 +90,12 @@
     return 'content/' + course.id + '/opening.svg';
   }
 
-  function buildTopNav(currentPage) {
-    /* Render Dashboard + All Courses entries.  When viewing a worksheet,
-       neither is highlighted (the active worksheet inside the course-card
-       gets the highlight instead). */
-    const dashActive = currentPage === 'dashboard' ? ' active' : '';
-    const catalogActive = currentPage === 'catalog' ? ' active' : '';
-    return `
-      <div class="ms-section">
-        <a class="ms-nav-item${dashActive}" data-nav="dashboard" href="#" id="ms-dashboard-link">
-          <span class="ms-nav-ico ms-nav-ico-primary">${ICONS.home}</span>
-          <span class="ms-nav-label">Dashboard</span>
-        </a>
-        <a class="ms-nav-item${catalogActive}" data-nav="catalog" href="index.html">
-          <span class="ms-nav-ico ms-nav-ico-mute">${ICONS.grid}</span>
-          <span class="ms-nav-label">All Courses</span>
-        </a>
-      </div>
-    `;
+  function buildTopNav(/* currentPage */) {
+    /* Intentionally empty: the old sidebar "Dashboard / All Courses" block
+       was redundant — Courses is in the top header nav, and the course card
+       below already exposes the dashboard. Kept as a no-op so the single
+       call site and the null-guarded #ms-dashboard-link handler stay valid. */
+    return '';
   }
 
   function buildFooterTools() {
