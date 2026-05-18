@@ -21,7 +21,6 @@
       <button class="tool-tab" data-tab="definition" role="tab" type="button">📋 Definition</button>
       <button class="tool-tab" data-tab="coursefiles" role="tab" type="button">📁 Course files</button>
       <button class="tool-tab" data-tab="exports" role="tab" type="button">🖨 Exports</button>
-      <button class="tool-tab" data-tab="drive" role="tab" type="button">☁ Google Drive</button>
     </div>
 
     <!-- ───────────────── SPLITTER ───────────────── -->
@@ -145,24 +144,6 @@
       </div>
     </section>
 
-    <!-- ───────────────── GOOGLE DRIVE ───────────────── -->
-    <section class="tool-panel" id="panel-drive">
-      <div class="support-card-group">
-        <div class="support-card-head">
-          <span class="support-card-eyebrow">Live folder</span>
-          <h2>Google Drive folder</h2>
-        </div>
-        <div class="drive-notice">
-          <p><strong>Needs a one-time setup decision before it can be wired.</strong></p>
-          <p>To open and read a live Google Drive course folder in the browser, the Course Viewer needs a Google Cloud <em>OAuth client ID</em> (and the Drive API enabled on that project). Drive access can't be added without those credentials and a decision on scope:</p>
-          <ul>
-            <li><strong>Read-only</strong> — list and pull <code>content.docx</code> / <code>definition.docx</code> / Media from a shared Drive folder into the tools above.</li>
-            <li><strong>Read-write</strong> — also write split outputs back to Drive (broader consent screen, review required by Google).</li>
-          </ul>
-          <p>Until then, work from local files in the Splitter / Definition tabs. Tell me which scope you want and provide (or create) a Google Cloud OAuth client ID and I'll wire the picker here.</p>
-        </div>
-      </div>
-    </section>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>

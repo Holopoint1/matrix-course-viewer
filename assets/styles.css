@@ -4410,16 +4410,6 @@ body.pdf-overlay-open { overflow: hidden; }
   resize: vertical;
 }
 
-.drive-notice {
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--text-muted);
-}
-.drive-notice p { margin: 0 0 0.7rem; }
-.drive-notice ul { margin: 0 0 0.7rem; padding-left: 1.3rem; }
-.drive-notice li { margin-bottom: 0.35rem; }
-.drive-notice strong { color: var(--text); }
-
 @media (max-width: 640px) {
   .split-actions, .split-media-row { flex-direction: column; align-items: stretch; }
   .split-id-input { min-width: 0; width: 100%; }

@@ -4,7 +4,7 @@
  * Wires the five tool panels to the in-browser modules:
  *   Splitter    → window.MatrixSplitter   (assets/splitter-core.js)
  *   Definition  → window.MatrixDefinition (assets/definition-parser.js)
- *   Course files / Exports / Drive  → local logic here
+ *   Course files / Exports  → local logic here
  * Nothing is uploaded — all work happens client-side.
  * ==========================================================================*/
 (function () {
