@@ -323,7 +323,7 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
     padding-right: 0.9rem;
     margin-top: -1.5rem;
   }
-  .mapping-grid, .support-grid { grid-template-columns: 1fr; gap: 0.55rem; }
+  .mapping-grid, .support-grid, .support-help-grid { grid-template-columns: 1fr; gap: 0.55rem; }
   .mapping-level, .support-card-group { padding: 1rem 0.95rem 1.1rem; }
   .stat-card { padding: 0.85rem 0.95rem 1rem; }
   .stat-card-num { font-size: 1.55rem; }
@@ -2749,10 +2749,12 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 }
 .stage-doc-inner h2 {
   font-family: var(--font-display);
-  font-size: 1.18rem;
-  color: var(--primary);
-  margin: 1.8em 0 0.5em;
+  font-size: 1.22rem;
+  color: var(--primary-dark);
+  margin: 1.9em 0 0.55em;
   font-weight: 700;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
 }
 .stage-doc-inner h2.doc-section {
   display: flex;
@@ -2933,7 +2935,7 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   margin: 0 0 0.4rem;
   font-size: 0.95rem;
 }
-.stage-doc-inner h3 { font-size: 1.05rem; color: var(--text); margin: 1.3em 0 0.3em; }
+.stage-doc-inner h3 { font-size: 1.05rem; color: var(--text); margin: 1.4em 0 0.35em; font-weight: 700; }
 .stage-doc-inner p { margin: 0 0 0.85em; }
 .stage-doc-inner ul, .stage-doc-inner ol { padding-left: 1.4em; margin: 0 0 0.85em; }
 .stage-doc-inner li { margin-bottom: 0.3em; }
@@ -3926,6 +3928,33 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 .support-link-body strong { font-size: 0.95rem; color: var(--text); }
 .support-link-body span { font-size: 0.78rem; color: var(--text-muted); }
 .support-link-arrow { color: var(--primary); font-weight: 700; flex-shrink: 0; }
+
+/* Plain how-to grid (no links) used by the "Using the Course Viewer" card. */
+.support-help-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.7rem;
+}
+.support-help {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+.support-help strong {
+  font-size: 0.92rem;
+  color: var(--text);
+}
+.support-help span {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.support-help a { color: var(--primary); font-weight: 600; }
+.support-help em { font-style: normal; font-weight: 600; color: var(--text); }
 
 /* ---------- Mapping page (BTEC curriculum guide) ---------- */
 .mapping-section {
