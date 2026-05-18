@@ -21,6 +21,7 @@
       <button class="tool-tab" data-tab="definition" role="tab" type="button">📋 Definition</button>
       <button class="tool-tab" data-tab="coursefiles" role="tab" type="button">📁 Course files</button>
       <button class="tool-tab" data-tab="exports" role="tab" type="button">🖨 Exports</button>
+      <button class="tool-tab" data-tab="drive" role="tab" type="button">☁ Google Drive</button>
     </div>
 
     <!-- ───────────────── SPLITTER ───────────────── -->
@@ -144,6 +145,26 @@
       </div>
     </section>
 
+    <!-- ───────────────── GOOGLE DRIVE ───────────────── -->
+    <section class="tool-panel" id="panel-drive">
+      <div class="support-card-group">
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Live folder</span>
+          <h2>Google Drive folder</h2>
+        </div>
+        <p class="files-tree-hint">Open the shared course Drive folder in a new window (you sign in to Google there as normal — nothing is stored here). Paste a different folder link to switch folders.</p>
+        <div class="drive-row">
+          <input id="drive-url" class="split-id-input drive-url" spellcheck="false"
+            value="https://drive.google.com/drive/folders/1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu?usp=drive_link">
+          <button class="btn btn-primary" id="drive-open" type="button">↗ Open in new window</button>
+          <button class="btn btn-secondary" id="drive-embed" type="button">Show inline</button>
+        </div>
+        <div id="drive-embed-wrap" hidden>
+          <iframe id="drive-frame" class="drive-frame" title="Google Drive folder" loading="lazy"></iframe>
+          <p class="files-tree-hint">The inline view only renders if the folder is shared “Anyone with the link”. If it stays blank, use <strong>Open in new window</strong>.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>

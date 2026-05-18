@@ -4410,8 +4410,25 @@ body.pdf-overlay-open { overflow: hidden; }
   resize: vertical;
 }
 
+.drive-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.4rem 0 0.5rem;
+}
+.drive-url { flex: 1 1 320px; min-width: 0; }
+.drive-frame {
+  width: 100%;
+  height: 620px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  margin-top: 0.4rem;
+}
+
 @media (max-width: 640px) {
-  .split-actions, .split-media-row { flex-direction: column; align-items: stretch; }
+  .split-actions, .split-media-row, .drive-row { flex-direction: column; align-items: stretch; }
   .split-id-input { min-width: 0; width: 100%; }
 }
 

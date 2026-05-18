@@ -423,6 +423,30 @@
   $('exp-input').addEventListener('change', function (e) { Array.from(e.target.files).forEach(addExport); });
   dropzone($('exp-drop'), function (files) { files.forEach(addExport); });
 
+  /* ====================================================================== *
+   *  GOOGLE DRIVE (open / embed a shared folder — no API, no credentials)
+   * ====================================================================== */
+  function driveFolderId(url) {
+    var m = String(url || '').match(/\/folders\/([A-Za-z0-9_-]+)/) ||
+            String(url || '').match(/[?&]id=([A-Za-z0-9_-]+)/);
+    return m ? m[1] : '';
+  }
+  $('drive-open').addEventListener('click', function () {
+    var url = ($('drive-url').value || '').trim();
+    if (!url) { alert('Paste a Google Drive folder link first.'); return; }
+    window.open(url, 'matrixDriveFolder', 'width=1280,height=860,noopener');
+  });
+  $('drive-embed').addEventListener('click', function () {
+    var id = driveFolderId($('drive-url').value);
+    if (!id) { alert('That does not look like a Drive folder link.'); return; }
+    var wrap = $('drive-embed-wrap');
+    var frame = $('drive-frame');
+    if (!wrap.hidden) { wrap.hidden = true; this.textContent = 'Show inline'; return; }
+    frame.src = 'https://drive.google.com/embeddedfolderview?id=' + id + '#grid';
+    wrap.hidden = false;
+    this.textContent = 'Hide inline';
+  });
+
   /* ---------- Boot ---------- */
   initCourseFiles().catch(function (err) {
     $('cf-tree').innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
