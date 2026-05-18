@@ -77,29 +77,24 @@ async function loadSourceFile(file) {
   return currentAnalysis;
 }
 
-// ─── Media ZIP handler ─────────────────────────────────────────────────────
-async function handleMediaFile(file) {
-  if (!file.name.toLowerCase().endsWith(".zip")) {
-    renderMediaError("Please upload a .zip file for the companion media folder.");
-    return;
-  }
-
+// ─── Media loader (DOM-free) ───────────────────────────────────────────────
+// Accepts either a single .zip File (legacy Media.zip) or an array of loose
+// File objects (the new per-course `Media/` folder structure). Both paths
+// build the identical `currentMediaBundle` shape the algorithm expects.
+async function loadMediaInput(input) {
   revokeObjectUrls();
   generatedArtefacts = [];
-  generatedPanel.hidden = true;
-  currentMediaZipName = file.name;
-  mediaMeta.innerHTML = `
-    <span><strong>Media ZIP:</strong> ${escapeHtml(file.name)}</span>
-    <span><strong>Size:</strong> ${Math.max(1, Math.round(file.size / 1024))} KB</span>
-    <span><strong>Last modified:</strong> ${new Date(file.lastModified).toLocaleString()}</span>
-  `;
 
-  try {
+  const list = Array.isArray(input) ? input : [input];
+  const isZip = list.length === 1 && /\.zip$/i.test(list[0].name);
+  const mediaFiles = [];
+
+  if (isZip) {
+    const file = list[0];
+    currentMediaZipName = file.name;
     const buffer = await file.arrayBuffer();
     currentMediaZipBuffer = new Uint8Array(buffer);
     const zip = await JSZip.loadAsync(buffer);
-    const mediaFiles = [];
-
     await Promise.all(Object.values(zip.files).map(async (entry) => {
       if (entry.dir || entry.name.startsWith("__MACOSX/")) return;
       const exportName = basenameOnly(entry.name);
@@ -111,34 +106,38 @@ async function handleMediaFile(file) {
       const dataUrl = await blobToDataUrl(blob);
       mediaFiles.push({ path: entry.name, exportName, key: normalizeMediaName(exportName), size: data.byteLength, mime, data, url, dataUrl });
     }));
-
-    currentMediaBundle = mediaFiles.sort((a, b) => a.exportName.localeCompare(b.exportName));
-    const indexed = buildMediaIndex(currentMediaBundle);
-    currentMediaIndex = indexed.index;
-    currentMediaDuplicateNames = indexed.duplicates;
-
-    // Pre-patch the source XML: rewrite r:link → r:embed for all resolvable
-    // external images so every block output inherits clean embedded references.
-    patchSourceXmlForEmbeddedImages();
-
-    if (currentAnalysis) {
-      currentAnalysis = applyMediaStateToAnalysis(currentAnalysis);
-      renderAnalysis(currentSourceText, currentAnalysis);
-      showBuildCta();
-      if (hasBuilt) {
-        generatedArtefacts = await buildArtefacts(currentAnalysis.blocks);
-        renderGeneratedOutputs(generatedArtefacts);
-        renderAnalysisReport(currentAnalysis, dedupeWarnings([...currentAnalysis.warnings, ...currentAnalysis.media.warnings]));
-      } else {
-        generatedArtefacts = [];
-      }
-    } else {
-      renderMediaPanel(null);
-    }
-  } catch (error) {
-    console.error(error);
-    renderMediaError("The media ZIP could not be read. Try compressing the folder again and re-uploading it.");
+  } else {
+    currentMediaZipName = list.length === 1 ? list[0].name : `${list.length} media files`;
+    currentMediaZipBuffer = null;
+    await Promise.all(list.map(async (file) => {
+      const rel = file.webkitRelativePath || file.name;
+      if (file.name.startsWith("__MACOSX") || /(^|\/)\.DS_Store$/.test(rel)) return;
+      const exportName = basenameOnly(file.name);
+      if (!exportName) return;
+      const buf = await file.arrayBuffer();
+      const data = new Uint8Array(buf);
+      const mime = getMimeType(exportName);
+      const blob = new Blob([data], { type: mime });
+      const url = createObjectUrl(blob);
+      const dataUrl = await blobToDataUrl(blob);
+      mediaFiles.push({ path: rel, exportName, key: normalizeMediaName(exportName), size: data.byteLength, mime, data, url, dataUrl });
+    }));
   }
+
+  currentMediaBundle = mediaFiles.sort((a, b) => a.exportName.localeCompare(b.exportName));
+  const indexed = buildMediaIndex(currentMediaBundle);
+  currentMediaIndex = indexed.index;
+  currentMediaDuplicateNames = indexed.duplicates;
+
+  // Pre-patch the source XML: rewrite r:link → r:embed for all resolvable
+  // external images so every block output inherits clean embedded references.
+  patchSourceXmlForEmbeddedImages();
+
+  if (currentAnalysis) {
+    currentAnalysis = applyMediaStateToAnalysis(currentAnalysis);
+    generatedArtefacts = [];
+  }
+  return currentAnalysis;
 }
 
 // ─── Extract embedded media from DOCX ─────────────────────────────────────
@@ -1107,276 +1106,7 @@ function renderPrototypeMediaHtml(mediaRefs) {
 }
 
 // ─── Build CTA helper ──────────────────────────────────────────────────────
-function showBuildCta() {
-  if (!currentAnalysis) return;
-  const ready  = currentAnalysis.blocks.filter((b) => b.filename).length;
-  const total  = currentAnalysis.blocks.length;
-  const errors = currentAnalysis.warnings.filter((w) => w.level === "danger").length;
-  const zipLine = currentMediaZipName
-    ? `<span style="color:var(--success)">✓ ${escapeHtml(currentMediaZipName)} loaded</span>`
-    : `<span style="color:var(--muted)">No media ZIP loaded (optional)</span>`;
-
-  ctaInfo.innerHTML = `
-    <strong>${escapeHtml(currentSourceFile)}</strong> —
-    ${total} block${total === 1 ? "" : "s"} detected,
-    ${ready} ready to build${errors ? `, <span style="color:var(--danger)">${errors} error${errors === 1 ? "" : "s"}</span>` : ""}
-    &nbsp;·&nbsp; ${zipLine}
-  `;
-  buildAllBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> ${hasBuilt ? "Rebuild Outputs" : "Build Outputs"}`;
-  buildAllBtn.disabled = false;
-  buildCta.hidden = false;
-}
-
-// ─── Render functions ──────────────────────────────────────────────────────
-function renderAnalysis(text, analysis) {
-  previewStatus.textContent = "Preview ready";
-  previewBox.className = "preview-box";
-  previewBox.textContent = text || "No readable text could be extracted.";
-  renderBlocks(analysis.blocks);
-  renderOutputs(analysis.blocks);
-  renderScorm(analysis.scorm);
-  renderMediaPanel(analysis);
-  const extraWarnings = [...(analysis.blocks.length === 0 && text ? [{ level: "warn", title: "No supported tags found", detail: "The document preview was extracted, but no supported custom blocks were detected." }] : []), ...analysis.media.warnings];
-  renderWarnings(analysis.warnings, extraWarnings);
-}
-
-function renderAnalysisReport(analysis, allWarnings) {
-  const blocks      = analysis.blocks;
-  const ready       = blocks.filter((b) => b.filename).length;
-  const total       = blocks.length;
-  const errors      = allWarnings.filter((w) => w.level === "danger").length;
-  const warns       = allWarnings.filter((w) => w.level === "warn").length;
-  const embedded    = blocks.reduce((sum, b) => sum + (b.embeddedImageCount || 0), 0);
-  const mediaTags   = blocks.reduce((sum, b) => sum + b.mediaRefs.length, 0);
-
-  const hasErrors = errors > 0;
-  const hasWarns  = warns > 0;
-  const iconClass = hasErrors ? "fail" : hasWarns ? "warn" : "ok";
-
-  const iconSvg = hasErrors
-    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
-    : hasWarns
-    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
-    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
-
-  const titleText = hasErrors
-    ? `${errors} error${errors === 1 ? "" : "s"} found — review before building`
-    : hasWarns
-    ? `Analysis complete — ${warns} warning${warns === 1 ? "" : "s"} to review`
-    : `Analysis complete — no issues detected`;
-
-  const subtitleText = total
-    ? `${total} block${total === 1 ? "" : "s"} detected · ${ready} ready to build · ${currentSourceFile}`
-    : `No tagged blocks found · ${currentSourceFile}`;
-
-  const stats = [
-    { value: total,    label: "Blocks",          cls: total ? "ok" : "warn" },
-    { value: ready,    label: "Ready to build",  cls: ready === total && total > 0 ? "ok" : ready > 0 ? "warn" : "fail" },
-    { value: errors,   label: "Errors",          cls: errors ? "fail" : "ok" },
-    { value: warns,    label: "Warnings",        cls: warns ? "warn" : "ok" },
-    { value: embedded, label: "Embedded images", cls: "ok" },
-    ...(mediaTags ? [{ value: mediaTags, label: "Media tags", cls: "ok" }] : [])
-  ];
-
-  analysisReport.hidden = false;
-  analysisReport.innerHTML = `
-    <div class="ar-header">
-      <div class="ar-status-icon ${iconClass}">${iconSvg}</div>
-      <div style="flex:1">
-        <p class="ar-title">${escapeHtml(titleText)}</p>
-        <p class="ar-subtitle">${escapeHtml(subtitleText)}</p>
-      </div>
-      <button id="arBundleBtn" class="action-button build-btn" type="button" style="flex-shrink:0">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download Full Bundle
-      </button>
-    </div>
-    <div class="ar-stats">
-      ${stats.map((s) => `<div class="ar-stat"><div class="ar-stat-value ${s.cls}">${s.value}</div><div class="ar-stat-label">${escapeHtml(s.label)}</div></div>`).join("")}
-    </div>
-    <p class="ar-hint">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-      Expand any section below to see detail
-    </p>
-  `;
-  document.getElementById("arBundleBtn").addEventListener("click", () => downloadBundle());
-}
-
-function renderBlocks(blocks) {
-  blocksCount.textContent = `${blocks.length} block${blocks.length === 1 ? "" : "s"}`;
-  if (!blocks.length) {
-    blocksList.className = "empty-state";
-    blocksList.innerHTML = "No supported tagged blocks were detected in this preview.";
-    return;
-  }
-  blocksList.className = "block-list";
-  blocksList.innerHTML = blocks.map((block) => `
-    <article class="block-card">
-      <div class="block-top">
-        <div><h3>Block ${block.order}</h3><p>${escapeHtml(block.outputType)}</p></div>
-        <div class="block-meta">
-          <span class="mini-tag">${escapeHtml(block.tagType)}</span>
-          <span class="mini-tag success">${escapeHtml(block.classification)}</span>
-          ${block.filename ? `<span class="mini-tag">${escapeHtml(block.filename)}</span>` : `<span class="mini-tag warn">filename missing</span>`}
-          <span class="mini-tag">lines ${block.startLine}-${block.endLine}</span>
-          ${block.mediaRefs.length ? `<span class="mini-tag">${block.mediaRefs.length} media tags</span>` : block.embeddedImageCount ? `<span class="mini-tag success">${block.embeddedImageCount} embedded image${block.embeddedImageCount === 1 ? "" : "s"}</span>` : `<span class="mini-tag">no images</span>`}
-        </div>
-      </div>
-      <div class="excerpt">${escapeHtml(block.excerpt || "(No visible text inside block)")}</div>
-      <div class="meta-grid">
-        <div class="meta-box"><strong>Filename</strong><div>${block.filename ? `<code>${escapeHtml(block.filename)}</code>` : "No filename detected"}</div></div>
-        <div class="meta-box"><strong>Destination</strong><div><code>${escapeHtml(block.destination)}</code></div></div>
-      </div>
-      <div class="media-inline-note">${block.mediaRefs.length ? `Explicit media tags: ${block.mediaRefs.map((ref) => `&lt;${escapeHtml(ref.tag)}&gt;${escapeHtml(ref.filename)}&lt;/${escapeHtml(ref.tag)}&gt;`).join(", ")}` : block.embeddedImageCount ? `${block.embeddedImageCount} Word-embedded image${block.embeddedImageCount === 1 ? "" : "s"} — extracted automatically, no explicit tags needed.` : "No images detected in this block."}</div>
-    </article>
-  `).join("");
-}
-
-function renderOutputs(blocks) {
-  const valid = blocks.filter((block) => block.filename);
-  outputsCount.textContent = `${valid.length} proposed`;
-  if (!valid.length) {
-    outputsList.className = "empty-state";
-    outputsList.innerHTML = "Valid outputs will appear here when blocks include usable filenames.";
-    return;
-  }
-  outputsList.className = "output-list";
-  outputsList.innerHTML = valid.map((block) => {
-    const matchedMedia   = block.mediaRefs.filter((ref) => ref.status === "matched").length;
-    const unmatchedMedia = block.mediaRefs.length - matchedMedia;
-    return `
-      <article class="output-card">
-        <div class="output-top">
-          <div><h3>${escapeHtml(block.filename)}</h3><p>${escapeHtml(block.outputType)}</p></div>
-          <div class="output-meta"><span class="mini-tag success">${escapeHtml(block.tagType)}</span>${block.mediaRefs.length ? `<span class="mini-tag">${block.mediaRefs.length} refs</span>` : ""}</div>
-        </div>
-        <div class="meta-grid">
-          <div class="meta-box"><strong>Likely folder</strong><div><code>${escapeHtml(block.destination)}</code></div></div>
-          <div class="meta-box"><strong>Classification</strong><div>${escapeHtml(block.classification)}</div></div>
-        </div>
-        ${block.mediaRefs.length ? `<div class="meta-grid"><div class="meta-box"><strong>Matched media</strong><div>${matchedMedia}</div></div><div class="meta-box"><strong>Missing / ambiguous</strong><div>${unmatchedMedia}</div></div></div>` : block.embeddedImageCount ? `<div class="meta-grid"><div class="meta-box" style="grid-column:1/-1"><strong>Embedded images</strong><div>${block.embeddedImageCount} image${block.embeddedImageCount === 1 ? "" : "s"} embedded in source DOCX — included automatically in outputs</div></div></div>` : ""}
-        <div class="excerpt" style="margin-top:0.9rem;">${escapeHtml(makeExcerpt(block.body, 160) || "(No visible text inside block)")}</div>
-      </article>
-    `;
-  }).join("");
-}
-
-function renderScorm(scorm) {
-  if (!scorm.hasScormContent) {
-    scormStatus.textContent = "Not applicable";
-    scormPanel.className = "empty-state";
-    scormPanel.innerHTML = `<div class="empty-state-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>No SCORM specification found in this document. If you need SCORM packaging, add version, launch file, tracking, and completion notes to the source.`;
-    return;
-  }
-  scormStatus.textContent = scorm.ready ? "Ready" : "No SCORM blocks";
-  scormPanel.className = "scorm-grid";
-  scormPanel.innerHTML = `
-    <div class="status-banner" style="grid-column: 1 / -1;"><strong>${escapeHtml(scorm.summary)}</strong></div>
-    ${scorm.checks.map((item) => `<article class="scorm-card"><div class="block-top"><h3>${escapeHtml(item.label)}</h3><span class="mini-tag success">Ready</span></div><p>${escapeHtml(item.value)}</p></article>`).join("")}
-  `;
-}
-
-function renderMediaPanel(analysis) {
-  if (!analysis) {
-    mediaCount.textContent = currentMediaBundle.length ? `${currentMediaBundle.length} files loaded` : "0 references";
-    if (!currentMediaBundle.length) {
-      mediaList.className = "empty-state";
-      mediaList.textContent = "Upload a source document and optional media ZIP to inspect explicit media references.";
-      return;
-    }
-    mediaList.className = "media-list";
-    mediaList.innerHTML = `<div class="status-banner"><strong>${escapeHtml(currentMediaZipName || "Media ZIP loaded")}</strong>${currentMediaBundle.length} files were loaded from the media ZIP. Upload a source document to match explicit media tags.</div>`;
-    return;
-  }
-  const mediaState = analysis.media;
-  mediaCount.textContent = `${mediaState.references.length} reference${mediaState.references.length === 1 ? "" : "s"}`;
-  if (!mediaState.references.length && !mediaState.loadedFiles && !mediaState.embeddedCount) {
-    mediaList.className = "empty-state";
-    mediaList.textContent = "No explicit media tags were found, and no media ZIP has been loaded.";
-    return;
-  }
-  mediaList.className = "media-list";
-  mediaList.innerHTML = `
-    <div class="media-summary">
-      <div class="media-stat"><strong>${mediaState.embeddedCount || 0}</strong><span>embedded in DOCX</span></div>
-      <div class="media-stat"><strong>${mediaState.loadedFiles}</strong><span>files loaded from ZIP</span></div>
-      <div class="media-stat"><strong>${mediaState.references.length}</strong><span>explicit media tags</span></div>
-      <div class="media-stat"><strong>${mediaState.matchedFiles.length}</strong><span>matched</span></div>
-    </div>
-    ${mediaState.references.length ? mediaState.references.map((ref) => `
-      <article class="media-card">
-        <div class="block-top"><div><h3>${escapeHtml(ref.filename)}</h3><p>Block ${ref.blockOrder} • ${escapeHtml(ref.blockFilename)} • <code>&lt;${escapeHtml(ref.tag)}&gt;</code> reference</p></div><span class="mini-tag ${ref.status === "matched" ? "success" : "warn"}">${ref.status === "matched" ? "Matched" : ref.status === "ambiguous" ? "Ambiguous" : "Missing"}</span></div>
-        <p>${escapeHtml(ref.detail)}</p>
-        ${ref.matchedFile ? `<div class="meta-grid"><div class="meta-box"><strong>ZIP entry</strong><div><code>${escapeHtml(ref.matchedFile.path)}</code></div></div><div class="meta-box"><strong>Export path</strong><div><code>media/${escapeHtml(ref.matchedFile.exportName)}</code></div></div></div><div class="media-link-row"><a class="download-link" href="${escapeHtml(ref.matchedFile.url)}" download="${escapeHtml(ref.matchedFile.exportName)}">Download media</a></div>` : ""}
-      </article>
-    `).join("") : `<article class="media-card"><div class="block-top"><h3>No explicit media refs in source</h3><span class="mini-tag">${mediaState.loadedFiles} loaded</span></div><p>The media ZIP is loaded, but the current source document contains no explicit media tags such as <code>&lt;image&gt;file.jpg&lt;/image&gt;</code>.</p></article>`}
-    ${mediaState.unusedFiles.length ? `<article class="media-card"><div class="block-top"><h3>Unused media in ZIP</h3><span class="mini-tag">${mediaState.unusedFiles.length} unused</span></div><p>These files are loaded but not referenced by any explicit media tag in the source.</p><div class="excerpt">${escapeHtml(mediaState.unusedFiles.map((file) => file.exportName).join(", "))}</div></article>` : ""}
-  `;
-}
-
-function renderWarnings(primaryWarnings, extraWarnings) {
-  const allWarnings = dedupeWarnings([...primaryWarnings, ...extraWarnings]);
-  const warningsPanel = document.getElementById("warningsPanel");
-  warningsCount.textContent = `${allWarnings.length} warning${allWarnings.length === 1 ? "" : "s"}`;
-  if (!allWarnings.length) {
-    if (warningsPanel) warningsPanel.hidden = true;
-    warningsList.innerHTML = "";
-    return;
-  }
-  if (warningsPanel) warningsPanel.hidden = false;
-  warningsList.innerHTML = allWarnings.map((w) => `
-    <div class="warn-row">
-      <span class="mini-tag ${w.level === "danger" ? "danger" : "warn"}">${w.level === "danger" ? "Error" : "Warning"}</span>
-      <div class="warn-row-text">
-        <strong>${escapeHtml(w.title)}</strong>
-        <span>${escapeHtml(w.detail)}</span>
-      </div>
-    </div>`).join("");
-}
-
-function renderGeneratedOutputs(files) {
-  generatedCount.textContent = `${files.length} file${files.length === 1 ? "" : "s"}`;
-  if (!files.length) {
-    generatedList.innerHTML = `<p style="color:var(--muted);font-size:0.85rem;margin:0">No output files were generated from this source.</p>`;
-    return;
-  }
-  generatedList.innerHTML = `
-    <div class="build-success">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      <span>${files.length} file${files.length === 1 ? "" : "s"} ready</span>
-      <button class="action-button build-btn" type="button" id="successBundleBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download
-      </button>
-    </div>`;
-  document.getElementById("successBundleBtn").addEventListener("click", () => ctaBundleBtn.click());
-}
-
-function renderError(message) {
-  previewStatus.textContent = "Upload failed";
-  previewBox.className = "empty-state";
-  previewBox.textContent = message;
-  blocksList.textContent = "No blocks available.";
-  outputsList.textContent = "No outputs available.";
-  scormPanel.textContent = "SCORM readiness could not be assessed.";
-  mediaList.textContent = currentMediaBundle.length ? "Media ZIP is loaded. Upload a valid source document to match explicit media tags." : "Upload a source document and optional media ZIP to inspect explicit media references.";
-  renderWarnings([{ level: "danger", title: "File could not be processed", detail: message }], []);
-}
-
-function renderMediaError(message) {
-  currentMediaZipName = "";
-  currentMediaZipBuffer = null;
-  currentMediaBundle = [];
-  currentMediaIndex = new Map();
-  currentMediaDuplicateNames = new Set();
-  mediaMeta.innerHTML = `<span>${escapeHtml(message)}</span>`;
-  if (currentAnalysis) {
-    currentAnalysis = applyMediaStateToAnalysis(currentAnalysis);
-    renderAnalysis(currentSourceText, currentAnalysis);
-  } else {
-    renderMediaPanel(null);
-  }
-}
+// ─── (render* / showBuildCta DOM functions removed — see MatrixSplitter API) ─
 
 // ─── Summary report ────────────────────────────────────────────────────────
 function buildSummaryReport() {
@@ -1455,7 +1185,44 @@ ${[...artefactEntries, ...mediaEntries].map((e) => `    <resource identifier="${
 </manifest>`;
 }
 
-// ─── Bundle download ───────────────────────────────────────────────────────
+// ─── Bundle assembly ───────────────────────────────────────────────────────
+// Builds the standard splitter output bundle (generated/, media/, source/,
+// reports, imsmanifest) and returns the populated JSZip without downloading,
+// so the Tools page can re-lay it into the LMS content tree.
+async function buildBundleZip() {
+  const zip = new JSZip();
+  const matchedMedia = uniqueMatchedMedia(currentAnalysis);
+  zip.file("summary-report.txt", buildSummaryReport());
+  zip.file("blocks-metadata.json", JSON.stringify(currentAnalysis.blocks.map((b) => ({
+    order: b.order, tagType: b.tagType, filename: b.filename, outputType: b.outputType,
+    destination: b.destination, classification: b.classification,
+    mediaRefs: b.mediaRefs.map((r) => ({ tag: r.tag, filename: r.filename, status: r.status, exportPath: r.matchedFile ? `media/${r.matchedFile.exportName}` : null }))
+  })), null, 2));
+  zip.file("scorm-readiness.txt", [
+    currentAnalysis.scorm.summary, "",
+    ...currentAnalysis.scorm.checks.map((item) => `${item.label}: ${item.ok ? "FOUND" : `MISSING - ${item.missing}`}`),
+    "",
+    `Media ZIP loaded: ${currentMediaZipName || "No"}`,
+    `Matched media files: ${matchedMedia.length}`,
+    `Missing media refs: ${currentAnalysis.media.missingCount}`,
+    `Ambiguous media refs: ${currentAnalysis.media.ambiguousCount}`
+  ].join("\n"));
+
+  if (currentSourceBuffer)   zip.file(`source/${currentSourceFile}`, currentSourceBuffer);
+  if (currentMediaZipBuffer) zip.file(`source/${currentMediaZipName}`, currentMediaZipBuffer);
+
+  // Generated artefacts: HTML files have .content (string), DOCX files have .blob
+  for (const file of generatedArtefacts) {
+    if (file.blob)    zip.file(`generated/${file.filename}`, file.blob);
+    else if (file.content) zip.file(`generated/${file.filename}`, file.content);
+  }
+  matchedMedia.forEach((file) => zip.file(`media/${file.exportName}`, file.data));
+
+  const manifest = buildBasicManifest(currentAnalysis, generatedArtefacts);
+  if (manifest) zip.file("imsmanifest.xml", manifest);
+  return zip;
+}
+
 async function downloadBundle() {
   const zip = new JSZip();
   const matchedMedia = uniqueMatchedMedia(currentAnalysis);
@@ -1521,6 +1288,8 @@ function revokeObjectUrls() {
   activeObjectUrls = [];
 }
 
+// DOM-free state reset. Media state is intentionally preserved so a media
+// folder loaded before the source document survives re-analysis.
 function resetSourceState() {
   currentSourceFile       = "";
   currentSourceBuffer     = null;
@@ -1537,39 +1306,6 @@ function resetSourceState() {
   currentEmbeddedMediaIndex = new Map();
   generatedArtefacts      = [];
   hasBuilt                = false;
-
-  buildCta.hidden         = true;
-  buildAllBtn.disabled    = false;
-  buildAllBtn.innerHTML   = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Build Outputs`;
-  ctaInfo.textContent     = "";
-  ctaSummaryBtn.disabled  = true;
-  ctaBundleBtn.disabled   = true;
-  resultsArea.hidden      = true;
-
-  // Re-collapse all detail panels
-  document.querySelectorAll("[data-collapsible]").forEach((p) => p.classList.add("is-collapsed"));
-
-  blocksCount.textContent  = "0 blocks";
-  outputsCount.textContent = "0 outputs";
-  warningsCount.textContent = "0 warnings";
-  scormStatus.textContent  = "Not assessed";
-  mediaCount.textContent   = currentMediaBundle.length ? `${currentMediaBundle.length} files loaded` : "0 references";
-  previewBox.className     = "empty-state";
-  previewBox.textContent   = "Upload a tagged .docx to see the extracted document text here.";
-  previewStatus.textContent = "Waiting for upload";
-  blocksList.className     = "empty-state";
-  blocksList.textContent   = "No blocks yet. Upload a document to detect <HTML>, <worksheet>, and <document> sections.";
-  outputsList.className    = "empty-state";
-  outputsList.textContent  = "Proposed outputs will appear here after tags and filenames are detected.";
-  scormPanel.className     = "empty-state";
-  scormPanel.textContent   = "Upload a source document to inspect SCORM-related notes and missing decisions.";
-  warningsList.innerHTML   = "";
-  const warningsPanel = document.getElementById("warningsPanel");
-  if (warningsPanel) warningsPanel.hidden = true;
-  generatedList.innerHTML  = "";
-  generatedCount.textContent = "0 files";
-  fileMeta.innerHTML       = "<span>No source file loaded yet.</span>";
-  renderMediaPanel(null);
 }
 
 // ─── Analysis utilities ────────────────────────────────────────────────────
@@ -1802,3 +1538,49 @@ function makeExcerpt(value, maxLength) {
 
 function escapeXml(value)  { return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&apos;"); }
 function escapeHtml(value) { return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;"); }
+
+// ─── Public API ────────────────────────────────────────────────────────────
+// Everything above is a faithful copy of the standalone splitter's algorithm.
+// The Tools page drives the splitter only through this surface.
+window.MatrixSplitter = {
+  /* Load + analyse a tagged content .docx. Returns the analysis object. */
+  async loadSource(file) { return loadSourceFile(file); },
+
+  /* Attach companion media. `input` is a single .zip File OR an array of
+     loose File objects (the per-course Media/ folder). Returns the
+     re-evaluated analysis (or null if no source loaded yet). */
+  async loadMedia(input) { return loadMediaInput(input); },
+
+  /* Build every block into its output artefact. Returns the artefact list:
+     [{ filename, tagType, outputLabel, status, content|blob, mime, url }]. */
+  async build() {
+    if (!currentAnalysis) throw new Error("Load a source document first.");
+    generatedArtefacts = await buildArtefacts(currentAnalysis.blocks);
+    hasBuilt = true;
+    return generatedArtefacts;
+  },
+
+  /* The standard splitter output bundle as a JSZip (call after build()). */
+  async bundleZip() {
+    if (!currentAnalysis) throw new Error("Nothing to bundle — load a source first.");
+    if (!generatedArtefacts.length) generatedArtefacts = await buildArtefacts(currentAnalysis.blocks);
+    return buildBundleZip();
+  },
+
+  /* Trigger the original "download bundle" behaviour unchanged. */
+  async downloadBundle() {
+    if (!generatedArtefacts.length && currentAnalysis) generatedArtefacts = await buildArtefacts(currentAnalysis.blocks);
+    return downloadBundle();
+  },
+
+  getAnalysis()   { return currentAnalysis; },
+  getArtefacts()  { return generatedArtefacts; },
+  getSourceName() { return currentSourceFile; },
+  getMediaBundle(){ return currentMediaBundle; },
+  summaryReport() { return buildSummaryReport(); },
+  resolveOutputFilename(block) { return resolveOutputFilename(block); },
+  normalizeMediaName(v) { return normalizeMediaName(v); },
+  baseName(v)     { return baseName(v); },
+  reset()         { resetSourceState(); }
+};
+})();

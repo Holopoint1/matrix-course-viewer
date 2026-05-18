@@ -3,520 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Files | Matrix Course Viewer</title>
+  <title>Tools | Matrix Course Viewer</title>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
-<body>
-  <header class="site-header" id="site-header"></header>
-
+<body data-no-sidebar>
   <section class="stats-hero">
     <div class="hero-inner">
       <span class="eyebrow">Author tools</span>
-      <h1>Files</h1>
-      <p>Check exactly which resource files are present, preview new files as they'll render in a course, route them to the right folder, and export everything as a zip for a developer to commit. Files stay in your browser — nothing is uploaded to a server.</p>
+      <h1>Tools</h1>
+      <p>Split a course content document into screens, read a course definition, check a course's media, and export worksheets. Everything runs in your browser — nothing is uploaded to a server.</p>
     </div>
   </section>
 
   <main class="files-section">
-    <!-- Drop zone -->
-    <div class="dropzone files-dropzone" id="dropzone">
-      <div class="dropzone-icon">⤓</div>
-      <div class="dropzone-title">Drop files to preview &amp; stage</div>
-      <div class="dropzone-sub">or <button class="btn btn-primary" type="button" id="pick-btn">choose files</button></div>
-      <input type="file" id="file-input" multiple accept=".docx,.htm,.html,.pdf,.png,.jpg,.jpeg,.gif,.webp,.svg,.pptx,.xlsx" hidden>
-      <div class="dropzone-types">.docx · .htm · .pdf · images · .pptx — auto-routes by filename (CP4807-N.docx → content/CP4807/, CO002 - opening.png → content/CO0002/, …)</div>
+    <div class="tool-tabs" id="tool-tabs" role="tablist">
+      <button class="tool-tab active" data-tab="splitter" role="tab" type="button">🪓 Splitter</button>
+      <button class="tool-tab" data-tab="definition" role="tab" type="button">📋 Definition</button>
+      <button class="tool-tab" data-tab="coursefiles" role="tab" type="button">📁 Course files</button>
+      <button class="tool-tab" data-tab="exports" role="tab" type="button">🖨 Exports</button>
+      <button class="tool-tab" data-tab="drive" role="tab" type="button">☁ Google Drive</button>
     </div>
 
-    <!-- Staging area: preview cards + JSON snippet + zip export -->
-    <div class="files-staging" id="files-staging" hidden>
-      <div class="files-staging-head">
-        <h2 class="stats-h2">Staged files</h2>
-        <span class="files-staging-count" id="staging-count">0 files</span>
-        <button class="btn btn-secondary" id="clear-staging">Clear</button>
-        <button class="btn btn-primary" id="export-zip">↓ Download zip</button>
-      </div>
-      <p class="files-staging-hint">Each dropped file is rendered exactly as the course viewer will render it. Click <strong>Download zip</strong> and send <code>matrix-files.zip</code> to a developer — they unzip into <code>lms/</code> and the missing-resource panels disappear automatically.</p>
-      <div class="preview-list" id="staging-list"></div>
-
-      <div class="preview-snippet-card" id="snippet-card" hidden>
-        <div class="preview-snippet-head">
-          <h2 class="stats-h2">courses.json snippet</h2>
-          <button class="btn btn-secondary" type="button" id="copy-all">Copy all</button>
+    <!-- ───────────────── SPLITTER ───────────────── -->
+    <section class="tool-panel active" id="panel-splitter">
+      <div class="support-card-group">
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Step 1 · Content</span>
+          <h2>Split a Course content document</h2>
         </div>
-        <p class="preview-snippet-hint">Paste these objects into the <code>screens</code> array of the relevant course in <code>data/courses.json</code> when authoring a new screen.</p>
-        <textarea id="snippet" readonly spellcheck="false"></textarea>
-      </div>
-    </div>
+        <p class="files-tree-hint">Drop the <code>&lt;id&gt; - content.docx</code> (the tagged source — <code>&lt;worksheet&gt;</code>, <code>&lt;HTML&gt;</code>, <code>&lt;document&gt;</code> blocks with <code>&lt;filename&gt;</code>). Optionally add the course's <strong>Media</strong> folder so images embed into every output. The splitter never deletes anything — re-running replaces duplicate files only.</p>
 
-    <!-- File tree -->
-    <div class="files-tree-card">
-      <div class="files-tree-head">
-        <h2 class="stats-h2">Resource files on the server</h2>
-        <div class="files-tree-legend">
-          <span class="files-status ok">✓ present</span>
-          <span class="files-status missing">✗ missing</span>
-          <span class="files-status staged">↑ staged</span>
+        <div class="dropzone files-dropzone" id="split-drop">
+          <div class="dropzone-icon">🪓</div>
+          <div class="dropzone-title">Drop <code>content.docx</code> to split</div>
+          <div class="dropzone-sub">or <button class="btn btn-primary" type="button" id="split-pick">choose content.docx</button></div>
+          <input type="file" id="split-input" accept=".docx" hidden>
+          <div class="dropzone-types">Then (optional) add the Media folder ↓</div>
         </div>
-        <button class="btn btn-secondary" id="rescan-btn">Rescan</button>
+
+        <div class="split-media-row">
+          <button class="btn btn-secondary" type="button" id="media-pick-folder">📂 Add Media folder</button>
+          <button class="btn btn-secondary" type="button" id="media-pick-zip">🗜 Add Media.zip</button>
+          <input type="file" id="media-folder-input" webkitdirectory directory multiple hidden>
+          <input type="file" id="media-zip-input" accept=".zip" hidden>
+          <span class="split-media-status" id="media-status">No media loaded (optional)</span>
+        </div>
+
+        <div class="split-status" id="split-status" hidden></div>
+
+        <div class="split-actions" id="split-actions" hidden>
+          <label class="split-id-label">LMS course id
+            <input id="split-course-id" class="split-id-input" placeholder="e.g. CP4807" spellcheck="false">
+          </label>
+          <button class="btn btn-primary" type="button" id="split-build">Build outputs</button>
+          <button class="btn btn-secondary" type="button" id="split-bundle" disabled>↓ Download splitter bundle (.zip)</button>
+          <button class="btn btn-secondary" type="button" id="split-lms-zip" disabled>↓ Download LMS drop-in (.zip)</button>
+        </div>
       </div>
-      <p class="files-tree-hint">Verified by HEAD-probe against the server. Click <strong>✗ missing</strong> rows to upload directly into that path.</p>
-      <div class="files-tree" id="files-tree">
-        <p class="stage-loading">Scanning&hellip;</p>
+
+      <div class="support-card-group" id="split-results-card" hidden>
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Step 2 · Outputs</span>
+          <h2>Generated files</h2>
+        </div>
+        <div class="split-warnings" id="split-warnings"></div>
+        <div class="preview-list" id="split-results"></div>
       </div>
-    </div>
+    </section>
+
+    <!-- ───────────────── DEFINITION ───────────────── -->
+    <section class="tool-panel" id="panel-definition">
+      <div class="support-card-group">
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Course structure</span>
+          <h2>Read a Course definition document</h2>
+        </div>
+        <p class="files-tree-hint">Drop the <code>&lt;id&gt; - definition.docx</code>. It is the structure source — it lists every screen (type, time, title, asset). This produces the <code>screens[]</code> for <code>data/courses.json</code> and a readable structure summary.</p>
+
+        <div class="dropzone files-dropzone" id="def-drop">
+          <div class="dropzone-icon">📋</div>
+          <div class="dropzone-title">Drop <code>definition.docx</code></div>
+          <div class="dropzone-sub">or <button class="btn btn-primary" type="button" id="def-pick">choose definition.docx</button></div>
+          <input type="file" id="def-input" accept=".docx" hidden>
+        </div>
+
+        <div id="def-out" hidden>
+          <div class="def-meta" id="def-meta"></div>
+
+          <div class="preview-snippet-card">
+            <div class="preview-snippet-head">
+              <h2 class="stats-h2">Structure summary</h2>
+              <button class="btn btn-secondary" type="button" id="def-copy-structure">Copy</button>
+            </div>
+            <p class="preview-snippet-hint">A plain-language map of the course — useful for the left-hand menu and for checking time totals.</p>
+            <textarea id="def-structure" readonly spellcheck="false"></textarea>
+          </div>
+
+          <div class="preview-snippet-card" id="def-screens-card">
+            <div class="preview-snippet-head">
+              <h2 class="stats-h2">courses.json — screens[]</h2>
+              <button class="btn btn-secondary" type="button" id="def-copy-screens">Copy</button>
+            </div>
+            <p class="preview-snippet-hint">Paste into the <code>screens</code> array of this course in <code>data/courses.json</code>.</p>
+            <textarea id="def-screens" readonly spellcheck="false"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────── COURSE FILES ───────────────── -->
+    <section class="tool-panel" id="panel-coursefiles">
+      <div class="files-tree-card">
+        <div class="files-tree-head">
+          <h2 class="stats-h2">Media &amp; resources for one course</h2>
+          <label class="split-id-label">Course
+            <select id="cf-course" class="split-id-input"></select>
+          </label>
+          <button class="btn btn-secondary" id="cf-rescan">Rescan</button>
+        </div>
+        <p class="files-tree-hint">Scoped to the selected course only. Verified by HEAD-probe against the server. <span class="files-status ok">✓ present</span> <span class="files-status missing">✗ missing</span></p>
+        <div class="def-meta" id="cf-structure"></div>
+        <div class="files-tree" id="cf-tree"><p class="stage-loading">Pick a course&hellip;</p></div>
+      </div>
+    </section>
+
+    <!-- ───────────────── EXPORTS ───────────────── -->
+    <section class="tool-panel" id="panel-exports">
+      <div class="support-card-group">
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Word &amp; PDF</span>
+          <h2>Export a worksheet</h2>
+        </div>
+        <p class="files-tree-hint">Drop a worksheet (<code>.docx</code> / <code>.htm</code> / <code>.pdf</code>) to preview it exactly as the course viewer renders it, then download it as <strong>PDF</strong>. <code>.docx</code> files are already Word documents — use <strong>Save Word copy</strong> to keep one.</p>
+        <div class="dropzone files-dropzone" id="exp-drop">
+          <div class="dropzone-icon">🖨</div>
+          <div class="dropzone-title">Drop a worksheet to preview &amp; export</div>
+          <div class="dropzone-sub">or <button class="btn btn-primary" type="button" id="exp-pick">choose files</button></div>
+          <input type="file" id="exp-input" multiple accept=".docx,.htm,.html,.pdf" hidden>
+        </div>
+        <div class="preview-list" id="exp-list"></div>
+      </div>
+    </section>
+
+    <!-- ───────────────── GOOGLE DRIVE ───────────────── -->
+    <section class="tool-panel" id="panel-drive">
+      <div class="support-card-group">
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Live folder</span>
+          <h2>Google Drive folder</h2>
+        </div>
+        <div class="drive-notice">
+          <p><strong>Needs a one-time setup decision before it can be wired.</strong></p>
+          <p>To open and read a live Google Drive course folder in the browser, the Course Viewer needs a Google Cloud <em>OAuth client ID</em> (and the Drive API enabled on that project). Drive access can't be added without those credentials and a decision on scope:</p>
+          <ul>
+            <li><strong>Read-only</strong> — list and pull <code>content.docx</code> / <code>definition.docx</code> / Media from a shared Drive folder into the tools above.</li>
+            <li><strong>Read-write</strong> — also write split outputs back to Drive (broader consent screen, review required by Google).</li>
+          </ul>
+          <p>Until then, work from local files in the Splitter / Definition tabs. Tell me which scope you want and provide (or create) a Google Cloud OAuth client ID and I'll wire the picker here.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer class="site-footer" id="site-footer"></footer>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="assets/splitter-core.js"></script>
+  <script src="assets/definition-parser.js"></script>
   <script src="assets/sidebar.js"></script>
   <script src="assets/gamify.js"></script>
   <script src="assets/cms-overrides.js"></script>
   <script src="assets/chrome.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script>
-    (async function () {
-      'use strict';
-
-      /* ---------- Helpers ---------- */
-      function escapeHtml(s) {
-        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        }[c]));
-      }
-      function escapeAttr(s) { return escapeHtml(s); }
-      function formatSize(n) {
-        if (n < 1024) return n + ' B';
-        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
-        return (n / 1024 / 1024).toFixed(1) + ' MB';
-      }
-
-      /* ---------- Expected files (from courses.json + standard stubs) ---------- */
-      const data = await fetch('data/courses.json').then((r) => r.json());
-      const expectedMap = new Map();
-      function expect(path, type, courseId, screenTitle) {
-        if (!path || /^https?:/i.test(path)) return;
-        if (!expectedMap.has(path)) {
-          expectedMap.set(path, { path, filename: path.split('/').pop(), type, status: 'unknown', usedBy: [] });
-        }
-        if (courseId) expectedMap.get(path).usedBy.push({ courseId, screenTitle });
-      }
-      for (const course of data.courses) {
-        for (const s of course.screens) {
-          expect(s.src, s.type, course.id, s.title);
-          if (s.thumbnail) expect(s.thumbnail, 'image', course.id, s.title + ' (thumbnail)');
-        }
-      }
-      for (const p of [
-        'content/CO0001/cpd-objectives.html',
-        'content/CO0001/opening.svg',
-        'content/CO0002/welcome.html',
-        'content/CO0002/learning-objectives.html',
-        'content/CO0002/equipment.html',
-        'content/CO0002/opening.svg',
-        'content/CO0003/welcome.html',
-        'content/CO0003/opening.svg'
-      ]) expect(p, 'html', null, null);
-      const expectedList = Array.from(expectedMap.values());
-
-      /* ---------- HEAD-probe ---------- */
-      async function rescan() {
-        const tree = document.getElementById('files-tree');
-        tree.innerHTML = '<p class="stage-loading">Scanning&hellip; (' + expectedList.length + ' files)</p>';
-        await Promise.all(expectedList.map(async (entry) => {
-          try {
-            const res = await fetch(entry.path, { method: 'HEAD', cache: 'no-store' });
-            entry.status = res.ok ? 'ok' : 'missing';
-            entry.size = Number(res.headers.get('content-length') || 0) || null;
-          } catch (_) {
-            entry.status = 'missing';
-          }
-        }));
-        renderTree();
-      }
-      document.getElementById('rescan-btn').addEventListener('click', rescan);
-      rescan();
-
-      function renderTree() {
-        const tree = document.getElementById('files-tree');
-        const byFolder = new Map();
-        for (const entry of expectedList) {
-          const folder = entry.path.replace(/\/[^/]+$/, '');
-          if (!byFolder.has(folder)) byFolder.set(folder, []);
-          byFolder.get(folder).push(entry);
-        }
-        const folders = Array.from(byFolder.keys()).sort();
-        let html = '';
-        for (const folder of folders) {
-          const items = byFolder.get(folder).sort((a, b) => a.filename.localeCompare(b.filename));
-          const ok = items.filter((e) => e.status === 'ok').length;
-          const missing = items.filter((e) => e.status === 'missing').length;
-          const staged = items.filter((e) => e.status === 'staged').length;
-          html += '<div class="files-folder"><div class="files-folder-head">';
-          html += '<span class="files-folder-name">' + escapeHtml(folder) + '/</span>';
-          html += '<span class="files-folder-counts">';
-          if (ok) html += '<span class="files-status ok">' + ok + ' ✓</span>';
-          if (missing) html += '<span class="files-status missing">' + missing + ' ✗</span>';
-          if (staged) html += '<span class="files-status staged">' + staged + ' ↑</span>';
-          html += '</span></div><ul class="files-folder-list">';
-          for (const entry of items) {
-            const cls = 'files-row files-row-' + entry.status;
-            const usage = entry.usedBy.length
-              ? entry.usedBy.map((u) => u.courseId + (u.screenTitle ? ' · ' + u.screenTitle : '')).join(', ')
-              : 'intro / reference page';
-            html += '<li class="' + cls + '" data-path="' + escapeHtml(entry.path) + '">';
-            html += '<span class="files-row-icon">' + (entry.status === 'ok' ? '✓' : entry.status === 'staged' ? '↑' : '✗') + '</span>';
-            html += '<div class="files-row-body"><div class="files-row-name"><code>' + escapeHtml(entry.filename) + '</code></div>';
-            html += '<div class="files-row-meta">' + escapeHtml(usage) + '</div></div>';
-            html += '<span class="files-row-action">';
-            if (entry.status === 'missing') {
-              html += '<button class="btn btn-secondary" type="button" data-action="upload-here" data-path="' + escapeHtml(entry.path) + '">Send file →</button>';
-            } else if (entry.status === 'staged') {
-              html += '<span class="files-row-staged">staged for upload</span>';
-            } else if (entry.size) {
-              html += '<span class="files-row-size">' + formatSize(entry.size) + '</span>';
-            }
-            html += '</span></li>';
-          }
-          html += '</ul></div>';
-        }
-        tree.innerHTML = html;
-        tree.querySelectorAll('[data-action="upload-here"]').forEach((btn) => {
-          btn.addEventListener('click', () => promptUploadForPath(btn.dataset.path));
-        });
-      }
-      function promptUploadForPath(path) {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.addEventListener('change', () => {
-          if (input.files.length) addFile(input.files[0], path);
-        });
-        input.click();
-      }
-
-      /* ---------- Staging (with full preview) ---------- */
-      const staged = []; /* { id, file, targetPath, fillsMissing, type, screen } */
-      let nextId = 1;
-
-      const dz = document.getElementById('dropzone');
-      const fileInput = document.getElementById('file-input');
-      document.getElementById('pick-btn').addEventListener('click', () => fileInput.click());
-      fileInput.addEventListener('change', (e) => Array.from(e.target.files).forEach((f) => addFile(f)));
-      ['dragenter', 'dragover'].forEach((ev) =>
-        dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.add('drag'); }));
-      ['dragleave', 'drop'].forEach((ev) =>
-        dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.remove('drag'); }));
-      dz.addEventListener('drop', (e) => Array.from(e.dataTransfer.files).forEach((f) => addFile(f)));
-
-      function inferScreenType(ext) {
-        ext = ext.toLowerCase();
-        if (ext === 'docx' || ext === 'doc') return 'document';
-        if (ext === 'htm' || ext === 'html') return 'html';
-        if (ext === 'pdf') return 'pdf';
-        if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico'].includes(ext)) return 'image';
-        if (ext === 'pptx' || ext === 'ppt') return 'powerpoint';
-        if (ext === 'xlsx' || ext === 'xls') return 'spreadsheet';
-        return 'unknown';
-      }
-      function defaultHours(type) {
-        return ({ document: 1, html: 0.2, pdf: 0.2, image: 0, powerpoint: 0.3, spreadsheet: 0.2 })[type] || 0.2;
-      }
-      function suggestPath(filename) {
-        for (const e of expectedList) {
-          if (e.filename === filename) return { path: e.path, fills: e.status === 'missing' };
-        }
-        let m = /^(CP\d+)-/.exec(filename);
-        if (m) return { path: 'content/' + m[1] + '/' + filename, fills: false };
-        m = /^(CO\d{3,4})/i.exec(filename);
-        if (m) return { path: 'content/' + m[1].toUpperCase() + '/' + filename, fills: false };
-        if (/microcontroller basics/i.test(filename)) return { path: 'content/CO0002/' + filename, fills: false };
-        return { path: 'content/' + filename, fills: false };
-      }
-
-      async function addFile(file, forcedPath) {
-        const id = 's-' + (nextId++);
-        const ext = (file.name.split('.').pop() || '').toLowerCase();
-        const type = inferScreenType(ext);
-        const suggestion = forcedPath ? { path: forcedPath, fills: true } : suggestPath(file.name);
-        const titleGuess = file.name.replace(/\.[a-z0-9]+$/i, '');
-
-        const item = {
-          id, file, type,
-          targetPath: suggestion.path,
-          fillsMissing: suggestion.fills,
-          screen: {
-            id: 's-' + nextId,
-            type,
-            title: titleGuess,
-            hours: defaultHours(type),
-            equipment: 'Flowcode / E-blocks3',
-            src: suggestion.path
-          }
-        };
-        staged.push(item);
-
-        /* Mark expected entry as 'staged' so the tree updates */
-        const match = expectedList.find((e) => e.path === suggestion.path);
-        if (match) match.status = 'staged';
-
-        renderStaging();
-        renderTree();
-        await renderCardPreview(item);
-      }
-
-      function renderStaging() {
-        const wrap = document.getElementById('files-staging');
-        const list = document.getElementById('staging-list');
-        document.getElementById('staging-count').textContent = staged.length + ' file' + (staged.length === 1 ? '' : 's');
-        if (staged.length === 0) { wrap.hidden = true; rebuildSnippet(); return; }
-        wrap.hidden = false;
-        list.innerHTML = '';
-        for (const item of staged) {
-          const card = document.createElement('article');
-          card.className = 'preview-card';
-          card.id = item.id;
-          card.innerHTML = `
-            <header class="preview-card-head">
-              <div>
-                <span class="preview-card-type ${item.type}">${item.type}</span>
-                <span class="preview-card-name">${escapeHtml(item.file.name)}</span>
-                <span class="preview-card-size">${formatSize(item.file.size)}</span>
-                ${item.fillsMissing ? '<span class="files-staged-tag" style="margin-left:0.4rem;background:var(--success-50);color:var(--success);border:1px solid #bbf7d0;">✓ fills missing</span>' : ''}
-              </div>
-              <div class="preview-card-actions">
-                <button class="btn btn-secondary preview-card-pdf" type="button">Download as PDF</button>
-                <button class="btn btn-ghost preview-card-remove" type="button" aria-label="Remove">×</button>
-              </div>
-            </header>
-            <div class="preview-card-body" data-role="body">
-              <p class="stage-loading">Rendering preview&hellip;</p>
-            </div>
-            <footer class="preview-card-foot">
-              <label>Title <input class="preview-card-title-input" value="${escapeHtml(item.screen.title)}"></label>
-              <label>Path <input class="preview-card-path-input" value="${escapeHtml(item.targetPath)}"></label>
-              <label>Hours <input class="preview-card-hours-input" type="number" min="0" step="0.1" value="${item.screen.hours}"></label>
-            </footer>
-          `;
-          list.appendChild(card);
-
-          card.querySelector('.preview-card-remove').addEventListener('click', () => {
-            const idx = staged.findIndex((s) => s.id === item.id);
-            if (idx >= 0) staged.splice(idx, 1);
-            const match = expectedList.find((e) => e.path === item.targetPath);
-            if (match) match.status = 'missing';
-            renderStaging();
-            renderTree();
-          });
-          card.querySelector('.preview-card-pdf').addEventListener('click', (ev) => {
-            downloadCardAsPdf(card, item.file, ev.currentTarget);
-          });
-          card.querySelector('.preview-card-title-input').addEventListener('input', (ev) => {
-            item.screen.title = ev.target.value;
-            rebuildSnippet();
-          });
-          card.querySelector('.preview-card-path-input').addEventListener('input', (ev) => {
-            const oldMatch = expectedList.find((e) => e.path === item.targetPath);
-            if (oldMatch) oldMatch.status = 'missing';
-            item.targetPath = ev.target.value;
-            item.screen.src = ev.target.value;
-            const newMatch = expectedList.find((e) => e.path === item.targetPath);
-            if (newMatch) { newMatch.status = 'staged'; item.fillsMissing = true; }
-            else { item.fillsMissing = false; }
-            rebuildSnippet();
-            renderTree();
-          });
-          card.querySelector('.preview-card-hours-input').addEventListener('input', (ev) => {
-            item.screen.hours = Number(ev.target.value) || 0;
-            rebuildSnippet();
-          });
-        }
-        rebuildSnippet();
-      }
-
-      async function renderCardPreview(item) {
-        const card = document.getElementById(item.id);
-        if (!card) return;
-        const body = card.querySelector('[data-role="body"]');
-        try {
-          if (item.type === 'document') await renderDocxPreview(item.file, body);
-          else if (item.type === 'html') await renderHtmlPreview(item.file, body);
-          else if (item.type === 'pdf') renderPdfPreview(item.file, body);
-          else if (item.type === 'image') renderImagePreview(item.file, body);
-          else if (item.type === 'powerpoint' || item.type === 'spreadsheet') {
-            const url = URL.createObjectURL(item.file);
-            body.innerHTML = `
-              <div class="stage-pptx" style="padding:1.5rem;">
-                <p>${item.type === 'powerpoint' ? 'PowerPoint' : 'Spreadsheet'} files cannot be rendered inline.</p>
-                <a class="btn btn-secondary" href="${url}" download="${escapeAttr(item.file.name)}">Download</a>
-              </div>`;
-          } else {
-            body.innerHTML = '<p class="stage-loading">No preview available for this type.</p>';
-          }
-        } catch (err) {
-          body.innerHTML = '<p style="padding:1.5rem;color:var(--warn);">Preview failed: ' + escapeHtml(err.message) + '</p>';
-        }
-      }
-
-      async function renderDocxPreview(file, body) {
-        const buf = await file.arrayBuffer();
-        const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
-        body.innerHTML = '<div class="stage-doc"><div class="stage-doc-inner">' + enhanceWorksheetHtml(result.value || '') + '</div></div>';
-      }
-      async function renderHtmlPreview(file, body) {
-        const text = await file.text();
-        const doc = new DOMParser().parseFromString(text, 'text/html');
-        const pageEl = doc.querySelector('.page');
-        let bodyHtml = pageEl ? pageEl.innerHTML : (doc.body ? doc.body.innerHTML : text);
-        body.innerHTML = '<div class="stage-doc"><div class="stage-doc-inner">' + enhanceWorksheetHtml(bodyHtml) + '</div></div>';
-      }
-      function renderPdfPreview(file, body) {
-        const url = URL.createObjectURL(file);
-        body.innerHTML = '<iframe class="preview-iframe" src="' + url + '" title="' + escapeAttr(file.name) + '"></iframe>';
-      }
-      function renderImagePreview(file, body) {
-        const url = URL.createObjectURL(file);
-        body.innerHTML = '<div class="preview-image"><img src="' + url + '" alt="' + escapeAttr(file.name) + '"></div>';
-      }
-
-      async function downloadCardAsPdf(card, file, btn) {
-        if (!window.html2pdf) { alert('PDF library not loaded yet — refresh and try again.'); return; }
-        const body = card.querySelector('[data-role="body"]');
-        if (!body || !body.innerHTML.trim()) { alert('Wait for the preview to render.'); return; }
-        const original = btn.textContent;
-        btn.disabled = true; btn.textContent = 'Building PDF…';
-        const wrap = document.createElement('div');
-        wrap.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:794px;background:#fff;font-family:"Segoe UI", Calibri, Arial, sans-serif;color:#1a1a2e;font-size:11pt;line-height:1.55;padding:30px 40px;';
-        wrap.innerHTML =
-          '<h1 style="font-family:\'Segoe UI\',Inter,Arial,sans-serif;font-size:22pt;color:#1e1b4b;margin:0 0 18px;font-weight:800;">' +
-          escapeHtml(file.name.replace(/\.[a-z0-9]+$/i, '')) + '</h1>' + body.innerHTML;
-        document.body.appendChild(wrap);
-        try {
-          await window.html2pdf().set({
-            margin: [10, 12, 14, 12],
-            filename: file.name.replace(/\.[a-z0-9]+$/i, '') + '.pdf',
-            image: { type: 'jpeg', quality: 0.95 },
-            html2canvas: { scale: 1.6, letterRendering: true, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4' }
-          }).from(wrap).save();
-        } catch (err) {
-          alert('PDF generation failed: ' + err.message);
-        } finally {
-          wrap.remove();
-          btn.disabled = false;
-          btn.textContent = original;
-        }
-      }
-
-      function rebuildSnippet() {
-        const card = document.getElementById('snippet-card');
-        const snippet = document.getElementById('snippet');
-        if (staged.length === 0) { card.hidden = true; return; }
-        card.hidden = false;
-        snippet.value = staged.map((s) => JSON.stringify(s.screen, null, 2)).join(',\n');
-      }
-      document.getElementById('copy-all').addEventListener('click', async () => {
-        const ta = document.getElementById('snippet');
-        try {
-          await navigator.clipboard.writeText(ta.value);
-          const btn = document.getElementById('copy-all');
-          const orig = btn.textContent;
-          btn.textContent = 'Copied!';
-          setTimeout(() => { btn.textContent = orig; }, 1400);
-        } catch (_) {
-          ta.select(); document.execCommand('copy');
-        }
-      });
-
-      document.getElementById('clear-staging').addEventListener('click', () => {
-        if (!staged.length) return;
-        if (!confirm('Clear all staged files?')) return;
-        for (const item of staged) {
-          const m = expectedList.find((e) => e.path === item.targetPath);
-          if (m) m.status = 'missing';
-        }
-        staged.length = 0;
-        renderStaging();
-        renderTree();
-      });
-
-      document.getElementById('export-zip').addEventListener('click', async () => {
-        if (!staged.length) { alert('No files staged.'); return; }
-        if (typeof window.JSZip === 'undefined') { alert('Zip library failed to load.'); return; }
-        const zip = new window.JSZip();
-        for (const item of staged) {
-          const buf = await item.file.arrayBuffer();
-          zip.file(item.targetPath, buf);
-        }
-        const readme = '# Matrix LMS — staged resources\n\nGenerated by /files.html on ' + new Date().toISOString() + '\n\nDrop the contents of this zip into your `lms/` folder, then commit and push.\n\nFiles included:\n\n' + staged.map((s) => '- ' + s.targetPath + (s.fillsMissing ? ' (fills a missing slot)' : '')).join('\n') + '\n';
-        zip.file('README.txt', readme);
-        const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'matrix-files.zip';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      });
-
-      /* ---------- Worksheet enhancer (mirrors app.js) ---------- */
-      function enhanceWorksheetHtml(html) {
-        let parsed;
-        try { parsed = new DOMParser().parseFromString('<!DOCTYPE html><html><body>' + html + '</body></html>', 'text/html'); }
-        catch (_) { return html; }
-        const root = parsed.body;
-        if (!root) return html;
-        Array.from(root.querySelectorAll('table')).forEach((table) => {
-          const cells = Array.from(table.querySelectorAll('td, th'));
-          const filled = cells.map((c) => (c.textContent || '').trim()).filter(Boolean);
-          if (cells.length <= 16 && filled.length <= 8 && filled.every((t) => t.length < 120)) {
-            const meta = parsed.createElement('div');
-            meta.className = 'worksheet-header';
-            meta.innerHTML = filled.map((t) => `<span>${escapeHtml(t)}</span>`).join('');
-            table.replaceWith(meta);
-          }
-        });
-        Array.from(root.querySelectorAll('a')).forEach((a) => {
-          const href = a.getAttribute('href') || '';
-          const m = href.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
-          if (!m) return;
-          const aText = (a.textContent || '').trim();
-          if (aText !== href.trim() && !/youtu/.test(aText)) return;
-          const wrap = parsed.createElement('div');
-          wrap.className = 'inline-youtube';
-          wrap.innerHTML = '<iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen loading="lazy"></iframe>';
-          if (a.parentElement && a.parentElement.tagName === 'P' && (a.parentElement.textContent || '').trim() === aText) {
-            a.parentElement.replaceWith(wrap);
-          } else { a.replaceWith(wrap); }
-        });
-        const patterns = [
-          { tag: 'h1', cls: 'doc-h1', re: /^(Homework\s*\d+|Assessment\s*\d+|Project|Assessment marking schemes)$/i },
-          { tag: 'h2', cls: 'doc-section design-brief', re: /^Design brief:?$/i },
-          { tag: 'h2', cls: 'doc-section hardware', re: /^Hardware:?$/i },
-          { tag: 'h2', cls: 'doc-section software', re: /^Software:?$/i },
-          { tag: 'h2', cls: 'doc-section challenges', re: /^Challenges:?$/i },
-          { tag: 'h2', cls: 'doc-section hints', re: /^Hints:?$/i },
-          { tag: 'h2', cls: 'doc-section over-to-you', re: /^Over to you:?$/i },
-          { tag: 'h2', cls: 'doc-section risk', re: /^Technical risk:?$/i }
-        ];
-        Array.from(root.querySelectorAll('p')).forEach((p) => {
-          const text = (p.textContent || '').trim();
-          if (!text) return;
-          for (const pat of patterns) {
-            if (pat.re.test(text)) {
-              const tag = parsed.createElement(pat.tag);
-              tag.className = pat.cls;
-              tag.textContent = text;
-              p.replaceWith(tag);
-              return;
-            }
-          }
-        });
-        return root.innerHTML;
-      }
-    })();
-  </script>
+  <script src="assets/tools.js"></script>
 </body>
 </html>
