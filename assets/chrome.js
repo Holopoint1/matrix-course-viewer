@@ -30,7 +30,7 @@
   'use strict';
 
   const NAV_LINKS = [
-    { href: 'index.html',   label: 'Catalog',    match: ['index.html', ''] },
+    { href: 'index.html',   label: 'Courses',    match: ['index.html', ''] },
     { href: 'account.html', label: 'My Account', match: ['account.html', 'stats.html'] },
     { href: 'files.html',   label: 'Tools',      match: ['files.html', 'preview.html', 'tools.html'] },
     { href: 'support.html', label: 'Support',    match: ['support.html'] },
@@ -38,7 +38,7 @@
   ];
 
   const FOOTER_LINKS = [
-    { href: 'index.html',   label: 'Catalog' },
+    { href: 'index.html',   label: 'Courses' },
     { href: 'account.html', label: 'My Account' },
     { href: 'files.html',   label: 'Tools' },
     { href: 'support.html', label: 'Support' },
