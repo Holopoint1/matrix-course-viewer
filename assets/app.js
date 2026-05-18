@@ -944,7 +944,10 @@
     const code = (course && course.code) || '';
     const body = innerEl && innerEl.innerHTML ? innerEl.innerHTML : '';
     if (!body.trim()) { alert('Wait for the worksheet to render first, then print.'); return; }
-    const w = window.open('', '_blank', 'noopener,noreferrer,width=900,height=1000');
+    /* NB: do NOT pass noopener/noreferrer here — those make window.open()
+       return null, so we could never write the print document into the new
+       window (the about:blank bug). The content below is our own. */
+    const w = window.open('', '_blank', 'width=900,height=1000');
     if (!w) { alert('Pop-up blocked. Allow pop-ups for this site to print.'); return; }
     w.document.open();
     w.document.write([

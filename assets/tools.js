@@ -434,7 +434,8 @@
   $('drive-open').addEventListener('click', function () {
     var url = ($('drive-url').value || '').trim();
     if (!url) { alert('Paste a Google Drive folder link first.'); return; }
-    window.open(url, 'matrixDriveFolder', 'width=1280,height=860,noopener');
+    var w = window.open(url, 'matrixDriveFolder', 'width=1280,height=860');
+    if (!w) alert('Pop-up blocked. Allow pop-ups for this site to open Drive.');
   });
   $('drive-embed').addEventListener('click', function () {
     var id = driveFolderId($('drive-url').value);
