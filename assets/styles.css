@@ -2999,20 +2999,38 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   flex: 1;
   min-height: 0;
 }
-/* Native fullscreen: the frame becomes the whole screen. The
-   :fullscreen pseudo handles the real state; .is-fullscreen is a
-   JS-set mirror for any browser quirks. */
-.stage-pdf-frame:fullscreen,
-.stage-pdf-frame.is-fullscreen {
-  width: 100vw;
-  height: 100vh;
-  background: #525659; /* matches the browser PDF viewer chrome */
+/* CSS-overlay "fullscreen": the whole .stage-pdf wrap is pinned over
+   the viewport. Doesn't use the native Fullscreen API (which the
+   cross-origin PDF iframe silently blocks), so it always works. */
+.stage-pdf.pdf-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #525659;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
-.stage-pdf-frame:fullscreen .stage-pdf-iframe,
-.stage-pdf-frame.is-fullscreen .stage-pdf-iframe {
-  width: 100%;
-  height: 100%;
+body.pdf-overlay-open { overflow: hidden; }
+.stage-pdf.pdf-overlay .stage-pdf-frame { flex: 1; }
+.stage-pdf.pdf-overlay .stage-pdf-toolbar { background: #323639; }
+.stage-pdf.pdf-overlay .stage-pdf-name { color: #fff; }
+.stage-pdf-exit {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 10000;
+  padding: 0.5rem 1rem;
+  background: rgba(255,255,255,0.95);
+  color: var(--primary-dark);
+  border: 0;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
 }
+.stage-pdf-exit:hover { background: #fff; }
 .stage-pdf-iframe,
 .stage-pdf-object {
   position: absolute;

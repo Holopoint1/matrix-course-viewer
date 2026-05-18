@@ -590,24 +590,41 @@
     /* If <object> swap-in also doesn't render anything, escalate to fallback. */
     obj.addEventListener('error', showFallback);
 
-    /* Fullscreen the PDF frame. Falls back to opening in a new tab if
-       the Fullscreen API is unavailable (some embedded browsers). */
+    /* Fullscreen via a CSS overlay rather than the native Fullscreen API.
+       The native API is silently blocked here because the PDF renders in
+       a cross-origin <iframe> (matrixtsl.com) — requestFullscreen on the
+       container resolves but the embedded viewer doesn't expand, so it
+       "does nothing". A position:fixed overlay always works, can't be
+       blocked, and we control the exit affordance. */
     const fsBtn = wrap.querySelector('[data-action="fullscreen"]');
     const frame = wrap.querySelector('.stage-pdf-frame');
     if (fsBtn && frame) {
-      fsBtn.addEventListener('click', () => {
-        if (frame.requestFullscreen) {
-          frame.requestFullscreen().catch(() => window.open(screen.src, '_blank', 'noopener'));
-        } else if (frame.webkitRequestFullscreen) {
-          frame.webkitRequestFullscreen();
-        } else {
-          window.open(screen.src, '_blank', 'noopener');
+      let exitBtn = null;
+      const enter = () => {
+        wrap.classList.add('pdf-overlay');
+        document.body.classList.add('pdf-overlay-open');
+        fsBtn.textContent = '⛶ Exit fullscreen';
+        if (!exitBtn) {
+          exitBtn = document.createElement('button');
+          exitBtn.type = 'button';
+          exitBtn.className = 'stage-pdf-exit';
+          exitBtn.innerHTML = '✕ Exit fullscreen';
+          exitBtn.addEventListener('click', exit);
+          wrap.appendChild(exitBtn);
         }
-      });
-      document.addEventListener('fullscreenchange', () => {
-        const isFs = document.fullscreenElement === frame;
-        frame.classList.toggle('is-fullscreen', isFs);
-        fsBtn.textContent = isFs ? '⛶ Exit fullscreen' : '⛶ Fullscreen';
+        exitBtn.hidden = false;
+        document.addEventListener('keydown', onEsc);
+      };
+      const exit = () => {
+        wrap.classList.remove('pdf-overlay');
+        document.body.classList.remove('pdf-overlay-open');
+        fsBtn.textContent = '⛶ Fullscreen';
+        if (exitBtn) exitBtn.hidden = true;
+        document.removeEventListener('keydown', onEsc);
+      };
+      const onEsc = (e) => { if (e.key === 'Escape') exit(); };
+      fsBtn.addEventListener('click', () => {
+        if (wrap.classList.contains('pdf-overlay')) exit(); else enter();
       });
     }
   }
