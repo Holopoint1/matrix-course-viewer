@@ -17,9 +17,7 @@
     screenStage: document.getElementById('screen-stage'),
     prevBtn: document.getElementById('prev-btn'),
     nextBtn: document.getElementById('next-btn'),
-    nextBtnBottom: document.getElementById('next-btn-bottom'),
-    completeBtn: document.getElementById('complete-btn'),
-    bundleBtn: document.getElementById('bundle-btn')
+    completeBtn: document.getElementById('complete-btn')
   };
 
   let course = null;
@@ -29,16 +27,39 @@
   /* ---------- Time tracker ---------- */
   const timeTracker = (function () {
     const SAVE_INTERVAL_MS = 15000;
+    /* Only count time when the learner is actually present. If there's been
+       no mouse / key / scroll / touch for IDLE_LIMIT_MS we treat the segment
+       as idle and stop accruing — fixes hours being logged because a tab was
+       left open in a focused window. */
+    const IDLE_LIMIT_MS = 90 * 1000;
+    /* Hard cap on what a single flush can add. Protects against laptop sleep
+       / clock jumps / debugger pauses dumping a huge delta in one go. */
+    const MAX_SEGMENT_MS = SAVE_INTERVAL_MS * 2;
     const KEY_PREFIX = 'matrix-lms:time:';
     let trackingCourseId = null;
     let trackingScreenId = null;
     let segmentStartedAt = null;
     let intervalId = null;
+    let lastActivityAt = Date.now();
+
+    function markActivity() {
+      const wasIdle = (Date.now() - lastActivityAt) > IDLE_LIMIT_MS;
+      lastActivityAt = Date.now();
+      /* Coming back from idle: restart the segment clock so the idle gap
+         isn't billed retroactively. */
+      if (wasIdle && trackingCourseId && document.visibilityState === 'visible') {
+        segmentStartedAt = Date.now();
+      }
+    }
+    ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'wheel'].forEach((ev) => {
+      window.addEventListener(ev, markActivity, { passive: true });
+    });
 
     function start(cId, sId) {
       stop();
       trackingCourseId = cId;
       trackingScreenId = sId;
+      lastActivityAt = Date.now();
       if (document.visibilityState === 'visible') {
         segmentStartedAt = Date.now();
       }
@@ -51,10 +72,20 @@
     }
     function flush() {
       if (!segmentStartedAt || !trackingCourseId || !trackingScreenId) return;
-      const elapsedSec = Math.floor((Date.now() - segmentStartedAt) / 1000);
+      const now = Date.now();
+      /* Don't bill idle time. If the learner has been inactive past the
+         limit, drop this segment and re-anchor so we resume cleanly when
+         they come back. */
+      if (now - lastActivityAt > IDLE_LIMIT_MS) {
+        segmentStartedAt = now;
+        return;
+      }
+      let elapsedMs = now - segmentStartedAt;
+      if (elapsedMs > MAX_SEGMENT_MS) elapsedMs = MAX_SEGMENT_MS; /* clamp */
+      const elapsedSec = Math.floor(elapsedMs / 1000);
       if (elapsedSec < 1) return;
       addSeconds(trackingCourseId, trackingScreenId, elapsedSec);
-      segmentStartedAt = Date.now();
+      segmentStartedAt = now;
     }
     function addSeconds(cId, sId, secs) {
       try {
@@ -68,6 +99,7 @@
       if (!trackingCourseId) return;
       if (document.visibilityState === 'visible') {
         segmentStartedAt = Date.now();
+        lastActivityAt = Date.now();
       } else {
         flush();
         segmentStartedAt = null;
@@ -484,6 +516,7 @@
       <div class="stage-pdf-toolbar">
         <span class="stage-pdf-name" title="${safeSrc}">${escapeHtml(fname)}</span>
         <div class="stage-pdf-actions">
+          <button type="button" class="btn btn-secondary" data-action="fullscreen">⛶ Fullscreen</button>
           <a class="btn btn-secondary" href="${safeSrc}" target="_blank" rel="noopener">↗ Open in new tab</a>
           <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
         </div>
@@ -556,6 +589,27 @@
 
     /* If <object> swap-in also doesn't render anything, escalate to fallback. */
     obj.addEventListener('error', showFallback);
+
+    /* Fullscreen the PDF frame. Falls back to opening in a new tab if
+       the Fullscreen API is unavailable (some embedded browsers). */
+    const fsBtn = wrap.querySelector('[data-action="fullscreen"]');
+    const frame = wrap.querySelector('.stage-pdf-frame');
+    if (fsBtn && frame) {
+      fsBtn.addEventListener('click', () => {
+        if (frame.requestFullscreen) {
+          frame.requestFullscreen().catch(() => window.open(screen.src, '_blank', 'noopener'));
+        } else if (frame.webkitRequestFullscreen) {
+          frame.webkitRequestFullscreen();
+        } else {
+          window.open(screen.src, '_blank', 'noopener');
+        }
+      });
+      document.addEventListener('fullscreenchange', () => {
+        const isFs = document.fullscreenElement === frame;
+        frame.classList.toggle('is-fullscreen', isFs);
+        fsBtn.textContent = isFs ? '⛶ Exit fullscreen' : '⛶ Fullscreen';
+      });
+    }
   }
 
   async function renderHtmlContent(stage, screen) {
@@ -744,17 +798,29 @@
   }
 
   function formatMeta(screen) {
+    /* Labelled screen info, e.g.
+       Title: Homework 1   ·   Time: 2 hours   ·   Type: HTML   ·   Asset: CP4807-H1.htm
+       (Title is also shown big in the h2 above; repeated here as a labelled
+       field per author request so all the screen metadata reads as one row.) */
     const parts = [];
-    parts.push('<span class="meta-type">' + escapeHtml(screen.type.toUpperCase()) + '</span>');
-    if (screen.hours) parts.push('<span class="meta-hours">' + escapeHtml(String(screen.hours)) + ' hr</span>');
-    if (screen.equipment) parts.push('<span class="meta-equip">' + escapeHtml(screen.equipment) + '</span>');
-    const fname = screen.src ? filename(screen.src) : '';
-    if (fname && !/^https?:/i.test(screen.src)) {
-      parts.push('<span class="meta-file"><code>' + escapeHtml(fname) + '</code></span>');
-    } else if (/^https?:/i.test(screen.src)) {
-      parts.push('<span class="meta-file"><code>' + escapeHtml(shortUrl(screen.src)) + '</code></span>');
+    parts.push('<span class="meta-field"><span class="meta-k">Title:</span> ' + escapeHtml(screen.title || '—') + '</span>');
+
+    if (screen.hours != null && screen.hours !== '') {
+      const h = Number(screen.hours);
+      const timeLabel = isNaN(h)
+        ? escapeHtml(String(screen.hours))
+        : (h === 1 ? '1 hour' : (Number.isInteger(h) ? h + ' hours' : h + ' hours'));
+      parts.push('<span class="meta-field"><span class="meta-k">Time:</span> ' + timeLabel + '</span>');
     }
-    return parts.join(' · ');
+
+    parts.push('<span class="meta-field"><span class="meta-k">Type:</span> ' + escapeHtml(screen.type.toUpperCase()) + '</span>');
+
+    const isUrl = /^https?:/i.test(screen.src || '');
+    const asset = screen.src ? (isUrl ? shortUrl(screen.src) : filename(screen.src)) : '';
+    if (asset) {
+      parts.push('<span class="meta-field"><span class="meta-k">Asset:</span> <code>' + escapeHtml(asset) + '</code></span>');
+    }
+    return parts.join('<span class="meta-sep">·</span>');
   }
   function shortUrl(u) {
     try {

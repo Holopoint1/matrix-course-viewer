@@ -7,7 +7,7 @@
   <meta name="description" content="Matrix TSL Course Viewer - browser-based courses for engineering education.">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
-<body>
+<body data-no-sidebar>
   <section class="catalog-hero">
     <div class="hero-inner">
       <span class="eyebrow">Matrix Learning</span>
@@ -32,17 +32,6 @@
     </div>
     <p class="catalog-empty" id="catalog-empty" hidden>No courses match this filter.</p>
   </main>
-
-  <section class="missing-section" id="missing-section" hidden>
-    <div class="missing-card">
-      <div class="missing-card-head">
-        <h2><span class="missing-card-pill">Awaiting</span> Resources to send</h2>
-        <span class="missing-card-counter" id="missing-counter">— files</span>
-      </div>
-      <p class="missing-card-hint">These files are referenced by the course outline but haven't been added to the media zip yet. Drop them into the indicated folder and they'll appear automatically — no rebuild needed.</p>
-      <ul class="missing-list" id="missing-list"></ul>
-    </div>
-  </section>
 
   <script src="assets/chrome.js"></script>
   <script src="assets/gamify.js"></script>
@@ -196,42 +185,8 @@
         stats.querySelector('[data-stat="courses"]').textContent = data.courses.filter((c) => c.kind !== 'pack').length;
         stats.querySelector('[data-stat="time"]').textContent = totalTime > 0 ? window.Gamify.formatDuration(totalTime) : '0m';
         stats.querySelector('[data-stat="streak"]').textContent = streak.days || 0;
-
-        /* ---------- Missing media panel ---------- */
-        const missingSection = document.getElementById('missing-section');
-        const missingList = document.getElementById('missing-list');
-        const missingCounter = document.getElementById('missing-counter');
-        const allMissing = new Map(); /* src -> { filename, screens: [{ courseCode, title }] } */
-        for (const course of data.courses) {
-          for (const screen of course.screens) {
-            if (!screen.missing) continue;
-            const src = screen.src;
-            if (!allMissing.has(src)) {
-              allMissing.set(src, { src, filename: src.split(/[\\/]/).pop(), screens: [] });
-            }
-            allMissing.get(src).screens.push({ courseCode: course.code, title: screen.title });
-          }
-        }
-        if (allMissing.size > 0) {
-          missingSection.hidden = false;
-          missingCounter.textContent = allMissing.size + ' file' + (allMissing.size === 1 ? '' : 's');
-          missingList.innerHTML = '';
-          for (const item of allMissing.values()) {
-            const li = document.createElement('li');
-            li.className = 'missing-row';
-            const usage = item.screens.map((s) => s.courseCode + ' · ' + s.title).join(' · ');
-            li.innerHTML = `
-              <div class="missing-row-icon">📦</div>
-              <div class="missing-row-body">
-                <div class="missing-row-name"><code>${escapeHtml(item.filename)}</code></div>
-                <div class="missing-row-meta">Drop into <code>${escapeHtml(item.src)}</code></div>
-                <div class="missing-row-usage">${escapeHtml(usage)}</div>
-              </div>
-            `;
-            missingList.appendChild(li);
-          }
-        }
-
+        /* Missing-resources summary moved to the TOOLS screen — the catalog
+           stays clean and learner-facing. */
       } catch (err) {
         root.innerHTML = '<p class="stage-loading">Could not load courses. ' + err.message + '</p>';
       }

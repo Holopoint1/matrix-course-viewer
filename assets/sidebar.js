@@ -110,20 +110,11 @@
     `;
   }
 
-  function buildFooterTools(course) {
-    /* When a course is in scope, pass its id through to the SCORM page so
-       its Live Status table shows that course's worksheets. */
-    const scormHref = course && course.id
-      ? `scorm.html?id=${encodeURIComponent(course.id)}`
-      : 'scorm.html';
-    return `
-      <div class="ms-section ms-section-tools">
-        <a class="ms-nav-item" href="${scormHref}">
-          <span class="ms-nav-ico ms-nav-ico-blue">${ICONS.check}</span>
-          <span class="ms-nav-label">SCORM Compliance</span>
-        </a>
-      </div>
-    `;
+  function buildFooterTools() {
+    /* Authoring tools (SCORM export, splitter, etc.) now live under the
+       top-nav TOOLS screen, not the sidebar. The sidebar is purely
+       course navigation for the currently-selected course. */
+    return '';
   }
 
   function buildResetBar() {
