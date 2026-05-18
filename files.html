@@ -21,6 +21,7 @@
       <button class="tool-tab" data-tab="definition" role="tab" type="button">📋 Definition</button>
       <button class="tool-tab" data-tab="coursefiles" role="tab" type="button">📁 Course files</button>
       <button class="tool-tab" data-tab="exports" role="tab" type="button">🖨 Exports</button>
+      <button class="tool-tab" data-tab="scorm" role="tab" type="button">📦 SCORM</button>
       <button class="tool-tab" data-tab="drive" role="tab" type="button">☁ Google Drive</button>
     </div>
 
@@ -145,6 +146,24 @@
       </div>
     </section>
 
+    <!-- ───────────────── SCORM ───────────────── -->
+    <section class="tool-panel" id="panel-scorm">
+      <div class="support-card-group">
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Export</span>
+          <h2>SCORM 1.2 package</h2>
+        </div>
+        <p class="files-tree-hint">Wraps a course's content into a self-contained <strong>SCORM 1.2</strong> package (SCO) — <code>imsmanifest.xml</code>, the viewer, the SCORM API bridge, filtered data and all referenced content — ready to drop into any SCORM-compliant LMS (Moodle, Canvas, etc.). Same structure as the build script. (This is Hamed's area — flag him if the SCORM runtime needs changes.)</p>
+        <div class="split-actions">
+          <label class="split-id-label">Course
+            <select id="scorm-course" class="split-id-input"></select>
+          </label>
+          <button class="btn btn-primary" id="scorm-build" type="button">📦 Build SCORM package</button>
+        </div>
+        <div class="split-status" id="scorm-status" hidden></div>
+      </div>
+    </section>
+
     <!-- ───────────────── GOOGLE DRIVE ───────────────── -->
     <section class="tool-panel" id="panel-drive">
       <div class="support-card-group">
@@ -172,6 +191,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="assets/splitter-core.js"></script>
   <script src="assets/definition-parser.js"></script>
+  <script src="assets/scorm-export.js"></script>
   <script src="assets/sidebar.js"></script>
   <script src="assets/gamify.js"></script>
   <script src="assets/cms-overrides.js"></script>

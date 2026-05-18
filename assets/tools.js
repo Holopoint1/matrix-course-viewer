@@ -424,6 +424,38 @@
   dropzone($('exp-drop'), function (files) { files.forEach(addExport); });
 
   /* ====================================================================== *
+   *  SCORM 1.2 EXPORT (client-side port of tools/build-scorm.js)
+   * ====================================================================== */
+  async function initScorm() {
+    var data = await loadCourses();
+    var sel = $('scorm-course');
+    sel.innerHTML = data.courses.map(function (c) {
+      return '<option value="' + esc(c.id) + '">' + esc(c.id) + ' — ' + esc(c.title) + '</option>';
+    }).join('');
+  }
+  function scormStatus(html, kind) {
+    var el = $('scorm-status');
+    el.hidden = false;
+    el.className = 'split-status' + (kind ? ' ' + kind : '');
+    el.innerHTML = html;
+  }
+  $('scorm-build').addEventListener('click', async function () {
+    if (!window.MatrixScormExport) { scormStatus('SCORM exporter not loaded — refresh and retry.', 'err'); return; }
+    var id = $('scorm-course').value;
+    var btn = this; btn.disabled = true; var t = btn.textContent; btn.textContent = 'Building…';
+    try {
+      var res = await window.MatrixScormExport.build(id, function (msg) { scormStatus(esc(msg)); });
+      download(res.blob, res.filename);
+      var s = res.stats;
+      scormStatus('✓ <strong>' + esc(res.filename) + '</strong> built — ' + s.screens +
+        ' screen(s), ' + s.got + ' content file(s) included' +
+        (s.miss ? ', <span class="x">' + s.miss + ' missing (placeholder shown in viewer)</span>' : '') + '.', 'ok');
+    } catch (err) {
+      scormStatus('Build failed: ' + esc(err.message), 'err');
+    } finally { btn.disabled = false; btn.textContent = t; }
+  });
+
+  /* ====================================================================== *
    *  GOOGLE DRIVE (open / embed a shared folder — no API, no credentials)
    * ====================================================================== */
   function driveFolderId(url) {
@@ -451,5 +483,8 @@
   /* ---------- Boot ---------- */
   initCourseFiles().catch(function (err) {
     $('cf-tree').innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
+  });
+  initScorm().catch(function (err) {
+    scormStatus('Could not load courses: ' + esc(err.message), 'err');
   });
 })();
