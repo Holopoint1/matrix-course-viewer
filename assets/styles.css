@@ -3557,23 +3557,29 @@ body.pdf-overlay-open { overflow: hidden; }
 .ms-tier-label.tier-other       { color: var(--text-muted); }
 .ms-tier-label.tier-other       .ms-tier-dot { background: var(--text-subtle); }
 
-/* Type indicator dot at the right edge of each sidebar row */
-.ms-ws-type-dot {
-  flex: 0 0 auto;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
+/* Readable type badge under each sidebar row's title so learners can
+   tell at a glance what each screen is: Worksheet / Video / PDF /
+   Slides / Page / Image. Colour-coded by type. */
+.ms-ws-type-badge {
   display: inline-block;
+  align-self: flex-start;
+  margin-top: 3px;
+  padding: 1px 7px;
+  border-radius: 99px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: #fff;
   background: var(--primary);
-  opacity: 0.7;
 }
-.ms-ws-type-dot.document   { background: #1d4ed8; }
-.ms-ws-type-dot.html       { background: #16a34a; }
-.ms-ws-type-dot.youtube    { background: #dc2626; }
-.ms-ws-type-dot.pdf        { background: #ea580c; }
-.ms-ws-type-dot.image      { background: #7c3aed; }
-.ms-ws-type-dot.powerpoint { background: #db2777; }
-.ms-ws-item.active .ms-ws-type-dot { opacity: 1; }
+.ms-ws-type-badge.document   { background: #1d4ed8; }
+.ms-ws-type-badge.html       { background: #16a34a; }
+.ms-ws-type-badge.youtube    { background: #dc2626; }
+.ms-ws-type-badge.pdf        { background: #ea580c; }
+.ms-ws-type-badge.image      { background: #7c3aed; }
+.ms-ws-type-badge.powerpoint { background: #db2777; }
 
 /* Worksheet rows */
 .ms-ws-item {
@@ -3608,16 +3614,7 @@ body.pdf-overlay-open { overflow: hidden; }
    row and disabling the click entirely. */
 .ms-ws-item.missing { opacity: 0.82; }
 .ms-ws-item.missing .ms-ws-title { color: var(--warn); font-style: italic; }
-.ms-ws-item.missing .ms-ws-title::after {
-  content: " · pending";
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: var(--warn);
-  font-style: normal;
-  opacity: 0.7;
-}
+.ms-ws-item.missing .ms-ws-type-badge { background: var(--warn); }
 .ms-ws-item.missing:hover { opacity: 1; background: var(--warn-bg); }
 .ms-ws-num {
   flex: 0 0 auto;
@@ -3639,14 +3636,23 @@ body.pdf-overlay-open { overflow: hidden; }
   background: var(--primary);
   color: #fff;
 }
-.ms-ws-title {
+/* Title + type badge stacked in a column to the right of the number */
+.ms-ws-main {
   flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ms-ws-title {
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
 }
+.ms-ws-item { align-items: flex-start; }
+.ms-ws-item .ms-ws-num { margin-top: 1px; }
 
 /* Reset bar at sidebar bottom */
 .ms-reset-bar {

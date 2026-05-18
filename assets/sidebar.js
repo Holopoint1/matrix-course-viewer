@@ -183,6 +183,20 @@
         default:           return 'document';
       }
     }
+    /* Short, human label so learners know what each screen IS at a glance
+       (worksheet vs video vs slides vs PDF…). */
+    function typeLabel(t) {
+      switch (t) {
+        case 'document':   return 'Worksheet';
+        case 'html':       return 'Page';
+        case 'pdf':        return 'PDF';
+        case 'youtube':    return 'Video';
+        case 'image':      return 'Image';
+        case 'powerpoint': return 'Slides';
+        case 'spreadsheet':return 'Sheet';
+        default:           return (t || 'Screen');
+      }
+    }
     /* Flat, in-authoring-order list. No tier / homework / assessment grouping —
        the course-structure spec doesn't define those buckets and the Bronze /
        Silver / Gold tiers are specific to one Microcontrollers pack, not a
@@ -201,8 +215,10 @@
       body += `
         <a class="ms-ws-item${isDone ? ' done' : ''}${isActive ? ' active' : ''}${isMissing ? ' missing' : ''}" href="${href}" title="${titleAttr}">
           <span class="ms-ws-num">${n}</span>
-          <span class="ms-ws-title">${escapeHtml(s.title)}</span>
-          <span class="ms-ws-type-dot ${typeClass(s.type)}" title="${escapeHtml(s.type)}"></span>
+          <span class="ms-ws-main">
+            <span class="ms-ws-title">${escapeHtml(s.title)}</span>
+            <span class="ms-ws-type-badge ${typeClass(s.type)}">${escapeHtml(typeLabel(s.type))}${isMissing ? ' · pending' : ''}</span>
+          </span>
         </a>
       `;
     }
