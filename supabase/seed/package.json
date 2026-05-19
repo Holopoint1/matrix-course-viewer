@@ -5,7 +5,8 @@
   "description": "One-time, local-only migration: git content -> Supabase. Reads supabase/.env (secret key). Never deployed.",
   "scripts": {
     "seed": "node migrate.mjs",
-    "seed:dry": "node migrate.mjs --dry-run"
+    "seed:dry": "node migrate.mjs --dry-run",
+    "export": "node export.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",

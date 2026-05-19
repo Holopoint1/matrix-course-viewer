@@ -2,3 +2,7 @@
 .env
 .env.*
 seed/node_modules/
+
+# Regenerable read-only snapshot (run `npm run export` any time).
+# Force-add a copy if you want a point-in-time versioned backup in git.
+export/
