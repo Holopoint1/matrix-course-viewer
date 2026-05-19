@@ -11,26 +11,14 @@
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
 
-  <!-- Login screen -->
-  <main class="cms-login" id="cms-login" hidden>
-    <div class="cms-login-card">
-      <div class="cms-login-icon">⚙</div>
-      <h1>Admin sign in</h1>
-      <p>Sign in to edit course text, screens and intro pages. Changes are saved in your browser and can be exported as files for a developer to commit.</p>
-      <form id="cms-login-form">
-        <label>Username
-          <input type="text" id="cms-username" value="admin" autocomplete="off">
-        </label>
-        <label>Password
-          <input type="password" id="cms-password" value="matrix" autocomplete="off">
-        </label>
-        <button type="submit" class="btn btn-primary" style="width:100%;">Sign in</button>
-      </form>
-    </div>
-  </main>
+  <!-- Live save status (driven by cms-supabase.js `matrixcms:save` events) -->
+  <div id="cms-savebar" aria-live="polite" style="position:fixed;right:14px;bottom:14px;z-index:9999;
+       padding:0.5rem 0.9rem;border-radius:999px;font:600 0.82rem/1 'Segoe UI',Arial,sans-serif;
+       color:#fff;background:#475569;box-shadow:0 6px 18px -6px rgba(0,0,0,.4);opacity:0;
+       transition:opacity .2s ease;pointer-events:none;">Idle</div>
 
-  <!-- Editor -->
-  <div class="cms-shell" id="cms-shell" hidden>
+  <!-- Editor (open access — no login yet; logins come later) -->
+  <div class="cms-shell" id="cms-shell">
     <aside class="cms-sidebar">
       <div class="cms-side-section">
         <span class="cms-side-eyebrow">Edit</span>
@@ -38,9 +26,10 @@
       </div>
       <ul class="cms-course-list" id="cms-course-list"></ul>
       <div class="cms-side-foot">
-        <button class="btn btn-secondary cms-side-export" id="cms-export-btn">⤓ Export changes</button>
-        <button class="btn btn-ghost cms-side-clear" id="cms-clear-btn">Clear all overrides</button>
-        <button class="btn btn-ghost" id="cms-logout-btn">Reload session</button>
+        <p class="cms-side-note" style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;margin:0;">
+          Edits save <strong>live to the shared database</strong> for everyone — no publish step.
+          Download copies any time from <a href="files.html#database">Tools → Database</a>.
+        </p>
       </div>
     </aside>
 
@@ -58,7 +47,6 @@
   <script>
     (function () {
       'use strict';
-      const loginEl = document.getElementById('cms-login');
       const shellEl = document.getElementById('cms-shell');
       const mainEl = () => document.getElementById('cms-main');
 
@@ -67,23 +55,29 @@
           '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         }[c]));
       }
-      function showShell() { loginEl.hidden = true; shellEl.hidden = false; }
-
-      document.getElementById('cms-login-form').addEventListener('submit', (ev) => {
-        ev.preventDefault();
-        try { window.MatrixCMS.unlock(document.getElementById('cms-password').value); } catch (_) {}
-        showShell();
-        init().catch(showInitError);
-      });
-      document.getElementById('cms-logout-btn').addEventListener('click', () => {
-        window.MatrixCMS.lock();
-        location.reload();
-      });
       function showInitError(e) {
         console.error('Admin init failed:', e);
         mainEl().innerHTML = '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
           escapeHtml(e && e.message ? e.message : String(e)) + '</p>';
       }
+
+      /* ---- Live save status pill (proves edits reach Supabase) ---- */
+      const bar = document.getElementById('cms-savebar');
+      let barHide;
+      function setBar(text, color, sticky) {
+        bar.textContent = text;
+        bar.style.background = color;
+        bar.style.opacity = '1';
+        clearTimeout(barHide);
+        if (!sticky) barHide = setTimeout(() => { bar.style.opacity = '0'; }, 2600);
+      }
+      window.addEventListener('matrixcms:save', (e) => {
+        const d = e.detail || {};
+        if (d.ok === null) setBar('Saving…', '#475569', true);
+        else if (d.ok === true) setBar('Saved ✓ live to database', '#15803d');
+        else if (d.reason === 'not-signed-in') setBar('Saved locally (DB write skipped)', '#a16207');
+        else setBar('Save FAILED: ' + (d.error || 'unknown') + ' — not in database', '#b91c1c', true);
+      });
 
       let originalCourses = null;
       let courses = null;
@@ -93,7 +87,6 @@
         originalCourses = data;
         courses = data.courses;
       }
-
       async function init() {
         if (!courses) await loadAll();
         renderCourseList();
@@ -105,7 +98,6 @@
           <li><button type="button" data-course="${escapeHtml(c.id)}" class="cms-course-pick">
             <strong>${escapeHtml(c.code)}</strong>
             <span>${escapeHtml(c.title)}</span>
-            ${window.MatrixCMS.getCourseOverride(c.id) || Object.keys(window.MatrixCMS.getScreenOverrides(c.id)).length ? '<em class="cms-edited-tag">edited</em>' : ''}
           </button></li>
         `).join('');
         root.querySelectorAll('button[data-course]').forEach((btn) => {
@@ -123,14 +115,13 @@
           <header class="cms-page-head">
             <span class="cms-page-eyebrow">Editing</span>
             <h1>${escapeHtml(merged.code)} · ${escapeHtml(merged.title)}</h1>
-            <p class="cms-page-hint">Every edit is saved to this browser instantly and shows on the live course. Use <strong>Export changes</strong> to download the files for a developer to commit permanently.</p>
+            <p class="cms-page-hint">Every edit saves <strong>live to the shared database</strong> for everyone — instantly, no publish step. Watch the status pill (bottom-right) confirm each save.</p>
           </header>
 
           <section class="cms-section">
             <div class="cms-section-head">
               <h2 class="cms-section-title">Course details</h2>
               <div class="cms-section-actions">
-                <button class="btn btn-secondary" data-action="reset-course">Reset course</button>
                 <button class="btn btn-primary" data-action="save-course">💾 Save course details</button>
                 <span class="cms-saved-hint" data-saved hidden>Saved ✓</span>
               </div>
@@ -159,12 +150,11 @@
 
           <section class="cms-section">
             <h2 class="cms-section-title">Screens (${merged.screens.length})</h2>
-            <p class="cms-section-hint">The top row of each screen edits its <strong>heading &amp; settings</strong> (title, time, type, file). To change the <strong>actual content learners read</strong> on a Page or Worksheet, use <strong>“✎ Edit this screen's content”</strong> below it — that opens the real on-screen text with a live preview and saves straight to the live course.</p>
+            <p class="cms-section-hint">The top row of each screen edits its <strong>heading &amp; settings</strong> (title, time, type, file). To change the <strong>actual content learners read</strong> on a Page or Worksheet, use <strong>“✎ Edit this screen's content”</strong> — it opens the real on-screen text with a live preview and saves straight to the database.</p>
             <div class="cms-screens">${screensHtml}</div>
           </section>
         `;
 
-        /* Course-meta: instant apply + an explicit Save button (flushes + confirms) */
         function applyMeta(input) {
           const field = input.dataset.field;
           const value = input.type === 'number' ? Number(input.value) : input.value;
@@ -174,7 +164,6 @@
           } else {
             window.MatrixCMS.setCourseOverride(courseId, { [field]: value });
           }
-          renderCourseList();
         }
         main.querySelectorAll('[data-field]').forEach((input) => {
           input.addEventListener('input', () => applyMeta(input));
@@ -183,14 +172,8 @@
           main.querySelectorAll('[data-field]').forEach(applyMeta);
           flashSaved(main);
         });
-        main.querySelector('[data-action="reset-course"]').addEventListener('click', () => {
-          if (!confirm('Reset all edits for this course (details + screens + text)?')) return;
-          window.MatrixCMS.clearCourse(courseId);
-          editCourse(courseId);
-          renderCourseList();
-        });
 
-        /* Screen-meta inputs */
+        /* Screen-meta inputs — save live on edit */
         main.querySelectorAll('.cms-screen-row').forEach((row) => {
           const screenId = row.dataset.screenId;
           row.querySelectorAll('[data-screen-field]').forEach((input) => {
@@ -201,7 +184,6 @@
               else if (input.type === 'checkbox') value = input.checked;
               else value = input.value;
               window.MatrixCMS.setScreenOverride(courseId, screenId, { [field]: value });
-              flashSaved(main);
             });
           });
           const editBtn = row.querySelector('[data-action="edit-text"]');
@@ -222,7 +204,6 @@
       function screenRow(courseId, originalScreen, mergedScreen, idx) {
         const types = ['image', 'html', 'youtube', 'pdf', 'document', 'powerpoint', 'spreadsheet'];
         const typeOpts = types.map((t) => `<option value="${t}" ${mergedScreen.type === t ? 'selected' : ''}>${t}</option>`).join('');
-        const edited = !!window.MatrixCMS.getHtmlOverride(mergedScreen.src);
         return `
           <div class="cms-screen-row" data-screen-id="${escapeHtml(mergedScreen.id)}">
             <div class="cms-screen-main">
@@ -235,7 +216,7 @@
             </div>
             <div class="cms-screen-actions">
               ${isEditableText(mergedScreen)
-                ? `<button type="button" class="btn btn-primary cms-edit-text-btn" data-action="edit-text">✎ Edit this screen's content${edited ? ' <em class="cms-edited-tag">edited</em>' : ''}</button>
+                ? `<button type="button" class="btn btn-primary cms-edit-text-btn" data-action="edit-text">✎ Edit this screen's content</button>
                    <span class="cms-screen-actions-hint">The title above is just the heading — this edits the body text learners read on screen ${idx + 1}.</span>`
                 : `<span class="cms-screen-noedit">No editable body text — ${escapeHtml(mergedScreen.type)} screen (image / video / PDF / slides are binary or external).</span>`}
             </div>
@@ -245,12 +226,10 @@
       }
 
       /* ---------- Per-screen text editor ----------
-         The source of truth shown here is EXACTLY what the learner sees:
-         - existing CMS override (keyed by screen.src), else
-         - .html screen: the file's .page / body, else
-         - .docx screen: mammoth-rendered HTML (same path the viewer uses).
-         Save writes a full HTML doc back under screen.src — the front end
-         (app.js renderHtmlContent / renderDocument) prefers that override. */
+         Shows EXACTLY what the learner sees: existing DB/override (keyed by
+         screen.src), else .html .page/body, else .docx mammoth render.
+         Save writes a full HTML doc back under screen.src → that is what
+         the viewer (app.js) renders, and cms-supabase pushes it live. */
       async function openTextEditor(courseId, screen, row) {
         const slot = row.querySelector('[data-editor-for="' + cssEscape(screen.id) + '"]');
         if (!slot) return;
@@ -259,7 +238,7 @@
         slot.innerHTML = '<p class="stage-loading">Loading current content&hellip;</p>';
 
         let bodyHtml = '';
-        let templateHtml = null; /* original full-doc shell to preserve on save */
+        let templateHtml = null;
         try {
           const override = window.MatrixCMS.getHtmlOverride(screen.src);
           if (override != null) {
@@ -286,7 +265,6 @@
               <textarea class="cms-text-area" rows="16" spellcheck="false">${escapeHtml(bodyHtml.trim())}</textarea>
               <div class="cms-section-actions">
                 <button type="button" class="btn btn-ghost" data-act="close">Close</button>
-                <button type="button" class="btn btn-secondary" data-act="reset">Reset to original</button>
                 <button type="button" class="btn btn-primary" data-act="save">💾 Save text</button>
                 <span class="cms-saved-hint" data-saved hidden>Saved ✓ — live on the course</span>
               </div>
@@ -316,17 +294,6 @@
           const full = wrapBody(ta.value, templateHtml);
           window.MatrixCMS.setHtmlOverride(screen.src, full);
           flashSaved(slot);
-          /* refresh the row tag + course list "edited" markers */
-          editCourse(courseId);
-          renderCourseList();
-        });
-        slot.querySelector('[data-act="reset"]').addEventListener('click', () => {
-          if (!confirm('Discard the saved edit for this screen and restore the original content?')) return;
-          const all = JSON.parse(localStorage.getItem('matrix-lms:cms:html') || '{}');
-          delete all[screen.src];
-          localStorage.setItem('matrix-lms:cms:html', JSON.stringify(all));
-          editCourse(courseId);
-          renderCourseList();
         });
       }
 
@@ -362,21 +329,9 @@
         });
       }
 
-      /* ---------- Export / clear ---------- */
-      document.getElementById('cms-export-btn').addEventListener('click', async () => {
-        if (!window.MatrixCMS.hasAnyEdits()) { alert('No edits to export yet.'); return; }
-        if (!courses) await loadAll();
-        await window.MatrixCMS.exportZip(originalCourses);
-      });
-      document.getElementById('cms-clear-btn').addEventListener('click', () => {
-        if (!confirm('Clear ALL CMS edits? This wipes every course, screen and text override.')) return;
-        window.MatrixCMS.clearAll();
-        location.reload();
-      });
-
-      /* Phase 1: admin is open to anyone. Auto-unlock + open. */
+      /* Open access (Phase: no login). The local engine's unlock flag is
+         harmless to set; real logins / Cloudflare Access come later. */
       try { window.MatrixCMS.unlock('matrix'); } catch (_) {}
-      showShell();
       init().catch(showInitError);
     })();
   </script>

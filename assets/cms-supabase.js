@@ -86,12 +86,38 @@
     } catch (_) { /* fail-open: keep whatever the local engine had */ }
   }
 
-  /* ---- Push localStorage edits → Supabase (editors only) ---------------- */
+  /* ---- Push localStorage edits → Supabase (editors only) ---------------- *
+   * Live writes: debounced per-record so rapid typing collapses to one
+   * upsert. Partial payloads are safe — PostgREST upsert only updates the
+   * columns present, and all rows already exist from the seed. Every
+   * attempt emits a `matrixcms:save` window event so the editor can show
+   * real success / failure (RLS rejection included). */
   function authed() {
     try { return !!(sb.auth && sb.__session); } catch (_) { return false; }
   }
-  async function push(table, row) {
-    try { if (authed()) await sb.from(table).upsert(row); } catch (_) {}
+  function emit(detail) {
+    try { window.dispatchEvent(new CustomEvent('matrixcms:save', { detail: detail })); } catch (_) {}
+  }
+  function clean(o) { var r = {}; for (var k in o) if (o[k] !== undefined) r[k] = o[k]; return r; }
+  var _timers = {};
+  /* OPEN ACCESS (interim): no login yet, so writes are NOT gated on a
+     session here — the (temporarily) permissive RLS policy is the gate.
+     When logins return, restore the `if (!authed()) return` guard AND
+     re-lock RLS to editor-only. */
+  function push(table, row) {
+    var payload = clean(row);
+    var key = table + ':' + (payload.id || payload.path || '');
+    emit({ ok: null, table: table });                       /* "saving…" */
+    clearTimeout(_timers[key]);
+    _timers[key] = setTimeout(function () {
+      sb.from(table).upsert(payload).then(function (res) {
+        if (res && res.error) { console.warn('[cms-supabase]', table, res.error.message); emit({ ok: false, table: table, error: res.error.message }); }
+        else emit({ ok: true, table: table });
+      }, function (e) {
+        var m = (e && e.message) ? e.message : String(e);
+        console.warn('[cms-supabase]', table, m); emit({ ok: false, table: table, error: m });
+      });
+    }, 350);
   }
   function wrap(name, fn) {
     var orig = CMS[name];
@@ -103,36 +129,40 @@
     };
   }
   wrap('setCourseOverride', function (courseId, patch) {
-    var p = patch || {};
-    push('courses', {
-      id: courseId,
-      title: p.title, code: p.code,
-      short_description: p.shortDescription,
-      estimated_hours: p.estimatedHours
-    });
+    var p = patch || {}, row = { id: courseId };
+    if (p.title !== undefined) row.title = p.title;
+    if (p.code !== undefined) row.code = p.code;
+    if (p.shortDescription !== undefined) row.short_description = p.shortDescription;
+    if (p.estimatedHours !== undefined) row.estimated_hours = p.estimatedHours;
+    if (p.certificate !== undefined) row.certificate_enabled = !!(p.certificate && p.certificate.enabled);
+    if (Object.keys(row).length > 1) push('courses', row);
   });
   wrap('setScreenOverride', function (courseId, screenId, patch) {
-    var p = patch || {};
-    push('screens', {
-      id: screenId, course_id: courseId,
-      title: p.title, hours: p.hours, equipment: p.equipment,
-      type: p.type, src: p.src, missing: p.missing
+    var p = patch || {}, row = { id: screenId, course_id: courseId };
+    ['title', 'hours', 'equipment', 'type', 'src', 'missing'].forEach(function (k) {
+      if (p[k] !== undefined) row[k] = p[k];
     });
+    if (Object.keys(row).length > 2) push('screens', row);
   });
   wrap('setHtmlOverride', function (path, html) {
     push('pages', { path: path, html: html });
   });
 
-  /* ---- Auth helpers (used by the Phase 3 editor; harmless here) --------- */
+  /* ---- Auth helpers (used by the Phase 3 editor) ----------------------- */
   sb.auth.getSession().then(function (r) { sb.__session = r && r.data ? r.data.session : null; }).catch(function () {});
   sb.auth.onAuthStateChange(function (_e, session) { sb.__session = session; });
   CMS.supabaseClient = sb;
   CMS.supabaseAuth = {
+    getSession: function () { return sb.auth.getSession(); },
+    signInWithPassword: function (email, password) {
+      return sb.auth.signInWithPassword({ email: email, password: password });
+    },
     signInWithEmail: function (email) {
       return sb.auth.signInWithOtp({ email: email, options: { emailRedirectTo: location.href } });
     },
     signOut: function () { return sb.auth.signOut(); },
     session: function () { return sb.__session || null; },
+    email: function () { try { return sb.__session && sb.__session.user && sb.__session.user.email || null; } catch (_) { return null; } },
     onChange: function (cb) { return sb.auth.onAuthStateChange(function (_e, s) { cb(s); }); }
   };
 
