@@ -167,6 +167,21 @@
         }
       });
     }
+    /* Keyboard slide navigation: ← previous screen, → next screen.
+       Ignored while typing in a field, with modifier keys, or when focus
+       is inside an embed (the iframe captures the key itself anyway). */
+    document.addEventListener('keydown', (e) => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      const ae = document.activeElement;
+      const tag = (ae && ae.tagName) || '';
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag) || (ae && ae.isContentEditable)) return;
+      if (e.key === 'ArrowRight') {
+        if (currentIndex < course.screens.length - 1) { showScreen(currentIndex + 1); e.preventDefault(); }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentIndex > 0) { showScreen(currentIndex - 1); e.preventDefault(); }
+      }
+    });
+
     els.completeBtn.addEventListener('click', () => {
       const screen = course.screens[currentIndex];
       if (isComplete(screen.id)) {
