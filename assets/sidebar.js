@@ -200,13 +200,23 @@
       const titleAttr = isMissing
         ? 'Resource pending — file not yet uploaded'
         : escapeHtml(s.type);
+      /* Per-screen completion toggle. role=checkbox + tabindex keeps it
+         keyboard-operable and valid inside the row anchor; the click/keydown
+         handler stops the anchor from navigating. Not offered for screens
+         whose file hasn't been uploaded yet (nothing to complete). */
+      const tick = isMissing ? '' : `
+          <span class="ms-ws-tick" role="checkbox" tabindex="0"
+                aria-checked="${isDone ? 'true' : 'false'}"
+                data-screen="${escapeHtml(s.id)}"
+                aria-label="Mark this page ${isDone ? 'incomplete' : 'complete'}"
+                title="${isDone ? 'Completed — click to mark incomplete' : 'Mark this page complete'}"></span>`;
       body += `
         <a class="ms-ws-item${isDone ? ' done' : ''}${isActive ? ' active' : ''}${isMissing ? ' missing' : ''}" href="${href}" title="${titleAttr}">
           <span class="ms-ws-num">${n}</span>
           <span class="ms-ws-main">
             <span class="ms-ws-title">${escapeHtml(s.title)}</span>
             <span class="ms-ws-type-badge ${typeClass(s.type)}">${escapeHtml(typeLabel(s.type))}${isMissing ? ' · pending' : ''}</span>
-          </span>
+          </span>${tick}
         </a>
       `;
     }

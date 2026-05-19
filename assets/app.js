@@ -447,7 +447,7 @@
         return;
       case 'powerpoint':
       case 'spreadsheet':
-        renderDownload(stage, screen);
+        renderOffice(stage, screen);
         return;
       default:
         stage.innerHTML = `<p class="stage-loading">Unsupported screen type: ${escapeHtml(screen.type)}</p>`;
@@ -737,16 +737,73 @@
     return root.innerHTML;
   }
 
-  function renderDownload(stage, screen) {
+  /* PowerPoint / Spreadsheet — rendered inline via Microsoft's free Office
+     Online embed viewer (real slides + navigation, no SDK, no conversion).
+     It needs the file at a public HTTPS URL, so on localhost / file://
+     (Office's servers can't reach a local preview) we fall back to a
+     download card that explains it works on the published site. */
+  function renderOffice(stage, screen) {
+    const label = screen.type === 'powerpoint' ? 'PowerPoint' : 'Spreadsheet';
+    const safeSrc = escapeAttr(screen.src);
+    const fname = filename(screen.src) || screen.src;
+    let absUrl = '';
+    try { absUrl = new URL(screen.src, location.href).href; } catch (_) {}
+    const host = location.hostname;
+    const isLocal = location.protocol === 'file:' ||
+      /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[?::1\]?)$/i.test(host) ||
+      /\.local$/i.test(host) || host === '';
+
     const wrap = document.createElement('div');
-    wrap.className = 'stage-pptx';
-    const label = screen.type === 'powerpoint' ? 'PowerPoint file' : 'Spreadsheet file';
+    wrap.className = 'stage-pdf';
+
+    if (isLocal || !absUrl) {
+      wrap.innerHTML = `
+        <div class="stage-pdf-toolbar">
+          <span class="stage-pdf-name" title="${safeSrc}">${escapeHtml(fname)}</span>
+          <div class="stage-pdf-actions">
+            <a class="btn btn-secondary" href="${safeSrc}" target="_blank" rel="noopener">↗ Open</a>
+            <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
+          </div>
+        </div>
+        <div class="stage-pdf-frame">
+          <div class="stage-pdf-fallback">
+            <div class="stage-pdf-fallback-icon">📑</div>
+            <h2>${escapeHtml(screen.title)}</h2>
+            <p>The inline ${label} viewer uses Microsoft's Office viewer, which can't reach a local preview. On the published site this renders the slides inline. For now, open or download it:</p>
+            <div class="stage-pdf-fallback-actions">
+              <a class="btn btn-primary" href="${safeSrc}" target="_blank" rel="noopener">Open ${label}</a>
+              <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
+            </div>
+            <p class="stage-pdf-fallback-src"><code>${escapeHtml(screen.src)}</code></p>
+          </div>
+        </div>`;
+      stage.appendChild(wrap);
+      return;
+    }
+
+    const viewer = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(absUrl);
     wrap.innerHTML = `
-      <h2>${escapeHtml(screen.title)}</h2>
-      <p style="color:var(--muted);max-width:520px;">${label} cannot be rendered inline in the browser. Download it to view.</p>
-      <a class="btn btn-primary" href="${escapeAttr(screen.src)}" download>Download</a>
-    `;
+      <div class="stage-pdf-toolbar">
+        <span class="stage-pdf-name" title="${safeSrc}">${escapeHtml(fname)}</span>
+        <div class="stage-pdf-actions">
+          <button type="button" class="btn btn-secondary" data-action="fullscreen">⛶ Fullscreen</button>
+          <a class="btn btn-secondary" href="${escapeAttr(viewer)}" target="_blank" rel="noopener">↗ Open viewer</a>
+          <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
+        </div>
+      </div>
+      <div class="stage-pdf-frame">
+        <iframe class="stage-pdf-iframe" src="${escapeAttr(viewer)}" title="${escapeAttr(screen.title)}" allowfullscreen></iframe>
+      </div>`;
     stage.appendChild(wrap);
+
+    const frame = wrap.querySelector('.stage-pdf-frame');
+    const fsBtn = wrap.querySelector('[data-action="fullscreen"]');
+    if (fsBtn && frame) {
+      fsBtn.addEventListener('click', () => {
+        if (document.fullscreenElement) { document.exitFullscreen(); return; }
+        if (frame.requestFullscreen) frame.requestFullscreen();
+      });
+    }
   }
 
   async function renderDocument(stage, screen) {
@@ -978,4 +1035,15 @@
     ].join(''));
     w.document.close();
   }
+
+  /* The sidebar renders a per-screen tick toggle so a learner can mark any
+     page complete straight from the menu — not only via the in-page
+     "Mark complete & next" button. Route those toggles through the same
+     pipeline (setComplete → renderProgress → gamify / SCORM / certificate
+     gate / Mark-complete button) so nothing drifts out of sync. */
+  window.MatrixCourse = {
+    toggleComplete: function (screenId) { toggleComplete(screenId); },
+    isComplete: function (screenId) { return isComplete(screenId); },
+    getCourseId: function () { return courseId; }
+  };
 })();
