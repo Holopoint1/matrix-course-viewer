@@ -424,16 +424,67 @@
   dropzone($('exp-drop'), function (files) { files.forEach(addExport); });
 
   /* ====================================================================== *
-   *  GOOGLE DRIVE  — deferred. The Drive panel is a static notice until a
-   *  Google Cloud OAuth client id / scope decision is made (see files.html).
-   *  No controls are wired here on purpose.
-   *  SCORM 1.2 export is likewise out of scope for this page; the LMS
-   *  drop-in zip (Splitter → "Download LMS drop-in") covers getting
-   *  generated content into this viewer.
+   *  SCORM 1.2 EXPORT (client-side port of tools/build-scorm.js)
    * ====================================================================== */
+  async function initScorm() {
+    var data = await loadCourses();
+    var sel = $('scorm-course');
+    sel.innerHTML = data.courses.map(function (c) {
+      return '<option value="' + esc(c.id) + '">' + esc(c.id) + ' — ' + esc(c.title) + '</option>';
+    }).join('');
+  }
+  function scormStatus(html, kind) {
+    var el = $('scorm-status');
+    el.hidden = false;
+    el.className = 'split-status' + (kind ? ' ' + kind : '');
+    el.innerHTML = html;
+  }
+  $('scorm-build').addEventListener('click', async function () {
+    if (!window.MatrixScormExport) { scormStatus('SCORM exporter not loaded — refresh and retry.', 'err'); return; }
+    var id = $('scorm-course').value;
+    var btn = this; btn.disabled = true; var t = btn.textContent; btn.textContent = 'Building…';
+    try {
+      var res = await window.MatrixScormExport.build(id, function (msg) { scormStatus(esc(msg)); });
+      download(res.blob, res.filename);
+      var s = res.stats;
+      scormStatus('✓ <strong>' + esc(res.filename) + '</strong> built — ' + s.screens +
+        ' screen(s), ' + s.got + ' content file(s) included' +
+        (s.miss ? ', <span class="x">' + s.miss + ' missing (placeholder shown in viewer)</span>' : '') + '.', 'ok');
+    } catch (err) {
+      scormStatus('Build failed: ' + esc(err.message), 'err');
+    } finally { btn.disabled = false; btn.textContent = t; }
+  });
+
+  /* ====================================================================== *
+   *  GOOGLE DRIVE (open / embed a shared folder — no API, no credentials)
+   * ====================================================================== */
+  function driveFolderId(url) {
+    var m = String(url || '').match(/\/folders\/([A-Za-z0-9_-]+)/) ||
+            String(url || '').match(/[?&]id=([A-Za-z0-9_-]+)/);
+    return m ? m[1] : '';
+  }
+  $('drive-open').addEventListener('click', function () {
+    var url = ($('drive-url').value || '').trim();
+    if (!url) { alert('Paste a Google Drive folder link first.'); return; }
+    var w = window.open(url, 'matrixDriveFolder', 'width=1280,height=860');
+    if (!w) alert('Pop-up blocked. Allow pop-ups for this site to open Drive.');
+  });
+  $('drive-embed').addEventListener('click', function () {
+    var id = driveFolderId($('drive-url').value);
+    if (!id) { alert('That does not look like a Drive folder link.'); return; }
+    var wrap = $('drive-embed-wrap');
+    var frame = $('drive-frame');
+    if (!wrap.hidden) { wrap.hidden = true; this.textContent = 'Show inline'; return; }
+    frame.src = 'https://drive.google.com/embeddedfolderview?id=' + id + '#grid';
+    wrap.hidden = false;
+    this.textContent = 'Hide inline';
+  });
 
   /* ---------- Boot ---------- */
   initCourseFiles().catch(function (err) {
     $('cf-tree').innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
+  });
+  initScorm().catch(function (err) {
+    scormStatus('Could not load courses: ' + esc(err.message), 'err');
   });
 })();
