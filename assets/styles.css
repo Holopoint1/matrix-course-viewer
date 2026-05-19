@@ -3005,6 +3005,38 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 }
 .stage-doc-inner h3 { font-size: 1.05rem; color: var(--text); margin: 1.4em 0 0.35em; font-weight: 700; }
 .stage-doc-inner p { margin: 0 0 0.85em; max-width: 68ch; }
+
+/* Custom Word styles recovered via the mammoth styleMap. h2.ws-name uses
+   the normal h2 look; the rest get sensible weight so the source's
+   formatting finally shows on the page. */
+.stage-doc-inner h2.ws-name { margin-top: 1.5em; }
+.stage-doc-inner .ws-number {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 0.1em;
+}
+.stage-doc-inner .pack-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  letter-spacing: 0.4px;
+  margin: 0 0 0.3em;
+}
+.stage-doc-inner .doc-contents { font-weight: 600; color: var(--text); margin: 0 0 0.25em; }
+.stage-doc-inner .yt-url { font-size: 0.85rem; color: var(--text-muted); word-break: break-all; }
+.stage-doc-inner .ai-instr {
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+  background: var(--surface-2);
+  border-left: 3px solid var(--border-strong);
+  padding: 0.4em 0.7em;
+  margin: 0 0 0.6em;
+  border-radius: 0 6px 6px 0;
+}
+.stage-doc-inner em { font-style: italic; }
 .stage-doc-inner strong { font-weight: 700; color: #141938; }
 .stage-doc-inner a { color: var(--primary); text-underline-offset: 2px; }
 /* First line of these worksheets is the doc title in <p><strong> form.

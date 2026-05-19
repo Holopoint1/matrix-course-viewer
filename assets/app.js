@@ -285,7 +285,7 @@
           const res = await fetch(screen.src);
           if (!res.ok) throw new Error('HTTP ' + res.status);
           const buf = await res.arrayBuffer();
-          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf }, MAMMOTH_OPTS);
           html = enhanceWorksheetHtml(result.value || '');
           docCache.set(screen.src, html);
         }
@@ -691,6 +691,26 @@
     }
   }
 
+  /* The source .docx files apply emphasis/headings through CUSTOM Word
+     styles, not the bold button — so mammoth's default map dropped them
+     and bold/titles never reached the page. Map the known custom styles
+     to semantic HTML (default map still applies on top for real bold/
+     italic/lists). Keeps text verbatim — only the wrapping tag changes. */
+  const MAMMOTH_OPTS = {
+    styleMap: [
+      "p[style-name='Ws name'] => h2.ws-name:fresh",
+      "p[style-name='Ws number'] => p.ws-number:fresh",
+      "p[style-name='Pack title - top right'] => p.pack-title:fresh",
+      "p[style-name='YouTube link URL'] => p.yt-url:fresh",
+      "p[style-name='Contents'] => p.doc-contents:fresh",
+      "p[style-name='Bullet'] => ul > li:fresh",
+      "p[style-name='AI instructions'] => p.ai-instr:fresh",
+      "r[style-name='Numbered bullet Char'] => strong",
+      "r[style-name='Strong'] => strong",
+      "r[style-name='Emphasis'] => em"
+    ]
+  };
+
   /* Promote pseudo-heading paragraphs ("Design brief:", "Hardware:", etc.) into real headings.
      Source text is preserved verbatim — only the tag changes. */
   function enhanceWorksheetHtml(html) {
@@ -912,7 +932,7 @@
           const res = await fetch(screen.src);
           if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
           const buf = await res.arrayBuffer();
-          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf }, MAMMOTH_OPTS);
           html = enhanceWorksheetHtml(result.value || '');
           docCache.set(screen.src, html);
         }
