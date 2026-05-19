@@ -34,7 +34,7 @@
           <span class="support-card-eyebrow">Step 1 · Content</span>
           <h2>Split a Course content document</h2>
         </div>
-        <p class="files-tree-hint">Drop the <code>&lt;id&gt; - content.docx</code> (the tagged source — <code>&lt;worksheet&gt;</code>, <code>&lt;HTML&gt;</code>, <code>&lt;document&gt;</code> blocks with <code>&lt;filename&gt;</code>). Optionally add the course's <strong>Media</strong> folder so images embed into every output. The splitter never deletes anything — re-running replaces duplicate files only.</p>
+        <p class="files-tree-hint"><strong>What this does:</strong> breaks one big tagged Word document into the individual worksheet / page / document files the course viewer uses. <strong>Drop here:</strong> the course's <code>Course content.docx</code> — the tagged source containing <code>&lt;worksheet&gt;</code>, <code>&lt;HTML&gt;</code>, <code>&lt;document&gt;</code> blocks with <code>&lt;filename&gt;</code> (this is the content doc, <em>not</em> the definition). Optionally add the course's <strong>Media</strong> folder so images embed into every output. Nothing is deleted — re-running only replaces duplicate files.</p>
 
         <div class="dropzone files-dropzone" id="split-drop">
           <div class="dropzone-icon">🪓</div>
@@ -81,7 +81,7 @@
           <span class="support-card-eyebrow">Course structure</span>
           <h2>Read a Course definition document</h2>
         </div>
-        <p class="files-tree-hint">Drop the <code>&lt;id&gt; - definition.docx</code>. It is the structure source — it lists every screen (type, time, title, asset). This produces the <code>screens[]</code> for <code>data/courses.json</code> and a readable structure summary.</p>
+        <p class="files-tree-hint"><strong>What this does:</strong> reads a course's structure manifest and produces the <code>screens[]</code> for <code>data/courses.json</code> plus a readable structure summary. <strong>Drop here:</strong> the <code>Course definition.docx</code> — the file that <em>lists</em> screens ("…browser-based course with the following screens:") or a pack's document list ("…consisting of the following documents:"). <strong>Not</strong> the content doc with <code>&lt;worksheet&gt;</code> tags — that goes in the Splitter tab.</p>
 
         <div class="dropzone files-dropzone" id="def-drop">
           <div class="dropzone-icon">📋</div>
@@ -137,7 +137,7 @@
           <span class="support-card-eyebrow">Word &amp; PDF</span>
           <h2>Export a worksheet</h2>
         </div>
-        <p class="files-tree-hint">Drop a worksheet (<code>.docx</code> / <code>.htm</code> / <code>.pdf</code>) to preview it exactly as the course viewer renders it, then download it as <strong>PDF</strong>. <code>.docx</code> files are already Word documents — use <strong>Save Word copy</strong> to keep one.</p>
+        <p class="files-tree-hint"><strong>What this does:</strong> previews a single worksheet exactly as the course viewer renders it, then exports it. <strong>Drop here:</strong> one worksheet (<code>.docx</code> / <code>.htm</code> / <code>.pdf</code>). Download it as <strong>PDF</strong>, or use <strong>Save Word copy</strong> to keep the original <code>.docx</code>.</p>
         <div class="dropzone files-dropzone" id="exp-drop">
           <div class="dropzone-icon">🖨</div>
           <div class="dropzone-title">Drop a worksheet to preview &amp; export</div>
