@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Certificate of Completion</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260524">
+  <link rel="stylesheet" href="assets/styles.css?v=20260525">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header" data-extras-id="cert-nav-extras"></header>
@@ -13,12 +13,13 @@
   <main class="cert-shell">
     <div class="cert-controls">
       <input type="text" class="cert-input" id="name-input" placeholder="Enter your full name">
-      <button class="btn btn-primary" id="print-btn">🖨 Print / Save as PDF</button>
+      <button class="btn btn-secondary" id="print-btn">🖨 Print</button>
+      <button class="btn btn-primary" id="save-btn">⬇ Save as PDF</button>
     </div>
 
     <div class="cert" id="certificate">
       <div class="cert-top">
-        <img class="cert-logo" src="assets/matrix-logo.svg?v=20260524" alt="Matrix TSL">
+        <img class="cert-logo" src="assets/matrix-logo.svg?v=20260525" alt="Matrix TSL">
         <div class="cert-eyebrow">Matrix&nbsp;TSL · Engineering Education</div>
       </div>
 
@@ -26,7 +27,7 @@
         <div class="title">Certificate of Completion</div>
         <div class="subtitle">This is to certify that</div>
         <div class="recipient" id="cert-name">&nbsp;</div>
-        <p class="body" id="cert-body">has successfully completed the course:</p>
+        <p class="body" id="cert-body">has successfully completed the course</p>
         <div class="cert-course"><span id="cert-code"></span> &nbsp;·&nbsp; <span id="cert-title"></span></div>
         <div class="subtitle cert-awarded">Awarded on <span id="cert-date"></span></div>
       </div>
@@ -60,9 +61,10 @@
     </div>
   </main>
 
-  <script src="assets/chrome.js?v=20260524"></script>
-  <script src="assets/gamify.js?v=20260524"></script>
-  <script src="assets/cms-overrides.js?v=20260524"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="assets/chrome.js?v=20260525"></script>
+  <script src="assets/gamify.js?v=20260525"></script>
+  <script src="assets/cms-overrides.js?v=20260525"></script>
   <script>
     (function () {
       'use strict';
@@ -96,6 +98,25 @@
         window.print();
       });
 
+      var saveBtn = document.getElementById('save-btn');
+      saveBtn.addEventListener('click', function () {
+        if (!window.html2pdf) { alert('PDF library is still loading — try again in a moment.'); return; }
+        var cert = document.getElementById('certificate');
+        var who = (nameInput.value.trim() || 'certificate').replace(/[^A-Za-z0-9._-]+/g, '-');
+        var orig = saveBtn.textContent;
+        saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+        window.html2pdf().set({
+          margin: 0,
+          filename: who + '-' + courseId + '-certificate.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        }).from(cert).save().then(
+          function () { saveBtn.disabled = false; saveBtn.textContent = orig; },
+          function () { saveBtn.disabled = false; saveBtn.textContent = orig; alert('Could not build the PDF — use Print and choose “Save as PDF” instead.'); }
+        );
+      });
+
       var today = new Date();
       document.getElementById('cert-date').textContent =
         today.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
@@ -121,8 +142,8 @@
             document.getElementById('cert-code').textContent = course.code || course.id;
             document.getElementById('cert-title').textContent = course.title || '';
             document.getElementById('cert-body').textContent = course.id === 'CO0001'
-              ? 'has successfully completed a Continuing Professional Development training course on E-blocks 3 and Flowcode:'
-              : 'has successfully completed the course:';
+              ? 'has successfully completed a Continuing Professional Development course in E-blocks 3 and Flowcode'
+              : 'has successfully completed the course';
             document.title = 'Certificate · ' + (course.title || course.id);
           }
 

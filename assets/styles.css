@@ -3171,8 +3171,6 @@ body.pdf-overlay-open { overflow: hidden; }
     radial-gradient(circle at 100% 100%, rgba(212,175,55,0.06), transparent 40%),
     #fff;
   border: 12px solid var(--primary-dark);
-  outline: 2px solid #d4af37;
-  outline-offset: -20px;
   padding: 3rem 3.5rem;
   display: flex;
   flex-direction: column;
@@ -3181,7 +3179,20 @@ body.pdf-overlay-open { overflow: hidden; }
   text-align: center;
   box-shadow: var(--shadow-lg);
   border-radius: 4px;
+  position: relative;
 }
+/* Gold inner frame as a positioned pseudo-element rather than `outline`
+   — outline is not rendered by html2canvas, so Save-as-PDF would drop
+   the frame. A bordered ::before is captured faithfully. */
+.cert::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1.5px solid #d4af37;
+  border-radius: 2px;
+  pointer-events: none;
+}
+.cert > * { position: relative; z-index: 1; }
 .cert .crest {
   font-family: var(--font-display);
   font-size: 1.7rem;
@@ -3219,10 +3230,10 @@ body.pdf-overlay-open { overflow: hidden; }
   line-height: 1.2;
 }
 .cert .body {
-  font-size: 1.02rem;
+  font-size: 1.05rem;
   max-width: 760px;
-  margin: 0;
-  color: var(--text);
+  margin: 0.5rem 0 0;
+  color: var(--text-muted);
   line-height: 1.55;
 }
 .cert .signoff {
@@ -3273,10 +3284,12 @@ body.pdf-overlay-open { overflow: hidden; }
 }
 .cert .cert-course {
   font-family: var(--font-display);
-  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
   font-weight: 700;
   color: var(--primary-dark);
-  margin: 0.5rem 0 0;
+  letter-spacing: 0.2px;
+  margin: 0.45rem 0 0;
+  padding: 0 1rem;
 }
 .cert .cert-awarded {
   margin: 0.7rem 0 0 !important;
