@@ -34,8 +34,8 @@
      point, so the label isn't duplicated. */
   const NAV_LINKS = [
     { href: 'index.html',   label: 'Courses',    match: ['index.html', ''] },
-    { href: 'files.html',   label: 'Tools',      match: ['files.html', 'preview.html', 'tools.html'] },
     { href: 'support.html', label: 'Support',    match: ['support.html'] },
+    { href: 'files.html',   label: 'Tools',      match: ['files.html', 'preview.html', 'tools.html'] },
     { href: 'admin.html',   label: 'Admin',      match: ['admin.html'] }
   ];
 
