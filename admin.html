@@ -261,7 +261,7 @@
         slot.innerHTML = `
           <div class="cms-text-edit">
             <div class="cms-text-edit-col">
-              <label class="cms-html-edit-label">Content (HTML — formatting preserved)</label>
+              <label class="cms-html-edit-label">HTML source (advanced — kept in sync)</label>
               <textarea class="cms-text-area" rows="16" spellcheck="false">${escapeHtml(bodyHtml.trim())}</textarea>
               <div class="cms-section-actions">
                 <button type="button" class="btn btn-ghost" data-act="close">Close</button>
@@ -270,27 +270,86 @@
               </div>
             </div>
             <div class="cms-text-edit-col">
-              <span class="cms-html-edit-label">Live preview</span>
-              <iframe class="cms-html-preview" data-preview></iframe>
+              <span class="cms-html-edit-label">Visual editor — type directly here (non-technical)</span>
+              <div class="cms-rte-toolbar" style="display:flex;flex-wrap:wrap;gap:.3rem;margin:.25rem 0 .4rem;">
+                <button type="button" class="btn btn-ghost" data-cmd="bold" title="Bold" style="font-weight:800;min-width:34px;">B</button>
+                <button type="button" class="btn btn-ghost" data-cmd="italic" title="Italic" style="font-style:italic;min-width:34px;">I</button>
+                <button type="button" class="btn btn-ghost" data-cmd="h2" title="Heading">H</button>
+                <button type="button" class="btn btn-ghost" data-cmd="p" title="Normal text">¶</button>
+                <button type="button" class="btn btn-ghost" data-cmd="ul" title="Bullet list">• List</button>
+                <button type="button" class="btn btn-ghost" data-cmd="ol" title="Numbered list">1. List</button>
+                <button type="button" class="btn btn-ghost" data-cmd="link" title="Add link">🔗</button>
+                <button type="button" class="btn btn-ghost" data-cmd="unlink" title="Remove link">⛓</button>
+                <button type="button" class="btn btn-ghost" data-cmd="undo" title="Undo">↶</button>
+                <button type="button" class="btn btn-ghost" data-cmd="redo" title="Redo">↷</button>
+              </div>
+              <iframe class="cms-html-preview" data-preview title="Visual editor"></iframe>
             </div>
           </div>`;
 
         const ta = slot.querySelector('.cms-text-area');
         const iframe = slot.querySelector('[data-preview]');
+        let pageEl = null;          /* the editable .page inside the iframe */
+        let syncing = false;        /* guards the two-way sync from looping */
+        let taTimer, pvTimer;
+
         function previewDoc() {
-          return `<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="stylesheet" href="assets/embedded.css"><style>body{margin:0;padding:1.2rem;font-family:system-ui,Segoe UI,Arial,sans-serif;color:#1c1b30}</style></head><body><div class="page">${ta.value}</div></body></html>`;
+          return `<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="stylesheet" href="assets/embedded.css"><style>body{margin:0;padding:1.2rem;font-family:system-ui,Segoe UI,Arial,sans-serif;color:#1c1b30}.page{outline:none}.page:focus{outline:none}</style></head><body><div class="page" contenteditable="true">${ta.value}</div></body></html>`;
         }
-        function refreshPreview() {
-          const blob = new Blob([previewDoc()], { type: 'text/html' });
-          iframe.src = URL.createObjectURL(blob);
+
+        /* Visual edit → HTML source. */
+        function syncFromPreview() {
+          if (syncing || !pageEl) return;
+          syncing = true;
+          ta.value = pageEl.innerHTML;
+          syncing = false;
         }
-        ta.addEventListener('input', refreshPreview);
-        refreshPreview();
+        /* HTML source → visual editor (no reload, cursor/scroll kept). */
+        function syncFromSource() {
+          if (syncing || !pageEl) return;
+          syncing = true;
+          if (pageEl.innerHTML !== ta.value) pageEl.innerHTML = ta.value;
+          syncing = false;
+        }
+
+        iframe.addEventListener('load', () => {
+          const doc = iframe.contentDocument;
+          pageEl = doc && doc.querySelector('.page');
+          if (!pageEl) return;
+          pageEl.addEventListener('input', () => {
+            clearTimeout(pvTimer); pvTimer = setTimeout(syncFromPreview, 120);
+          });
+          /* execCommand is deprecated but is the only dependency-free way
+             to format a contenteditable region; it edits the existing DOM
+             so the worksheet HTML/tables stay verbatim. */
+          slot.querySelectorAll('.cms-rte-toolbar [data-cmd]').forEach((b) => {
+            b.addEventListener('mousedown', (e) => e.preventDefault()); /* keep iframe selection */
+            b.addEventListener('click', () => {
+              const c = b.dataset.cmd;
+              pageEl.focus();
+              try {
+                if (c === 'bold' || c === 'italic' || c === 'undo' || c === 'redo') doc.execCommand(c, false, null);
+                else if (c === 'h2') doc.execCommand('formatBlock', false, 'H2');
+                else if (c === 'p') doc.execCommand('formatBlock', false, 'P');
+                else if (c === 'ul') doc.execCommand('insertUnorderedList', false, null);
+                else if (c === 'ol') doc.execCommand('insertOrderedList', false, null);
+                else if (c === 'link') { const u = prompt('Link URL:', 'https://'); if (u) doc.execCommand('createLink', false, u); }
+                else if (c === 'unlink') doc.execCommand('unlink', false, null);
+              } catch (_) {}
+              syncFromPreview();
+            });
+          });
+        });
+        ta.addEventListener('input', () => {
+          clearTimeout(taTimer); taTimer = setTimeout(syncFromSource, 200);
+        });
+        iframe.srcdoc = previewDoc();
 
         slot.querySelector('[data-act="close"]').addEventListener('click', () => {
           slot.hidden = true; slot.innerHTML = '';
         });
         slot.querySelector('[data-act="save"]').addEventListener('click', () => {
+          if (pageEl) { ta.value = pageEl.innerHTML; }   /* capture latest visual edit */
           const full = wrapBody(ta.value, templateHtml);
           window.MatrixCMS.setHtmlOverride(screen.src, full);
           flashSaved(slot);
