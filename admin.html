@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · CMS | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260529">
+  <link rel="stylesheet" href="assets/styles.css?v=20260530">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -49,9 +49,9 @@
     </main>
   </div>
 
-  <script src="assets/chrome.js?v=20260529"></script>
+  <script src="assets/chrome.js?v=20260530"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="assets/cms-overrides.js?v=20260529"></script>
+  <script src="assets/cms-overrides.js?v=20260530"></script>
   <script>
     (function () {
       'use strict';
@@ -156,7 +156,7 @@
 
           <section class="cms-section">
             <h2 class="cms-section-title">Screens (${merged.screens.length})</h2>
-            <p class="cms-section-hint">Edit a screen's title, time, type or file path. Click <strong>Edit text</strong> on a Page or Worksheet screen to edit the exact content learners see — it updates the live course on save.</p>
+            <p class="cms-section-hint">The top row of each screen edits its <strong>heading &amp; settings</strong> (title, time, type, file). To change the <strong>actual content learners read</strong> on a Page or Worksheet, use <strong>“✎ Edit this screen's content”</strong> below it — that opens the real on-screen text with a live preview and saves straight to the live course.</p>
             <div class="cms-screens">${screensHtml}</div>
           </section>
         `;
@@ -224,14 +224,17 @@
           <div class="cms-screen-row" data-screen-id="${escapeHtml(mergedScreen.id)}">
             <div class="cms-screen-main">
               <span class="cms-screen-num">${idx + 1}</span>
-              <input class="cms-screen-title" data-screen-field="title" value="${escapeHtml(mergedScreen.title || '')}" placeholder="Title">
+              <input class="cms-screen-title" data-screen-field="title" value="${escapeHtml(mergedScreen.title || '')}" placeholder="Screen title (heading)">
               <select class="cms-screen-type" data-screen-field="type">${typeOpts}</select>
               <input class="cms-screen-hours" data-screen-field="hours" type="number" step="0.1" min="0" value="${escapeHtml(String(mergedScreen.hours || 0))}">
               <input class="cms-screen-src" data-screen-field="src" value="${escapeHtml(mergedScreen.src || '')}" placeholder="path or URL">
               <label class="cms-screen-missing"><input type="checkbox" data-screen-field="missing" ${mergedScreen.missing ? 'checked' : ''}> missing</label>
+            </div>
+            <div class="cms-screen-actions">
               ${isEditableText(mergedScreen)
-                ? `<button type="button" class="btn btn-secondary cms-edit-text-btn" data-action="edit-text">✎ Edit text${edited ? ' <em class="cms-edited-tag">edited</em>' : ''}</button>`
-                : `<span class="cms-screen-noedit" title="Only Page (HTML) and Worksheet (Word) screens have editable text">—</span>`}
+                ? `<button type="button" class="btn btn-primary cms-edit-text-btn" data-action="edit-text">✎ Edit this screen's content${edited ? ' <em class="cms-edited-tag">edited</em>' : ''}</button>
+                   <span class="cms-screen-actions-hint">The title above is just the heading — this edits the body text learners read on screen ${idx + 1}.</span>`
+                : `<span class="cms-screen-noedit">No editable body text — ${escapeHtml(mergedScreen.type)} screen (image / video / PDF / slides are binary or external).</span>`}
             </div>
             <div class="cms-screen-editor" data-editor-for="${escapeHtml(mergedScreen.id)}" hidden></div>
           </div>

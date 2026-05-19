@@ -2111,17 +2111,32 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 }
 .cms-screen-main {
   display: grid;
-  grid-template-columns: 26px minmax(0,2fr) 108px 70px minmax(0,2fr) 64px auto;
+  grid-template-columns: 26px minmax(0,2fr) 108px 70px minmax(0,2fr) 64px;
   gap: 0.5rem;
   align-items: center;
+}
+.cms-screen-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.55rem;
+}
+.cms-screen-actions-hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+.cms-screen-noedit {
+  font-size: 0.76rem;
+  color: var(--text-subtle);
+  font-style: italic;
 }
 .cms-section-head {
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; flex-wrap: wrap; margin-bottom: 0.7rem;
 }
-.cms-edit-text-btn { white-space: nowrap; font-size: 0.78rem; padding: 0.3rem 0.6rem; }
-.cms-edit-text-btn .cms-edited-tag { margin-left: 0.3rem; }
-.cms-screen-noedit { text-align: center; color: var(--text-subtle); }
+.cms-edit-text-btn { white-space: nowrap; font-size: 0.82rem; padding: 0.4rem 0.85rem; }
+.cms-edit-text-btn .cms-edited-tag { margin-left: 0.35rem; }
 .cms-screen-editor {
   margin-top: 0.65rem;
   border-top: 1px dashed var(--border-strong);
