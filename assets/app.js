@@ -739,9 +739,55 @@
       }
     });
 
-    /* Pseudo-heading promotion, hint-collapsing and topic-list grouping
-       removed (per author feedback: "Just present them plain as the
-       documents in Word"). The mammoth output is left as-is from here on. */
+    /* 4. Title + section headings only (conservative — per the "Title +
+       headings only" decision). TEXT IS VERBATIM; only the tag changes:
+       the first line becomes the page title, and paragraphs that are an
+       obvious section label ("Design brief:", "Hardware:", "Software", …)
+       become headings with the matching icon. NO list grouping or
+       hint-collapsing — sub-lines stay as authored. */
+    const SECTION_MAP = [
+      [/^design\s*brief$/i,                'design-brief'],
+      [/^hardware$/i,                      'hardware'],
+      [/^software$/i,                      'software'],
+      [/^challenges?$/i,                   'challenges'],
+      [/^hints?$/i,                        'hints'],
+      [/^over\s*to\s*you$/i,               'over-to-you'],
+      [/^(risk(\s*assessment)?|safety)$/i, 'risk']
+    ];
+    let titleDone = false;
+    Array.from(root.children).forEach((el) => {
+      if (el.tagName !== 'P') return;
+      const text = (el.textContent || '').trim();
+      if (!text) return;
+
+      /* First non-empty paragraph → page title (verbatim). */
+      if (!titleDone) {
+        titleDone = true;
+        if (text.length <= 90) {
+          const h1 = parsed.createElement('h1');
+          h1.className = 'doc-h1';
+          h1.textContent = text;
+          el.replaceWith(h1);
+          return;
+        }
+      }
+
+      /* Obvious section label → heading. A trailing colon is ignored for
+         matching only; the displayed text stays exactly as authored. */
+      const label = text.replace(/\s*:\s*$/, '');
+      if (label.length > 42 || /[.!?]/.test(label)) return; /* a sentence, not a label */
+      let cls = '';
+      for (let i = 0; i < SECTION_MAP.length; i++) {
+        if (SECTION_MAP[i][0].test(label)) { cls = SECTION_MAP[i][1]; break; }
+      }
+      const isGeneric = !cls && /:\s*$/.test(text) && label.split(/\s+/).length <= 4;
+      if (cls || isGeneric) {
+        const h2 = parsed.createElement('h2');
+        h2.className = 'doc-section' + (cls ? ' ' + cls : '');
+        h2.textContent = text;
+        el.replaceWith(h2);
+      }
+    });
 
     return root.innerHTML;
   }

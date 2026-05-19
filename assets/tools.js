@@ -710,39 +710,61 @@
       return ((filenameInput.value || 'worksheets').trim().replace(/\.(pdf|docx?)$/i, '')) || 'worksheets';
     }
 
-    compileBtn.addEventListener('click', function () {
-      var outName = baseName() + '.pdf';
+    /* One combined print document → the browser's own PDF engine.
+       html2canvas (html2pdf) renders BLANK in this environment — proved
+       repeatedly (certificate, here). The browser's print renderer is
+       the reliable path: mammoth embeds images as data URIs so they
+       appear, and "Save as PDF" in the dialog yields one combined PDF
+       in order. Same mechanism as the working worksheet Print button. */
+    function buildPrintHtml(parts, title) {
+      function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+      var sections = parts.map(function (h, i) {
+        return '<section class="ws"' + (i ? ' style="page-break-before:always;"' : '') + '>' + (h || '<p>(empty document)</p>') + '</section>';
+      }).join('\n');
+      return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + esc(title) + '</title>' +
+        '<style>@page{margin:18mm 16mm;}*{box-sizing:border-box;}' +
+        'body{margin:0;font:11pt/1.55 "Segoe UI",Calibri,Arial,sans-serif;color:#1a1a2e;}' +
+        '.ws{padding:0 0 6mm;}h1{font-size:20pt;margin:0 0 6pt;color:#1e1b4b;font-weight:800;}' +
+        'h2,h3{margin:1.1em 0 .35em;line-height:1.25;color:#1e1b4b;}' +
+        'p{margin:0 0 .7em;}ul,ol{margin:0 0 .8em;padding-left:1.4em;}li{margin-bottom:.25em;}' +
+        'img{max-width:100%;height:auto;}table{border-collapse:collapse;width:100%;margin:.8em 0;}' +
+        'th,td{border:1px solid #c8d5f0;padding:.4em .6em;vertical-align:top;}a{color:#1d4ed8;}' +
+        '@media print{.ws{padding:0;}}</style></head><body>' + sections +
+        '<scr' + 'ipt>window.onload=function(){setTimeout(function(){window.print();},350);};</scr' + 'ipt>' +
+        '</body></html>';
+    }
+
+    compileBtn.addEventListener('click', async function () {
+      var title = baseName();
       if (!cFiles.length) { cStatus('Add at least one .docx file.', 'err'); return; }
-      if (!window.PDFLib || !window.html2pdf || !window.mammoth) {
-        cStatus('A PDF library is still loading — retry in a moment.', 'err'); return;
-      }
-      compileBtn.disabled = true; clearBtn.disabled = true;
-      cStatus('Converting documents…'); cProgress(1);
-      var parts = [];
-      var chain = Promise.resolve();
-      cFiles.forEach(function (f, i) {
-        chain = chain.then(function () {
-          cStatus('Converting ' + (i + 1) + ' of ' + cFiles.length + ': ' + f.name);
-          return docxToPdfBytes(f);
-        }).then(function (bytes) {
-          parts.push(bytes);
-          cProgress(Math.round(((i + 1) / cFiles.length) * 85));
-        });
-      });
-      chain.then(function () {
-        cStatus('Merging and numbering pages…'); cProgress(92);
-        return mergeAndPaginate(parts);
-      }).then(function (finalBytes) {
+      if (!window.mammoth) { cStatus('Document renderer still loading — retry in a moment.', 'err'); return; }
+      compileBtn.disabled = compileDocxBtn.disabled = clearBtn.disabled = true;
+      cStatus('Rendering documents…'); cProgress(1);
+      try {
+        var parts = [];
+        for (var i = 0; i < cFiles.length; i++) {
+          cStatus('Rendering ' + (i + 1) + ' of ' + cFiles.length + ': ' + cFiles[i].name);
+          var ab = await cFiles[i].arrayBuffer();
+          var r = await window.mammoth.convertToHtml({ arrayBuffer: ab });
+          parts.push(r.value || '');
+          cProgress(Math.round(((i + 1) / cFiles.length) * 90));
+        }
+        var w = window.open('', '_blank');
+        if (!w) { cStatus('Pop-up blocked — allow pop-ups for this site, then Compile PDF again.', 'err'); return; }
+        w.document.open();
+        w.document.write(buildPrintHtml(parts, title));
+        w.document.close();
         cProgress(100);
-        download(new Blob([finalBytes], { type: 'application/pdf' }), outName);
-        cStatus('Done — ' + outName + ' downloaded.', 'ok');
-      }).catch(function (err) {
+        cStatus('Print view opened for ' + title + '.pdf — in the dialog pick “Save as PDF”. ' +
+          cFiles.length + ' worksheet(s), in order.', 'ok');
+      } catch (err) {
         console.error(err);
         cStatus('Error: ' + (err && err.message ? err.message : err), 'err');
-      }).then(function () {
-        compileBtn.disabled = cFiles.length === 0; clearBtn.disabled = false;
+      } finally {
+        compileBtn.disabled = compileDocxBtn.disabled = cFiles.length === 0;
+        clearBtn.disabled = false;
         setTimeout(function () { cProgress(0); }, 1500);
-      });
+      }
     });
 
     /* Word output — lossless altChunk concatenation (original formatting). */
