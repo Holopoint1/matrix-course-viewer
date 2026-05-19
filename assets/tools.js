@@ -46,22 +46,31 @@
      `files.html#compiler` (or any #<tab>) opens that tab directly — used by
      the Admin "Worksheet compiler" link and the old standalone-page redirect. */
   var tabs = Array.from(document.querySelectorAll('.tool-tab'));
-  function activateTab(name) {
+  var toolAnchor = document.querySelector('.tool-tabs') || document.querySelector('.files-section');
+  function activateTab(name, scroll) {
     if (!name || !tabs.some(function (b) { return b.dataset.tab === name; })) return false;
     tabs.forEach(function (b) { b.classList.toggle('active', b.dataset.tab === name); });
     document.querySelectorAll('.tool-panel').forEach(function (p) {
       p.classList.toggle('active', p.id === 'panel-' + name);
     });
+    /* Switching used to feel jumpy: panels differ a lot in height, so
+       clicking a tab while scrolled down left you stranded mid-page. On a
+       user click, settle back to the (sticky) tab bar smoothly so every
+       tool always opens from the same, predictable place. */
+    if (scroll && toolAnchor && toolAnchor.scrollIntoView) {
+      toolAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     return true;
   }
   tabs.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      activateTab(btn.dataset.tab);
+      activateTab(btn.dataset.tab, true);
+      /* replaceState only — never assign location.hash (that scrolls to a
+         matching id and causes the jump the user reported). */
       if (history.replaceState) history.replaceState(null, '', '#' + btn.dataset.tab);
-      else location.hash = btn.dataset.tab;
     });
   });
-  function tabFromHash() { activateTab((location.hash || '').replace(/^#/, '').trim()); }
+  function tabFromHash() { activateTab((location.hash || '').replace(/^#/, '').trim(), false); }
   tabFromHash();
   window.addEventListener('hashchange', tabFromHash);
 
