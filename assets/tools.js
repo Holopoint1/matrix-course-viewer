@@ -480,29 +480,109 @@
   });
 
   /* ====================================================================== *
-   *  GOOGLE DRIVE (open / embed a shared folder — no API, no credentials)
+   *  DATABASE — read-only download of the live (amended) course content
+   *  from Supabase, zipped in the browser. No secret key: RLS allows
+   *  public read, so this can never modify the project. (Replaced the
+   *  old Google Drive tab.)
    * ====================================================================== */
-  function driveFolderId(url) {
-    var m = String(url || '').match(/\/folders\/([A-Za-z0-9_-]+)/) ||
-            String(url || '').match(/[?&]id=([A-Za-z0-9_-]+)/);
-    return m ? m[1] : '';
-  }
-  $('drive-open').addEventListener('click', function () {
-    var url = ($('drive-url').value || '').trim();
-    if (!url) { alert('Paste a Google Drive folder link first.'); return; }
-    var w = window.open(url, 'matrixDriveFolder', 'width=1280,height=860');
-    if (!w) alert('Pop-up blocked. Allow pop-ups for this site to open Drive.');
-  });
-  $('drive-embed').addEventListener('click', function () {
-    var id = driveFolderId($('drive-url').value);
-    if (!id) { alert('That does not look like a Drive folder link.'); return; }
-    var wrap = $('drive-embed-wrap');
-    var frame = $('drive-frame');
-    if (!wrap.hidden) { wrap.hidden = true; this.textContent = 'Show inline'; return; }
-    frame.src = 'https://drive.google.com/embeddedfolderview?id=' + id + '#grid';
-    wrap.hidden = false;
-    this.textContent = 'Hide inline';
-  });
+  (function initDatabase() {
+    var statusEl = $('cmsdb-status');
+    if (!statusEl) return;                              /* panel not on page */
+    var dlAll = $('cmsdb-dl-all'), dlOne = $('cmsdb-dl-one'),
+        courseSel = $('cmsdb-course'), outEl = $('cmsdb-out');
+
+    function getClient() {
+      try {
+        if (window.MatrixCMS && window.MatrixCMS.supabaseClient) return window.MatrixCMS.supabaseClient;
+        if (window.supabase && window.MATRIX_SUPABASE)
+          return window.supabase.createClient(window.MATRIX_SUPABASE.url,
+            window.MATRIX_SUPABASE.publishableKey, { auth: { persistSession: false } });
+      } catch (_) {}
+      return null;
+    }
+    function out(msg, kind) {
+      outEl.hidden = !msg;
+      outEl.className = 'split-status' + (kind ? ' ' + kind : '');
+      outEl.textContent = msg || '';
+    }
+    function safeRel(p) {
+      return String(p == null ? 'untitled' : p).replace(/[^\w.\-/]+/g, '_').replace(/^\/+/, '');
+    }
+    function stamp() { return new Date().toISOString().slice(0, 10); }
+
+    var cache = null;
+    async function load() {
+      var sb = getClient();
+      if (!sb) throw new Error('Supabase client not available on this page.');
+      var r = await Promise.all([
+        sb.from('courses').select('*'),
+        sb.from('screens').select('*'),
+        sb.from('pages').select('*')
+      ]);
+      for (var i = 0; i < 3; i++) if (r[i].error) throw new Error(r[i].error.message);
+      cache = { courses: r[0].data || [], screens: r[1].data || [], pages: r[2].data || [] };
+      return cache;
+    }
+    function zipFrom(courses, screens, pages, name) {
+      var zip = new JSZip();
+      zip.file('courses.json', JSON.stringify(courses, null, 2));
+      zip.file('screens.json', JSON.stringify(screens, null, 2));
+      zip.file('pages.json', JSON.stringify(pages, null, 2));
+      var hf = zip.folder('html');
+      pages.forEach(function (p) {
+        if (!p || p.path == null) return;
+        hf.file(safeRel(p.path) + (/\.html?$/i.test(p.path) ? '' : '.html'), p.html || '');
+      });
+      return zip.generateAsync({ type: 'blob', compression: 'DEFLATE' })
+        .then(function (b) { download(b, name); });
+    }
+
+    (async function () {
+      try {
+        var d = await load();
+        statusEl.className = 'split-status ok';
+        statusEl.textContent = 'Connected ✓ — ' + d.courses.length + ' courses, ' +
+          d.screens.length + ' screens, ' + d.pages.length + ' page bodies in the database.';
+        courseSel.innerHTML = d.courses.slice()
+          .sort(function (a, b) { return String(a.id).localeCompare(String(b.id)); })
+          .map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.id) + ' — ' + esc(c.title || '') + '</option>'; })
+          .join('');
+        dlAll.disabled = false;
+        dlOne.disabled = d.courses.length === 0;
+      } catch (e) {
+        statusEl.className = 'split-status err';
+        statusEl.textContent = 'Database not reachable: ' + (e && e.message ? e.message : e) +
+          '  (The live site still works — it falls back to the built-in content.)';
+      }
+    })();
+
+    dlAll.addEventListener('click', async function () {
+      var b = this, t = b.textContent; b.disabled = true; b.textContent = 'Building…';
+      try {
+        var d = cache || await load();
+        await zipFrom(d.courses, d.screens, d.pages, 'matrix-courses-' + stamp() + '.zip');
+        out('Downloaded all ' + d.courses.length + ' courses.', 'ok');
+      } catch (e) { out('Download failed: ' + (e && e.message ? e.message : e), 'err'); }
+      finally { b.disabled = false; b.textContent = t; }
+    });
+
+    dlOne.addEventListener('click', async function () {
+      var id = courseSel.value;
+      if (!id) return;
+      var b = this, t = b.textContent; b.disabled = true; b.textContent = 'Building…';
+      try {
+        var d = cache || await load();
+        var course = d.courses.filter(function (c) { return c.id === id; });
+        var scr = d.screens.filter(function (s) { return s.course_id === id; });
+        var paths = {};
+        scr.forEach(function (s) { if (s.src) paths[s.src] = 1; });
+        var pgs = d.pages.filter(function (p) { return p && paths[p.path]; });
+        await zipFrom(course, scr, pgs, id + '-' + stamp() + '.zip');
+        out('Downloaded ' + id + ' (' + scr.length + ' screens, ' + pgs.length + ' page bodies).', 'ok');
+      } catch (e) { out('Download failed: ' + (e && e.message ? e.message : e), 'err'); }
+      finally { b.disabled = false; b.textContent = t; }
+    });
+  })();
 
   /* ====================================================================== *
    *  COMPILER — merge many .docx into one continuously-paginated PDF.

@@ -24,7 +24,7 @@
       <button class="tool-tab" data-tab="coursefiles" role="tab" type="button">📁 Course files</button>
       <button class="tool-tab" data-tab="exports" role="tab" type="button">🖨 Exports</button>
       <button class="tool-tab" data-tab="compiler" role="tab" type="button">🪄 Compiler</button>
-      <button class="tool-tab" data-tab="drive" role="tab" type="button">☁ Google Drive</button>
+      <button class="tool-tab" data-tab="database" role="tab" type="button">🗄 Database</button>
     </div>
 
     <!-- ───────────────── SPLITTER ───────────────── -->
@@ -194,24 +194,42 @@
 
     <!-- SCORM tab temporarily removed (kept in tools.js, guarded). -->
 
-    <!-- ───────────────── GOOGLE DRIVE ───────────────── -->
-    <section class="tool-panel" id="panel-drive">
+    <!-- ───────────────── DATABASE ───────────────── -->
+    <section class="tool-panel" id="panel-database">
       <div class="support-card-group">
         <div class="support-card-head">
-          <span class="support-card-eyebrow">Live folder</span>
-          <h2>Google Drive folder</h2>
+          <span class="support-card-eyebrow">Live content database</span>
+          <h2>Database &amp; course downloads</h2>
         </div>
-        <p class="files-tree-hint">Open the shared course Drive folder in a new window (you sign in to Google there as normal — nothing is stored here). Paste a different folder link to switch folders.</p>
-        <div class="drive-row">
-          <input id="drive-url" class="split-id-input drive-url" spellcheck="false"
-            value="https://drive.google.com/drive/folders/1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu?usp=drive_link">
-          <button class="btn btn-primary" id="drive-open" type="button">↗ Open in new window</button>
-          <button class="btn btn-secondary" id="drive-embed" type="button">Show inline</button>
+        <p class="files-tree-hint">
+          Course content (every screen's <strong>text, images and links</strong>) lives in a
+          <strong>Supabase</strong> database — not in flat files. Editors change it in the
+          <a href="admin.html">Admin</a> section; saves apply <strong>instantly for everyone</strong>,
+          with no redeploy and no developer. The public site reads from the database (and safely
+          falls back to the built-in copy if the database is ever unreachable).
+        </p>
+        <p class="files-tree-hint">
+          Use the buttons below to pull the <strong>current, amended</strong> courses out as files —
+          for big offline restructuring, a backup, or handing to someone. This is read-only: it
+          downloads, it never changes the live courses.
+        </p>
+
+        <div class="split-status" id="cmsdb-status">Checking database…</div>
+
+        <div class="split-actions">
+          <button class="btn btn-primary" id="cmsdb-dl-all" type="button" disabled>⤓ Download all courses (ZIP)</button>
+          <label class="split-id-label">Single course
+            <select id="cmsdb-course" class="split-id-input"></select>
+          </label>
+          <button class="btn btn-secondary" id="cmsdb-dl-one" type="button" disabled>⤓ Download this course</button>
         </div>
-        <div id="drive-embed-wrap" hidden>
-          <iframe id="drive-frame" class="drive-frame" title="Google Drive folder" loading="lazy"></iframe>
-          <p class="files-tree-hint">The inline view only renders if the folder is shared “Anyone with the link”. If it stays blank, use <strong>Open in new window</strong>.</p>
-        </div>
+
+        <div class="split-status" id="cmsdb-out" hidden></div>
+
+        <p class="files-tree-hint">
+          Each ZIP contains <code>courses.json</code>, <code>screens.json</code>,
+          <code>pages.json</code> and a browsable <code>html/</code> folder with every page body.
+        </p>
       </div>
     </section>
   </main>
