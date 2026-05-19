@@ -826,14 +826,26 @@
     });
 
     try {
-      let html = docCache.get(screen.src);
-      if (!html) {
-        const res = await fetch(screen.src);
-        if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
-        const buf = await res.arrayBuffer();
-        const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
-        html = enhanceWorksheetHtml(result.value || '');
-        docCache.set(screen.src, html);
+      /* Admin CMS edit wins over the source .docx — same override key
+         (screen.src) the HTML-screen renderer uses, so a worksheet edited
+         in the admin shows here immediately. The override is a full HTML
+         doc; pull its .page / body, then run the normal enhancer. */
+      const cmsOverride = window.MatrixCMS ? window.MatrixCMS.getHtmlOverride(screen.src) : null;
+      let html;
+      if (cmsOverride != null) {
+        const odoc = new DOMParser().parseFromString(cmsOverride, 'text/html');
+        const opage = odoc.querySelector('.page');
+        html = enhanceWorksheetHtml(opage ? opage.innerHTML : (odoc.body ? odoc.body.innerHTML : cmsOverride));
+      } else {
+        html = docCache.get(screen.src);
+        if (!html) {
+          const res = await fetch(screen.src);
+          if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
+          const buf = await res.arrayBuffer();
+          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+          html = enhanceWorksheetHtml(result.value || '');
+          docCache.set(screen.src, html);
+        }
       }
       inner.innerHTML = html;
       /* Wire Hint Seeker — first reveal of any hints section in this

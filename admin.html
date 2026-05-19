@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin · CMS | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260528">
+  <link rel="stylesheet" href="assets/styles.css?v=20260529">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -14,7 +14,7 @@
     <div class="cms-login-card">
       <div class="cms-login-icon">⚙</div>
       <h1>Admin sign in</h1>
-      <p>Sign in to edit course text, screens, and intro pages. Changes are saved to your browser and can be exported as files for a developer to commit.</p>
+      <p>Sign in to edit course text, screens and intro pages. Changes are saved in your browser and can be exported as files for a developer to commit.</p>
       <form id="cms-login-form">
         <label>Username
           <input type="text" id="cms-username" value="admin" autocomplete="off">
@@ -36,17 +36,11 @@
       </div>
       <ul class="cms-course-list" id="cms-course-list"></ul>
       <div class="cms-side-section">
-        <span class="cms-side-eyebrow">HTML pages</span>
-        <h2>Intro &amp; reference text</h2>
-      </div>
-      <ul class="cms-html-list" id="cms-html-list"></ul>
-      <div class="cms-side-section">
         <span class="cms-side-eyebrow">Assets</span>
         <h2>Files</h2>
       </div>
       <ul class="cms-html-list">
-        <li><a class="cms-html-link" href="files.html">→ File manager &amp; drop-zone</a></li>
-        <li><a class="cms-html-link" href="files.html#compiler">→ Worksheet compiler</a></li>
+        <li><a class="cms-html-link" href="files.html">→ Tools · file manager &amp; splitter</a></li>
       </ul>
       <div class="cms-side-foot">
         <button class="btn btn-secondary cms-side-export" id="cms-export-btn">⤓ Export changes</button>
@@ -56,57 +50,43 @@
     </aside>
 
     <main class="cms-main" id="cms-main">
-      <p class="stage-loading">Pick something on the left to start editing&hellip;</p>
+      <p class="stage-loading">Pick a course on the left to start editing&hellip;</p>
     </main>
   </div>
 
-  <script src="assets/chrome.js?v=20260528"></script>
+  <script src="assets/chrome.js?v=20260529"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="assets/cms-overrides.js?v=20260528"></script>
+  <script src="assets/cms-overrides.js?v=20260529"></script>
   <script>
-    (async function () {
+    (function () {
       'use strict';
       const loginEl = document.getElementById('cms-login');
       const shellEl = document.getElementById('cms-shell');
+      const mainEl = () => document.getElementById('cms-main');
 
       function escapeHtml(s) {
         return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
           '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         }[c]));
       }
+      function showShell() { loginEl.hidden = true; shellEl.hidden = false; }
 
-      function showLogin() { loginEl.hidden = false; shellEl.hidden = true; }
-      function showShell() { loginEl.hidden = true;  shellEl.hidden = false; }
-
-      /* ----- Login -----
-         The admin area is intentionally open to anyone visiting the site
-         during this build phase. We auto-unlock + call init() at the BOTTOM
-         of this IIFE so the 'let courses' / 'async function init' bindings
-         below are fully initialised before init() runs (a Temporal Dead
-         Zone error broke this previously). */
       document.getElementById('cms-login-form').addEventListener('submit', (ev) => {
         ev.preventDefault();
-        try {
-          const pw = document.getElementById('cms-password').value;
-          window.MatrixCMS.unlock(pw); /* Phase 1: always succeeds */
-          showShell();
-          init().catch((e) => {
-            console.error('Admin init failed:', e);
-            document.getElementById('cms-main').innerHTML =
-              '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
-              (e && e.message ? e.message : String(e)) + '</p>';
-          });
-        } catch (err) {
-          console.error('Admin sign-in error:', err);
-          alert('Sign in failed: ' + (err && err.message ? err.message : err));
-        }
+        try { window.MatrixCMS.unlock(document.getElementById('cms-password').value); } catch (_) {}
+        showShell();
+        init().catch(showInitError);
       });
       document.getElementById('cms-logout-btn').addEventListener('click', () => {
         window.MatrixCMS.lock();
         location.reload();
       });
+      function showInitError(e) {
+        console.error('Admin init failed:', e);
+        mainEl().innerHTML = '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
+          escapeHtml(e && e.message ? e.message : String(e)) + '</p>';
+      }
 
-      /* ----- Initial data ----- */
       let originalCourses = null;
       let courses = null;
 
@@ -116,18 +96,9 @@
         courses = data.courses;
       }
 
-      const HTML_PAGES = [
-        { path: 'content/CO0001/cpd-objectives.html', label: 'CO0001 · CPD objectives' },
-        { path: 'content/CO0002/welcome.html',         label: 'CO0002 · Welcome' },
-        { path: 'content/CO0002/learning-objectives.html', label: 'CO0002 · Learning objectives' },
-        { path: 'content/CO0002/equipment.html',       label: 'CO0002 · Equipment' },
-        { path: 'content/CO0003/welcome.html',         label: 'CO0003 · Welcome' }
-      ];
-
       async function init() {
         if (!courses) await loadAll();
         renderCourseList();
-        renderHtmlList();
       }
 
       function renderCourseList() {
@@ -136,41 +107,36 @@
           <li><button type="button" data-course="${escapeHtml(c.id)}" class="cms-course-pick">
             <strong>${escapeHtml(c.code)}</strong>
             <span>${escapeHtml(c.title)}</span>
-            ${window.MatrixCMS.getCourseOverride(c.id) ? '<em class="cms-edited-tag">edited</em>' : ''}
+            ${window.MatrixCMS.getCourseOverride(c.id) || Object.keys(window.MatrixCMS.getScreenOverrides(c.id)).length ? '<em class="cms-edited-tag">edited</em>' : ''}
           </button></li>
         `).join('');
         root.querySelectorAll('button[data-course]').forEach((btn) => {
           btn.addEventListener('click', () => editCourse(btn.dataset.course));
         });
       }
-      function renderHtmlList() {
-        const root = document.getElementById('cms-html-list');
-        root.innerHTML = HTML_PAGES.map((p) => `
-          <li><button type="button" data-html="${escapeHtml(p.path)}" class="cms-html-pick">
-            <span>${escapeHtml(p.label)}</span>
-            ${window.MatrixCMS.getHtmlOverride(p.path) ? '<em class="cms-edited-tag">edited</em>' : ''}
-          </button></li>
-        `).join('');
-        root.querySelectorAll('button[data-html]').forEach((btn) => {
-          btn.addEventListener('click', () => editHtml(btn.dataset.html));
-        });
-      }
 
-      /* ----- Course editor ----- */
+      /* ---------- Course editor ---------- */
       function editCourse(courseId) {
         const original = courses.find((c) => c.id === courseId);
         const merged = window.MatrixCMS.applyOverrides(original);
-        const main = document.getElementById('cms-main');
+        const main = mainEl();
         const screensHtml = merged.screens.map((s, i) => screenRow(courseId, original.screens[i], s, i)).join('');
         main.innerHTML = `
           <header class="cms-page-head">
             <span class="cms-page-eyebrow">Editing</span>
             <h1>${escapeHtml(merged.code)} · ${escapeHtml(merged.title)}</h1>
-            <p class="cms-page-hint">Live preview of edits will reflect on every page in this browser. Use <strong>Export changes</strong> in the sidebar to download files for a developer to commit.</p>
+            <p class="cms-page-hint">Every edit is saved to this browser instantly and shows on the live course. Use <strong>Export changes</strong> to download the files for a developer to commit permanently.</p>
           </header>
 
           <section class="cms-section">
-            <h2 class="cms-section-title">Course meta</h2>
+            <div class="cms-section-head">
+              <h2 class="cms-section-title">Course details</h2>
+              <div class="cms-section-actions">
+                <button class="btn btn-secondary" data-action="reset-course">Reset course</button>
+                <button class="btn btn-primary" data-action="save-course">💾 Save course details</button>
+                <span class="cms-saved-hint" data-saved hidden>Saved ✓</span>
+              </div>
+            </div>
             <div class="cms-grid-2">
               <label>Code
                 <input type="text" data-field="code" value="${escapeHtml(merged.code || '')}">
@@ -191,43 +157,42 @@
                 </select>
               </label>
             </div>
-            <div class="cms-section-actions">
-              <button class="btn btn-secondary" data-action="reset-course">Reset course meta</button>
-              <span class="cms-saved-hint" data-saved hidden>Saved ✓</span>
-            </div>
           </section>
 
           <section class="cms-section">
             <h2 class="cms-section-title">Screens (${merged.screens.length})</h2>
-            <p class="cms-section-hint">Edit titles, hours, equipment label, type or file path. The course viewer will reflect changes immediately.</p>
+            <p class="cms-section-hint">Edit a screen's title, time, type or file path. Click <strong>Edit text</strong> on a Page or Worksheet screen to edit the exact content learners see — it updates the live course on save.</p>
             <div class="cms-screens">${screensHtml}</div>
           </section>
         `;
 
-        /* Wire course-meta inputs */
+        /* Course-meta: instant apply + an explicit Save button (flushes + confirms) */
+        function applyMeta(input) {
+          const field = input.dataset.field;
+          const value = input.type === 'number' ? Number(input.value) : input.value;
+          if (field === 'certificateEnabled') {
+            const orig = original.certificate || { enabled: false };
+            window.MatrixCMS.setCourseOverride(courseId, { certificate: Object.assign({}, orig, { enabled: input.value === 'true' }) });
+          } else {
+            window.MatrixCMS.setCourseOverride(courseId, { [field]: value });
+          }
+          renderCourseList();
+        }
         main.querySelectorAll('[data-field]').forEach((input) => {
-          input.addEventListener('input', () => {
-            const field = input.dataset.field;
-            const value = input.type === 'number' ? Number(input.value) : input.value;
-            if (field === 'certificateEnabled') {
-              const orig = original.certificate || { enabled: false };
-              window.MatrixCMS.setCourseOverride(courseId, { certificate: Object.assign({}, orig, { enabled: input.value === 'true' }) });
-            } else {
-              window.MatrixCMS.setCourseOverride(courseId, { [field]: value });
-            }
-            flashSaved(main);
-            renderCourseList();
-          });
+          input.addEventListener('input', () => applyMeta(input));
         });
-
+        main.querySelector('[data-action="save-course"]').addEventListener('click', () => {
+          main.querySelectorAll('[data-field]').forEach(applyMeta);
+          flashSaved(main);
+        });
         main.querySelector('[data-action="reset-course"]').addEventListener('click', () => {
-          if (!confirm('Reset all edits for this course?')) return;
+          if (!confirm('Reset all edits for this course (details + screens + text)?')) return;
           window.MatrixCMS.clearCourse(courseId);
           editCourse(courseId);
           renderCourseList();
         });
 
-        /* Wire screen inputs */
+        /* Screen-meta inputs */
         main.querySelectorAll('.cms-screen-row').forEach((row) => {
           const screenId = row.dataset.screenId;
           row.querySelectorAll('[data-screen-field]').forEach((input) => {
@@ -241,83 +206,130 @@
               flashSaved(main);
             });
           });
+          const editBtn = row.querySelector('[data-action="edit-text"]');
+          if (editBtn) {
+            editBtn.addEventListener('click', () => {
+              const sc = merged.screens.find((x) => x.id === screenId);
+              openTextEditor(courseId, sc, row);
+            });
+          }
         });
+      }
+
+      function isEditableText(s) {
+        return (s.type === 'html' || s.type === 'document') &&
+               s.src && !/^https?:/i.test(s.src) && !s.missing;
       }
 
       function screenRow(courseId, originalScreen, mergedScreen, idx) {
         const types = ['image', 'html', 'youtube', 'pdf', 'document', 'powerpoint', 'spreadsheet'];
         const typeOpts = types.map((t) => `<option value="${t}" ${mergedScreen.type === t ? 'selected' : ''}>${t}</option>`).join('');
+        const edited = !!window.MatrixCMS.getHtmlOverride(mergedScreen.src);
         return `
           <div class="cms-screen-row" data-screen-id="${escapeHtml(mergedScreen.id)}">
-            <span class="cms-screen-num">${idx + 1}</span>
-            <input class="cms-screen-title" data-screen-field="title" value="${escapeHtml(mergedScreen.title || '')}" placeholder="Title">
-            <select class="cms-screen-type" data-screen-field="type">${typeOpts}</select>
-            <input class="cms-screen-hours" data-screen-field="hours" type="number" step="0.1" min="0" value="${escapeHtml(String(mergedScreen.hours || 0))}">
-            <input class="cms-screen-src" data-screen-field="src" value="${escapeHtml(mergedScreen.src || '')}" placeholder="path or URL">
-            <label class="cms-screen-missing"><input type="checkbox" data-screen-field="missing" ${mergedScreen.missing ? 'checked' : ''}> missing</label>
+            <div class="cms-screen-main">
+              <span class="cms-screen-num">${idx + 1}</span>
+              <input class="cms-screen-title" data-screen-field="title" value="${escapeHtml(mergedScreen.title || '')}" placeholder="Title">
+              <select class="cms-screen-type" data-screen-field="type">${typeOpts}</select>
+              <input class="cms-screen-hours" data-screen-field="hours" type="number" step="0.1" min="0" value="${escapeHtml(String(mergedScreen.hours || 0))}">
+              <input class="cms-screen-src" data-screen-field="src" value="${escapeHtml(mergedScreen.src || '')}" placeholder="path or URL">
+              <label class="cms-screen-missing"><input type="checkbox" data-screen-field="missing" ${mergedScreen.missing ? 'checked' : ''}> missing</label>
+              ${isEditableText(mergedScreen)
+                ? `<button type="button" class="btn btn-secondary cms-edit-text-btn" data-action="edit-text">✎ Edit text${edited ? ' <em class="cms-edited-tag">edited</em>' : ''}</button>`
+                : `<span class="cms-screen-noedit" title="Only Page (HTML) and Worksheet (Word) screens have editable text">—</span>`}
+            </div>
+            <div class="cms-screen-editor" data-editor-for="${escapeHtml(mergedScreen.id)}" hidden></div>
           </div>
         `;
       }
 
-      /* ----- HTML editor ----- */
-      async function editHtml(path) {
-        const main = document.getElementById('cms-main');
-        main.innerHTML = '<p class="stage-loading">Loading file&hellip;</p>';
+      /* ---------- Per-screen text editor ----------
+         The source of truth shown here is EXACTLY what the learner sees:
+         - existing CMS override (keyed by screen.src), else
+         - .html screen: the file's .page / body, else
+         - .docx screen: mammoth-rendered HTML (same path the viewer uses).
+         Save writes a full HTML doc back under screen.src — the front end
+         (app.js renderHtmlContent / renderDocument) prefers that override. */
+      async function openTextEditor(courseId, screen, row) {
+        const slot = row.querySelector('[data-editor-for="' + cssEscape(screen.id) + '"]');
+        if (!slot) return;
+        if (!slot.hidden) { slot.hidden = true; slot.innerHTML = ''; return; }
+        slot.hidden = false;
+        slot.innerHTML = '<p class="stage-loading">Loading current content&hellip;</p>';
 
-        let original = '';
+        let bodyHtml = '';
+        let templateHtml = null; /* original full-doc shell to preserve on save */
         try {
-          original = await fetch(path).then((r) => r.text());
-        } catch (_) {}
-        const override = window.MatrixCMS.getHtmlOverride(path);
-        const current = override != null ? override : original;
+          const override = window.MatrixCMS.getHtmlOverride(screen.src);
+          if (override != null) {
+            templateHtml = override;
+            bodyHtml = extractBody(override);
+          } else if (screen.type === 'document') {
+            const buf = await fetch(screen.src).then((r) => r.arrayBuffer());
+            const res = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+            bodyHtml = res.value || '';
+          } else {
+            const txt = await fetch(screen.src).then((r) => r.text());
+            templateHtml = txt;
+            bodyHtml = extractBody(txt);
+          }
+        } catch (e) {
+          slot.innerHTML = '<p style="color:var(--warn);padding:0.6rem;">Could not load this screen\'s content: ' + escapeHtml(e.message) + '</p>';
+          return;
+        }
 
-        main.innerHTML = `
-          <header class="cms-page-head">
-            <span class="cms-page-eyebrow">Editing HTML page</span>
-            <h1>${escapeHtml(path)}</h1>
-            <p class="cms-page-hint">Edit the body content. Changes appear on the matching screen the next time it's opened.</p>
-          </header>
-          <div class="cms-html-edit">
-            <label class="cms-html-edit-label">Body HTML
-              <textarea id="cms-html-textarea" rows="22" spellcheck="false">${escapeHtml(extractBody(current))}</textarea>
-            </label>
-            <div class="cms-html-preview-wrap">
-              <span class="cms-html-edit-label">Live preview</span>
-              <iframe id="cms-html-preview" class="cms-html-preview"></iframe>
+        slot.innerHTML = `
+          <div class="cms-text-edit">
+            <div class="cms-text-edit-col">
+              <label class="cms-html-edit-label">Content (HTML — formatting preserved)</label>
+              <textarea class="cms-text-area" rows="16" spellcheck="false">${escapeHtml(bodyHtml.trim())}</textarea>
+              <div class="cms-section-actions">
+                <button type="button" class="btn btn-ghost" data-act="close">Close</button>
+                <button type="button" class="btn btn-secondary" data-act="reset">Reset to original</button>
+                <button type="button" class="btn btn-primary" data-act="save">💾 Save text</button>
+                <span class="cms-saved-hint" data-saved hidden>Saved ✓ — live on the course</span>
+              </div>
             </div>
-          </div>
-          <div class="cms-section-actions">
-            <button class="btn btn-secondary" data-action="reset-html">Reset to original</button>
-            <span class="cms-saved-hint" data-saved hidden>Saved ✓</span>
-          </div>
-        `;
+            <div class="cms-text-edit-col">
+              <span class="cms-html-edit-label">Live preview</span>
+              <iframe class="cms-html-preview" data-preview></iframe>
+            </div>
+          </div>`;
 
-        const ta = document.getElementById('cms-html-textarea');
-        const iframe = document.getElementById('cms-html-preview');
-
-        function rebuildPreview() {
-          const html = wrapBody(ta.value, original);
-          const blob = new Blob([html], { type: 'text/html' });
+        const ta = slot.querySelector('.cms-text-area');
+        const iframe = slot.querySelector('[data-preview]');
+        function previewDoc() {
+          return `<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="stylesheet" href="assets/embedded.css"><style>body{margin:0;padding:1.2rem;font-family:system-ui,Segoe UI,Arial,sans-serif;color:#1c1b30}</style></head><body><div class="page">${ta.value}</div></body></html>`;
+        }
+        function refreshPreview() {
+          const blob = new Blob([previewDoc()], { type: 'text/html' });
           iframe.src = URL.createObjectURL(blob);
         }
-        function persist() {
-          const html = wrapBody(ta.value, original);
-          window.MatrixCMS.setHtmlOverride(path, html);
-          flashSaved(main);
-          renderHtmlList();
-        }
-        ta.addEventListener('input', () => { rebuildPreview(); persist(); });
-        rebuildPreview();
+        ta.addEventListener('input', refreshPreview);
+        refreshPreview();
 
-        main.querySelector('[data-action="reset-html"]').addEventListener('click', () => {
-          if (!confirm('Reset this HTML file to the original?')) return;
-          /* clear just this override */
+        slot.querySelector('[data-act="close"]').addEventListener('click', () => {
+          slot.hidden = true; slot.innerHTML = '';
+        });
+        slot.querySelector('[data-act="save"]').addEventListener('click', () => {
+          const full = wrapBody(ta.value, templateHtml);
+          window.MatrixCMS.setHtmlOverride(screen.src, full);
+          flashSaved(slot);
+          /* refresh the row tag + course list "edited" markers */
+          editCourse(courseId);
+          renderCourseList();
+        });
+        slot.querySelector('[data-act="reset"]').addEventListener('click', () => {
+          if (!confirm('Discard the saved edit for this screen and restore the original content?')) return;
           const all = JSON.parse(localStorage.getItem('matrix-lms:cms:html') || '{}');
-          delete all[path];
+          delete all[screen.src];
           localStorage.setItem('matrix-lms:cms:html', JSON.stringify(all));
-          editHtml(path);
+          editCourse(courseId);
+          renderCourseList();
         });
       }
+
+      function cssEscape(s) { return String(s).replace(/"/g, '\\"'); }
 
       function extractBody(fullHtml) {
         try {
@@ -329,54 +341,42 @@
         return fullHtml;
       }
       function wrapBody(bodyHtml, originalFullHtml) {
-        try {
-          const doc = new DOMParser().parseFromString(originalFullHtml, 'text/html');
-          const page = doc.querySelector('.page');
-          if (page) {
-            page.innerHTML = bodyHtml;
-          } else if (doc.body) {
-            doc.body.innerHTML = bodyHtml;
-          }
-          return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
-        } catch (_) {
-          /* fallback: minimal wrapper */
-          return `<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="stylesheet" href="../../assets/embedded.css"></head><body><div class="page">${bodyHtml}</div></body></html>`;
+        if (originalFullHtml) {
+          try {
+            const doc = new DOMParser().parseFromString(originalFullHtml, 'text/html');
+            const page = doc.querySelector('.page');
+            if (page) { page.innerHTML = bodyHtml; }
+            else if (doc.body) { doc.body.innerHTML = bodyHtml; }
+            return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
+          } catch (_) {}
         }
+        return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="../../assets/embedded.css"></head><body><div class="page">${bodyHtml}</div></body></html>`;
       }
 
       function flashSaved(root) {
         root.querySelectorAll('[data-saved]').forEach((el) => {
           el.hidden = false;
           clearTimeout(el._t);
-          el._t = setTimeout(() => { el.hidden = true; }, 1400);
+          el._t = setTimeout(() => { el.hidden = true; }, 1800);
         });
       }
 
-      /* ----- Export ----- */
+      /* ---------- Export / clear ---------- */
       document.getElementById('cms-export-btn').addEventListener('click', async () => {
-        if (!window.MatrixCMS.hasAnyEdits()) {
-          alert('No edits to export yet.');
-          return;
-        }
+        if (!window.MatrixCMS.hasAnyEdits()) { alert('No edits to export yet.'); return; }
         if (!courses) await loadAll();
         await window.MatrixCMS.exportZip(originalCourses);
       });
       document.getElementById('cms-clear-btn').addEventListener('click', () => {
-        if (!confirm('Clear ALL CMS edits? This wipes every course and HTML override.')) return;
+        if (!confirm('Clear ALL CMS edits? This wipes every course, screen and text override.')) return;
         window.MatrixCMS.clearAll();
         location.reload();
       });
 
-      /* Auto-unlock + open the editor for everyone (Phase 1 access policy).
-         Placed at the bottom of the IIFE so every binding above is ready. */
-      try { window.MatrixCMS.unlock('matrix'); } catch (_) { /* idempotent */ }
+      /* Phase 1: admin is open to anyone. Auto-unlock + open. */
+      try { window.MatrixCMS.unlock('matrix'); } catch (_) {}
       showShell();
-      init().catch((e) => {
-        console.error('Admin init failed:', e);
-        document.getElementById('cms-main').innerHTML =
-          '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
-          (e && e.message ? e.message : String(e)) + '</p>';
-      });
+      init().catch(showInitError);
     })();
   </script>
 </body>
