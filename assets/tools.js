@@ -42,17 +42,28 @@
     });
   }
 
-  /* ---------- Tab switching ---------- */
+  /* ---------- Tab switching (+ deep-link via #hash) ----------
+     `files.html#compiler` (or any #<tab>) opens that tab directly — used by
+     the Admin "Worksheet compiler" link and the old standalone-page redirect. */
   var tabs = Array.from(document.querySelectorAll('.tool-tab'));
+  function activateTab(name) {
+    if (!name || !tabs.some(function (b) { return b.dataset.tab === name; })) return false;
+    tabs.forEach(function (b) { b.classList.toggle('active', b.dataset.tab === name); });
+    document.querySelectorAll('.tool-panel').forEach(function (p) {
+      p.classList.toggle('active', p.id === 'panel-' + name);
+    });
+    return true;
+  }
   tabs.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var name = btn.dataset.tab;
-      tabs.forEach(function (b) { b.classList.toggle('active', b === btn); });
-      document.querySelectorAll('.tool-panel').forEach(function (p) {
-        p.classList.toggle('active', p.id === 'panel-' + name);
-      });
+      activateTab(btn.dataset.tab);
+      if (history.replaceState) history.replaceState(null, '', '#' + btn.dataset.tab);
+      else location.hash = btn.dataset.tab;
     });
   });
+  function tabFromHash() { activateTab((location.hash || '').replace(/^#/, '').trim()); }
+  tabFromHash();
+  window.addEventListener('hashchange', tabFromHash);
 
   /* ---------- Worksheet preview (plain, mirrors app.js) ---------- */
   function enhancePlain(html) {
@@ -479,6 +490,140 @@
     wrap.hidden = false;
     this.textContent = 'Hide inline';
   });
+
+  /* ====================================================================== *
+   *  COMPILER — merge many .docx into one continuously-paginated PDF.
+   *  Moved here from the old standalone worksheet-compiler.html. Content is
+   *  verbatim: each doc is rendered (mammoth → html2pdf), the parts are
+   *  concatenated with pdf-lib and page-numbered. No cover pages.
+   * ====================================================================== */
+  (function initCompiler() {
+    var drop = $('cmp-drop');
+    if (!drop) return;                         /* panel not on page */
+    var input = $('cmp-input'), pick = $('cmp-pick'), listEl = $('cmp-list');
+    var compileBtn = $('cmp-compile'), clearBtn = $('cmp-clear');
+    var statusEl = $('cmp-status'), progress = $('cmp-progress'), progressBar = $('cmp-progress-bar');
+    var filenameInput = $('cmp-filename'), sandbox = $('cmp-sandbox');
+    var cFiles = [];
+
+    function cStatus(msg, kind) {
+      statusEl.hidden = !msg;
+      statusEl.className = 'split-status' + (kind ? ' ' + kind : '');
+      statusEl.textContent = msg || '';
+    }
+    function cProgress(pct) {
+      progress.classList.toggle('active', pct > 0 && pct < 100);
+      progressBar.style.width = pct + '%';
+    }
+    function cRender() {
+      listEl.innerHTML = '';
+      cFiles.forEach(function (f, i) {
+        var row = document.createElement('div');
+        row.className = 'file-row';
+        row.innerHTML =
+          '<div class="idx">' + (i + 1) + '</div>' +
+          '<div class="name"></div>' +
+          '<div class="size">' + fmtSize(f.size) + '</div>' +
+          '<button type="button" class="row-btn" data-a="up" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Move up">↑</button>' +
+          '<button type="button" class="row-btn" data-a="down" ' + (i === cFiles.length - 1 ? 'disabled' : '') + ' aria-label="Move down">↓</button>' +
+          '<button type="button" class="row-btn row-btn-rm" data-a="rm" aria-label="Remove">×</button>';
+        row.querySelector('.name').textContent = f.name;
+        row.querySelector('[data-a=up]').onclick = function () { var t = cFiles[i - 1]; cFiles[i - 1] = cFiles[i]; cFiles[i] = t; cRender(); };
+        row.querySelector('[data-a=down]').onclick = function () { var t = cFiles[i + 1]; cFiles[i + 1] = cFiles[i]; cFiles[i] = t; cRender(); };
+        row.querySelector('[data-a=rm]').onclick = function () { cFiles.splice(i, 1); cRender(); };
+        listEl.appendChild(row);
+      });
+      compileBtn.disabled = cFiles.length === 0;
+    }
+    function cAdd(fl) {
+      Array.prototype.forEach.call(fl, function (f) {
+        if (!/\.docx$/i.test(f.name)) { cStatus('Skipped ' + f.name + ' — only .docx files are supported.', 'err'); return; }
+        cFiles.push(f);
+      });
+      cRender();
+    }
+    pick.addEventListener('click', function () { input.click(); });
+    drop.addEventListener('click', function (ev) { if (ev.target.closest('button')) return; input.click(); });
+    input.addEventListener('change', function (e) { cAdd(e.target.files); input.value = ''; });
+    dropzone(drop, function (files) { cAdd(files); });
+    clearBtn.addEventListener('click', function () { cFiles = []; cRender(); cStatus(''); cProgress(0); });
+
+    function docxToPdfBytes(file) {
+      return file.arrayBuffer()
+        .then(function (ab) { return window.mammoth.convertToHtml({ arrayBuffer: ab }); })
+        .then(function (r) {
+          sandbox.innerHTML = r.value || '';
+          var opts = {
+            margin: [15, 15, 20, 15], filename: 'tmp.pdf',
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['css', 'legacy'] }
+          };
+          return window.html2pdf().set(opts).from(sandbox).output('blob');
+        })
+        .then(function (blob) { sandbox.innerHTML = ''; return blob.arrayBuffer(); })
+        .then(function (ab) { return new Uint8Array(ab); });
+    }
+    function mergeAndPaginate(parts) {
+      var P = window.PDFLib;
+      return P.PDFDocument.create().then(function (merged) {
+        var chain = Promise.resolve();
+        parts.forEach(function (bytes) {
+          chain = chain
+            .then(function () { return P.PDFDocument.load(bytes); })
+            .then(function (src) { return merged.copyPages(src, src.getPageIndices()); })
+            .then(function (pages) { pages.forEach(function (p) { merged.addPage(p); }); });
+        });
+        return chain
+          .then(function () { return merged.embedFont(P.StandardFonts.Helvetica); })
+          .then(function (font) {
+            var pages = merged.getPages(), total = pages.length;
+            pages.forEach(function (p, i) {
+              var label = (i + 1) + ' / ' + total, size = 9;
+              var w = font.widthOfTextAtSize(label, size), pw = p.getSize().width;
+              p.drawText(label, { x: (pw - w) / 2, y: 12, size: size, font: font, color: P.rgb(0.3, 0.3, 0.3) });
+            });
+            return merged.save();
+          });
+      });
+    }
+    compileBtn.addEventListener('click', function () {
+      var outName = (filenameInput.value || 'worksheets.pdf').trim();
+      if (!/\.pdf$/i.test(outName)) { cStatus('Filename must end with .pdf', 'err'); return; }
+      if (!cFiles.length) { cStatus('Add at least one .docx file.', 'err'); return; }
+      if (!window.PDFLib || !window.html2pdf || !window.mammoth) {
+        cStatus('A PDF library is still loading — retry in a moment.', 'err'); return;
+      }
+      compileBtn.disabled = true; clearBtn.disabled = true;
+      cStatus('Converting documents…'); cProgress(1);
+      var parts = [];
+      var chain = Promise.resolve();
+      cFiles.forEach(function (f, i) {
+        chain = chain.then(function () {
+          cStatus('Converting ' + (i + 1) + ' of ' + cFiles.length + ': ' + f.name);
+          return docxToPdfBytes(f);
+        }).then(function (bytes) {
+          parts.push(bytes);
+          cProgress(Math.round(((i + 1) / cFiles.length) * 85));
+        });
+      });
+      chain.then(function () {
+        cStatus('Merging and numbering pages…'); cProgress(92);
+        return mergeAndPaginate(parts);
+      }).then(function (finalBytes) {
+        cProgress(100);
+        download(new Blob([finalBytes], { type: 'application/pdf' }), outName);
+        cStatus('Done — ' + outName + ' downloaded.', 'ok');
+      }).catch(function (err) {
+        console.error(err);
+        cStatus('Error: ' + (err && err.message ? err.message : err), 'err');
+      }).then(function () {
+        compileBtn.disabled = cFiles.length === 0; clearBtn.disabled = false;
+        setTimeout(function () { cProgress(0); }, 1500);
+      });
+    });
+  })();
 
   /* ---------- Boot ---------- */
   initCourseFiles().catch(function (err) {

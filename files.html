@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tools | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260527">
+  <link rel="stylesheet" href="assets/styles.css?v=20260528">
 </head>
 <body data-no-sidebar>
   <section class="stats-hero">
@@ -21,6 +21,7 @@
       <button class="tool-tab" data-tab="definition" role="tab" type="button">📋 Definition</button>
       <button class="tool-tab" data-tab="coursefiles" role="tab" type="button">📁 Course files</button>
       <button class="tool-tab" data-tab="exports" role="tab" type="button">🖨 Exports</button>
+      <button class="tool-tab" data-tab="compiler" role="tab" type="button">🪄 Compiler</button>
       <button class="tool-tab" data-tab="scorm" role="tab" type="button">📦 SCORM</button>
       <button class="tool-tab" data-tab="drive" role="tab" type="button">☁ Google Drive</button>
     </div>
@@ -146,6 +147,40 @@
       </div>
     </section>
 
+    <!-- ───────────────── COMPILER ───────────────── -->
+    <section class="tool-panel" id="panel-compiler">
+      <div class="support-card-group">
+        <div class="support-card-head">
+          <span class="support-card-eyebrow">Word → single PDF</span>
+          <h2>Worksheet Compiler</h2>
+        </div>
+        <p class="files-tree-hint">Merge multiple Word documents into one continuously-paginated <strong>PDF</strong>. Content is preserved verbatim — no extra headers, footers or cover pages. Files merge in the order shown; use ↑ / ↓ to reorder. Everything runs in your browser.</p>
+
+        <label class="split-id-label">PDF filename
+          <input id="cmp-filename" class="split-id-input" type="text" value="CP4807-worksheets.pdf" spellcheck="false">
+        </label>
+
+        <div class="dropzone files-dropzone" id="cmp-drop">
+          <div class="dropzone-icon">⤓</div>
+          <div class="dropzone-title">Drop <code>.docx</code> files here</div>
+          <div class="dropzone-sub">or <button type="button" class="btn btn-primary" id="cmp-pick">choose files</button></div>
+          <input id="cmp-input" type="file" accept=".docx" multiple hidden>
+          <div class="dropzone-types">They merge in the listed order — reorder below.</div>
+        </div>
+
+        <div class="file-list" id="cmp-list"></div>
+
+        <div class="compiler-actions">
+          <button id="cmp-compile" class="btn btn-primary" type="button" disabled><span>🪄 Compile PDF</span></button>
+          <button id="cmp-clear" class="btn btn-ghost" type="button">Clear</button>
+        </div>
+        <div class="compiler-progress" id="cmp-progress"><div class="compiler-progress-bar" id="cmp-progress-bar"></div></div>
+        <div class="split-status" id="cmp-status" hidden></div>
+      </div>
+      <!-- Off-screen render sandbox: each .docx is painted here then captured -->
+      <div id="cmp-sandbox" aria-hidden="true" style="position:fixed;left:-99999px;top:0;width:794px;background:#fff;"></div>
+    </section>
+
     <!-- ───────────────── SCORM ───────────────── -->
     <section class="tool-panel" id="panel-scorm">
       <div class="support-card-group">
@@ -189,13 +224,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="assets/splitter-core.js?v=20260527"></script>
-  <script src="assets/definition-parser.js?v=20260527"></script>
-  <script src="assets/scorm-export.js?v=20260527"></script>
-  <script src="assets/sidebar.js?v=20260527"></script>
-  <script src="assets/gamify.js?v=20260527"></script>
-  <script src="assets/cms-overrides.js?v=20260527"></script>
-  <script src="assets/chrome.js?v=20260527"></script>
-  <script src="assets/tools.js?v=20260527"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="assets/splitter-core.js?v=20260528"></script>
+  <script src="assets/definition-parser.js?v=20260528"></script>
+  <script src="assets/scorm-export.js?v=20260528"></script>
+  <script src="assets/sidebar.js?v=20260528"></script>
+  <script src="assets/gamify.js?v=20260528"></script>
+  <script src="assets/cms-overrides.js?v=20260528"></script>
+  <script src="assets/chrome.js?v=20260528"></script>
+  <script src="assets/tools.js?v=20260528"></script>
 </body>
 </html>
