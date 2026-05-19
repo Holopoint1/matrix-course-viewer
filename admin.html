@@ -34,7 +34,44 @@
     </aside>
 
     <main class="cms-main" id="cms-main">
-      <p class="stage-loading">Pick a course on the left to start editing&hellip;</p>
+      <header class="cms-page-head">
+        <span class="cms-page-eyebrow">Admin · Live editor</span>
+        <h1>How editing works</h1>
+        <p class="cms-page-hint">Pick a course on the left to edit its details, screens, and the on-screen text, images and links learners see.</p>
+      </header>
+
+      <section class="cms-section">
+        <h2 class="cms-section-title">It's live — straight to the database</h2>
+        <p class="cms-section-hint" style="line-height:1.6;">
+          This editor reads from and writes to a <strong>Supabase database</strong>.
+          Every change you make is saved <strong>directly to that database for everyone</strong>,
+          instantly — there is <strong>no publish step and no developer involved</strong>.
+          The public Course Viewer reads the same database, so learners see your changes
+          almost immediately (a quick auto-refresh). Edit a course → it's live. The
+          status pill at the bottom-right confirms each save
+          (<em>Saving… → Saved ✓ live to database</em>).
+        </p>
+      </section>
+
+      <section class="cms-section">
+        <h2 class="cms-section-title" style="color:var(--warn);">⚠ Please read before editing</h2>
+        <div style="background:var(--warn-bg);border:1px solid var(--warn);border-left-width:4px;
+             border-radius:8px;padding:0.9rem 1.1rem;line-height:1.65;color:var(--text);">
+          <ul style="margin:0;padding-left:1.2rem;">
+            <li><strong>Changes are immediate and shared.</strong> There is no draft or
+              per-user copy — what you type is the live course for <em>all</em> users as you save it.</li>
+            <li><strong>There is no “undo” / “reset”.</strong> The old reset buttons were
+              removed because edits now go straight to the live database. To recover, you'd
+              re-enter the content (or restore from a download).</li>
+            <li><strong>Open access right now.</strong> There is currently <em>no login</em> —
+              anyone with this page's link can make changes. Restricted logins are planned;
+              until then, treat this page as sensitive and don't share the link widely.</li>
+            <li><strong>Back up before big changes.</strong> Grab a full copy any time from
+              <a href="files.html#database">Tools → Database → Download</a>
+              (<code>courses.json</code>, <code>screens.json</code>, <code>pages.json</code> + every page's HTML).</li>
+          </ul>
+        </div>
+      </section>
     </main>
   </div>
 
