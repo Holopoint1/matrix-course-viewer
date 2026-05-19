@@ -558,45 +558,81 @@
         'ul,ol{margin:0 0 .8em 1.4em;}img{max-width:100%;}a{color:#1d4ed8;}' +
         '</style></head><body><div class="page">' + String(bodyHtml || '') + '</div></body></html>';
     }
-    /* Original-file-types ZIP: content/<CODE>/ tree — worksheets as .docx
-       (regenerated from the live HTML), pages as .htm, + courses.json. */
-    function buildOriginalZip(courses, screens, pages, name) {
+    /* Build a REAL .docx (OOXML) with no external library — a minimal Word
+       package whose body is one altChunk pointing at the HTML. Word desktop
+       imports/converts that HTML to native Word content on open. Uses the
+       already-loaded JSZip (no flaky CDN). */
+    function htmlToDocxBlob(html) {
+      var z = new JSZip();
+      z.file('[Content_Types].xml',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+        '<Override PartName="/word/afchunk.html" ContentType="text/html"/>' +
+        '</Types>');
+      z.file('_rels/.rels',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+        '</Relationships>');
+      z.file('word/document.xml',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ' +
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+        '<w:body><w:altChunk r:id="htmlChunk"/>' +
+        '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
+        '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"/></w:sectPr>' +
+        '</w:body></w:document>');
+      z.file('word/_rels/document.xml.rels',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="htmlChunk" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk" Target="afchunk.html"/>' +
+        '</Relationships>');
+      z.file('word/afchunk.html', String(html || ''));
+      return z.generateAsync({
+        type: 'blob',
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      });
+    }
+    /* Original-file-types ZIP: content/<CODE>/ tree — worksheets as real
+       .docx (regenerated from the live HTML), pages as .htm, + manifests. */
+    async function buildOriginalZip(courses, screens, pages, name) {
       var zip = new JSZip();
       zip.file('courses.json', JSON.stringify(courses, null, 2));
       zip.file('screens.json', JSON.stringify(screens, null, 2));
       var byPath = {};
       pages.forEach(function (p) { if (p && p.path != null) byPath[p.path] = p.html || ''; });
       var done = {}, docx = 0, htm = 0, skipped = 0;
-      var canDocx = !!(window.htmlDocx && window.htmlDocx.asBlob);
-      screens.forEach(function (s) {
+      for (var i = 0; i < screens.length; i++) {
+        var s = screens[i];
         var src = s && s.src;
-        if (!src || /^https?:/i.test(src) || done[src]) { return; }
+        if (!src || /^https?:/i.test(src) || done[src]) continue;
         var body = byPath[src];
-        if (body == null) { skipped++; return; }   /* no editable body (binary/external) */
+        if (body == null) { skipped++; continue; }   /* no editable body (binary/external) */
         done[src] = 1;
         var inner = extractBody(body);
         if (s.type === 'document' || /\.docx?$/i.test(src)) {
-          if (canDocx) {
-            zip.file(src.replace(/\.docx?$/i, '.docx'),
-              window.htmlDocx.asBlob(fullHtmlDoc(inner, s.title)));
-            docx++;
-          } else {
-            zip.file(src.replace(/\.docx?$/i, '.html'), fullHtmlDoc(inner, s.title));
-            htm++;
-          }
+          var blob = await htmlToDocxBlob(fullHtmlDoc(inner, s.title));
+          zip.file(src.replace(/\.docx?$/i, '.docx'), blob);
+          docx++;
         } else {
           zip.file(src, fullHtmlDoc(inner, s.title));   /* .htm / .html page */
           htm++;
         }
-      });
+      }
       zip.file('README.txt',
         'Matrix course export (original file types)\n\n' +
         docx + ' worksheet .docx, ' + htm + ' .htm pages, ' + skipped + ' screens with no editable body ' +
         '(image/video/PDF/slides — referenced by URL/path in screens.json).\n\n' +
-        'NOTE: .docx files are REGENERATED from the live HTML — readable in Word but not ' +
-        'pixel-identical to the originals; images that could not be read on import are not included.\n');
-      return zip.generateAsync({ type: 'blob', compression: 'DEFLATE' })
-        .then(function (b) { download(b, name); return { docx: docx, htm: htm, skipped: skipped }; });
+        'NOTE: .docx files are REGENERATED from the live HTML — Word converts the\n' +
+        'embedded HTML on open, so they are readable/editable in Word desktop but\n' +
+        'not pixel-identical to the originals; images that could not be read on\n' +
+        'import are not included.\n');
+      var out = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+      download(out, name);
+      return { docx: docx, htm: htm, skipped: skipped };
     }
     function fmt() { return fmtSel && fmtSel.value === 'raw' ? 'raw' : 'files'; }
 
