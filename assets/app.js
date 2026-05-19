@@ -523,8 +523,8 @@
       </div>
       <div class="stage-pdf-frame">
         <iframe class="stage-pdf-iframe" src="${safeSrc}#view=FitH" referrerpolicy="no-referrer" title="${escapeAttr(screen.title)}"></iframe>
-        <object class="stage-pdf-object" data="${safeSrc}" type="application/pdf" hidden>
-          <embed src="${safeSrc}" type="application/pdf" />
+        <object class="stage-pdf-object" type="application/pdf" data-src="${safeSrc}" hidden>
+          <embed type="application/pdf" />
         </object>
         <div class="stage-pdf-fallback" hidden>
           <div class="stage-pdf-fallback-icon">📄</div>
@@ -554,6 +554,15 @@
     }
     function tryObject() {
       iframe.style.display = 'none';
+      /* Lazy: only fetch the PDF a second way (object/embed) if the iframe
+         actually failed. Loading it upfront made the browser pull the same
+         (often large) PDF 2-3x at once — the main cause of the lag. */
+      if (!obj.getAttribute('data')) {
+        var src = obj.getAttribute('data-src');
+        obj.setAttribute('data', src);
+        var emb = obj.querySelector('embed');
+        if (emb) emb.setAttribute('src', src);
+      }
       obj.hidden = false;
       /* If <object> also fails, the fallback above shows after the second timer */
     }

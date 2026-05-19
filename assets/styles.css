@@ -3037,6 +3037,11 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   background: #2d2b40;
   min-height: 0;
 }
+/* Portrait datasheets looked cramped in a short, wide box because the flex
+   chain wasn't giving the stage full height. Force a tall reading area
+   (the .screen-stage scrolls if it overflows). Not applied in the
+   fixed-overlay "fullscreen" mode, which already fills the viewport. */
+.stage-pdf:not(.pdf-overlay) { min-height: calc(100vh - var(--header-h, 56px) - 60px); }
 .stage-pdf-toolbar {
   background: var(--surface);
   border-bottom: 1px solid var(--border);

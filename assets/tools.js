@@ -511,6 +511,13 @@
     var defPick = $('cmp-def-pick'), defInput = $('cmp-def-input');
     var cFiles = [];
 
+    /* The sandbox lives inside the Compiler tab panel, which is
+       display:none whenever another tab is active — an off-flow element
+       there has no layout and html2canvas renders BLANK. Re-parent it to
+       <body> once so it always has layout (matches the proven
+       downloadSingleAsPdf approach: absolute, off-screen, z-index:-1). */
+    if (sandbox && sandbox.parentNode !== document.body) document.body.appendChild(sandbox);
+
     /* Pack lists — verbatim from the asset definition docs / master doc
        ("Please make me a single PDF/DOCX document consisting of …").
        Order, the duplicate CP4807-8 and the head/cont/TN entries are kept
@@ -659,11 +666,15 @@
       return file.arrayBuffer()
         .then(function (ab) { return window.mammoth.convertToHtml({ arrayBuffer: ab }); })
         .then(function (r) {
-          sandbox.innerHTML = r.value || '';
+          sandbox.innerHTML = r.value || '<p>(empty document)</p>';
           var opts = {
             margin: [15, 15, 20, 15], filename: 'tmp.pdf',
             image: { type: 'jpeg', quality: 0.95 },
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+            html2canvas: {
+              scale: 1.6, useCORS: true, letterRendering: true,
+              backgroundColor: '#ffffff', scrollX: 0, scrollY: 0,
+              windowWidth: 794, windowHeight: 1123
+            },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['css', 'legacy'] }
           };
