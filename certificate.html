@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Certificate of Completion</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260523">
+  <link rel="stylesheet" href="assets/styles.css?v=20260524">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header" data-extras-id="cert-nav-extras"></header>
@@ -13,23 +13,29 @@
   <main class="cert-shell">
     <div class="cert-controls">
       <input type="text" class="cert-input" id="name-input" placeholder="Enter your full name">
-      <button class="btn btn-primary" id="print-btn">Print certificate</button>
+      <button class="btn btn-primary" id="print-btn">🖨 Print / Save as PDF</button>
     </div>
 
     <div class="cert" id="certificate">
-      <div class="crest">MATRIX</div>
-      <div>
+      <div class="cert-top">
+        <img class="cert-logo" src="assets/matrix-logo.svg?v=20260524" alt="Matrix TSL">
+        <div class="cert-eyebrow">Matrix&nbsp;TSL · Engineering Education</div>
+      </div>
+
+      <div class="cert-mid">
         <div class="title">Certificate of Completion</div>
         <div class="subtitle">This is to certify that</div>
         <div class="recipient" id="cert-name">&nbsp;</div>
-        <p class="body" id="cert-body">Has completed a Continuing Professional Development training course on E-blocks 3 and Flowcode</p>
-        <div class="subtitle" style="margin-top:0.8rem;">on <span id="cert-date"></span></div>
+        <p class="body" id="cert-body">has successfully completed the course:</p>
+        <div class="cert-course"><span id="cert-code"></span> &nbsp;·&nbsp; <span id="cert-title"></span></div>
+        <div class="subtitle cert-awarded">Awarded on <span id="cert-date"></span></div>
       </div>
+
       <div class="signoff">
         <div class="col">
           <div class="line"></div>
           <strong>Time spent</strong>
-          <div id="cert-hours">— hours</div>
+          <div id="cert-hours">—</div>
         </div>
         <div class="col">
           <div class="line"></div>
@@ -38,65 +44,113 @@
         </div>
         <div class="col">
           <div class="line"></div>
-          <strong>Signed</strong>
-          <div>The Matrix team</div>
+          <strong>Screens</strong>
+          <div id="cert-screens">—</div>
         </div>
+        <div class="col">
+          <div class="line"></div>
+          <strong>Awarded by</strong>
+          <div>The Matrix&nbsp;TSL team</div>
+        </div>
+      </div>
+
+      <div class="cert-foot">
+        Certificate reference <span id="cert-ref">—</span> &nbsp;·&nbsp; Verify at matrixtsl.com
       </div>
     </div>
   </main>
 
-  <script src="assets/chrome.js?v=20260523"></script>
-  <script src="assets/gamify.js?v=20260523"></script>
-  <script src="assets/cms-overrides.js?v=20260523"></script>
+  <script src="assets/chrome.js?v=20260524"></script>
+  <script src="assets/gamify.js?v=20260524"></script>
+  <script src="assets/cms-overrides.js?v=20260524"></script>
   <script>
-    (async function () {
-      const params = new URLSearchParams(location.search);
-      const courseId = params.get('id');
+    (function () {
+      'use strict';
+      var params = new URLSearchParams(location.search);
+      var courseId = params.get('id');
       if (!courseId) { location.replace('index.html'); return; }
 
-      document.getElementById('back-link').href = 'course.html?id=' + encodeURIComponent(courseId);
+      /* ---- Critical UI wiring FIRST: this must work even if the async
+              data load (Gamify / courses.json) fails or chrome.js hasn't
+              injected the back link yet. The old single async IIFE put the
+              print + name code AFTER an unguarded #back-link lookup, so any
+              earlier error silently killed both. ---- */
+      var backLink = document.getElementById('back-link');
+      if (backLink) backLink.href = 'course.html?id=' + encodeURIComponent(courseId);
 
-      await window.Gamify.init();
-      const res = await fetch('data/courses.json');
-      const data = await res.json();
-      let course = data.courses.find((c) => c.id === courseId);
-      if (course && window.MatrixCMS) course = window.MatrixCMS.applyOverrides(course);
-
-      const titleSlot = document.querySelector('.cert .title');
-      const bodySlot = document.getElementById('cert-body');
-      if (course) {
-        if (course.id === 'CO0001') {
-          bodySlot.textContent = 'Has completed a Continuing Professional Development training course on E-blocks 3 and Flowcode';
-        } else {
-          bodySlot.textContent = `Has completed the ${course.title} course`;
-        }
-      }
-
-      const today = new Date();
-      document.getElementById('cert-date').textContent = today.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
-
-      const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + courseId) || '{}');
-      const completedCount = course ? course.screens.filter((s) => progress[s.id]).length : 0;
-      const total = course ? course.screens.length : 0;
-      const pct = total ? Math.round((completedCount / total) * 100) : 0;
-      const realSeconds = window.Gamify.getCourseTotalSeconds(courseId);
-      document.getElementById('cert-completion').textContent = pct + '% (' + completedCount + ' of ' + total + ')';
-      document.getElementById('cert-hours').textContent = realSeconds > 0 ? window.Gamify.formatDuration(realSeconds) : '— hours';
-
-      const nameInput = document.getElementById('name-input');
-      const nameKey = 'matrix-lms:cert-name:' + courseId;
-      const stored = localStorage.getItem(nameKey);
-      if (stored) nameInput.value = stored;
-      const nameSlot = document.getElementById('cert-name');
-      const setName = () => {
-        const v = nameInput.value.trim();
+      var nameInput = document.getElementById('name-input');
+      var nameSlot = document.getElementById('cert-name');
+      var nameKey = 'matrix-lms:cert-name:' + courseId;
+      var seeded = localStorage.getItem(nameKey) ||
+                   localStorage.getItem('matrix-lms:account-name') || '';
+      if (seeded) nameInput.value = seeded;
+      function setName() {
+        var v = nameInput.value.trim();
         nameSlot.textContent = v || ' ';
-        localStorage.setItem(nameKey, v);
-      };
+        try { localStorage.setItem(nameKey, v); } catch (e) {}
+      }
       nameInput.addEventListener('input', setName);
       setName();
 
-      document.getElementById('print-btn').addEventListener('click', () => window.print());
+      document.getElementById('print-btn').addEventListener('click', function () {
+        window.print();
+      });
+
+      var today = new Date();
+      document.getElementById('cert-date').textContent =
+        today.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+      var pad = function (n) { return ('0' + n).slice(-2); };
+      document.getElementById('cert-ref').textContent =
+        (courseId + '-' + today.getFullYear() + pad(today.getMonth() + 1) + pad(today.getDate())).toUpperCase();
+
+      /* ---- Best-effort data population. Wrapped so nothing here can break
+              the print button or the name field. ---- */
+      (async function () {
+        try {
+          var course = null;
+          try {
+            var res = await fetch('data/courses.json');
+            var data = await res.json();
+            course = (data.courses || []).find(function (c) { return c.id === courseId; }) || null;
+            if (course && window.MatrixCMS && window.MatrixCMS.applyOverrides) {
+              course = window.MatrixCMS.applyOverrides(course);
+            }
+          } catch (e) {}
+
+          if (course) {
+            document.getElementById('cert-code').textContent = course.code || course.id;
+            document.getElementById('cert-title').textContent = course.title || '';
+            document.getElementById('cert-body').textContent = course.id === 'CO0001'
+              ? 'has successfully completed a Continuing Professional Development training course on E-blocks 3 and Flowcode:'
+              : 'has successfully completed the course:';
+            document.title = 'Certificate · ' + (course.title || course.id);
+          }
+
+          var total = course ? course.screens.length : 0;
+          var completedCount = 0;
+          try {
+            var progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + courseId) || '{}');
+            completedCount = course ? course.screens.filter(function (s) { return progress[s.id]; }).length : 0;
+          } catch (e) {}
+
+          var realSeconds = 0;
+          try {
+            if (window.Gamify) {
+              await window.Gamify.init();
+              realSeconds = window.Gamify.getCourseTotalSeconds(courseId) || 0;
+            }
+          } catch (e) {}
+
+          var pct = total ? Math.round((completedCount / total) * 100) : 0;
+          document.getElementById('cert-completion').textContent = pct + '%';
+          document.getElementById('cert-screens').textContent = total ? (completedCount + ' of ' + total) : '—';
+          document.getElementById('cert-hours').textContent = realSeconds > 0
+            ? (window.Gamify && window.Gamify.formatDuration
+                ? window.Gamify.formatDuration(realSeconds)
+                : Math.round(realSeconds / 60) + ' min')
+            : '—';
+        } catch (e) { /* never let this break the page */ }
+      })();
     })();
   </script>
 </body>

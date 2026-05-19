@@ -3247,6 +3247,47 @@ body.pdf-overlay-open { overflow: hidden; }
   margin-bottom: 0.15rem;
 }
 
+/* Logo + richer detail (replaces the old text "MATRIX" crest) */
+.cert .cert-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+.cert .cert-logo {
+  width: clamp(170px, 26%, 240px);
+  height: auto;
+  display: block;
+}
+.cert .cert-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.cert .cert-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cert .cert-course {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 0.5rem 0 0;
+}
+.cert .cert-awarded {
+  margin: 0.7rem 0 0 !important;
+}
+.cert .cert-foot {
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
 @media print {
   .site-header, .cert-controls, .viewer-shell { display: none; }
   body { background: #fff; }
@@ -3255,6 +3296,12 @@ body.pdf-overlay-open { overflow: hidden; }
     border-width: 8px;
     box-shadow: none;
     page-break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .cert .cert-logo {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }
 
