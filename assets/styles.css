@@ -2254,6 +2254,8 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 }
 .files-tree-head #rescan-btn { margin-left: auto; }
 .files-tree-hint { color: var(--text-muted); font-size: 0.86rem; margin: 0 0 1rem; }
+.files-tree { min-height: 3rem; }
+.files-tree .stage-loading { padding: 1rem 0; color: var(--text-muted); }
 
 .files-status {
   display: inline-block;

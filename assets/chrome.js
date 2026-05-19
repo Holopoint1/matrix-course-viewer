@@ -29,9 +29,11 @@
 (function () {
   'use strict';
 
+  /* 'My Account' is intentionally NOT in the main nav — the dedicated
+     account button on the far right of the header is the single entry
+     point, so the label isn't duplicated. */
   const NAV_LINKS = [
     { href: 'index.html',   label: 'Courses',    match: ['index.html', ''] },
-    { href: 'account.html', label: 'My Account', match: ['account.html', 'stats.html'] },
     { href: 'files.html',   label: 'Tools',      match: ['files.html', 'preview.html', 'tools.html'] },
     { href: 'support.html', label: 'Support',    match: ['support.html'] },
     { href: 'admin.html',   label: 'Admin',      match: ['admin.html'] }
