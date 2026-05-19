@@ -214,6 +214,9 @@
   function renderFooter() {
     const root = document.getElementById('site-footer');
     if (!root) return;
+    /* No footer inside the course viewer — it appears at the bottom of
+       every screen and is distracting there. Kept on all other pages. */
+    if (currentFile() === 'course.html') { root.remove(); return; }
     const linksHtml = FOOTER_LINKS
       .map((l) => l.external
         ? `<a href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`
