@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Tools | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260530">
+  <link rel="stylesheet" href="assets/styles.css?v=20260531">
 </head>
 <body data-no-sidebar>
   <section class="stats-hero">
@@ -24,7 +24,6 @@
       <button class="tool-tab" data-tab="coursefiles" role="tab" type="button">📁 Course files</button>
       <button class="tool-tab" data-tab="exports" role="tab" type="button">🖨 Exports</button>
       <button class="tool-tab" data-tab="compiler" role="tab" type="button">🪄 Compiler</button>
-      <button class="tool-tab" data-tab="scorm" role="tab" type="button">📦 SCORM</button>
       <button class="tool-tab" data-tab="drive" role="tab" type="button">☁ Google Drive</button>
     </div>
 
@@ -153,13 +152,22 @@
     <section class="tool-panel" id="panel-compiler">
       <div class="support-card-group">
         <div class="support-card-head">
-          <span class="support-card-eyebrow">Word → single PDF</span>
-          <h2>Worksheet Compiler</h2>
+          <span class="support-card-eyebrow">Worksheet bundles → PDF + Word</span>
+          <h2>Compiler</h2>
         </div>
-        <p class="files-tree-hint">Merge multiple Word documents into one continuously-paginated <strong>PDF</strong>. Content is preserved verbatim — no extra headers, footers or cover pages. Files merge in the order shown; use ↑ / ↓ to reorder. Everything runs in your browser.</p>
+        <p class="files-tree-hint">Combine a course's worksheets into <strong>one PDF</strong> and <strong>one Word</strong> document, in order, verbatim — no cover pages. Load a defined pack, drop its <code>Course definition.docx</code>, or drop <code>.docx</code> files manually. Everything runs in your browser.</p>
 
-        <label class="split-id-label">PDF filename
-          <input id="cmp-filename" class="split-id-input" type="text" value="CP4807-worksheets.pdf" spellcheck="false">
+        <div class="split-actions" id="cmp-packs">
+          <span class="split-id-label" style="align-self:center;margin:0;">Load a pack</span>
+          <button class="btn btn-secondary" type="button" data-pack="CP4807">CP4807 · Intro to microcontrollers</button>
+          <button class="btn btn-secondary" type="button" data-pack="CP7244">CP7244 · EASA Digital Techniques</button>
+          <button class="btn btn-secondary" type="button" data-pack="CP2563">CP2563 · T-levels</button>
+          <button class="btn btn-secondary" type="button" id="cmp-def-pick">⤓ …or drop a definition.docx</button>
+          <input id="cmp-def-input" type="file" accept=".docx" hidden>
+        </div>
+
+        <label class="split-id-label">Output base name (no extension)
+          <input id="cmp-filename" class="split-id-input" type="text" value="CP4807-worksheets" spellcheck="false">
         </label>
 
         <div class="dropzone files-dropzone" id="cmp-drop">
@@ -174,6 +182,7 @@
 
         <div class="compiler-actions">
           <button id="cmp-compile" class="btn btn-primary" type="button" disabled><span>🪄 Compile PDF</span></button>
+          <button id="cmp-compile-docx" class="btn btn-primary" type="button" disabled><span>📄 Compile Word</span></button>
           <button id="cmp-clear" class="btn btn-ghost" type="button">Clear</button>
         </div>
         <div class="compiler-progress" id="cmp-progress"><div class="compiler-progress-bar" id="cmp-progress-bar"></div></div>
@@ -183,23 +192,7 @@
       <div id="cmp-sandbox" aria-hidden="true" style="position:fixed;left:-99999px;top:0;width:794px;background:#fff;"></div>
     </section>
 
-    <!-- ───────────────── SCORM ───────────────── -->
-    <section class="tool-panel" id="panel-scorm">
-      <div class="support-card-group">
-        <div class="support-card-head">
-          <span class="support-card-eyebrow">Export</span>
-          <h2>SCORM 1.2 package</h2>
-        </div>
-        <p class="files-tree-hint">Wraps a course's content into a self-contained <strong>SCORM 1.2</strong> package (SCO) — <code>imsmanifest.xml</code>, the viewer, the SCORM API bridge, filtered data and all referenced content — ready to drop into any SCORM-compliant LMS (Moodle, Canvas, etc.). Same structure as the build script. (This is Hamed's area — flag him if the SCORM runtime needs changes.)</p>
-        <div class="split-actions">
-          <label class="split-id-label">Course
-            <select id="scorm-course" class="split-id-input"></select>
-          </label>
-          <button class="btn btn-primary" id="scorm-build" type="button">📦 Build SCORM package</button>
-        </div>
-        <div class="split-status" id="scorm-status" hidden></div>
-      </div>
-    </section>
+    <!-- SCORM tab temporarily removed (kept in tools.js, guarded). -->
 
     <!-- ───────────────── GOOGLE DRIVE ───────────────── -->
     <section class="tool-panel" id="panel-drive">
@@ -227,13 +220,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-  <script src="assets/splitter-core.js?v=20260530"></script>
-  <script src="assets/definition-parser.js?v=20260530"></script>
-  <script src="assets/scorm-export.js?v=20260530"></script>
-  <script src="assets/sidebar.js?v=20260530"></script>
-  <script src="assets/gamify.js?v=20260530"></script>
-  <script src="assets/cms-overrides.js?v=20260530"></script>
-  <script src="assets/chrome.js?v=20260530"></script>
-  <script src="assets/tools.js?v=20260530"></script>
+  <script src="assets/splitter-core.js?v=20260531"></script>
+  <script src="assets/definition-parser.js?v=20260531"></script>
+  <script src="assets/scorm-export.js?v=20260531"></script>
+  <script src="assets/sidebar.js?v=20260531"></script>
+  <script src="assets/gamify.js?v=20260531"></script>
+  <script src="assets/cms-overrides.js?v=20260531"></script>
+  <script src="assets/chrome.js?v=20260531"></script>
+  <script src="assets/tools.js?v=20260531"></script>
 </body>
 </html>

@@ -450,7 +450,11 @@
     el.className = 'split-status' + (kind ? ' ' + kind : '');
     el.innerHTML = html;
   }
-  $('scorm-build').addEventListener('click', async function () {
+  /* SCORM tab is temporarily removed from the Tools page. The handler and
+     initScorm()/scormStatus() are kept intact (just not bound/run) so the
+     tab can be restored later by re-adding the panel markup only. */
+  var scormBuildBtn = $('scorm-build');
+  if (scormBuildBtn) scormBuildBtn.addEventListener('click', async function () {
     if (!window.MatrixScormExport) { scormStatus('SCORM exporter not loaded — refresh and retry.', 'err'); return; }
     var id = $('scorm-course').value;
     var btn = this; btn.disabled = true; var t = btn.textContent; btn.textContent = 'Building…';
@@ -501,10 +505,113 @@
     var drop = $('cmp-drop');
     if (!drop) return;                         /* panel not on page */
     var input = $('cmp-input'), pick = $('cmp-pick'), listEl = $('cmp-list');
-    var compileBtn = $('cmp-compile'), clearBtn = $('cmp-clear');
+    var compileBtn = $('cmp-compile'), compileDocxBtn = $('cmp-compile-docx'), clearBtn = $('cmp-clear');
     var statusEl = $('cmp-status'), progress = $('cmp-progress'), progressBar = $('cmp-progress-bar');
     var filenameInput = $('cmp-filename'), sandbox = $('cmp-sandbox');
+    var defPick = $('cmp-def-pick'), defInput = $('cmp-def-input');
     var cFiles = [];
+
+    /* Pack lists — verbatim from the asset definition docs / master doc
+       ("Please make me a single PDF/DOCX document consisting of …").
+       Order, the duplicate CP4807-8 and the head/cont/TN entries are kept
+       exactly as the source specifies. Missing files are skipped with a
+       warning (same policy as the SCORM builder). */
+    var PACKS = {
+      CP4807: (function () {
+        var a = ['content/CP4807/CP4807-head.docx', 'content/CP4807/CP4807-cont.docx'];
+        for (var i = 1; i <= 12; i++) a.push('content/CP4807/CP4807-' + i + '.docx');
+        a.push('content/CP4807/CP4807-TN.docx'); return a;
+      })(),
+      CP7244: [
+        'content/CP7244/CP7244-head.docx', 'content/CP7244/CP7244-cont.docx',
+        'content/CP4807/CP4807-1.docx', 'content/CP4807/CP4807-2.docx', 'content/CP4807/CP4807-3.docx',
+        'content/CP4807/CP4807-4.docx', 'content/CP4807/CP4807-5.docx', 'content/CP4807/CP4807-6.docx',
+        'content/CP4807/CP4807-7.docx', 'content/CP1972/CP1972-1.docx',
+        'content/CP4807/CP4807-8.docx', 'content/CP4807/CP4807-8.docx',
+        'content/CP1972/CP1972-2.docx', 'content/CP1972/CP1972-3.docx',
+        'content/CP0507/CP0507-1.docx', 'content/CP0507/CP0507-2.docx', 'content/CP0507/CP0507-4.docx',
+        'content/CP4807/TN-1.docx'
+      ],
+      CP2563: [
+        'content/CP7244/CP2563-head.docx', 'content/CP7244/CP2563-cont.docx',
+        'content/CP4807/CP4807-1.docx', 'content/CP4807/CP4807-2.docx', 'content/CP4807/CP4807-3.docx',
+        'content/CP4807/CP4807-4.docx', 'content/CP4807/CP4807-5.docx', 'content/CP4807/CP4807-6.docx',
+        'content/CP4807/CP4807-7.docx', 'content/CP1972/CP1972-1.docx',
+        'content/CP4807/CP4807-8.docx', 'content/CP4807/CP4807-8.docx',
+        'content/CP1972/CP1972-2.docx', 'content/CP1972/CP1972-3.docx',
+        'content/CP1972/CP1972-4.docx', 'content/CP1972/CP1972-5.docx',
+        'content/CP0507/CP0507-1.docx', 'content/CP0507/CP0507-2.docx',
+        'content/CP0507/CP0507-3.docx', 'content/CP0507/CP0507-4.docx',
+        'content/CP4807/TN-1.docx'
+      ]
+    };
+
+    async function fetchAsFile(path) {
+      try {
+        var r = await fetch(path, { cache: 'no-store' });
+        if (!r.ok) return null;
+        var blob = await r.blob();
+        return new File([blob], path.split('/').pop(),
+          { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      } catch (e) { return null; }
+    }
+    async function loadList(paths, label) {
+      compileBtn.disabled = compileDocxBtn.disabled = clearBtn.disabled = true;
+      cStatus('Loading ' + paths.length + ' document(s)' + (label ? ' for ' + label : '') + '…');
+      var got = 0, miss = [];
+      for (var i = 0; i < paths.length; i++) {
+        var f = await fetchAsFile(paths[i]);
+        if (f) { cFiles.push(f); got++; } else { miss.push(paths[i].split('/').pop()); }
+        cProgress(Math.round(((i + 1) / paths.length) * 100));
+      }
+      cRender(); cProgress(0); clearBtn.disabled = false;
+      cStatus(got + ' loaded in order' +
+        (miss.length ? ' · ' + miss.length + ' missing, skipped: ' + miss.join(', ') : '') + '.',
+        miss.length ? 'warn' : 'ok');
+    }
+
+    /* Combine many .docx into ONE .docx using OOXML altChunk: each source
+       is embedded whole and referenced by <w:altChunk>, so Word/LibreOffice
+       inline every worksheet with its ORIGINAL formatting intact (lossless,
+       no re-render). Page break between documents. */
+    async function buildDocxAltChunk(files) {
+      var JSZipRef = window.JSZip;
+      var zip = new JSZipRef();
+      var rels = [], body = [], ctOverrides = [];
+      for (var i = 0; i < files.length; i++) {
+        var n = i + 1, part = 'afchunk' + n + '.docx', rid = 'acId' + n;
+        var buf = await files[i].arrayBuffer();
+        zip.file('word/' + part, buf);
+        rels.push('<Relationship Id="' + rid +
+          '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk" Target="' + part + '"/>');
+        ctOverrides.push('<Override PartName="/word/' + part +
+          '" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>');
+        body.push('<w:altChunk r:id="' + rid + '"/>');
+        if (i < files.length - 1) body.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
+      }
+      zip.file('[Content_Types].xml',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+        ctOverrides.join('') + '</Types>');
+      zip.file('_rels/.rels',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+        '</Relationships>');
+      zip.file('word/_rels/document.xml.rels',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        rels.join('') + '</Relationships>');
+      zip.file('word/document.xml',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ' +
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+        '<w:body>' + body.join('') + '<w:sectPr/></w:body></w:document>');
+      return zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+    }
 
     function cStatus(msg, kind) {
       statusEl.hidden = !msg;
@@ -533,7 +640,7 @@
         row.querySelector('[data-a=rm]').onclick = function () { cFiles.splice(i, 1); cRender(); };
         listEl.appendChild(row);
       });
-      compileBtn.disabled = cFiles.length === 0;
+      compileBtn.disabled = compileDocxBtn.disabled = cFiles.length === 0;
     }
     function cAdd(fl) {
       Array.prototype.forEach.call(fl, function (f) {
@@ -588,9 +695,12 @@
           });
       });
     }
+    function baseName() {
+      return ((filenameInput.value || 'worksheets').trim().replace(/\.(pdf|docx?)$/i, '')) || 'worksheets';
+    }
+
     compileBtn.addEventListener('click', function () {
-      var outName = (filenameInput.value || 'worksheets.pdf').trim();
-      if (!/\.pdf$/i.test(outName)) { cStatus('Filename must end with .pdf', 'err'); return; }
+      var outName = baseName() + '.pdf';
       if (!cFiles.length) { cStatus('Add at least one .docx file.', 'err'); return; }
       if (!window.PDFLib || !window.html2pdf || !window.mammoth) {
         cStatus('A PDF library is still loading — retry in a moment.', 'err'); return;
@@ -623,13 +733,74 @@
         setTimeout(function () { cProgress(0); }, 1500);
       });
     });
+
+    /* Word output — lossless altChunk concatenation (original formatting). */
+    compileDocxBtn.addEventListener('click', async function () {
+      if (!cFiles.length) { cStatus('Add at least one .docx file.', 'err'); return; }
+      if (!window.JSZip) { cStatus('Zip library still loading — retry in a moment.', 'err'); return; }
+      var outName = baseName() + '.docx';
+      compileBtn.disabled = compileDocxBtn.disabled = clearBtn.disabled = true;
+      cStatus('Building combined Word document…'); cProgress(40);
+      try {
+        var blob = await buildDocxAltChunk(cFiles.slice());
+        cProgress(100);
+        download(blob, outName);
+        cStatus('Done — ' + outName + ' downloaded. Opens in Word/LibreOffice with each worksheet’s original formatting.', 'ok');
+      } catch (err) {
+        console.error(err);
+        cStatus('Error building Word doc: ' + (err && err.message ? err.message : err), 'err');
+      } finally {
+        compileBtn.disabled = compileDocxBtn.disabled = cFiles.length === 0;
+        clearBtn.disabled = false;
+        setTimeout(function () { cProgress(0); }, 1500);
+      }
+    });
+
+    /* Pack presets — resolve the verbatim list from content/ in order. */
+    var packsRow = $('cmp-packs');
+    if (packsRow) {
+      packsRow.querySelectorAll('[data-pack]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.dataset.pack, list = PACKS[id];
+          if (!list) return;
+          cFiles = [];
+          filenameInput.value = id + '-worksheets';
+          loadList(list, id);
+        });
+      });
+    }
+
+    /* Drop a Course definition.docx → use its ordered pack list. */
+    if (defPick && defInput) {
+      defPick.addEventListener('click', function () { defInput.click(); });
+      defInput.addEventListener('change', async function (e) {
+        var f = e.target.files[0]; defInput.value = '';
+        if (!f) return;
+        if (!window.MatrixDefinition) { cStatus('Definition parser not loaded.', 'err'); return; }
+        cStatus('Reading ' + f.name + '…');
+        try {
+          var d = await window.MatrixDefinition.parseFile(f);
+          if (d.kind !== 'pack' || !d.packDocs.length) {
+            cStatus('That definition is a course (screen list), not a pack. Use a “single PDF/Document consisting of…” definition.', 'err');
+            return;
+          }
+          cFiles = [];
+          if (d.courseId) filenameInput.value = d.courseId + '-worksheets';
+          loadList(d.packDocs.map(function (p) { return p.src; }), d.courseId || f.name);
+        } catch (err) {
+          cStatus('Could not read definition: ' + (err && err.message ? err.message : err), 'err');
+        }
+      });
+    }
   })();
 
   /* ---------- Boot ---------- */
   initCourseFiles().catch(function (err) {
     $('cf-tree').innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
   });
-  initScorm().catch(function (err) {
-    scormStatus('Could not load courses: ' + esc(err.message), 'err');
-  });
+  if ($('scorm-course')) {
+    initScorm().catch(function (err) {
+      scormStatus('Could not load courses: ' + esc(err.message), 'err');
+    });
+  }
 })();
