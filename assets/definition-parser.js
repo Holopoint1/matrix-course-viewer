@@ -104,7 +104,16 @@
     var intent = "";
     var intentMatch = text.match(/Please make me ([^\n]+)/i);
     if (intentMatch) intent = stripCurly(intentMatch[0]).replace(/[":]+\s*$/, "");
+    var hasDefnCommand = /browser-based course|consisting of the following/i.test(text);
     var kind = /single\s+(pdf|docx?|document)\s+(?:document\s+)?consisting/i.test(text) ? "pack" : "course";
+
+    /* A *content* doc (splitter source) has <worksheet>/<document> blocks
+       and <filename> tags but none of the definition commands. People drop
+       these into the Definition tab by mistake — detect it so we can say
+       exactly what's wrong instead of "no screen rows". */
+    var looksLikeContentDoc =
+      !hasDefnCommand &&
+      (/<\s*(worksheet|document)\b/i.test(text) || /<\/filename>/i.test(text));
 
     var screens = [];
     var packDocs = [];
@@ -227,7 +236,16 @@
           file: { raw: unquote(file), folder: folderOf(unquote(file)), basename: basename(unquote(file)), isUrl: isUrl(unquote(file)) }
         });
       }
-      if (!screens.length) warnings.push("No screen rows were detected. The definition should list one screen per line starting with a type (Image / HTML / YouTube / PDF / Powerpoint / Document) under “Please make me a browser-based course with the following screens:”.");
+      if (!screens.length) {
+        warnings.push(looksLikeContentDoc
+          ? "This looks like a course CONTENT document (splitter source — it contains <worksheet>/<filename> tags), not a definition. Use the Splitter tab for this file. The Definition tab expects a “…- definition.docx” that lists screens, or a pack’s document list."
+          : "No screen rows were detected. The definition should list one screen per line starting with a type (Image / HTML / YouTube / PDF / Powerpoint / Document) under “Please make me a browser-based course with the following screens:”.");
+      }
+    }
+    if (kind === "pack" && !packDocs.length) {
+      warnings.push(looksLikeContentDoc
+        ? "This looks like a course CONTENT document (splitter source), not a definition. Use the Splitter tab for this file."
+        : "A pack command was found but no document list could be read after “…consisting of the following documents:”.");
     }
 
     /* Certificate: a <filename> near the word "certificate". */
