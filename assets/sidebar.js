@@ -253,6 +253,33 @@
     `;
   }
 
+  /* Reflect a persisted progress map onto the rendered screen rows: the
+     .done class, each tick toggle's a11y state, and the overall % bar.
+     Reads each row's own data-screen so it never depends on list order.
+     Denominator is every rendered row (incl. 'missing' ones, which have
+     no tick and can never be done) — matching the app-wide pct definition. */
+  function syncSidebarProgress(root, progress) {
+    const rows = root.querySelectorAll('.ms-ws-item');
+    const total = rows.length;
+    let done = 0;
+    rows.forEach((row) => {
+      const t = row.querySelector('.ms-ws-tick');
+      const isDone = t ? Boolean(progress[t.dataset.screen]) : false;
+      if (t) {
+        row.classList.toggle('done', isDone);
+        t.setAttribute('aria-checked', isDone ? 'true' : 'false');
+        t.setAttribute('aria-label', 'Mark this page ' + (isDone ? 'incomplete' : 'complete'));
+        t.setAttribute('title', isDone ? 'Completed — click to mark incomplete' : 'Mark this page complete');
+      }
+      if (isDone) done += 1;
+    });
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    const pctEl = root.querySelector('[data-role="overall-pct"]');
+    const barEl = root.querySelector('[data-role="overall-bar"]');
+    if (pctEl) pctEl.textContent = pct + '%';
+    if (barEl) barEl.style.width = pct + '%';
+  }
+
   function wireExpanderAndReset(root, courseId) {
     const toggle = root.querySelector('#ms-course-toggle');
     const group = root.querySelector('[data-role="course-group"]');
@@ -291,6 +318,48 @@
       dashLink.href = 'dashboard.html?id=' + encodeURIComponent(courseId);
     } else if (dashLink) {
       dashLink.href = 'index.html';
+    }
+
+    /* Per-screen tick toggle. The sidebar root (#sidebar) persists across
+       re-renders while only its innerHTML is replaced, so bind the delegated
+       handler exactly once and read the live course id from a data attr
+       (re-set on every render). */
+    root.dataset.tickCourse = courseId || '';
+    if (root.dataset.tickWired !== '1') {
+      root.dataset.tickWired = '1';
+      const onTick = (ev) => {
+        const t = ev.target.closest && ev.target.closest('.ms-ws-tick');
+        if (!t || !root.contains(t)) return;
+        if (ev.type === 'keydown' &&
+            ev.key !== 'Enter' && ev.key !== ' ' && ev.key !== 'Spacebar') return;
+        ev.preventDefault();
+        ev.stopPropagation();              /* don't let the row anchor navigate */
+        const cid = root.dataset.tickCourse;
+        const screenId = t.dataset.screen;
+        if (!cid || !screenId) return;
+        if (window.MatrixCourse &&
+            typeof window.MatrixCourse.toggleComplete === 'function' &&
+            typeof window.MatrixCourse.getCourseId === 'function' &&
+            window.MatrixCourse.getCourseId() === cid) {
+          /* On the course player: route through app.js so gamify, SCORM and
+             the certificate gate update too. It calls back into
+             MatrixSidebar.refreshProgress, which re-syncs these rows. */
+          window.MatrixCourse.toggleComplete(screenId);
+        } else {
+          /* Elsewhere (e.g. the dashboard): toggle persisted progress
+             directly and reflect it on the rows locally. */
+          const key = 'matrix-lms:progress:' + cid;
+          let p;
+          try { p = JSON.parse(localStorage.getItem(key) || '{}'); }
+          catch (_) { p = {}; }
+          if (p[screenId]) delete p[screenId];
+          else p[screenId] = { ts: Date.now() };
+          localStorage.setItem(key, JSON.stringify(p));
+          syncSidebarProgress(root, p);
+        }
+      };
+      root.addEventListener('click', onTick);
+      root.addEventListener('keydown', onTick);
     }
   }
 
@@ -393,8 +462,15 @@
     items.forEach((el, i) => {
       const s = screens[i];
       if (!s) return;
-      el.classList.toggle('done', Boolean(progress[s.id]));
+      const isDone = Boolean(progress[s.id]);
+      el.classList.toggle('done', isDone);
       el.classList.toggle('active', s.id === currentScreenId);
+      const t = el.querySelector('.ms-ws-tick');
+      if (t) {
+        t.setAttribute('aria-checked', isDone ? 'true' : 'false');
+        t.setAttribute('aria-label', 'Mark this page ' + (isDone ? 'incomplete' : 'complete'));
+        t.setAttribute('title', isDone ? 'Completed — click to mark incomplete' : 'Mark this page complete');
+      }
     });
   }
 

@@ -2719,13 +2719,24 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   overflow: auto;
 }
 .stage-doc-inner {
-  max-width: 880px;
+  /* Read like a clean Word page, not raw text. Narrower card gives a
+     comfortable ~70-character measure; relaxed leading + paragraph
+     rhythm stop a wall of short paragraphs feeling cramped. No content
+     or structure is changed here — purely typographic. */
+  max-width: 800px;
   margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-sm);
-  padding: 2.5rem 3rem 3rem;
+  padding: 3rem 3.5rem 3.25rem;
+  font-family: "Segoe UI", Calibri, system-ui, -apple-system, Arial, sans-serif;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #1f2440;
+  text-wrap: pretty;
+  -webkit-hyphens: none;
+  hyphens: none;
 }
 .stage-doc-inner h1 {
   font-family: var(--font-display);
@@ -2938,7 +2949,13 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   font-size: 0.95rem;
 }
 .stage-doc-inner h3 { font-size: 1.05rem; color: var(--text); margin: 1.4em 0 0.35em; font-weight: 700; }
-.stage-doc-inner p { margin: 0 0 0.85em; }
+.stage-doc-inner p { margin: 0 0 0.85em; max-width: 68ch; }
+.stage-doc-inner strong { font-weight: 700; color: #141938; }
+.stage-doc-inner a { color: var(--primary); text-underline-offset: 2px; }
+/* First line of these worksheets is the doc title in <p><strong> form.
+   Give it a little more presence WITHOUT changing the markup. */
+.stage-doc-inner > p:first-child { margin-bottom: 1.3em; }
+.stage-doc-inner > p:first-child strong { font-size: 1.4rem; color: var(--primary-dark); letter-spacing: -0.01em; }
 .stage-doc-inner ul, .stage-doc-inner ol { padding-left: 1.4em; margin: 0 0 0.85em; }
 .stage-doc-inner li { margin-bottom: 0.3em; }
 .stage-doc-inner img { max-width: 100%; height: auto; border-radius: var(--r-sm); margin: 0.7em 0; }
@@ -2949,7 +2966,7 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 .stage-doc-inner pre { background: var(--primary-50); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 0.9em 1em; overflow-x: auto; }
 
 .stage-doc-toolbar {
-  max-width: 880px;
+  max-width: 800px;
   margin: 0 auto 0.9rem;
   display: flex;
   justify-content: flex-end;
@@ -3623,16 +3640,41 @@ body.pdf-overlay-open { overflow: hidden; }
 .ms-ws-item.done:not(.active) .ms-ws-title {
   color: var(--success);
 }
-.ms-ws-item.done::after {
-  content: "✓";
-  align-self: center;
+/* Interactive per-screen completion toggle. Lets a learner mark any page
+   done straight from the sidebar list, instead of only via the in-page
+   "Mark complete & next" button. Empty circle = not done; filled green
+   check = done. */
+.ms-ws-tick {
   flex: 0 0 auto;
+  align-self: center;
+  width: 20px;
+  height: 20px;
   margin-left: 0.35rem;
-  color: var(--success);
-  font-weight: 800;
-  font-size: 0.85rem;
-  line-height: 1;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  background: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease;
 }
+.ms-ws-tick::after {
+  content: "✓";
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+}
+.ms-ws-tick:hover { border-color: var(--success); background: var(--success-50); }
+.ms-ws-tick:hover::after { color: var(--success); }
+.ms-ws-tick:active { transform: scale(0.88); }
+.ms-ws-tick:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.ms-ws-item.done .ms-ws-tick {
+  background: var(--success);
+  border-color: var(--success);
+}
+.ms-ws-item.done .ms-ws-tick::after { color: #fff; }
 /* Missing screens: visually subdued but still clickable. Clicking
    takes the learner to the viewer's friendly "Resource missing —
    please send X" panel, which is more useful than greying out a
