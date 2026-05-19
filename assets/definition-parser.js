@@ -104,19 +104,52 @@
     var intent = "";
     var intentMatch = text.match(/Please make me ([^\n]+)/i);
     if (intentMatch) intent = stripCurly(intentMatch[0]).replace(/[":]+\s*$/, "");
-    var kind = /single\s+(pdf|document)\s+(?:document\s+)?consisting/i.test(text) ? "pack" : "course";
+    var kind = /single\s+(pdf|docx?|document)\s+(?:document\s+)?consisting/i.test(text) ? "pack" : "course";
 
     var screens = [];
     var packDocs = [];
 
     if (kind === "pack") {
-      /* Pack: every quoted path line after the command becomes a document. */
-      for (var i = 0; i < lines.length; i++) {
-        var ln = stripCurly(lines[i]);
-        if (!ln) continue;
-        if (/^["']?[^"'\n]+\.(docx?|pdf)["']?\s*$/i.test(ln) && /[\\/]/.test(ln)) {
-          var raw = unquote(ln);
-          packDocs.push({ raw: raw, src: deriveSrc(raw, courseId), basename: basename(raw) });
+      /* Pack docs are the quoted filenames listed AFTER the
+         "…consisting of the following documents:" command, up to the end
+         of that command / AI-instruction block. Entries are bare or
+         pathed filenames ending .doc/.docx/.pdf — e.g. "CP4807-head.docx"
+         (NO path). Tab-separated screen-table rows and unrelated path/URL
+         lines (e.g. the CP9645 datasheet) are NOT entries. */
+      var DOC_RE = /^["'“”]?\s*([^"'“”\t]+?\.(?:docx?|pdf))\s*["'“”]?\s*$/i;
+      var startIdx = -1;
+      for (var s = 0; s < lines.length; s++) {
+        if (/consisting of the following documents/i.test(lines[s])) { startIdx = s; break; }
+      }
+      var scan = function (from) {
+        for (var i = from; i < lines.length; i++) {
+          var ln = stripCurly(lines[i]);
+          if (!ln) continue;
+          if (/<\/?\s*(command|ai\s*instruction)\s*>/i.test(ln)) break;     /* block end */
+          if (/^<\s*(command|filename|ai\s*instruction)\b/i.test(ln)) break; /* next block */
+          if (/please make me|consisting of the following/i.test(ln)) break;/* next command */
+          if (/^when\b/i.test(ln)) break;                                   /* trailing prose */
+          if (/^["'“”]\s*$/.test(ln)) continue;                             /* lone closing quote */
+          if (ln.indexOf("\t") !== -1) continue;                            /* screen-table row */
+          var m = ln.match(DOC_RE);
+          if (!m) continue;
+          var raw = unquote(m[1]);
+          if (raw) packDocs.push({ raw: raw, src: deriveSrc(raw, courseId), basename: basename(raw) });
+        }
+      };
+      if (startIdx !== -1) scan(startIdx + 1);
+      /* Fallback for an unexpected layout: whole-file scan, still without a
+         path requirement and still skipping tab rows / command lines. */
+      if (!packDocs.length) {
+        for (var k = 0; k < lines.length; k++) {
+          var l2 = stripCurly(lines[k]);
+          if (!l2 || l2.indexOf("\t") !== -1) continue;
+          if (/please make me|consisting of the following/i.test(l2)) continue;
+          var mm = l2.match(DOC_RE);
+          if (mm) {
+            var rn = unquote(mm[1]);
+            if (rn) packDocs.push({ raw: rn, src: deriveSrc(rn, courseId), basename: basename(rn) });
+          }
         }
       }
     } else {
