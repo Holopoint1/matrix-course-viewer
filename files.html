@@ -217,6 +217,12 @@
         <div class="split-status" id="cmsdb-status">Checking database…</div>
 
         <div class="split-actions">
+          <label class="split-id-label">Format
+            <select id="cmsdb-fmt" class="split-id-input">
+              <option value="files">Original file types (.docx / .htm)</option>
+              <option value="raw">Raw snapshot (JSON + HTML)</option>
+            </select>
+          </label>
           <button class="btn btn-primary" id="cmsdb-dl-all" type="button" disabled>⤓ Download all courses (ZIP)</button>
           <label class="split-id-label">Single course
             <select id="cmsdb-course" class="split-id-input"></select>
@@ -227,14 +233,19 @@
         <div class="split-status" id="cmsdb-out" hidden></div>
 
         <p class="files-tree-hint">
-          Each ZIP contains <code>courses.json</code>, <code>screens.json</code>,
-          <code>pages.json</code> and a browsable <code>html/</code> folder with every page body.
+          <strong>Original file types</strong> — a <code>content/&lt;CODE&gt;/</code> tree with worksheets
+          regenerated as <strong>.docx</strong> and pages as <strong>.htm</strong>, reflecting the current
+          live edits, plus <code>courses.json</code>. <em>Note: regenerated Word files are readable but
+          not pixel-identical to the originals, and images that couldn't be read on import won't be present.</em><br>
+          <strong>Raw snapshot</strong> — <code>courses.json</code>, <code>screens.json</code>,
+          <code>pages.json</code> and a browsable <code>html/</code> folder (best for backup / re-import).
         </p>
       </div>
     </section>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>

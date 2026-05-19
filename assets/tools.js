@@ -489,7 +489,7 @@
     var statusEl = $('cmsdb-status');
     if (!statusEl) return;                              /* panel not on page */
     var dlAll = $('cmsdb-dl-all'), dlOne = $('cmsdb-dl-one'),
-        courseSel = $('cmsdb-course'), outEl = $('cmsdb-out');
+        courseSel = $('cmsdb-course'), outEl = $('cmsdb-out'), fmtSel = $('cmsdb-fmt');
 
     function getClient() {
       try {
@@ -537,6 +537,69 @@
         .then(function (b) { download(b, name); });
     }
 
+    /* Body HTML out of a stored value that may be a full doc or just a body. */
+    function extractBody(html) {
+      try {
+        var d = new DOMParser().parseFromString(String(html || ''), 'text/html');
+        var pg = d.querySelector('.page');
+        if (pg) return pg.innerHTML.trim();
+        if (d.body) return d.body.innerHTML.trim();
+      } catch (_) {}
+      return String(html || '');
+    }
+    /* A complete, self-styled HTML document (used for the .htm files and as
+       the input to html-docx-js so Word renders headings/lists/tables). */
+    function fullHtmlDoc(bodyHtml, title) {
+      return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+        '<title>' + esc(title || '') + '</title><style>' +
+        'body{font-family:"Segoe UI",Calibri,Arial,sans-serif;font-size:11pt;line-height:1.5;color:#1a1a2e;margin:24px;}' +
+        'h1{font-size:20pt;color:#1e1b4b;}h2{font-size:14pt;color:#1d4ed8;margin:1.2em 0 .4em;}h3{font-size:12pt;}' +
+        'table{border-collapse:collapse;width:100%;margin:1em 0;}th,td{border:1px solid #c8d5f0;padding:6px 8px;vertical-align:top;}' +
+        'ul,ol{margin:0 0 .8em 1.4em;}img{max-width:100%;}a{color:#1d4ed8;}' +
+        '</style></head><body><div class="page">' + String(bodyHtml || '') + '</div></body></html>';
+    }
+    /* Original-file-types ZIP: content/<CODE>/ tree — worksheets as .docx
+       (regenerated from the live HTML), pages as .htm, + courses.json. */
+    function buildOriginalZip(courses, screens, pages, name) {
+      var zip = new JSZip();
+      zip.file('courses.json', JSON.stringify(courses, null, 2));
+      zip.file('screens.json', JSON.stringify(screens, null, 2));
+      var byPath = {};
+      pages.forEach(function (p) { if (p && p.path != null) byPath[p.path] = p.html || ''; });
+      var done = {}, docx = 0, htm = 0, skipped = 0;
+      var canDocx = !!(window.htmlDocx && window.htmlDocx.asBlob);
+      screens.forEach(function (s) {
+        var src = s && s.src;
+        if (!src || /^https?:/i.test(src) || done[src]) { return; }
+        var body = byPath[src];
+        if (body == null) { skipped++; return; }   /* no editable body (binary/external) */
+        done[src] = 1;
+        var inner = extractBody(body);
+        if (s.type === 'document' || /\.docx?$/i.test(src)) {
+          if (canDocx) {
+            zip.file(src.replace(/\.docx?$/i, '.docx'),
+              window.htmlDocx.asBlob(fullHtmlDoc(inner, s.title)));
+            docx++;
+          } else {
+            zip.file(src.replace(/\.docx?$/i, '.html'), fullHtmlDoc(inner, s.title));
+            htm++;
+          }
+        } else {
+          zip.file(src, fullHtmlDoc(inner, s.title));   /* .htm / .html page */
+          htm++;
+        }
+      });
+      zip.file('README.txt',
+        'Matrix course export (original file types)\n\n' +
+        docx + ' worksheet .docx, ' + htm + ' .htm pages, ' + skipped + ' screens with no editable body ' +
+        '(image/video/PDF/slides — referenced by URL/path in screens.json).\n\n' +
+        'NOTE: .docx files are REGENERATED from the live HTML — readable in Word but not ' +
+        'pixel-identical to the originals; images that could not be read on import are not included.\n');
+      return zip.generateAsync({ type: 'blob', compression: 'DEFLATE' })
+        .then(function (b) { download(b, name); return { docx: docx, htm: htm, skipped: skipped }; });
+    }
+    function fmt() { return fmtSel && fmtSel.value === 'raw' ? 'raw' : 'files'; }
+
     (async function () {
       try {
         var d = await load();
@@ -560,8 +623,13 @@
       var b = this, t = b.textContent; b.disabled = true; b.textContent = 'Building…';
       try {
         var d = cache || await load();
-        await zipFrom(d.courses, d.screens, d.pages, 'matrix-courses-' + stamp() + '.zip');
-        out('Downloaded all ' + d.courses.length + ' courses.', 'ok');
+        if (fmt() === 'raw') {
+          await zipFrom(d.courses, d.screens, d.pages, 'matrix-courses-' + stamp() + '.zip');
+          out('Downloaded all ' + d.courses.length + ' courses (raw snapshot).', 'ok');
+        } else {
+          var r = await buildOriginalZip(d.courses, d.screens, d.pages, 'matrix-courses-files-' + stamp() + '.zip');
+          out('Downloaded all courses — ' + r.docx + ' .docx, ' + r.htm + ' .htm.', 'ok');
+        }
       } catch (e) { out('Download failed: ' + (e && e.message ? e.message : e), 'err'); }
       finally { b.disabled = false; b.textContent = t; }
     });
@@ -577,8 +645,13 @@
         var paths = {};
         scr.forEach(function (s) { if (s.src) paths[s.src] = 1; });
         var pgs = d.pages.filter(function (p) { return p && paths[p.path]; });
-        await zipFrom(course, scr, pgs, id + '-' + stamp() + '.zip');
-        out('Downloaded ' + id + ' (' + scr.length + ' screens, ' + pgs.length + ' page bodies).', 'ok');
+        if (fmt() === 'raw') {
+          await zipFrom(course, scr, pgs, id + '-' + stamp() + '.zip');
+          out('Downloaded ' + id + ' (raw — ' + scr.length + ' screens, ' + pgs.length + ' bodies).', 'ok');
+        } else {
+          var r = await buildOriginalZip(course, scr, pgs, id + '-files-' + stamp() + '.zip');
+          out('Downloaded ' + id + ' — ' + r.docx + ' .docx, ' + r.htm + ' .htm.', 'ok');
+        }
       } catch (e) { out('Download failed: ' + (e && e.message ? e.message : e), 'err'); }
       finally { b.disabled = false; b.textContent = t; }
     });
