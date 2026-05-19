@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Certificate of Completion</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260525">
+  <link rel="stylesheet" href="assets/styles.css?v=20260526">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header" data-extras-id="cert-nav-extras"></header>
@@ -19,7 +19,7 @@
 
     <div class="cert" id="certificate">
       <div class="cert-top">
-        <img class="cert-logo" src="assets/matrix-logo.svg?v=20260525" alt="Matrix TSL">
+        <img class="cert-logo" src="assets/matrix-logo.svg?v=20260526" alt="Matrix TSL">
         <div class="cert-eyebrow">Matrix&nbsp;TSL · Engineering Education</div>
       </div>
 
@@ -62,9 +62,9 @@
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="assets/chrome.js?v=20260525"></script>
-  <script src="assets/gamify.js?v=20260525"></script>
-  <script src="assets/cms-overrides.js?v=20260525"></script>
+  <script src="assets/chrome.js?v=20260526"></script>
+  <script src="assets/gamify.js?v=20260526"></script>
+  <script src="assets/cms-overrides.js?v=20260526"></script>
   <script>
     (function () {
       'use strict';
@@ -99,22 +99,55 @@
       });
 
       var saveBtn = document.getElementById('save-btn');
-      saveBtn.addEventListener('click', function () {
+      saveBtn.addEventListener('click', async function () {
         if (!window.html2pdf) { alert('PDF library is still loading — try again in a moment.'); return; }
-        var cert = document.getElementById('certificate');
-        var who = (nameInput.value.trim() || 'certificate').replace(/[^A-Za-z0-9._-]+/g, '-');
         var orig = saveBtn.textContent;
         saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
-        window.html2pdf().set({
-          margin: 0,
-          filename: who + '-' + courseId + '-certificate.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-        }).from(cert).save().then(
-          function () { saveBtn.disabled = false; saveBtn.textContent = orig; },
-          function () { saveBtn.disabled = false; saveBtn.textContent = orig; alert('Could not build the PDF — use Print and choose “Save as PDF” instead.'); }
-        );
+
+        /* Capture an offscreen clone with EXPLICIT pixel dimensions.
+           html2canvas mis-measures elements sized only by `aspect-ratio`
+           (height resolves to 0 → empty canvas → the promise rejects),
+           and an SVG <img> with width/height="100%" has no intrinsic size
+           for it to rasterise. Forcing a fixed A4-landscape box and a
+           sized, decoded logo makes the render deterministic. */
+        var holder = document.createElement('div');
+        holder.style.cssText = 'position:fixed;left:-10000px;top:0;width:1160px;background:#fff;z-index:-1;';
+        var clone = document.getElementById('certificate').cloneNode(true);
+        clone.style.aspectRatio = 'auto';
+        clone.style.width = '1160px';
+        clone.style.height = '820px';      /* 1160/820 ≈ 1.414 = A4 landscape */
+        clone.style.boxShadow = 'none';
+        holder.appendChild(clone);
+        document.body.appendChild(holder);
+
+        try {
+          var img = clone.querySelector('.cert-logo');
+          if (img) {
+            img.setAttribute('width', '240');
+            img.removeAttribute('height');
+            img.style.height = 'auto';
+            if (!img.complete) {
+              await new Promise(function (r) { img.onload = r; img.onerror = r; });
+            }
+            try { if (img.decode) await img.decode(); } catch (e) {}
+          }
+          var who = (nameInput.value.trim() || 'certificate').replace(/[^A-Za-z0-9._-]+/g, '-');
+          await window.html2pdf().set({
+            margin: 0,
+            filename: who + '-' + courseId + '-certificate.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 1160, logging: false },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+          }).from(clone).save();
+        } catch (err) {
+          console.error('Certificate PDF build failed:', err);
+          alert('Direct PDF failed (' + ((err && err.message) || err) + '). Opening the print dialog — choose “Save as PDF” there.');
+          window.print();
+        } finally {
+          holder.remove();
+          saveBtn.disabled = false;
+          saveBtn.textContent = orig;
+        }
       });
 
       var today = new Date();
