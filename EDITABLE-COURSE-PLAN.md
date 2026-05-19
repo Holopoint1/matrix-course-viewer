@@ -1,6 +1,10 @@
 # Editable Course — Architecture & Plan
 
-Status: **planned, not yet built.** Decisions locked 2026-05-19.
+Status (2026-05-19): **Phase 0 ✅ (schema/RLS live), Phase 1 ✅ (seeded:
+9 courses / 148 screens / 121 HTML bodies), Phase 2 ✅ (fail-open data
+layer deployed). Phase 3 (editor + Supabase login) next. Cloudflare
+Access deferred. Open follow-up: external `file:///…Media…` worksheet
+images still dropped by mammoth (pre-existing; embedded images OK).**
 
 ## Goal
 The whole course (meta, screen list, every screen's content, intro pages,
