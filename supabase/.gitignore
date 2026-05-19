@@ -1,0 +1,4 @@
+# Never commit secrets. The service-role key lives here, locally only.
+.env
+.env.*
+seed/node_modules/
