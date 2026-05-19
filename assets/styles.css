@@ -3489,6 +3489,35 @@ body.pdf-overlay-open { overflow: hidden; }
   color: var(--text-muted);
   line-height: 1.4;
 }
+/* Sidebar header is a link back to the course dashboard. */
+.ms-header-link {
+  display: block;
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  text-decoration: none;
+  color: inherit;
+  transition: background 150ms ease, border-color 150ms ease, transform 110ms ease;
+}
+.ms-header-link:hover {
+  background: var(--primary-50);
+  border-color: var(--primary);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+.ms-header-link .ms-course-code { display: block; }
+.ms-header-link .ms-course-title { display: block; }
+.ms-header-dash {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--primary);
+}
+.ms-header-link:hover .ms-header-dash { text-decoration: underline; }
 
 /* Overall progress */
 .ms-overall {

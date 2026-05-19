@@ -124,11 +124,17 @@
         </div>
       `;
     }
+    /* The code/title is a link back to the course dashboard — from inside
+       a worksheet there was previously no way back to it. */
+    const dashHref = 'dashboard.html?id=' + encodeURIComponent(course.id);
     return `
       <div class="ms-header">
         <span class="ms-brand-eyebrow">Matrix Learning</span>
-        <div class="ms-course-code">${escapeHtml(course.code || '')}</div>
-        <div class="ms-course-title">${escapeHtml(course.title || '')}</div>
+        <a class="ms-header-link" href="${dashHref}" title="Back to the ${escapeHtml(course.code || 'course')} dashboard">
+          <span class="ms-course-code">${escapeHtml(course.code || '')}</span>
+          <span class="ms-course-title">${escapeHtml(course.title || '')}</span>
+          <span class="ms-header-dash">⌂ Course dashboard</span>
+        </a>
       </div>
     `;
   }
