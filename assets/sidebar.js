@@ -407,9 +407,24 @@
        - on any other page but the course is in-progress  */
     const showCourseCard = course && (isCourseOpen || isCourseInProgress(course.id));
 
+    /* Certificate quick-access in the sidebar — only when the course is
+       100% AND has a certificate enabled. Sits right under the progress
+       bar so it's the very next thing the learner sees on completion. */
+    const showCertCta = showCourseCard && pct === 100 &&
+      course && course.certificate && course.certificate.enabled;
+    const certCtaHtml = showCertCta
+      ? '<a class="ms-cert-cta" href="certificate.html?id=' + encodeURIComponent(course.id) +
+        '" title="Download your certificate">' +
+        '<span class="ms-cert-cta-ico" aria-hidden="true">🎓</span>' +
+        '<span class="ms-cert-cta-body"><strong>Certificate ready</strong>' +
+        '<span>Download your certificate</span></span>' +
+        '<span class="ms-cert-cta-arrow" aria-hidden="true">→</span></a>'
+      : '';
+
     const html = `
       ${buildHeader(showCourseCard ? course : null)}
       ${showCourseCard ? buildProgressBlock(pct) : ''}
+      ${certCtaHtml}
       <nav class="ms-nav">
         ${buildTopNav(currentPage)}
         ${showCourseCard ? buildCourseCard(course, expanded, currentScreenId, isCourseOpen) : ''}
