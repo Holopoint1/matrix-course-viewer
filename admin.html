@@ -5,431 +5,371 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <title>Admin · CMS | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260535">
+  <title>Admin · Content Manager | Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20260536">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
 
-  <!-- Live save status (driven by cms-supabase.js `matrixcms:save` events) -->
-  <div id="cms-savebar" aria-live="polite" style="position:fixed;right:14px;bottom:14px;z-index:9999;
-       padding:0.5rem 0.9rem;border-radius:999px;font:600 0.82rem/1 'Segoe UI',Arial,sans-serif;
-       color:#fff;background:#475569;box-shadow:0 6px 18px -6px rgba(0,0,0,.4);opacity:0;
-       transition:opacity .2s ease;pointer-events:none;">Idle</div>
-
-  <!-- Editor (open access — no login yet; logins come later) -->
-  <div class="cms-shell" id="cms-shell">
-    <aside class="cms-sidebar">
-      <div class="cms-side-section">
-        <span class="cms-side-eyebrow">Edit</span>
-        <h2>Courses</h2>
-      </div>
-      <ul class="cms-course-list" id="cms-course-list"></ul>
-      <div class="cms-side-foot">
-        <p class="cms-side-note" style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;margin:0;">
-          Edits save <strong>live to the shared database</strong> for everyone — no publish step.
-          Download copies any time from <a href="files.html#database">Tools → Database</a>.
-        </p>
-      </div>
-    </aside>
-
-    <main class="cms-main" id="cms-main">
-      <header class="cms-page-head">
-        <span class="cms-page-eyebrow">Admin · Live editor</span>
-        <h1>How editing works</h1>
-        <p class="cms-page-hint">Pick a course on the left to edit its details, screens, and the on-screen text, images and links learners see.</p>
-      </header>
-
-      <section class="cms-section">
-        <h2 class="cms-section-title">It's live — straight to the database</h2>
-        <p class="cms-section-hint" style="line-height:1.6;">
-          This editor reads from and writes to a <strong>Supabase database</strong>.
-          Every change you make is saved <strong>directly to that database for everyone</strong>,
-          instantly — there is <strong>no publish step and no developer involved</strong>.
-          The public Course Viewer reads the same database, so learners see your changes
-          almost immediately (a quick auto-refresh). Edit a course → it's live. The
-          status pill at the bottom-right confirms each save
-          (<em>Saving… → Saved ✓ live to database</em>).
-        </p>
-      </section>
-
-      <section class="cms-section">
-        <h2 class="cms-section-title" style="color:var(--warn);">⚠ Please read before editing</h2>
-        <div style="background:var(--warn-bg);border:1px solid var(--warn);border-left-width:4px;
-             border-radius:8px;padding:0.9rem 1.1rem;line-height:1.65;color:var(--text);">
-          <ul style="margin:0;padding-left:1.2rem;">
-            <li><strong>Changes are immediate and shared.</strong> There is no draft or
-              per-user copy — what you type is the live course for <em>all</em> users as you save it.</li>
-            <li><strong>There is no “undo” / “reset”.</strong> The old reset buttons were
-              removed because edits now go straight to the live database. To recover, you'd
-              re-enter the content (or restore from a download).</li>
-            <li><strong>Open access right now.</strong> There is currently <em>no login</em> —
-              anyone with this page's link can make changes. Restricted logins are planned;
-              until then, treat this page as sensitive and don't share the link widely.</li>
-            <li><strong>Back up before big changes.</strong> Grab a full copy any time from
-              <a href="files.html#database">Tools → Database → Download</a>
-              (<code>courses.json</code>, <code>screens.json</code>, <code>pages.json</code> + every page's HTML).</li>
-          </ul>
+  <main class="am-wrap">
+    <div class="am-shell">
+      <!-- Course folders -->
+      <aside class="am-rail">
+        <div class="am-rail-head">
+          <span class="am-rail-eyebrow">Content manager</span>
+          <h2>Courses</h2>
         </div>
+        <ul class="am-folders" id="am-folders"></ul>
+        <div class="am-rail-foot">
+          <p class="am-rail-note">Every change saves to the live database — it shows on the course immediately, for everyone.</p>
+        </div>
+      </aside>
+
+      <!-- Main: course grid OR screen detail -->
+      <section class="am-main" id="am-main">
+        <p class="stage-loading">Loading courses&hellip;</p>
       </section>
-    </main>
-  </div>
+    </div>
+  </main>
 
-  <script src="assets/chrome.js?v=20260535"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="assets/cms-overrides.js?v=20260535"></script>
+  <script src="assets/chrome.js?v=20260536"></script>
+  <script src="assets/cms-overrides.js?v=20260536"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260535"></script>
-  <script src="assets/cms-supabase.js?v=20260535"></script>
+  <script src="assets/supabase-config.js?v=20260536"></script>
+  <script src="assets/cms-supabase.js?v=20260536"></script>
   <script>
-    (function () {
-      'use strict';
-      const shellEl = document.getElementById('cms-shell');
-      const mainEl = () => document.getElementById('cms-main');
+  (function () {
+    'use strict';
+    var CMS = window.MatrixCMS;
+    try { CMS.unlock('matrix'); } catch (e) {}   /* Phase 1: open access */
 
-      function escapeHtml(s) {
-        return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        }[c]));
-      }
-      function showInitError(e) {
-        console.error('Admin init failed:', e);
-        mainEl().innerHTML = '<p style="color:var(--warn);padding:1rem;">Admin failed to load: ' +
-          escapeHtml(e && e.message ? e.message : String(e)) + '</p>';
-      }
+    var main = document.getElementById('am-main');
+    var foldersEl = document.getElementById('am-folders');
+    var courses = null;
+    var view = { courseId: null, screenId: null };
 
-      /* ---- Live save status pill (proves edits reach Supabase) ---- */
-      const bar = document.getElementById('cms-savebar');
-      let barHide;
-      function setBar(text, color, sticky) {
-        bar.textContent = text;
-        bar.style.background = color;
-        bar.style.opacity = '1';
-        clearTimeout(barHide);
-        if (!sticky) barHide = setTimeout(() => { bar.style.opacity = '0'; }, 2600);
-      }
-      window.addEventListener('matrixcms:save', (e) => {
-        const d = e.detail || {};
-        if (d.ok === null) setBar('Saving…', '#475569', true);
-        else if (d.ok === true) setBar('Saved ✓ live to database', '#15803d');
-        else if (d.reason === 'not-signed-in') setBar('Saved locally (DB write skipped)', '#a16207');
-        else setBar('Save FAILED: ' + (d.error || 'unknown') + ' — not in database', '#b91c1c', true);
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    /* Screen "file type" → icon, label, and whether it's a Word-editable screen. */
+    var TYPES = {
+      document:   { icon: '📄', label: 'Word document', word: true },
+      html:       { icon: '📝', label: 'Page',          word: true },
+      youtube:    { icon: '▶',  label: 'Video',         word: false },
+      pdf:        { icon: '📕', label: 'PDF',           word: false },
+      powerpoint: { icon: '📊', label: 'Slides',        word: false },
+      image:      { icon: '🖼', label: 'Image',         word: false },
+      spreadsheet:{ icon: '📈', label: 'Spreadsheet',   word: false }
+    };
+    function typeOf(t) { return TYPES[t] || { icon: '📄', label: t || 'Screen', word: false }; }
+
+    function getCourse(id) { return courses.find(function (c) { return c.id === id; }); }
+    function merged(id) {
+      var c = getCourse(id);
+      return (c && CMS.applyOverrides) ? CMS.applyOverrides(c) : c;
+    }
+    function isEdited(screen) {
+      return !!(screen && screen.src && CMS.getHtmlOverride(screen.src));
+    }
+
+    /* ---------- Course folder rail ---------- */
+    function renderRail() {
+      foldersEl.innerHTML = courses.map(function (c) {
+        var edits = (c.screens || []).filter(function (s) { return isEdited(s); }).length;
+        return '<li><button type="button" class="am-folder' +
+          (c.id === view.courseId ? ' active' : '') + '" data-course="' + esc(c.id) + '">' +
+          '<span class="am-folder-ico">📁</span>' +
+          '<span class="am-folder-body"><strong>' + esc(c.code || c.id) + '</strong>' +
+          '<span>' + esc(c.title || '') + '</span></span>' +
+          (edits ? '<span class="am-folder-badge" title="' + edits + ' edited screen(s)">' + edits + '</span>' : '') +
+          '</button></li>';
+      }).join('');
+      foldersEl.querySelectorAll('[data-course]').forEach(function (b) {
+        b.addEventListener('click', function () { openCourse(b.dataset.course); });
+      });
+    }
+
+    /* ---------- Course view: screens as a file grid ---------- */
+    function openCourse(courseId) {
+      view.courseId = courseId; view.screenId = null;
+      renderRail();
+      var c = merged(courseId);
+      if (!c) { main.innerHTML = '<p class="stage-loading">Course not found.</p>'; return; }
+
+      var cards = (c.screens || []).map(function (s, i) {
+        var t = typeOf(s.type);
+        return '<button type="button" class="am-card" data-screen="' + esc(s.id) + '">' +
+          '<span class="am-card-top">' +
+            '<span class="am-card-ico">' + t.icon + '</span>' +
+            '<span class="am-card-num">' + (i + 1) + '</span>' +
+            (isEdited(s) ? '<span class="am-card-edited" title="Edited — differs from the original">edited</span>' : '') +
+          '</span>' +
+          '<span class="am-card-title">' + esc(s.title || '(untitled)') + '</span>' +
+          '<span class="am-card-type">' + t.icon + ' ' + esc(t.label) + '</span>' +
+          '</button>';
+      }).join('');
+
+      main.innerHTML =
+        '<div class="am-crumb"><span>Courses</span><span class="am-crumb-sep">›</span>' +
+          '<strong>' + esc(c.code || c.id) + '</strong></div>' +
+        '<div class="am-course-head">' +
+          '<div><h1>' + esc(c.title || c.id) + '</h1>' +
+          '<p>' + (c.screens || []).length + ' screens — click any one to preview it, edit the text, or replace it with a Word document.</p></div>' +
+          '<a class="btn btn-secondary" href="course.html?id=' + esc(c.id) + '" target="_blank" rel="noopener">↗ Open course</a>' +
+        '</div>' +
+        '<div class="am-grid">' + cards + '</div>';
+
+      main.querySelectorAll('[data-screen]').forEach(function (b) {
+        b.addEventListener('click', function () { openScreen(courseId, b.dataset.screen); });
+      });
+    }
+
+    /* ---------- Screen detail: preview + replace + edit ---------- */
+    function openScreen(courseId, screenId) {
+      view.courseId = courseId; view.screenId = screenId;
+      var c = merged(courseId);
+      var idx = (c.screens || []).findIndex(function (s) { return s.id === screenId; });
+      var s = c.screens[idx];
+      var t = typeOf(s.type);
+
+      main.innerHTML =
+        '<div class="am-crumb"><a href="#" data-back="courses">Courses</a><span class="am-crumb-sep">›</span>' +
+          '<a href="#" data-back="course">' + esc(c.code || c.id) + '</a><span class="am-crumb-sep">›</span>' +
+          '<strong>Screen ' + (idx + 1) + '</strong></div>' +
+
+        '<div class="am-screen-head">' +
+          '<span class="am-screen-ico">' + t.icon + '</span>' +
+          '<div class="am-screen-headbody">' +
+            '<span class="am-screen-eyebrow">Screen ' + (idx + 1) + ' · ' + esc(t.label) + '</span>' +
+            '<input class="am-screen-title" id="am-title" value="' + esc(s.title || '') + '">' +
+          '</div>' +
+          '<a class="btn btn-secondary" href="course.html?id=' + esc(courseId) + '&screen=' + esc(s.id) + '" target="_blank" rel="noopener">↗ Open in course</a>' +
+        '</div>' +
+
+        (t.word
+          ? '<div class="am-replace" id="am-replace">' +
+              '<div class="am-replace-info"><strong>⤓ Replace with a Word document</strong>' +
+              '<span>Drop a <code>.docx</code> here (or click) — its text is copied in word-for-word and goes live on the course immediately. Re-upload any time to update.</span></div>' +
+              '<input type="file" id="am-file" accept=".docx" hidden>' +
+              '<div class="am-replace-actions">' +
+                '<button class="btn btn-primary" id="am-upload-btn" type="button">Choose Word file…</button>' +
+                '<button class="btn btn-secondary" id="am-edit-btn" type="button">✎ Edit text here</button>' +
+                (isEdited(s) ? '<button class="btn btn-ghost" id="am-revert-btn" type="button">↩ Revert to original</button>' : '') +
+              '</div>' +
+            '</div>'
+          : '<div class="am-replace am-replace-readonly"><div class="am-replace-info">' +
+              '<strong>' + t.icon + ' ' + esc(t.label) + ' screen</strong>' +
+              '<span>This screen is ' + (s.type === 'youtube' ? 'a video' : 'a ' + esc(t.label).toLowerCase()) +
+              ', not a Word document — it is managed by its link / file path below. Word replace applies to Page and Word-document screens.</span></div>' +
+              '<code class="am-src">' + esc(s.src || '') + '</code></div>') +
+
+        '<div class="am-status" id="am-status" hidden></div>' +
+        '<div class="am-editor" id="am-editor" hidden></div>' +
+
+        '<div class="am-preview-wrap">' +
+          '<div class="am-preview-label">Preview — exactly as learners see it</div>' +
+          '<div class="am-preview" id="am-preview"><p class="stage-loading">Rendering&hellip;</p></div>' +
+        '</div>';
+
+      main.querySelector('[data-back="courses"]').addEventListener('click', function (e) { e.preventDefault(); openCourse(courseId); });
+      main.querySelector('[data-back="course"]').addEventListener('click', function (e) { e.preventDefault(); openCourse(courseId); });
+
+      /* Screen title — save on change */
+      var titleInput = document.getElementById('am-title');
+      titleInput.addEventListener('change', function () {
+        CMS.setScreenOverride(courseId, s.id, { title: titleInput.value.trim() });
+        flash('Title saved — live on the course.');
+        renderRail();
       });
 
-      let originalCourses = null;
-      let courses = null;
-
-      async function loadAll() {
-        const data = await fetch('data/courses.json').then((r) => r.json());
-        originalCourses = data;
-        courses = data.courses;
-      }
-      async function init() {
-        if (!courses) await loadAll();
-        renderCourseList();
-      }
-
-      function renderCourseList() {
-        const root = document.getElementById('cms-course-list');
-        root.innerHTML = courses.map((c) => `
-          <li><button type="button" data-course="${escapeHtml(c.id)}" class="cms-course-pick">
-            <strong>${escapeHtml(c.code)}</strong>
-            <span>${escapeHtml(c.title)}</span>
-          </button></li>
-        `).join('');
-        root.querySelectorAll('button[data-course]').forEach((btn) => {
-          btn.addEventListener('click', () => editCourse(btn.dataset.course));
+      if (t.word) {
+        var fileInput = document.getElementById('am-file');
+        document.getElementById('am-upload-btn').addEventListener('click', function () { fileInput.click(); });
+        fileInput.addEventListener('change', function () {
+          if (fileInput.files[0]) uploadWord(fileInput.files[0], courseId, s);
         });
-      }
-
-      /* ---------- Course editor ---------- */
-      function editCourse(courseId) {
-        const original = courses.find((c) => c.id === courseId);
-        const merged = window.MatrixCMS.applyOverrides(original);
-        const main = mainEl();
-        const screensHtml = merged.screens.map((s, i) => screenRow(courseId, original.screens[i], s, i)).join('');
-        main.innerHTML = `
-          <header class="cms-page-head">
-            <span class="cms-page-eyebrow">Editing</span>
-            <h1>${escapeHtml(merged.code)} · ${escapeHtml(merged.title)}</h1>
-            <p class="cms-page-hint">Every edit saves <strong>live to the shared database</strong> for everyone — instantly, no publish step. Watch the status pill (bottom-right) confirm each save.</p>
-          </header>
-
-          <section class="cms-section">
-            <div class="cms-section-head">
-              <h2 class="cms-section-title">Course details</h2>
-              <div class="cms-section-actions">
-                <button class="btn btn-primary" data-action="save-course">💾 Save course details</button>
-                <span class="cms-saved-hint" data-saved hidden>Saved ✓</span>
-              </div>
-            </div>
-            <div class="cms-grid-2">
-              <label>Code
-                <input type="text" data-field="code" value="${escapeHtml(merged.code || '')}">
-              </label>
-              <label>Title
-                <input type="text" data-field="title" value="${escapeHtml(merged.title || '')}">
-              </label>
-              <label class="cms-grid-full">Short description
-                <textarea data-field="shortDescription" rows="3">${escapeHtml(merged.shortDescription || '')}</textarea>
-              </label>
-              <label>Estimated hours
-                <input type="number" step="0.1" data-field="estimatedHours" value="${escapeHtml(String(merged.estimatedHours || 0))}">
-              </label>
-              <label>Certificate enabled
-                <select data-field="certificateEnabled">
-                  <option value="true" ${merged.certificate && merged.certificate.enabled ? 'selected' : ''}>Yes</option>
-                  <option value="false" ${merged.certificate && merged.certificate.enabled ? '' : 'selected'}>No</option>
-                </select>
-              </label>
-            </div>
-          </section>
-
-          <section class="cms-section">
-            <h2 class="cms-section-title">Screens (${merged.screens.length})</h2>
-            <p class="cms-section-hint">The top row of each screen edits its <strong>heading &amp; settings</strong> (title, time, type, file). To change the <strong>actual content learners read</strong> on a Page or Worksheet, use <strong>“✎ Edit this screen's content”</strong> — it opens the real on-screen text with a live preview and saves straight to the database.</p>
-            <div class="cms-screens">${screensHtml}</div>
-          </section>
-        `;
-
-        function applyMeta(input) {
-          const field = input.dataset.field;
-          const value = input.type === 'number' ? Number(input.value) : input.value;
-          if (field === 'certificateEnabled') {
-            const orig = original.certificate || { enabled: false };
-            window.MatrixCMS.setCourseOverride(courseId, { certificate: Object.assign({}, orig, { enabled: input.value === 'true' }) });
-          } else {
-            window.MatrixCMS.setCourseOverride(courseId, { [field]: value });
-          }
-        }
-        main.querySelectorAll('[data-field]').forEach((input) => {
-          input.addEventListener('input', () => applyMeta(input));
+        var dz = document.getElementById('am-replace');
+        ['dragenter', 'dragover'].forEach(function (ev) {
+          dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('drag'); });
         });
-        main.querySelector('[data-action="save-course"]').addEventListener('click', () => {
-          main.querySelectorAll('[data-field]').forEach(applyMeta);
-          flashSaved(main);
+        ['dragleave', 'drop'].forEach(function (ev) {
+          dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('drag'); });
         });
-
-        /* Screen-meta inputs — save live on edit */
-        main.querySelectorAll('.cms-screen-row').forEach((row) => {
-          const screenId = row.dataset.screenId;
-          row.querySelectorAll('[data-screen-field]').forEach((input) => {
-            input.addEventListener('input', () => {
-              const field = input.dataset.screenField;
-              let value;
-              if (input.type === 'number') value = Number(input.value);
-              else if (input.type === 'checkbox') value = input.checked;
-              else value = input.value;
-              window.MatrixCMS.setScreenOverride(courseId, screenId, { [field]: value });
-            });
-          });
-          const editBtn = row.querySelector('[data-action="edit-text"]');
-          if (editBtn) {
-            editBtn.addEventListener('click', () => {
-              const sc = merged.screens.find((x) => x.id === screenId);
-              openTextEditor(courseId, sc, row);
-            });
-          }
+        dz.addEventListener('drop', function (e) {
+          var f = e.dataTransfer && e.dataTransfer.files[0];
+          if (f) uploadWord(f, courseId, s);
         });
+        document.getElementById('am-edit-btn').addEventListener('click', function () { openEditor(courseId, s); });
+        var rev = document.getElementById('am-revert-btn');
+        if (rev) rev.addEventListener('click', function () { revert(courseId, s); });
       }
 
-      function isEditableText(s) {
-        return (s.type === 'html' || s.type === 'document') &&
-               s.src && !/^https?:/i.test(s.src) && !s.missing;
-      }
+      renderPreview(s, document.getElementById('am-preview'));
+    }
 
-      function screenRow(courseId, originalScreen, mergedScreen, idx) {
-        const types = ['image', 'html', 'youtube', 'pdf', 'document', 'powerpoint', 'spreadsheet'];
-        const typeOpts = types.map((t) => `<option value="${t}" ${mergedScreen.type === t ? 'selected' : ''}>${t}</option>`).join('');
-        return `
-          <div class="cms-screen-row" data-screen-id="${escapeHtml(mergedScreen.id)}">
-            <div class="cms-screen-main">
-              <span class="cms-screen-num">${idx + 1}</span>
-              <input class="cms-screen-title" data-screen-field="title" value="${escapeHtml(mergedScreen.title || '')}" placeholder="Screen title (heading)">
-              <select class="cms-screen-type" data-screen-field="type">${typeOpts}</select>
-              <input class="cms-screen-hours" data-screen-field="hours" type="number" step="0.1" min="0" value="${escapeHtml(String(mergedScreen.hours || 0))}">
-              <input class="cms-screen-src" data-screen-field="src" value="${escapeHtml(mergedScreen.src || '')}" placeholder="path or URL">
-              <label class="cms-screen-missing"><input type="checkbox" data-screen-field="missing" ${mergedScreen.missing ? 'checked' : ''}> missing</label>
-            </div>
-            <div class="cms-screen-actions">
-              ${isEditableText(mergedScreen)
-                ? `<button type="button" class="btn btn-primary cms-edit-text-btn" data-action="edit-text">✎ Edit this screen's content</button>
-                   <span class="cms-screen-actions-hint">The title above is just the heading — this edits the body text learners read on screen ${idx + 1}.</span>`
-                : `<span class="cms-screen-noedit">No editable body text — ${escapeHtml(mergedScreen.type)} screen (image / video / PDF / slides are binary or external).</span>`}
-            </div>
-            <div class="cms-screen-editor" data-editor-for="${escapeHtml(mergedScreen.id)}" hidden></div>
-          </div>
-        `;
-      }
+    function flash(msg, kind) {
+      var el = document.getElementById('am-status');
+      if (!el) return;
+      el.hidden = false;
+      el.className = 'am-status' + (kind ? ' ' + kind : ' ok');
+      el.textContent = msg;
+      clearTimeout(el._t);
+      if (!kind || kind === 'ok') el._t = setTimeout(function () { el.hidden = true; }, 3500);
+    }
 
-      /* ---------- Per-screen text editor ----------
-         Shows EXACTLY what the learner sees: existing DB/override (keyed by
-         screen.src), else .html .page/body, else .docx mammoth render.
-         Save writes a full HTML doc back under screen.src → that is what
-         the viewer (app.js) renders, and cms-supabase pushes it live. */
-      async function openTextEditor(courseId, screen, row) {
-        const slot = row.querySelector('[data-editor-for="' + cssEscape(screen.id) + '"]');
-        if (!slot) return;
-        if (!slot.hidden) { slot.hidden = true; slot.innerHTML = ''; return; }
-        slot.hidden = false;
-        slot.innerHTML = '<p class="stage-loading">Loading current content&hellip;</p>';
-
-        let bodyHtml = '';
-        let templateHtml = null;
-        try {
-          const override = window.MatrixCMS.getHtmlOverride(screen.src);
+    /* ---------- Render a screen as the front end shows it ---------- */
+    async function renderPreview(s, box) {
+      try {
+        var override = CMS.getHtmlOverride(s.src);
+        if (s.type === 'document' || s.type === 'html') {
+          var html;
           if (override != null) {
-            templateHtml = override;
-            bodyHtml = extractBody(override);
-          } else if (screen.type === 'document') {
-            const buf = await fetch(screen.src).then((r) => r.arrayBuffer());
-            const res = await window.mammoth.convertToHtml({ arrayBuffer: buf });
-            bodyHtml = res.value || '';
+            html = bodyOf(override);
+          } else if (s.type === 'document') {
+            var buf = await fetch(s.src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); });
+            html = (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value || '';
           } else {
-            const txt = await fetch(screen.src).then((r) => r.text());
-            templateHtml = txt;
-            bodyHtml = extractBody(txt);
+            var txt = await fetch(s.src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); });
+            html = bodyOf(txt);
           }
-        } catch (e) {
-          slot.innerHTML = '<p style="color:var(--warn);padding:0.6rem;">Could not load this screen\'s content: ' + escapeHtml(e.message) + '</p>';
-          return;
+          box.innerHTML = '<div class="stage-doc"><div class="stage-doc-inner">' + enhance(html) + '</div></div>';
+        } else if (s.type === 'youtube') {
+          var m = String(s.src || '').match(/(?:youtu\.be\/|v=|embed\/)([\w-]{6,})/);
+          box.innerHTML = m ? '<div class="inline-youtube"><iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen></iframe></div>'
+                            : '<p class="stage-loading">Video: ' + esc(s.src) + '</p>';
+        } else if (s.type === 'pdf') {
+          box.innerHTML = '<iframe class="am-preview-frame" src="' + esc(s.src) + '"></iframe>';
+        } else if (s.type === 'image') {
+          box.innerHTML = '<div class="am-preview-img"><img src="' + esc(s.src) + '" alt="' + esc(s.title) + '"></div>';
+        } else {
+          box.innerHTML = '<p class="stage-loading">' + esc(typeOf(s.type).label) + ' — <a href="' + esc(s.src) + '" target="_blank" rel="noopener">open / download</a></p>';
         }
-
-        slot.innerHTML = `
-          <div class="cms-text-edit">
-            <div class="cms-text-edit-col">
-              <label class="cms-html-edit-label">HTML source (advanced — kept in sync)</label>
-              <textarea class="cms-text-area" rows="16" spellcheck="false">${escapeHtml(bodyHtml.trim())}</textarea>
-              <div class="cms-section-actions">
-                <button type="button" class="btn btn-ghost" data-act="close">Close</button>
-                <button type="button" class="btn btn-primary" data-act="save">💾 Save text</button>
-                <span class="cms-saved-hint" data-saved hidden>Saved ✓ — live on the course</span>
-              </div>
-            </div>
-            <div class="cms-text-edit-col">
-              <span class="cms-html-edit-label">Visual editor — type directly here (non-technical)</span>
-              <div class="cms-rte-toolbar" style="display:flex;flex-wrap:wrap;gap:.3rem;margin:.25rem 0 .4rem;">
-                <button type="button" class="btn btn-ghost" data-cmd="bold" title="Bold" style="font-weight:800;min-width:34px;">B</button>
-                <button type="button" class="btn btn-ghost" data-cmd="italic" title="Italic" style="font-style:italic;min-width:34px;">I</button>
-                <button type="button" class="btn btn-ghost" data-cmd="h2" title="Heading">H</button>
-                <button type="button" class="btn btn-ghost" data-cmd="p" title="Normal text">¶</button>
-                <button type="button" class="btn btn-ghost" data-cmd="ul" title="Bullet list">• List</button>
-                <button type="button" class="btn btn-ghost" data-cmd="ol" title="Numbered list">1. List</button>
-                <button type="button" class="btn btn-ghost" data-cmd="link" title="Add link">🔗</button>
-                <button type="button" class="btn btn-ghost" data-cmd="unlink" title="Remove link">⛓</button>
-                <button type="button" class="btn btn-ghost" data-cmd="undo" title="Undo">↶</button>
-                <button type="button" class="btn btn-ghost" data-cmd="redo" title="Redo">↷</button>
-              </div>
-              <iframe class="cms-html-preview" data-preview title="Visual editor"></iframe>
-            </div>
-          </div>`;
-
-        const ta = slot.querySelector('.cms-text-area');
-        const iframe = slot.querySelector('[data-preview]');
-        let pageEl = null;          /* the editable .page inside the iframe */
-        let syncing = false;        /* guards the two-way sync from looping */
-        let taTimer, pvTimer;
-
-        function previewDoc() {
-          return `<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="stylesheet" href="assets/embedded.css"><style>body{margin:0;padding:1.2rem;font-family:system-ui,Segoe UI,Arial,sans-serif;color:#1c1b30}.page{outline:none}.page:focus{outline:none}</style></head><body><div class="page" contenteditable="true">${ta.value}</div></body></html>`;
-        }
-
-        /* Visual edit → HTML source. */
-        function syncFromPreview() {
-          if (syncing || !pageEl) return;
-          syncing = true;
-          ta.value = pageEl.innerHTML;
-          syncing = false;
-        }
-        /* HTML source → visual editor (no reload, cursor/scroll kept). */
-        function syncFromSource() {
-          if (syncing || !pageEl) return;
-          syncing = true;
-          if (pageEl.innerHTML !== ta.value) pageEl.innerHTML = ta.value;
-          syncing = false;
-        }
-
-        iframe.addEventListener('load', () => {
-          const doc = iframe.contentDocument;
-          pageEl = doc && doc.querySelector('.page');
-          if (!pageEl) return;
-          pageEl.addEventListener('input', () => {
-            clearTimeout(pvTimer); pvTimer = setTimeout(syncFromPreview, 120);
-          });
-          /* execCommand is deprecated but is the only dependency-free way
-             to format a contenteditable region; it edits the existing DOM
-             so the worksheet HTML/tables stay verbatim. */
-          slot.querySelectorAll('.cms-rte-toolbar [data-cmd]').forEach((b) => {
-            b.addEventListener('mousedown', (e) => e.preventDefault()); /* keep iframe selection */
-            b.addEventListener('click', () => {
-              const c = b.dataset.cmd;
-              pageEl.focus();
-              try {
-                if (c === 'bold' || c === 'italic' || c === 'undo' || c === 'redo') doc.execCommand(c, false, null);
-                else if (c === 'h2') doc.execCommand('formatBlock', false, 'H2');
-                else if (c === 'p') doc.execCommand('formatBlock', false, 'P');
-                else if (c === 'ul') doc.execCommand('insertUnorderedList', false, null);
-                else if (c === 'ol') doc.execCommand('insertOrderedList', false, null);
-                else if (c === 'link') { const u = prompt('Link URL:', 'https://'); if (u) doc.execCommand('createLink', false, u); }
-                else if (c === 'unlink') doc.execCommand('unlink', false, null);
-              } catch (_) {}
-              syncFromPreview();
-            });
-          });
-        });
-        ta.addEventListener('input', () => {
-          clearTimeout(taTimer); taTimer = setTimeout(syncFromSource, 200);
-        });
-        iframe.srcdoc = previewDoc();
-
-        slot.querySelector('[data-act="close"]').addEventListener('click', () => {
-          slot.hidden = true; slot.innerHTML = '';
-        });
-        slot.querySelector('[data-act="save"]').addEventListener('click', () => {
-          if (pageEl) { ta.value = pageEl.innerHTML; }   /* capture latest visual edit */
-          const full = wrapBody(ta.value, templateHtml);
-          window.MatrixCMS.setHtmlOverride(screen.src, full);
-          flashSaved(slot);
-        });
+      } catch (err) {
+        box.innerHTML = '<p class="stage-loading" style="color:var(--warn)">Could not render this screen: ' + esc(err.message) + '</p>';
       }
-
-      function cssEscape(s) { return String(s).replace(/"/g, '\\"'); }
-
-      function extractBody(fullHtml) {
-        try {
-          const doc = new DOMParser().parseFromString(fullHtml, 'text/html');
-          const page = doc.querySelector('.page');
-          if (page) return page.innerHTML.trim();
-          if (doc.body) return doc.body.innerHTML.trim();
-        } catch (_) {}
-        return fullHtml;
-      }
-      function wrapBody(bodyHtml, originalFullHtml) {
-        if (originalFullHtml) {
-          try {
-            const doc = new DOMParser().parseFromString(originalFullHtml, 'text/html');
-            const page = doc.querySelector('.page');
-            if (page) { page.innerHTML = bodyHtml; }
-            else if (doc.body) { doc.body.innerHTML = bodyHtml; }
-            return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
-          } catch (_) {}
-        }
-        return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="../../assets/embedded.css"></head><body><div class="page">${bodyHtml}</div></body></html>`;
-      }
-
-      function flashSaved(root) {
-        root.querySelectorAll('[data-saved]').forEach((el) => {
-          el.hidden = false;
-          clearTimeout(el._t);
-          el._t = setTimeout(() => { el.hidden = true; }, 1800);
+    }
+    function bodyOf(fullHtml) {
+      try {
+        var d = new DOMParser().parseFromString(fullHtml, 'text/html');
+        var page = d.querySelector('.page');
+        if (page) return page.innerHTML;
+        if (d.body) return d.body.innerHTML;
+      } catch (e) {}
+      return fullHtml;
+    }
+    /* Light, deterministic enhancer — inline bare YouTube links only. */
+    function enhance(html) {
+      try {
+        var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
+        d.body.querySelectorAll('a').forEach(function (a) {
+          var m = (a.getAttribute('href') || '').match(/(?:youtu\.be\/|v=|embed\/)([\w-]{6,})/);
+          if (!m) return;
+          var w = d.createElement('div');
+          w.className = 'inline-youtube';
+          w.innerHTML = '<iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen loading="lazy"></iframe>';
+          a.replaceWith(w);
         });
-      }
+        return d.body.innerHTML;
+      } catch (e) { return html; }
+    }
 
-      /* Open access (Phase: no login). The local engine's unlock flag is
-         harmless to set; real logins / Cloudflare Access come later. */
-      try { window.MatrixCMS.unlock('matrix'); } catch (_) {}
-      init().catch(showInitError);
-    })();
+    /* ---------- Word upload → deterministic mammoth convert → save ---------- */
+    async function uploadWord(file, courseId, s) {
+      if (!/\.docx$/i.test(file.name)) { flash('Please choose a Word .docx file.', 'err'); return; }
+      flash('Reading “' + file.name + '” and copying the text in word-for-word…');
+      try {
+        var buf = await file.arrayBuffer();
+        var result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
+        var bodyHtml = result.value || '';
+        if (!bodyHtml.trim()) { flash('That document looks empty — nothing to import.', 'err'); return; }
+        /* Wrap in the standard page shell so the viewer's .page extraction
+           works. Stored under screen.src — the key the viewer reads. */
+        var full = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+          '<link rel="stylesheet" href="../../assets/embedded.css"></head><body>' +
+          '<div class="page">' + bodyHtml + '</div></body></html>';
+        CMS.setHtmlOverride(s.src, full);     /* → cms-supabase upserts to the live DB */
+        flash('✓ Saved from “' + file.name + '” — live on the course now.');
+        renderPreview(s, document.getElementById('am-preview'));
+        /* refresh the Revert button + edited badges */
+        openScreen(courseId, s.id);
+        renderRail();
+      } catch (err) {
+        flash('Could not import that document: ' + (err && err.message ? err.message : err), 'err');
+      }
+    }
+
+    /* ---------- Inline text editor ---------- */
+    async function openEditor(courseId, s) {
+      var ed = document.getElementById('am-editor');
+      if (!ed.hidden) { ed.hidden = true; ed.innerHTML = ''; return; }
+      ed.hidden = false;
+      ed.innerHTML = '<p class="stage-loading">Loading current text…</p>';
+      var bodyHtml = '';
+      try {
+        var ov = CMS.getHtmlOverride(s.src);
+        if (ov != null) bodyHtml = bodyOf(ov);
+        else if (s.type === 'document') {
+          var buf = await fetch(s.src).then(function (r) { return r.arrayBuffer(); });
+          bodyHtml = (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value || '';
+        } else {
+          bodyHtml = bodyOf(await fetch(s.src).then(function (r) { return r.text(); }));
+        }
+      } catch (e) { bodyHtml = '<p>(could not load current text)</p>'; }
+
+      ed.innerHTML =
+        '<label class="am-editor-label">Screen text (HTML — paste, type, formatting is kept)</label>' +
+        '<textarea class="am-editor-area" id="am-ta" spellcheck="false">' + esc(bodyHtml.trim()) + '</textarea>' +
+        '<div class="am-editor-actions">' +
+          '<button class="btn btn-ghost" id="am-ed-close" type="button">Close</button>' +
+          '<button class="btn btn-primary" id="am-ed-save" type="button">💾 Save text</button>' +
+        '</div>';
+      var ta = document.getElementById('am-ta');
+      document.getElementById('am-ed-close').addEventListener('click', function () { ed.hidden = true; ed.innerHTML = ''; });
+      document.getElementById('am-ed-save').addEventListener('click', function () {
+        var full = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+          '<link rel="stylesheet" href="../../assets/embedded.css"></head><body>' +
+          '<div class="page">' + ta.value + '</div></body></html>';
+        CMS.setHtmlOverride(s.src, full);
+        flash('✓ Text saved — live on the course now.');
+        ed.hidden = true; ed.innerHTML = '';
+        renderPreview(s, document.getElementById('am-preview'));
+        openScreen(courseId, s.id);
+        renderRail();
+      });
+    }
+
+    /* ---------- Revert ---------- */
+    function revert(courseId, s) {
+      if (!confirm('Discard the edit for this screen and restore the original content?')) return;
+      try {
+        var all = JSON.parse(localStorage.getItem('matrix-lms:cms:html') || '{}');
+        delete all[s.src];
+        localStorage.setItem('matrix-lms:cms:html', JSON.stringify(all));
+      } catch (e) {}
+      /* Remove from the live DB too, best-effort. */
+      try {
+        if (CMS.supabaseClient) CMS.supabaseClient.from('pages').delete().eq('path', s.src);
+      } catch (e) {}
+      flash('Reverted to the original content.');
+      openScreen(courseId, s.id);
+      renderRail();
+    }
+
+    /* ---------- Boot ---------- */
+    fetch('data/courses.json').then(function (r) { return r.json(); }).then(function (data) {
+      courses = data.courses || [];
+      renderRail();
+      main.innerHTML = '<div class="am-empty"><div class="am-empty-ico">📁</div>' +
+        '<h1>Pick a course on the left</h1>' +
+        '<p>Each course is a folder. Inside, every screen is a file you can preview, edit, or replace with a Word document — saved live, no developer needed.</p></div>';
+    }).catch(function (err) {
+      main.innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
+    });
+  })();
   </script>
 </body>
 </html>
