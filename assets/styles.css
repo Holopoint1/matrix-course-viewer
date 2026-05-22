@@ -4884,26 +4884,29 @@ body.pdf-overlay-open { overflow: hidden; }
 .am-tile-meta { font-size: 0.76rem; color: var(--text-muted); }
 .am-tile-meta em { color: var(--success); font-style: normal; font-weight: 700; }
 
-/* ---- Course open: fixed-height two-pane so nothing shifts ----
-   The shell is a fixed height; the screen sidebar is pinned on the
-   left and the content pane scrolls INSIDE itself. Clicking a screen
-   only changes the content pane — the page never grows / shrinks /
-   jumps, and the screen list stays put. */
+/* ---- Course open: two-pane with a genuinely sticky screen sidebar ----
+   The page scrolls normally. The screen sidebar uses position:sticky so
+   it stays pinned just below the (also sticky) header while you scroll
+   or edit a screen. The grid uses align-items:start so the sidebar keeps
+   its own short height while the row grows with the content pane — that
+   gap is the precondition for sticky to actually engage. Clicking a
+   screen only swaps the content pane; the screen list never moves. */
 .am-course-shell {
   display: grid;
   grid-template-columns: 264px 1fr;
   gap: 1.1rem;
-  height: calc(100vh - 172px);
-  min-height: 440px;
+  align-items: start;
 }
 .am-side {
+  position: sticky;
+  top: calc(var(--header-h) + 0.8rem);
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  max-height: calc(100vh - var(--header-h) - 1.6rem);
 }
 .am-side-head { flex: 0 0 auto; padding: 0.85rem 0.9rem 0.7rem; border-bottom: 1px solid var(--border); }
 .am-back {
@@ -4918,9 +4921,6 @@ body.pdf-overlay-open { overflow: hidden; }
 
 .am-content {
   min-width: 0;
-  height: 100%;
-  overflow-y: auto;
-  padding-right: 0.4rem;
 }
 
 .am-empty { text-align: center; padding: 3rem 1rem; }
@@ -5019,10 +5019,9 @@ body.pdf-overlay-open { overflow: hidden; }
 .am-preview-img img { max-width: 100%; max-height: 520px; border-radius: var(--r-sm); }
 
 @media (max-width: 820px) {
-  /* Stacked on narrow screens — drop the fixed-height two-pane. */
-  .am-course-shell { grid-template-columns: 1fr; height: auto; min-height: 0; }
-  .am-side { height: auto; }
+  /* Stacked on narrow screens — drop sticky; the sidebar sits on top. */
+  .am-course-shell { grid-template-columns: 1fr; }
+  .am-side { position: static; max-height: none; }
   .am-screenlist { max-height: 50vh; }
-  .am-content { height: auto; overflow: visible; padding-right: 0; }
 }
 
