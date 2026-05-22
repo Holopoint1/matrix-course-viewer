@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260548">
+  <link rel="stylesheet" href="assets/styles.css?v=20260549">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260548"></script>
-  <script src="assets/cms-overrides.js?v=20260548"></script>
+  <script src="assets/chrome.js?v=20260549"></script>
+  <script src="assets/cms-overrides.js?v=20260549"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260548"></script>
-  <script src="assets/cms-supabase.js?v=20260548"></script>
+  <script src="assets/supabase-config.js?v=20260549"></script>
+  <script src="assets/cms-supabase.js?v=20260549"></script>
   <script>
   (function () {
     'use strict';
@@ -139,6 +139,12 @@
        screen heading, so a downloaded course re-uploads and matches. */
     function stripScreenPrefix(title) {
       return String(title || '').replace(/^\s*screen\s*\d+\s*[:.\-–—]\s*/i, '').trim();
+    }
+    /* The number from a "Screen N:" heading, or null. This is the most
+       reliable matcher — it survives the title text being renamed. */
+    function screenNumberOf(title) {
+      var m = String(title || '').match(/^\s*screen\s*(\d+)\s*[:.\-–—]/i);
+      return m ? parseInt(m[1], 10) : null;
     }
     /* First embedded picture (a data: URI) inside a chunk of HTML —
        used to populate image screens from a section of an uploaded doc. */
@@ -596,59 +602,63 @@
           return;
         }
         var c = merged(courseId);
-        /* The screens this upload can fill, in course order. */
-        var fillable = (c.screens || []).filter(function (s) {
-          var t = typeOf(s.type); return t.word || t.img;
-        });
+        var allScreens = c.screens || [];
         var byTitle = {};
-        fillable.forEach(function (s) { byTitle[norm(s.title)] = s; });
+        allScreens.forEach(function (s) { byTitle[norm(s.title)] = s; });
 
-        /* Pass 1 — match each section to a screen by title. */
         var used = {}, plan = [];
         sections.forEach(function (sec) {
-          var s = byTitle[norm(stripScreenPrefix(sec.title))] || byTitle[norm(sec.title)];
+          var s = null;
+          /* 1 — by the "Screen N:" number. Most reliable: it survives
+                 the title being renamed and other sections deleted. */
+          var n = screenNumberOf(sec.title);
+          if (n != null && n >= 1 && n <= allScreens.length) s = allScreens[n - 1];
+          /* 2 — by title. */
+          if (!s) s = byTitle[norm(stripScreenPrefix(sec.title))] || byTitle[norm(sec.title)];
           if (s && !used[s.id]) { used[s.id] = true; plan.push({ sec: sec, screen: s }); }
           else plan.push({ sec: sec, screen: null });
         });
-        /* Pass 2 — if the section count matches the screen count this is
-           a clean round-trip, so fill any title-miss positionally from
-           the screens still free, in order. */
-        if (sections.length === fillable.length) {
-          var fi = 0;
-          plan.forEach(function (p) {
-            if (p.screen) return;
-            while (fi < fillable.length && used[fillable[fi].id]) fi++;
-            if (fi < fillable.length) { p.screen = fillable[fi]; used[fillable[fi].id] = true; }
+        /* 3 — clean round-trip (one section per screen, same order):
+               fill any remaining miss by position. */
+        if (sections.length === allScreens.length) {
+          plan.forEach(function (p, i) {
+            if (!p.screen && !used[allScreens[i].id]) { p.screen = allScreens[i]; used[allScreens[i].id] = true; }
           });
         }
-        /* Apply. */
-        var matched = [], unmatched = [];
+
+        /* Apply — three outcomes: updated (text / image content saved),
+           skipped (video / PDF / slides — set by a link, nothing in a
+           document to apply), unmatched (no such screen). */
+        var updated = [], skipped = [], unmatched = [];
         plan.forEach(function (p) {
           if (!p.screen) { unmatched.push(p.sec.title || '(untitled section)'); return; }
           var t = typeOf(p.screen.type);
-          if (t.img) {
-            var data = firstImageData(p.sec.body);
-            if (data) { CMS.setHtmlOverride(p.screen.src, data); matched.push(p.screen.title); }
-            else unmatched.push((p.sec.title || p.screen.title) + ' (no picture in that section)');
-          } else {
+          if (t.word) {
             CMS.setHtmlOverride(p.screen.src, wrapPage(p.sec.body));
-            matched.push(p.screen.title);
+            updated.push(p.screen.title);
+          } else if (t.img) {
+            var data = firstImageData(p.sec.body);
+            if (data) { CMS.setHtmlOverride(p.screen.src, data); updated.push(p.screen.title); }
+            else skipped.push(p.screen.title + ' (image screen — no picture in that section)');
+          } else {
+            skipped.push(p.screen.title + ' (' + t.label + ')');
           }
         });
-        var allFailed = matched.length === 0;
+        var allFailed = updated.length === 0;
         pane.innerHTML =
           '<div class="am-empty"><div class="am-empty-ico">' + (allFailed ? '⚠' : '✓') + '</div>' +
           '<h1>' + (allFailed ? 'Nothing was updated' : 'Course updated') + '</h1>' +
-          '<p><strong>' + matched.length + '</strong> of <strong>' + sections.length +
-            '</strong> section(s) saved to the course' +
-            (unmatched.length ? ' · <strong>' + unmatched.length + '</strong> could not be matched' : '') + '.</p>' +
-          (matched.length ? '<p style="font-size:0.82rem;color:var(--success)">Updated: ' +
-            esc(matched.join(', ')) + '</p>' : '') +
-          (unmatched.length ? '<p style="font-size:0.82rem;color:var(--warn)">Not matched: ' +
-            esc(unmatched.join(', ')) + '</p>' : '') +
+          '<p><strong>' + updated.length + '</strong> screen(s) updated' +
+            (skipped.length ? ' · <strong>' + skipped.length + '</strong> skipped' : '') +
+            (unmatched.length ? ' · <strong>' + unmatched.length + '</strong> not matched' : '') + '.</p>' +
+          (updated.length ? '<p style="font-size:0.82rem;color:var(--success)">Updated: ' +
+            esc(updated.join(', ')) + '</p>' : '') +
+          (skipped.length ? '<p style="font-size:0.82rem;color:var(--text-muted)">Skipped — videos, PDFs ' +
+            'and slideshows are set by their link, not by document text: ' + esc(skipped.join('; ')) + '</p>' : '') +
+          (unmatched.length ? '<p style="font-size:0.82rem;color:var(--warn)">Not matched (no screen with ' +
+            'that number or title): ' + esc(unmatched.join(', ')) + '</p>' : '') +
           (allFailed ? '<p style="font-size:0.82rem;color:var(--text-muted)">Tip: use “Download whole course” ' +
-            'to get a document already in the right format — each screen headed “Screen N: Title” — then edit ' +
-            'that and upload it back.</p>' : '') +
+            'to get a document already in the right format, edit that, and upload it back.</p>' : '') +
           '<button class="btn btn-primary" id="am-back2" type="button">Review screens</button></div>';
         document.getElementById('am-back2').addEventListener('click', function () { openCourse(courseId); });
       } catch (err) {
