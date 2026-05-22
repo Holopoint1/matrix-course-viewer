@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260547">
+  <link rel="stylesheet" href="assets/styles.css?v=20260548">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260547"></script>
-  <script src="assets/cms-overrides.js?v=20260547"></script>
+  <script src="assets/chrome.js?v=20260548"></script>
+  <script src="assets/cms-overrides.js?v=20260548"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260547"></script>
-  <script src="assets/cms-supabase.js?v=20260547"></script>
+  <script src="assets/supabase-config.js?v=20260548"></script>
+  <script src="assets/cms-supabase.js?v=20260548"></script>
   <script>
   (function () {
     'use strict';
@@ -533,7 +533,10 @@
         /* The whole course as one document — each screen is a Heading 1.
            This is the file you edit and re-upload via "Upload whole course". */
         var combined = parts.join('<br clear="all" style="page-break-before:always">');
-        zip.file('Full course - ' + safeName(c.title) + '.doc', wordDoc(c.title, combined));
+        /* Name files with the CP/CO course code up front — several
+           courses share a title, so the code is what tells them apart. */
+        var codeName = safeName((c.code || c.id) + ' - ' + c.title);
+        zip.file(codeName + '.doc', wordDoc((c.code || c.id) + ' ' + c.title, combined));
         zip.file('README.txt',
           'Matrix LMS — course download for ' + (c.code || c.id) + ' ' + c.title + '\n\n' +
           '• screens/  — each screen as its own Word-openable file (text\n' +
@@ -544,33 +547,35 @@
           '  Then use "Upload whole course" in Admin — it splits on those\n' +
           '  headings and refills every screen, pictures and all.\n');
         var blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
-        download(blob, safeName(c.code || c.id) + ' - course.zip');
+        download(blob, codeName + '.zip');
         flash('✓ Course downloaded — ' + c.screens.length + ' screen file(s) + the full-course document.');
       } catch (err) {
         flash('Could not build the course download: ' + esc(err.message || err), 'err');
       }
     }
 
-    /* ---------- Full-course upload — split a Word doc on Heading 1 ---------- */
+    /* ---------- Full-course upload — split a Word doc into screens ---------- */
     function splitOnHeadings(html) {
       var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
       var markerRe = /^\s*screen\s*\d+\s*[:.\-–—]/i;
-      /* Prefer our explicit "Screen N: Title" markers as the screen
-         boundaries — that way a Heading 1 INSIDE a worksheet's own
-         content is never mistaken for a new screen. If the document
-         has no such markers (hand-made), fall back to every H1. */
-      var hasMarkers = Array.prototype.some.call(d.body.querySelectorAll('h1'), function (h) {
-        return markerRe.test(h.textContent || '');
-      });
+      var kids = Array.prototype.filter.call(d.body.childNodes, function (n) { return n.nodeType === 1; });
+      /* A screen boundary is any block whose text starts with
+         "Screen N:" — our download marker. Detected on ANY element,
+         because Word / Google Docs may re-import our <h1> as a heading
+         of a different level or even a styled paragraph. Only if the
+         document has no such markers at all (hand-made) do we fall
+         back to treating every Heading 1 as a boundary. */
+      var anyMarker = kids.some(function (n) { return markerRe.test((n.textContent || '').trim()); });
       var sections = [], curSec = null;
-      Array.prototype.forEach.call(d.body.childNodes, function (node) {
-        var isBoundary = node.nodeType === 1 && node.tagName === 'H1' &&
-          (!hasMarkers || markerRe.test(node.textContent || ''));
+      kids.forEach(function (node) {
+        var isBoundary = anyMarker
+          ? markerRe.test((node.textContent || '').trim())
+          : (node.tagName === 'H1');
         if (isBoundary) {
           curSec = { title: (node.textContent || '').trim(), body: '' };
           sections.push(curSec);
         } else if (curSec) {
-          curSec.body += (node.outerHTML || (node.textContent ? '<p>' + esc(node.textContent) + '</p>' : ''));
+          curSec.body += node.outerHTML || '';
         }
       });
       return sections;
@@ -591,36 +596,59 @@
           return;
         }
         var c = merged(courseId);
-        var byTitle = {};
-        (c.screens || []).forEach(function (s) {
-          var t = typeOf(s.type);
-          if (t.word || t.img) byTitle[norm(s.title)] = s;
+        /* The screens this upload can fill, in course order. */
+        var fillable = (c.screens || []).filter(function (s) {
+          var t = typeOf(s.type); return t.word || t.img;
         });
-        var matched = [], unmatched = [];
+        var byTitle = {};
+        fillable.forEach(function (s) { byTitle[norm(s.title)] = s; });
+
+        /* Pass 1 — match each section to a screen by title. */
+        var used = {}, plan = [];
         sections.forEach(function (sec) {
           var s = byTitle[norm(stripScreenPrefix(sec.title))] || byTitle[norm(sec.title)];
-          if (!s) { unmatched.push(sec.title); return; }
-          var t = typeOf(s.type);
+          if (s && !used[s.id]) { used[s.id] = true; plan.push({ sec: sec, screen: s }); }
+          else plan.push({ sec: sec, screen: null });
+        });
+        /* Pass 2 — if the section count matches the screen count this is
+           a clean round-trip, so fill any title-miss positionally from
+           the screens still free, in order. */
+        if (sections.length === fillable.length) {
+          var fi = 0;
+          plan.forEach(function (p) {
+            if (p.screen) return;
+            while (fi < fillable.length && used[fillable[fi].id]) fi++;
+            if (fi < fillable.length) { p.screen = fillable[fi]; used[fillable[fi].id] = true; }
+          });
+        }
+        /* Apply. */
+        var matched = [], unmatched = [];
+        plan.forEach(function (p) {
+          if (!p.screen) { unmatched.push(p.sec.title || '(untitled section)'); return; }
+          var t = typeOf(p.screen.type);
           if (t.img) {
-            /* Image screen — pull the first embedded picture out of this
-               section and make it the screen's image. */
-            var data = firstImageData(sec.body);
-            if (data) { CMS.setHtmlOverride(s.src, data); matched.push(sec.title); }
-            else unmatched.push(sec.title + ' (no picture found in that section)');
+            var data = firstImageData(p.sec.body);
+            if (data) { CMS.setHtmlOverride(p.screen.src, data); matched.push(p.screen.title); }
+            else unmatched.push((p.sec.title || p.screen.title) + ' (no picture in that section)');
           } else {
-            /* Text screen — its HTML goes in word-for-word; any pictures
-               inside the document were already embedded by the reader. */
-            CMS.setHtmlOverride(s.src, wrapPage(sec.body));
-            matched.push(sec.title);
+            CMS.setHtmlOverride(p.screen.src, wrapPage(p.sec.body));
+            matched.push(p.screen.title);
           }
         });
+        var allFailed = matched.length === 0;
         pane.innerHTML =
-          '<div class="am-empty"><div class="am-empty-ico">' + (matched.length ? '✓' : '⚠') + '</div>' +
-          '<h1>Course uploaded</h1>' +
-          '<p><strong>' + matched.length + '</strong> screen(s) updated and live on the course' +
-          (unmatched.length ? ' · <strong>' + unmatched.length + '</strong> section(s) had no matching screen title' : '') + '.</p>' +
-          (unmatched.length ? '<p style="font-size:0.82rem;color:var(--text-muted)">No match for: ' +
-            esc(unmatched.join(', ')) + ' — section titles must match a screen title exactly.</p>' : '') +
+          '<div class="am-empty"><div class="am-empty-ico">' + (allFailed ? '⚠' : '✓') + '</div>' +
+          '<h1>' + (allFailed ? 'Nothing was updated' : 'Course updated') + '</h1>' +
+          '<p><strong>' + matched.length + '</strong> of <strong>' + sections.length +
+            '</strong> section(s) saved to the course' +
+            (unmatched.length ? ' · <strong>' + unmatched.length + '</strong> could not be matched' : '') + '.</p>' +
+          (matched.length ? '<p style="font-size:0.82rem;color:var(--success)">Updated: ' +
+            esc(matched.join(', ')) + '</p>' : '') +
+          (unmatched.length ? '<p style="font-size:0.82rem;color:var(--warn)">Not matched: ' +
+            esc(unmatched.join(', ')) + '</p>' : '') +
+          (allFailed ? '<p style="font-size:0.82rem;color:var(--text-muted)">Tip: use “Download whole course” ' +
+            'to get a document already in the right format — each screen headed “Screen N: Title” — then edit ' +
+            'that and upload it back.</p>' : '') +
           '<button class="btn btn-primary" id="am-back2" type="button">Review screens</button></div>';
         document.getElementById('am-back2').addEventListener('click', function () { openCourse(courseId); });
       } catch (err) {
