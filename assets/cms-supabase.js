@@ -65,7 +65,7 @@
       (screens || []).forEach(function (s) {
         (sOv[s.course_id] = sOv[s.course_id] || {})[s.id] = {
           title: s.title, hours: s.hours, equipment: s.equipment,
-          type: s.type, src: s.src, missing: !!s.missing
+          type: s.type, src: s.src, missing: !!s.missing, position: s.position
         };
       });
       (pages || []).forEach(function (p) { if (p && p.path != null) hOv[p.path] = p.html || ''; });
@@ -157,7 +157,7 @@
   });
   wrap('setScreenOverride', function (courseId, screenId, patch) {
     var p = patch || {}, row = { id: screenId, course_id: courseId };
-    ['title', 'hours', 'equipment', 'type', 'src', 'missing'].forEach(function (k) {
+    ['title', 'hours', 'equipment', 'type', 'src', 'missing', 'position'].forEach(function (k) {
       if (p[k] !== undefined) row[k] = p[k];
     });
     if (Object.keys(row).length > 2) push('screens', row);

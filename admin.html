@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260552">
+  <link rel="stylesheet" href="assets/styles.css?v=20260553">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260552"></script>
-  <script src="assets/cms-overrides.js?v=20260552"></script>
+  <script src="assets/chrome.js?v=20260553"></script>
+  <script src="assets/cms-overrides.js?v=20260553"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260552"></script>
-  <script src="assets/cms-supabase.js?v=20260552"></script>
+  <script src="assets/supabase-config.js?v=20260553"></script>
+  <script src="assets/cms-supabase.js?v=20260553"></script>
   <script>
   (function () {
     'use strict';
@@ -674,37 +674,60 @@
           });
         }
 
-        /* Apply — three outcomes: updated (text / image content saved),
-           skipped (video / PDF / slides — set by a link, nothing in a
-           document to apply), unmatched (no such screen). */
-        var updated = [], skipped = [], unmatched = [];
+        /* Apply — outcomes: updated (existing screen content saved),
+           added (a "Screen N" beyond the course → a brand-new screen
+           created), skipped (video / PDF / slides — set by a link),
+           unmatched (no such screen, couldn't place it). */
+        var updated = [], added = [], skipped = [], unmatched = [];
+        var newPos = allScreens.length;
         plan.forEach(function (p) {
-          if (!p.screen) { unmatched.push(p.sec.title || '(untitled section)'); return; }
-          var t = typeOf(p.screen.type);
-          if (t.word) {
-            CMS.setHtmlOverride(p.screen.src, wrapPage(p.sec.body));
-            updated.push(p.screen.title);
-          } else if (t.img) {
-            var data = firstImageData(p.sec.body);
-            if (data) { CMS.setHtmlOverride(p.screen.src, data); updated.push(p.screen.title); }
-            else skipped.push(p.screen.title + ' (image screen — no picture in that section)');
+          if (p.screen) {
+            var t = typeOf(p.screen.type);
+            if (t.word) {
+              CMS.setHtmlOverride(p.screen.src, wrapPage(p.sec.body));
+              updated.push(p.screen.title);
+            } else if (t.img) {
+              var data = firstImageData(p.sec.body);
+              if (data) { CMS.setHtmlOverride(p.screen.src, data); updated.push(p.screen.title); }
+              else skipped.push(p.screen.title + ' (image screen — no picture in that section)');
+            } else {
+              skipped.push(p.screen.title + ' (' + t.label + ')');
+            }
+            return;
+          }
+          /* No existing screen. If the section carries a "Screen N"
+             number beyond the course's current length, the editor
+             added a new screen on purpose — so create it. */
+          var n = screenNumberOf(p.sec.title);
+          if (n != null && n > allScreens.length) {
+            var newTitle = stripScreenPrefix(p.sec.title) || ('Screen ' + n);
+            var newId = 'add-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+            var newSrc = 'content/' + (c.code || c.id) + '/' + newId + '.html';
+            newPos += 1;
+            CMS.setScreenOverride(courseId, newId, { title: newTitle, type: 'html', src: newSrc, position: newPos });
+            CMS.setHtmlOverride(newSrc, wrapPage(p.sec.body));
+            added.push(newTitle);
           } else {
-            skipped.push(p.screen.title + ' (' + t.label + ')');
+            unmatched.push(p.sec.title || '(untitled section)');
           }
         });
-        var allFailed = updated.length === 0;
+        var allFailed = updated.length === 0 && added.length === 0;
         pane.innerHTML =
           '<div class="am-empty"><div class="am-empty-ico">' + (allFailed ? '⚠' : '✓') + '</div>' +
           '<h1>' + (allFailed ? 'Nothing was updated' : 'Course updated') + '</h1>' +
           '<p><strong>' + updated.length + '</strong> screen(s) updated' +
+            (added.length ? ' · <strong>' + added.length + '</strong> new screen(s) added' : '') +
             (skipped.length ? ' · <strong>' + skipped.length + '</strong> skipped' : '') +
             (unmatched.length ? ' · <strong>' + unmatched.length + '</strong> not matched' : '') + '.</p>' +
           (updated.length ? '<p style="font-size:0.82rem;color:var(--success)">Updated: ' +
             esc(updated.join(', ')) + '</p>' : '') +
+          (added.length ? '<p style="font-size:0.82rem;color:var(--success)">Added as new screens: ' +
+            esc(added.join(', ')) + '</p>' : '') +
           (skipped.length ? '<p style="font-size:0.82rem;color:var(--text-muted)">Skipped — videos, PDFs ' +
             'and slideshows are set by their link, not by document text: ' + esc(skipped.join('; ')) + '</p>' : '') +
-          (unmatched.length ? '<p style="font-size:0.82rem;color:var(--warn)">Not matched (no screen with ' +
-            'that number or title): ' + esc(unmatched.join(', ')) + '</p>' : '') +
+          (unmatched.length ? '<p style="font-size:0.82rem;color:var(--warn)">Not matched: ' +
+            esc(unmatched.join(', ')) + ' — to ADD a screen, head it with the next free number, ' +
+            'e.g. “Screen ' + (allScreens.length + 1) + ': …”.</p>' : '') +
           (allFailed ? '<p style="font-size:0.82rem;color:var(--text-muted)">Tip: use “Download whole course” ' +
             'to get a document already in the right format, edit that, and upload it back.</p>' : '') +
           '<button class="btn btn-primary" id="am-back2" type="button">Review screens</button></div>';

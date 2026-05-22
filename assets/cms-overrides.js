@@ -77,10 +77,21 @@
     const courseOverride = getCourseOverride(course.id);
     const screenOverrides = getScreenOverrides(course.id);
     const merged = Object.assign({}, course, courseOverride || {});
+    const origIds = {};
+    (course.screens || []).forEach((s) => { origIds[s.id] = true; });
     merged.screens = (course.screens || []).map((s) => {
       const o = screenOverrides[s.id];
       return o ? Object.assign({}, s, o) : s;
     });
+    /* Screens ADDED through the admin (e.g. a course upload that
+       included an extra "Screen N" section) live in the overrides but
+       not in the original courses.json. Append them, ordered by the
+       position they were given. */
+    const added = Object.keys(screenOverrides)
+      .filter((id) => !origIds[id] && screenOverrides[id] && screenOverrides[id].src)
+      .map((id) => Object.assign({ id: id }, screenOverrides[id]))
+      .sort((a, b) => (a.position || 0) - (b.position || 0));
+    if (added.length) merged.screens = merged.screens.concat(added);
     return merged;
   }
 
