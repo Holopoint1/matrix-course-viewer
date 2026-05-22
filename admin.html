@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260550">
+  <link rel="stylesheet" href="assets/styles.css?v=20260551">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260550"></script>
-  <script src="assets/cms-overrides.js?v=20260550"></script>
+  <script src="assets/chrome.js?v=20260551"></script>
+  <script src="assets/cms-overrides.js?v=20260551"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260550"></script>
-  <script src="assets/cms-supabase.js?v=20260550"></script>
+  <script src="assets/supabase-config.js?v=20260551"></script>
+  <script src="assets/cms-supabase.js?v=20260551"></script>
   <script>
   (function () {
     'use strict';
@@ -404,7 +404,7 @@
       var s = c.screens[idx];
       var t = typeOf(s.type);
       /* Don't rebuild the list — just move the active row and refresh this
-         row in case its content / title changed (import, edit, revert). */
+         row in case its content / title changed (import, edit). */
       markActiveScreen(screenId);
       syncScreenListItem(courseId, screenId);
 
@@ -418,7 +418,6 @@
             '<button class="btn btn-primary" id="am-upload-btn" type="button">Upload Word file…</button>' +
             '<button class="btn btn-secondary" id="am-edit-btn" type="button">✎ Edit like a document</button>' +
             '<button class="btn btn-secondary" id="am-dl-btn" type="button">⤓ Download Word</button>' +
-            (isEdited(s) ? '<button class="btn btn-ghost" id="am-revert-btn" type="button">↩ Revert</button>' : '') +
           '</div></div>';
       } else if (t.img) {
         actions = '<div class="am-replace" id="am-zone">' +
@@ -427,7 +426,6 @@
           '<input type="file" id="am-imgfile" accept="image/*" hidden>' +
           '<div class="am-replace-actions">' +
             '<button class="btn btn-primary" id="am-img-btn" type="button">Upload image…</button>' +
-            (isEdited(s) ? '<button class="btn btn-ghost" id="am-revert-btn" type="button">↩ Revert</button>' : '') +
           '</div></div>';
       } else {
         actions = '<div class="am-replace am-replace-readonly"><div class="am-replace-info">' +
@@ -472,9 +470,6 @@
         imgInput.addEventListener('change', function () { if (imgInput.files[0]) uploadImage(imgInput.files[0], courseId, s); });
         wireDrop('am-zone', /^image\//i, function (f) { uploadImage(f, courseId, s); }, true);
       }
-      var rev = document.getElementById('am-revert-btn');
-      if (rev) rev.addEventListener('click', function () { revert(courseId, s); });
-
       renderPreview(s, document.getElementById('am-preview'));
     }
 
@@ -792,22 +787,6 @@
         host.dataset.open = '0'; host.innerHTML = '';
         openScreen(courseId, s.id, 'replace');
       });
-    }
-
-    /* ---------- Revert ---------- */
-    function revert(courseId, s) {
-      if (!confirm('Discard the edit for this screen and restore the original content?')) return;
-      try {
-        var all = JSON.parse(localStorage.getItem('matrix-lms:cms:html') || '{}');
-        delete all[s.src];
-        localStorage.setItem('matrix-lms:cms:html', JSON.stringify(all));
-        var dirty = JSON.parse(localStorage.getItem('matrix-lms:cms:dirty') || '{}');
-        delete dirty[s.src];
-        localStorage.setItem('matrix-lms:cms:dirty', JSON.stringify(dirty));
-      } catch (e) {}
-      try { if (CMS.supabaseClient) CMS.supabaseClient.from('pages').delete().eq('path', s.src); } catch (e) {}
-      flash('Reverted to the original content.');
-      openScreen(courseId, s.id);
     }
 
     /* ---------- Boot ---------- */
