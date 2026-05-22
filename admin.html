@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260542">
+  <link rel="stylesheet" href="assets/styles.css?v=20260543">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260542"></script>
-  <script src="assets/cms-overrides.js?v=20260542"></script>
+  <script src="assets/chrome.js?v=20260543"></script>
+  <script src="assets/cms-overrides.js?v=20260543"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260542"></script>
-  <script src="assets/cms-supabase.js?v=20260542"></script>
+  <script src="assets/supabase-config.js?v=20260543"></script>
+  <script src="assets/cms-supabase.js?v=20260543"></script>
   <script>
   (function () {
     'use strict';
@@ -293,15 +293,10 @@
         '<div id="am-editor-host"></div>' +
         '<div class="am-preview-wrap"><div class="am-preview-label">Preview — exactly as learners see it</div>' +
           '<div class="am-preview" id="am-preview"><p class="stage-loading">Rendering&hellip;</p></div></div>';
-      /* Page scrolls normally now (the sidebar is position:sticky). When the
-         user picks another screen, bring the shell top back under the header
-         so the new screen starts from the top — without ever moving the
-         sticky screen list. */
-      var shell = document.querySelector('.am-course-shell');
-      if (shell) {
-        var y = shell.getBoundingClientRect().top + window.pageYOffset - 72;
-        if (window.pageYOffset > y) window.scrollTo(0, Math.max(0, y));
-      }
+      /* The content pane is a fixed height and scrolls internally, so the
+         page never resizes between screens. Just reset the pane to its
+         top so each newly-opened screen starts from the beginning. */
+      pane.scrollTop = 0;
 
       document.getElementById('am-title').addEventListener('change', function () {
         CMS.setScreenOverride(courseId, s.id, { title: this.value.trim() });
