@@ -29,6 +29,7 @@
   var KEY_COURSES = 'matrix-lms:cms:courses';
   var KEY_SCREENS = 'matrix-lms:cms:screens';
   var KEY_HTML    = 'matrix-lms:cms:html';
+  var KEY_DIRTY   = 'matrix-lms:cms:dirty';   /* page paths edited locally, awaiting a confirmed Supabase save */
   var SYNC_FLAG   = 'matrix-sb-synced';
 
   var sb;
@@ -69,6 +70,16 @@
       });
       (pages || []).forEach(function (p) { if (p && p.path != null) hOv[p.path] = p.html || ''; });
 
+      /* Keep any page edited locally but not yet CONFIRMED saved to
+         Supabase — otherwise this pull wipes an edit that is still
+         syncing (or whose push failed / lost the race). Once the push
+         succeeds the path is cleared from KEY_DIRTY and the remote
+         copy is allowed to win again. */
+      var dirty = readJSON(KEY_DIRTY);
+      var localHtml = readJSON(KEY_HTML);
+      Object.keys(dirty).forEach(function (path) {
+        if (Object.prototype.hasOwnProperty.call(localHtml, path)) hOv[path] = localHtml[path];
+      });
       var prev = localStorage.getItem(KEY_HTML) || '';
       writeJSON(KEY_COURSES, cOv);
       writeJSON(KEY_SCREENS, sOv);
@@ -112,7 +123,14 @@
     _timers[key] = setTimeout(function () {
       sb.from(table).upsert(payload).then(function (res) {
         if (res && res.error) { console.warn('[cms-supabase]', table, res.error.message); emit({ ok: false, table: table, error: res.error.message }); }
-        else emit({ ok: true, table: table });
+        else {
+          /* Confirmed in Supabase — a later pull may now safely take the
+             remote copy of this page back. */
+          if (table === 'pages' && payload.path) {
+            try { var d = readJSON(KEY_DIRTY); delete d[payload.path]; writeJSON(KEY_DIRTY, d); } catch (_) {}
+          }
+          emit({ ok: true, table: table });
+        }
       }, function (e) {
         var m = (e && e.message) ? e.message : String(e);
         console.warn('[cms-supabase]', table, m); emit({ ok: false, table: table, error: m });
@@ -145,6 +163,9 @@
     if (Object.keys(row).length > 2) push('screens', row);
   });
   wrap('setHtmlOverride', function (path, html) {
+    /* Mark the page locally-edited so a concurrent / subsequent pull
+       can't overwrite it before Supabase confirms the save. */
+    try { var d = readJSON(KEY_DIRTY); d[path] = 1; writeJSON(KEY_DIRTY, d); } catch (_) {}
     push('pages', { path: path, html: html });
   });
 
