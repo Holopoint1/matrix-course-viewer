@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260543">
+  <link rel="stylesheet" href="assets/styles.css?v=20260544">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260543"></script>
-  <script src="assets/cms-overrides.js?v=20260543"></script>
+  <script src="assets/chrome.js?v=20260544"></script>
+  <script src="assets/cms-overrides.js?v=20260544"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260543"></script>
-  <script src="assets/cms-supabase.js?v=20260543"></script>
+  <script src="assets/supabase-config.js?v=20260544"></script>
+  <script src="assets/cms-supabase.js?v=20260544"></script>
   <script>
   (function () {
     'use strict';
@@ -135,9 +135,45 @@
       throw new Error('Unsupported file — use .docx or .doc');
     }
 
+    /* ========== URL routing ==========
+       Each view has its own address, so a refresh, a bookmark or a
+       shared link reopens exactly where you were:
+         admin.html                          → catalog
+         admin.html?course=CO0001            → that course
+         admin.html?course=CO0001&screen=s3  → that screen
+       mode: 'push' = new history entry (Back works), 'replace' =
+       update in place, 'none' = don't touch history (popstate). */
+    function buildUrl(courseId, screenId) {
+      var u = location.pathname.split('/').pop() || 'admin.html';
+      if (courseId) {
+        u += '?course=' + encodeURIComponent(courseId);
+        if (screenId) u += '&screen=' + encodeURIComponent(screenId);
+      }
+      return u;
+    }
+    function setUrl(courseId, screenId, mode) {
+      if (mode === 'none') return;
+      var url = buildUrl(courseId, screenId);
+      var here = (location.pathname.split('/').pop() || 'admin.html') + location.search;
+      var st = { courseId: courseId || null, screenId: screenId || null };
+      try {
+        if (mode === 'push' && url !== here) history.pushState(st, '', url);
+        else history.replaceState(st, '', url);
+      } catch (e) {}
+    }
+    function routeFromUrl(mode) {
+      if (!courses) return;
+      var p = new URLSearchParams(location.search);
+      var courseId = p.get('course');
+      var screenId = p.get('screen');
+      if (courseId && getCourse(courseId)) openCourse(courseId, screenId || null, mode);
+      else renderCatalog(mode);
+    }
+
     /* ========== View 1: catalog ========== */
-    function renderCatalog() {
+    function renderCatalog(mode) {
       cur.courseId = null; cur.screenId = null;
+      document.body.classList.remove('am-course-mode');
       var tiles = courses.map(function (c) {
         var scr = c.screens || [];
         var edited = scr.filter(function (s) { return isEdited(s); }).length;
@@ -155,13 +191,15 @@
       main.querySelectorAll('[data-course]').forEach(function (b) {
         b.addEventListener('click', function () { openCourse(b.dataset.course); });
       });
+      setUrl(null, null, mode || 'push');
     }
 
     /* ========== View 2: course open ========== */
-    function openCourse(courseId, screenId) {
+    function openCourse(courseId, screenId, mode) {
       cur.courseId = courseId;
       var c = merged(courseId);
-      if (!c) { renderCatalog(); return; }
+      if (!c) { renderCatalog('replace'); return; }
+      document.body.classList.add('am-course-mode');
       main.innerHTML =
         '<div class="am-course-shell">' +
           '<aside class="am-side">' +
@@ -179,16 +217,20 @@
           '</aside>' +
           '<div class="am-content" id="am-content"></div>' +
         '</div>';
-      main.querySelector('[data-back]').addEventListener('click', renderCatalog);
+      main.querySelector('[data-back]').addEventListener('click', function () { renderCatalog('push'); });
       document.getElementById('am-dl-course').addEventListener('click', function () { downloadCourse(courseId); });
       var cf = document.getElementById('am-course-file');
       document.getElementById('am-ul-course').addEventListener('click', function () { cf.click(); });
       cf.addEventListener('change', function () { if (cf.files[0]) uploadCourse(cf.files[0], courseId); });
       renderScreenList(c);
-      if (screenId) openScreen(courseId, screenId);
-      else document.getElementById('am-content').innerHTML =
-        '<div class="am-empty"><div class="am-empty-ico">👈</div><h1>Pick a screen</h1>' +
-        '<p>Choose a screen in the sidebar to preview it, edit it like a document, or replace it with a Word file. Or download / upload the whole course at once.</p></div>';
+      if (screenId && (c.screens || []).some(function (x) { return x.id === screenId; })) {
+        openScreen(courseId, screenId, mode);
+      } else {
+        setUrl(courseId, null, mode || 'push');
+        document.getElementById('am-content').innerHTML =
+          '<div class="am-empty"><div class="am-empty-ico">👈</div><h1>Pick a screen</h1>' +
+          '<p>Choose a screen in the sidebar to preview it, edit it like a document, or replace it with a Word file. Or download / upload the whole course at once.</p></div>';
+      }
     }
 
     function renderScreenList(c) {
@@ -242,8 +284,9 @@
     }
 
     /* ========== Screen content pane ========== */
-    function openScreen(courseId, screenId) {
+    function openScreen(courseId, screenId, mode) {
       cur.screenId = screenId;
+      setUrl(courseId, screenId, mode || 'push');
       var c = merged(courseId);
       var idx = (c.screens || []).findIndex(function (s) { return s.id === screenId; });
       var s = c.screens[idx];
@@ -379,7 +422,7 @@
         if (!bodyHtml.trim()) { flash('That file looks empty — nothing to import.', 'err'); return; }
         CMS.setHtmlOverride(s.src, wrapPage(bodyHtml));
         flash('✓ Saved from “' + esc(file.name) + '” — live on the course now.');
-        openScreen(courseId, s.id);
+        openScreen(courseId, s.id, 'replace');
       } catch (err) {
         flash('Could not import that file: ' + esc(err.message || err), 'err');
       }
@@ -501,7 +544,7 @@
       fr.onload = function () {
         CMS.setHtmlOverride(s.src, String(fr.result));
         flash('✓ Image updated — live on the course now.');
-        openScreen(courseId, s.id);
+        openScreen(courseId, s.id, 'replace');
       };
       fr.onerror = function () { flash('Could not read that image.', 'err'); };
       fr.readAsDataURL(file);
@@ -563,7 +606,7 @@
         CMS.setHtmlOverride(s.src, wrapPage(doc.innerHTML));
         flash('✓ Saved — live on the course now.');
         host.dataset.open = '0'; host.innerHTML = '';
-        openScreen(courseId, s.id);
+        openScreen(courseId, s.id, 'replace');
       });
     }
 
@@ -581,9 +624,12 @@
     }
 
     /* ---------- Boot ---------- */
+    /* Back / Forward re-render the matching view without touching history. */
+    window.addEventListener('popstate', function () { routeFromUrl('none'); });
+
     fetch('data/courses.json').then(function (r) { return r.json(); }).then(function (data) {
       courses = data.courses || [];
-      renderCatalog();
+      routeFromUrl('replace');
     }).catch(function (err) {
       main.innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
     });
