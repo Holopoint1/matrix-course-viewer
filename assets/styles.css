@@ -5012,10 +5012,12 @@ body.am-course-mode { overflow: hidden; }
 /* ---- Preview ---- */
 .am-preview-wrap { border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
 .am-preview-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
   font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase;
   font-weight: 800; color: var(--text-subtle);
-  padding: 0.55rem 0.9rem; background: var(--surface-2); border-bottom: 1px solid var(--border);
+  padding: 0.4rem 0.5rem 0.4rem 0.9rem; background: var(--surface-2); border-bottom: 1px solid var(--border);
 }
+.am-preview-save { text-transform: none; letter-spacing: normal; font-size: 0.8rem; padding: 0.32rem 0.8rem; }
 .am-preview { padding: 1rem; background: #f4f6fb; }
 .am-preview .stage-doc { padding: 0; background: transparent; }
 .am-preview-frame { width: 100%; height: 560px; border: none; background: #fff; border-radius: var(--r-sm); }

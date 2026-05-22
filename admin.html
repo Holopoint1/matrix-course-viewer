@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260551">
+  <link rel="stylesheet" href="assets/styles.css?v=20260552">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260551"></script>
-  <script src="assets/cms-overrides.js?v=20260551"></script>
+  <script src="assets/chrome.js?v=20260552"></script>
+  <script src="assets/cms-overrides.js?v=20260552"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260551"></script>
-  <script src="assets/cms-supabase.js?v=20260551"></script>
+  <script src="assets/supabase-config.js?v=20260552"></script>
+  <script src="assets/cms-supabase.js?v=20260552"></script>
   <script>
   (function () {
     'use strict';
@@ -444,7 +444,10 @@
         '</div>' + actions +
         '<div class="am-status" id="am-status" hidden></div>' +
         '<div id="am-editor-host"></div>' +
-        '<div class="am-preview-wrap"><div class="am-preview-label">Preview — exactly as learners see it</div>' +
+        '<div class="am-preview-wrap"><div class="am-preview-label">' +
+          '<span>Preview — exactly as learners see it</span>' +
+          (t.word ? '<button class="btn btn-primary am-preview-save" id="am-preview-save" type="button" hidden>💾 Save changes</button>' : '') +
+          '</div>' +
           '<div class="am-preview" id="am-preview"><p class="stage-loading">Rendering&hellip;</p></div></div>';
       /* The content pane is a fixed height and scrolls internally, so the
          page never resizes between screens. Just reset the pane to its
@@ -739,7 +742,12 @@
     ];
     async function openEditor(courseId, s) {
       var host = document.getElementById('am-editor-host');
-      if (host.dataset.open === '1') { host.dataset.open = '0'; host.innerHTML = ''; return; }
+      if (host.dataset.open === '1') {
+        host.dataset.open = '0'; host.innerHTML = '';
+        var ps = document.getElementById('am-preview-save');
+        if (ps) ps.hidden = true;
+        return;
+      }
       host.dataset.open = '1';
       host.innerHTML = '<div class="am-editor"><p class="stage-loading" style="padding:1rem">Loading…</p></div>';
       var bodyHtml = '';
@@ -780,13 +788,21 @@
         fr.onload = function () { doc.focus(); document.execCommand('insertImage', false, String(fr.result)); };
         fr.readAsDataURL(f); e.target.value = '';
       });
-      document.getElementById('am-ed-close').addEventListener('click', function () { host.dataset.open = '0'; host.innerHTML = ''; });
-      document.getElementById('am-ed-save').addEventListener('click', function () {
+      var topSave = document.getElementById('am-preview-save');
+      function closeEditor() {
+        host.dataset.open = '0'; host.innerHTML = '';
+        if (topSave) topSave.hidden = true;
+      }
+      function saveEditor() {
         CMS.setHtmlOverride(s.src, wrapPage(doc.innerHTML));
         flash('✓ Saved — live on the course now.');
-        host.dataset.open = '0'; host.innerHTML = '';
+        closeEditor();
         openScreen(courseId, s.id, 'replace');
-      });
+      }
+      document.getElementById('am-ed-close').addEventListener('click', closeEditor);
+      document.getElementById('am-ed-save').addEventListener('click', saveEditor);
+      /* Mirror Save onto the Preview bar so it's reachable from the top. */
+      if (topSave) { topSave.hidden = false; topSave.onclick = saveEditor; }
     }
 
     /* ---------- Boot ---------- */
