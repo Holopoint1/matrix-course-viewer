@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260549">
+  <link rel="stylesheet" href="assets/styles.css?v=20260550">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260549"></script>
-  <script src="assets/cms-overrides.js?v=20260549"></script>
+  <script src="assets/chrome.js?v=20260550"></script>
+  <script src="assets/cms-overrides.js?v=20260550"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260549"></script>
-  <script src="assets/cms-supabase.js?v=20260549"></script>
+  <script src="assets/supabase-config.js?v=20260550"></script>
+  <script src="assets/cms-supabase.js?v=20260550"></script>
   <script>
   (function () {
     'use strict';
@@ -47,13 +47,53 @@
         '<link rel="stylesheet" href="../../assets/embedded.css"></head><body>' +
         '<div class="page">' + bodyHtml + '</div></body></html>';
     }
-    /* A Word-openable .doc (HTML-flavoured) — opens in Word AND Google Docs,
-       fully editable, and re-uploads cleanly (the importer accepts it). */
-    function wordDoc(title, bodyHtml) {
-      return '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
-        'xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
-        '<head><meta charset="utf-8"><title>' + esc(title) + '</title></head><body>' +
-        bodyHtml + '</body></html>';
+    /* A full HTML document — the body Word converts inside the .docx. */
+    function fullHtmlDoc(bodyHtml, title) {
+      return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + esc(title || '') + '</title>' +
+        '<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.4;}' +
+        'h1{font-size:16pt;}h2{font-size:13pt;}h3{font-size:12pt;}' +
+        'table{border-collapse:collapse;}td,th{border:1px solid #999;padding:4px;}' +
+        'img{max-width:100%;height:auto;}</style></head><body>' +
+        String(bodyHtml || '') + '</body></html>';
+    }
+    /* Build a REAL .docx (OOXML) — a minimal Word package whose body is one
+       altChunk pointing at the embedded HTML. Word converts it to native
+       content on open AND saves it back as a clean .docx, so the
+       download → edit-in-Word → re-upload round trip works. (Ported from
+       the Tools-page Word builder.) */
+    function htmlToDocxBlob(html) {
+      var z = new JSZip();
+      z.file('[Content_Types].xml',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+        '<Override PartName="/word/afchunk.html" ContentType="text/html"/>' +
+        '</Types>');
+      z.file('_rels/.rels',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+        '</Relationships>');
+      z.file('word/document.xml',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ' +
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+        '<w:body><w:altChunk r:id="htmlChunk"/>' +
+        '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
+        '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"/></w:sectPr>' +
+        '</w:body></w:document>');
+      z.file('word/_rels/document.xml.rels',
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="htmlChunk" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk" Target="afchunk.html"/>' +
+        '</Relationships>');
+      z.file('word/afchunk.html', String(html || ''));
+      return z.generateAsync({
+        type: 'blob',
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      });
     }
     function download(blob, name) {
       var url = URL.createObjectURL(blob);
@@ -122,17 +162,24 @@
       return '';
     }
 
-    /* Read an uploaded file → body HTML. Accepts .docx (mammoth, verbatim)
-       and .doc / .htm / .html (our Word-flavoured exports). No AI. */
+    /* Read an uploaded file → body HTML. Sniffs the actual CONTENT, not
+       the extension — so a .docx works even if mis-named, and an old
+       binary .doc gets a clear, actionable error instead of garbage.
+       No AI: .docx is read verbatim by mammoth, HTML is parsed as-is. */
     async function fileToHtml(file) {
-      if (/\.docx$/i.test(file.name)) {
-        var buf = await file.arrayBuffer();
+      var buf = await file.arrayBuffer();
+      var b = new Uint8Array(buf);
+      /* "PK" — a ZIP, i.e. a real .docx — read verbatim with mammoth. */
+      if (b[0] === 0x50 && b[1] === 0x4B) {
         return (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value || '';
       }
-      if (/\.(doc|html?)$/i.test(file.name)) {
-        return bodyOf(await file.text());
+      /* OLE2 magic — an old binary .doc that mammoth cannot read. */
+      if (b[0] === 0xD0 && b[1] === 0xCF && b[2] === 0x11 && b[3] === 0xE0) {
+        throw new Error('That is an old-format Word .doc. In Word choose ' +
+          'File ▸ Save As and pick “Word Document (.docx)”, then upload that .docx.');
       }
-      throw new Error('Unsupported file — use .docx or .doc');
+      /* Otherwise treat it as HTML / text (our exports, .htm pages). */
+      return bodyOf(new TextDecoder('utf-8').decode(buf));
     }
 
     /* Strip the "Screen N:" prefix our course downloads put on each
@@ -493,14 +540,14 @@
       }
     }
 
-    /* ---------- Per-screen download (Word-openable .doc) ---------- */
+    /* ---------- Per-screen download (real Word .docx) ---------- */
     async function downloadScreen(s, idx) {
       flash('Preparing the Word file…');
       try {
-        var body = await getScreenBody(s);
-        download(new Blob([wordDoc(s.title, body)], { type: 'application/msword' }),
-          pad2(idx + 1) + ' - ' + safeName(s.title) + '.doc');
-        flash('✓ Downloaded — open it in Word or Google Docs, edit, then upload it back.');
+        var body = markScreen(await getScreenBody(s), s.title, s.title);
+        var blob = await htmlToDocxBlob(fullHtmlDoc(body, s.title));
+        download(blob, pad2(idx + 1) + ' - ' + safeName(s.title) + '.docx');
+        flash('✓ Downloaded as Word .docx — open it in Word, edit, then upload it back.');
       } catch (err) {
         flash('Could not build the Word file: ' + esc(err.message || err), 'err');
       }
@@ -526,32 +573,35 @@
             content = '<p><em>[' + esc(t.label) + ' screen — link kept as-is: ' +
               esc(s.src || '') + ']</em></p>';
           }
-          /* Per-screen file: exactly ONE plain title heading. */
+          /* Per-screen file: a real .docx, exactly ONE plain title heading. */
           if (t.word || t.img) {
-            zip.file('screens/' + pad2(i + 1) + ' - ' + safeName(s.title) + '.doc',
-              wordDoc(s.title, markScreen(content, s.title, s.title)));
+            zip.file('screens/' + pad2(i + 1) + ' - ' + safeName(s.title) + '.docx',
+              await htmlToDocxBlob(fullHtmlDoc(markScreen(content, s.title, s.title), s.title)));
           }
           /* Combined doc: exactly ONE heading per screen, "Screen N:
              Title" — the obvious editing label AND the re-upload split
              boundary. No more title-then-title repetition. */
           parts.push(markScreen(content, 'Screen ' + (i + 1) + ': ' + s.title, s.title));
         }
-        /* The whole course as one document — each screen is a Heading 1.
-           This is the file you edit and re-upload via "Upload whole course". */
-        var combined = parts.join('<br clear="all" style="page-break-before:always">');
+        /* The whole course as one real .docx — each screen a "Screen N:"
+           heading. This is the file you edit and re-upload. */
+        var combined = parts.join('<br style="page-break-before:always">');
         /* Name files with the CP/CO course code up front — several
            courses share a title, so the code is what tells them apart. */
         var codeName = safeName((c.code || c.id) + ' - ' + c.title);
-        zip.file(codeName + '.doc', wordDoc((c.code || c.id) + ' ' + c.title, combined));
+        zip.file(codeName + '.docx',
+          await htmlToDocxBlob(fullHtmlDoc(combined, (c.code || c.id) + ' ' + c.title)));
         zip.file('README.txt',
           'Matrix LMS — course download for ' + (c.code || c.id) + ' ' + c.title + '\n\n' +
-          '• screens/  — each screen as its own Word-openable file (text\n' +
-          '  screens and image screens; pictures are embedded in the file).\n' +
-          '• Full course - ....doc — the whole course in ONE document. Each\n' +
-          '  screen begins with a heading "Screen N: Title". Edit anything\n' +
-          '  below a heading; keep the "Screen N: Title" lines as they are.\n' +
+          '• screens/  — each screen as its own Word .docx (text screens and\n' +
+          '  image screens; pictures are embedded in the file).\n' +
+          '• ' + codeName + '.docx — the whole course in ONE Word document.\n' +
+          '  Each screen begins with a heading "Screen N: Title". Edit\n' +
+          '  anything below a heading; keep the "Screen N: Title" lines.\n' +
           '  Then use "Upload whole course" in Admin — it splits on those\n' +
-          '  headings and refills every screen, pictures and all.\n');
+          '  headings and refills every screen, pictures and all.\n\n' +
+          'Open and save these in Microsoft Word as .docx (do NOT save as the\n' +
+          'old .doc format). Google Docs: use File > Download > .docx.\n');
         var blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
         download(blob, codeName + '.zip');
         flash('✓ Course downloaded — ' + c.screens.length + ' screen file(s) + the full-course document.');
