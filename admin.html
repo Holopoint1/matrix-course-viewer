@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260545">
+  <link rel="stylesheet" href="assets/styles.css?v=20260546">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260545"></script>
-  <script src="assets/cms-overrides.js?v=20260545"></script>
+  <script src="assets/chrome.js?v=20260546"></script>
+  <script src="assets/cms-overrides.js?v=20260546"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260545"></script>
-  <script src="assets/cms-supabase.js?v=20260545"></script>
+  <script src="assets/supabase-config.js?v=20260546"></script>
+  <script src="assets/cms-supabase.js?v=20260546"></script>
   <script>
   (function () {
     'use strict';
@@ -167,6 +167,31 @@
           fr.readAsDataURL(blob);
         });
       } catch (e) { return null; }
+    }
+
+    /* Give a screen's HTML exactly ONE title heading. If the content
+       already opens with a heading that just repeats the screen title,
+       that heading is REUSED (its text becomes headingText) — so the
+       title never appears twice. Otherwise headingText is added as a
+       new heading on top. */
+    function markScreen(html, headingText, title) {
+      try {
+        var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
+        var first = d.body.firstElementChild;
+        while (first && !(first.textContent || '').trim() && !first.querySelector('img')) {
+          first = first.nextElementSibling;
+        }
+        if (first && /^H[1-6]$/.test(first.tagName) && norm(first.textContent) === norm(title)) {
+          first.textContent = headingText;
+        } else {
+          var h = d.createElement('h1');
+          h.textContent = headingText;
+          d.body.insertBefore(h, d.body.firstChild);
+        }
+        return d.body.innerHTML;
+      } catch (e) {
+        return '<h1>' + esc(headingText) + '</h1>' + html;
+      }
     }
 
     /* ========== URL routing ==========
@@ -484,12 +509,6 @@
         var parts = [];
         for (var i = 0; i < c.screens.length; i++) {
           var s = c.screens[i], t = typeOf(s.type);
-          /* In the combined doc each screen is delimited by ONE clear
-             "Screen N: Title" heading — it reads obviously as a screen
-             marker (not a stray duplicate of the title) and it's the
-             boundary the re-upload splits on. The screen's own content
-             follows beneath it. */
-          var marker = '<h1>Screen ' + (i + 1) + ': ' + esc(s.title) + '</h1>';
           var content;
           if (t.word) {
             content = await getScreenBody(s);
@@ -501,13 +520,15 @@
             content = '<p><em>[' + esc(t.label) + ' screen — link kept as-is: ' +
               esc(s.src || '') + ']</em></p>';
           }
-          /* Per-screen file: just the content, no "Screen N:" marker,
-             so it re-uploads cleanly on its own. */
+          /* Per-screen file: exactly ONE plain title heading. */
           if (t.word || t.img) {
             zip.file('screens/' + pad2(i + 1) + ' - ' + safeName(s.title) + '.doc',
-              wordDoc(s.title, content));
+              wordDoc(s.title, markScreen(content, s.title, s.title)));
           }
-          parts.push(marker + content);
+          /* Combined doc: exactly ONE heading per screen, "Screen N:
+             Title" — the obvious editing label AND the re-upload split
+             boundary. No more title-then-title repetition. */
+          parts.push(markScreen(content, 'Screen ' + (i + 1) + ': ' + s.title, s.title));
         }
         /* The whole course as one document — each screen is a Heading 1.
            This is the file you edit and re-upload via "Upload whole course". */
