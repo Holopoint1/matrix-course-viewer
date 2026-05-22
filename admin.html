@@ -33,6 +33,8 @@
     var main = document.getElementById('am-main');
     var courses = null;
     var cur = { courseId: null, screenId: null };
+    var editTimes = {};                /* screen src -> ISO time of its last content edit */
+    var editTimesReady = Promise.resolve();
 
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -247,6 +249,37 @@
       }
     }
 
+    /* ---- Edit-time tracking (file manager + per-screen info) ---- */
+    function fmtTime(iso) {
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return '';
+      var mon = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()];
+      return d.getDate() + ' ' + mon + ' ' + d.getFullYear() + ', ' +
+        ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    }
+    /* Pull each edited screen's last-edit timestamp from Supabase — the
+       pages table has a touch_updated_at trigger, so updated_at is the
+       true last-edit time. Unedited screens simply aren't in the table. */
+    async function loadEditTimes(c) {
+      editTimes = {};
+      if (!CMS.supabaseClient || !c) return;
+      try {
+        var srcs = (c.screens || []).map(function (s) { return s.src; }).filter(Boolean);
+        if (!srcs.length) return;
+        var res = await CMS.supabaseClient.from('pages').select('path,updated_at').in('path', srcs);
+        (res.data || []).forEach(function (r) { if (r && r.path) editTimes[r.path] = r.updated_at; });
+      } catch (e) {}
+    }
+    function editTextPlain(s) {
+      var iso = s && editTimes[s.src];
+      if (iso) return fmtTime(iso);
+      if (isEdited(s)) return 'Edited';
+      return 'Original — not yet edited';
+    }
+    function hoursText(s) {
+      return (s && s.hours != null && s.hours !== '') ? String(s.hours) : '—';
+    }
+
     /* ========== URL routing ==========
        Each view has its own address, so a refresh, a bookmark or a
        shared link reopens exactly where you were:
@@ -320,6 +353,7 @@
               '<div class="am-side-code">' + esc(c.code || c.id) + '</div>' +
               '<div class="am-side-title">' + esc(c.title || '') + '</div>' +
               '<div class="am-side-actions">' +
+                '<button type="button" class="am-side-act" id="am-fm-btn">📁 File manager</button>' +
                 '<button type="button" class="am-side-act" id="am-dl-course">⤓ Download whole course</button>' +
                 '<button type="button" class="am-side-act" id="am-ul-course">⤴ Upload whole course</button>' +
                 '<input type="file" id="am-course-file" accept=".docx,.doc,.htm,.html" hidden>' +
@@ -330,10 +364,12 @@
           '<div class="am-content" id="am-content"></div>' +
         '</div>';
       main.querySelector('[data-back]').addEventListener('click', function () { renderCatalog('push'); });
+      document.getElementById('am-fm-btn').addEventListener('click', function () { showFileManager(courseId); });
       document.getElementById('am-dl-course').addEventListener('click', function () { downloadCourse(courseId); });
       var cf = document.getElementById('am-course-file');
       document.getElementById('am-ul-course').addEventListener('click', function () { cf.click(); });
       cf.addEventListener('change', function () { if (cf.files[0]) uploadCourse(cf.files[0], courseId); });
+      editTimesReady = loadEditTimes(c);
       renderScreenList(c);
       if (screenId && (c.screens || []).some(function (x) { return x.id === screenId; })) {
         openScreen(courseId, screenId, mode);
@@ -395,6 +431,43 @@
       }
     }
 
+    /* ========== File manager — every screen, type, hours, file ========== */
+    async function showFileManager(courseId) {
+      cur.screenId = null;
+      markActiveScreen(null);
+      var pane = document.getElementById('am-content');
+      if (!pane) return;
+      pane.innerHTML = '<p class="stage-loading">Loading file manager&hellip;</p>';
+      try { await editTimesReady; } catch (e) {}
+      var c = merged(courseId);
+      var rows = (c.screens || []).map(function (s, i) {
+        var t = typeOf(s.type), src = s.src || '';
+        var loc = /^https?:/i.test(src)
+          ? '<a href="' + esc(src) + '" target="_blank" rel="noopener">' + esc(src) + '</a>'
+          : '<code>' + esc(src || '—') + '</code>';
+        return '<tr data-screen="' + esc(s.id) + '">' +
+          '<td>' + (i + 1) + '</td>' +
+          '<td><span class="ms-ws-type-badge ' + t.cls + '">' + esc(t.label) + '</span></td>' +
+          '<td>' + esc(s.title || '(untitled)') + '</td>' +
+          '<td>' + esc(hoursText(s)) + '</td>' +
+          '<td class="am-fm-loc">' + loc + '</td>' +
+          '<td>' + esc(editTextPlain(s)) + '</td></tr>';
+      }).join('');
+      pane.innerHTML =
+        '<div class="am-head"><span class="am-head-eyebrow">File manager</span>' +
+          '<h1>' + esc(c.code || c.id) + ' &middot; ' + esc(c.title || '') + '</h1>' +
+          '<p>Every screen in this course — its type, title, hours, where the content comes from, ' +
+          'and when it was last edited. Originals live in the project files; edits are saved in the ' +
+          'database. Click any row to open that screen.</p></div>' +
+        '<table class="am-fm-table"><thead><tr>' +
+          '<th>#</th><th>Type</th><th>Title</th><th>Hours</th><th>Source file</th><th>Last edited</th>' +
+        '</tr></thead><tbody>' + rows + '</tbody></table>';
+      pane.querySelectorAll('[data-screen]').forEach(function (tr) {
+        tr.addEventListener('click', function () { openScreen(courseId, tr.dataset.screen); });
+      });
+      pane.scrollTop = 0;
+    }
+
     /* ========== Screen content pane ========== */
     function openScreen(courseId, screenId, mode) {
       cur.screenId = screenId;
@@ -441,6 +514,15 @@
           '<div class="am-screen-headbody"><span class="am-screen-eyebrow">Screen ' + (idx + 1) + ' · ' + esc(t.label) + '</span>' +
             '<input class="am-screen-title" id="am-title" value="' + esc(s.title || '') + '"></div>' +
           '<a class="btn btn-secondary" href="course.html?id=' + esc(courseId) + '&screen=' + esc(s.id) + '" target="_blank" rel="noopener">↗ Open in course</a>' +
+        '</div>' +
+        '<div class="am-screen-meta">' +
+          '<label class="am-meta-hours">Hours <input type="number" id="am-hours" min="0" step="0.1" value="' +
+            esc(s.hours != null ? s.hours : '') + '"></label>' +
+          '<span class="am-meta-item"><strong>Source file:</strong> ' +
+            (/^https?:/i.test(s.src || '')
+              ? '<a href="' + esc(s.src) + '" target="_blank" rel="noopener">' + esc(s.src) + '</a>'
+              : '<code>' + esc(s.src || '—') + '</code>') + '</span>' +
+          '<span class="am-meta-item" id="am-edited"><strong>Last edited:</strong> ' + esc(editTextPlain(s)) + '</span>' +
         '</div>' + actions +
         '<div class="am-status" id="am-status" hidden></div>' +
         '<div id="am-editor-host"></div>' +
@@ -453,11 +535,21 @@
          page never resizes between screens. Just reset the pane to its
          top so each newly-opened screen starts from the beginning. */
       pane.scrollTop = 0;
+      /* Fill in the last-edited time once the Supabase lookup resolves. */
+      editTimesReady.then(function () {
+        var el = document.getElementById('am-edited');
+        if (el && cur.screenId === s.id) el.innerHTML = '<strong>Last edited:</strong> ' + esc(editTextPlain(s));
+      });
 
       document.getElementById('am-title').addEventListener('change', function () {
         CMS.setScreenOverride(courseId, s.id, { title: this.value.trim() });
         flash('Title saved — live on the course.');
         syncScreenListItem(courseId, s.id);
+      });
+      document.getElementById('am-hours').addEventListener('change', function () {
+        var h = parseFloat(this.value);
+        CMS.setScreenOverride(courseId, s.id, { hours: isNaN(h) ? null : h });
+        flash('Hours saved — live on the course.');
       });
 
       if (t.word) {
@@ -531,6 +623,7 @@
         var bodyHtml = await fileToHtml(file);
         if (!bodyHtml.trim()) { flash('That file looks empty — nothing to import.', 'err'); return; }
         CMS.setHtmlOverride(s.src, wrapPage(bodyHtml));
+        editTimes[s.src] = new Date().toISOString();
         flash('✓ Saved from “' + esc(file.name) + '” — live on the course now.');
         openScreen(courseId, s.id, 'replace');
       } catch (err) {
@@ -581,9 +674,26 @@
              boundary. No more title-then-title repetition. */
           parts.push(markScreen(content, 'Screen ' + (i + 1) + ': ' + s.title, s.title));
         }
-        /* The whole course as one real .docx — each screen a "Screen N:"
-           heading. This is the file you edit and re-upload. */
-        var combined = parts.join('<br style="page-break-before:always">');
+        /* A "Course contents" summary table at the very top — screen
+           type, title, hours and source file for every screen. It sits
+           BEFORE the first "Screen N:" heading, so the re-upload
+           splitter ignores it (information only). */
+        var sumRows = c.screens.map(function (s, i) {
+          var t = typeOf(s.type);
+          return '<tr><td>' + (i + 1) + '</td><td>' + esc(t.label) + '</td><td>' +
+            esc(s.title || '') + '</td><td>' + esc(s.hours != null ? s.hours : '') +
+            '</td><td>' + esc(s.src || '') + '</td></tr>';
+        }).join('');
+        var summary =
+          '<h1>' + esc((c.code || c.id) + ' — ' + (c.title || '')) + '</h1>' +
+          '<p><b>Course contents</b> — ' + c.screens.length + ' screens. This table is a ' +
+          'summary only; edit each screen further down, under its “Screen N: Title” heading.</p>' +
+          '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse">' +
+          '<tr><th>#</th><th>Screen type</th><th>Title</th><th>Hours</th><th>Source file</th></tr>' +
+          sumRows + '</table><br style="page-break-before:always">';
+        /* The whole course as one real .docx — the contents table, then
+           each screen under a "Screen N:" heading you edit and re-upload. */
+        var combined = summary + parts.join('<br style="page-break-before:always">');
         /* Name files with the CP/CO course code up front — several
            courses share a title, so the code is what tells them apart. */
         var codeName = safeName((c.code || c.id) + ' - ' + c.title);
@@ -748,6 +858,7 @@
       var fr = new FileReader();
       fr.onload = function () {
         CMS.setHtmlOverride(s.src, String(fr.result));
+        editTimes[s.src] = new Date().toISOString();
         flash('✓ Image updated — live on the course now.');
         openScreen(courseId, s.id, 'replace');
       };
@@ -818,6 +929,7 @@
       }
       function saveEditor() {
         CMS.setHtmlOverride(s.src, wrapPage(doc.innerHTML));
+        editTimes[s.src] = new Date().toISOString();
         flash('✓ Saved — live on the course now.');
         closeEditor();
         openScreen(courseId, s.id, 'replace');
