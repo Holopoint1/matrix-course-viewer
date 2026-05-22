@@ -6,38 +6,23 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260536">
+  <link rel="stylesheet" href="assets/styles.css?v=20260538">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
 
   <main class="am-wrap">
-    <div class="am-shell">
-      <!-- Course folders -->
-      <aside class="am-rail">
-        <div class="am-rail-head">
-          <span class="am-rail-eyebrow">Content manager</span>
-          <h2>Courses</h2>
-        </div>
-        <ul class="am-folders" id="am-folders"></ul>
-        <div class="am-rail-foot">
-          <p class="am-rail-note">Every change saves to the live database — it shows on the course immediately, for everyone.</p>
-        </div>
-      </aside>
-
-      <!-- Main: course grid OR screen detail -->
-      <section class="am-main" id="am-main">
-        <p class="stage-loading">Loading courses&hellip;</p>
-      </section>
-    </div>
+    <section class="am-main" id="am-main">
+      <p class="stage-loading">Loading courses&hellip;</p>
+    </section>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="assets/chrome.js?v=20260536"></script>
-  <script src="assets/cms-overrides.js?v=20260536"></script>
+  <script src="assets/chrome.js?v=20260538"></script>
+  <script src="assets/cms-overrides.js?v=20260538"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260536"></script>
-  <script src="assets/cms-supabase.js?v=20260536"></script>
+  <script src="assets/supabase-config.js?v=20260538"></script>
+  <script src="assets/cms-supabase.js?v=20260538"></script>
   <script>
   (function () {
     'use strict';
@@ -45,170 +30,195 @@
     try { CMS.unlock('matrix'); } catch (e) {}   /* Phase 1: open access */
 
     var main = document.getElementById('am-main');
-    var foldersEl = document.getElementById('am-folders');
     var courses = null;
-    var view = { courseId: null, screenId: null };
+    var cur = { courseId: null, screenId: null };
 
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
       });
     }
+    function wrapPage(bodyHtml) {
+      return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+        '<link rel="stylesheet" href="../../assets/embedded.css"></head><body>' +
+        '<div class="page">' + bodyHtml + '</div></body></html>';
+    }
 
-    /* Screen "file type" → icon, label, and whether it's a Word-editable screen. */
+    /* Screen type → badge class, label, icon, and editability. */
     var TYPES = {
-      document:   { icon: '📄', label: 'Word document', word: true },
-      html:       { icon: '📝', label: 'Page',          word: true },
-      youtube:    { icon: '▶',  label: 'Video',         word: false },
-      pdf:        { icon: '📕', label: 'PDF',           word: false },
-      powerpoint: { icon: '📊', label: 'Slides',        word: false },
-      image:      { icon: '🖼', label: 'Image',         word: false },
-      spreadsheet:{ icon: '📈', label: 'Spreadsheet',   word: false }
+      document:   { cls: 'document', label: 'Worksheet', icon: '📄', word: true,  img: false },
+      html:       { cls: 'html',     label: 'Page',      icon: '📝', word: true,  img: false },
+      youtube:    { cls: 'youtube',  label: 'Video',     icon: '▶',  word: false, img: false },
+      pdf:        { cls: 'pdf',      label: 'PDF',       icon: '📕', word: false, img: false },
+      powerpoint: { cls: 'powerpoint', label: 'Slides',  icon: '📊', word: false, img: false },
+      image:      { cls: 'image',    label: 'Image',     icon: '🖼', word: false, img: true },
+      spreadsheet:{ cls: 'document', label: 'Sheet',     icon: '📈', word: false, img: false }
     };
-    function typeOf(t) { return TYPES[t] || { icon: '📄', label: t || 'Screen', word: false }; }
+    function typeOf(t) { return TYPES[t] || { cls: 'document', label: t || 'Screen', icon: '📄', word: false, img: false }; }
 
     function getCourse(id) { return courses.find(function (c) { return c.id === id; }); }
     function merged(id) {
       var c = getCourse(id);
       return (c && CMS.applyOverrides) ? CMS.applyOverrides(c) : c;
     }
-    function isEdited(screen) {
-      return !!(screen && screen.src && CMS.getHtmlOverride(screen.src));
-    }
+    function isEdited(s) { return !!(s && s.src && CMS.getHtmlOverride(s.src)); }
 
-    /* ---------- Course folder rail ---------- */
-    function renderRail() {
-      foldersEl.innerHTML = courses.map(function (c) {
-        var edits = (c.screens || []).filter(function (s) { return isEdited(s); }).length;
-        return '<li><button type="button" class="am-folder' +
-          (c.id === view.courseId ? ' active' : '') + '" data-course="' + esc(c.id) + '">' +
-          '<span class="am-folder-ico">📁</span>' +
-          '<span class="am-folder-body"><strong>' + esc(c.code || c.id) + '</strong>' +
-          '<span>' + esc(c.title || '') + '</span></span>' +
-          (edits ? '<span class="am-folder-badge" title="' + edits + ' edited screen(s)">' + edits + '</span>' : '') +
-          '</button></li>';
+    /* ========== View 1: catalog — course containers side by side ========== */
+    function renderCatalog() {
+      cur.courseId = null; cur.screenId = null;
+      var tiles = courses.map(function (c) {
+        var scr = c.screens || [];
+        var edited = scr.filter(function (s) { return isEdited(s); }).length;
+        return '<button type="button" class="am-tile" data-course="' + esc(c.id) + '">' +
+          '<span class="am-tile-thumb" style="background-image:url(\'content/' + esc(c.id) + '/opening.svg\')">' +
+            '<span class="am-tile-code">' + esc(c.code || c.id) + '</span>' +
+          '</span>' +
+          '<span class="am-tile-body"><strong>' + esc(c.title || c.id) + '</strong>' +
+            '<span class="am-tile-meta">' + scr.length + ' screens' +
+              (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span>' +
+          '</span></button>';
       }).join('');
-      foldersEl.querySelectorAll('[data-course]').forEach(function (b) {
+      main.innerHTML =
+        '<div class="am-head"><span class="am-head-eyebrow">Content manager</span>' +
+          '<h1>Courses</h1>' +
+          '<p>Pick a course — it opens with the same screen sidebar learners see. Click any screen to preview it, edit it like a document, or replace it with a Word file.</p></div>' +
+        '<div class="am-catalog">' + tiles + '</div>';
+      main.querySelectorAll('[data-course]').forEach(function (b) {
         b.addEventListener('click', function () { openCourse(b.dataset.course); });
       });
     }
 
-    /* ---------- Course view: screens as a file grid ---------- */
-    function openCourse(courseId) {
-      view.courseId = courseId; view.screenId = null;
-      renderRail();
+    /* ========== View 2: course open — screen sidebar + content ========== */
+    function openCourse(courseId, screenId) {
+      cur.courseId = courseId;
       var c = merged(courseId);
-      if (!c) { main.innerHTML = '<p class="stage-loading">Course not found.</p>'; return; }
-
-      var cards = (c.screens || []).map(function (s, i) {
-        var t = typeOf(s.type);
-        return '<button type="button" class="am-card" data-screen="' + esc(s.id) + '">' +
-          '<span class="am-card-top">' +
-            '<span class="am-card-ico">' + t.icon + '</span>' +
-            '<span class="am-card-num">' + (i + 1) + '</span>' +
-            (isEdited(s) ? '<span class="am-card-edited" title="Edited — differs from the original">edited</span>' : '') +
-          '</span>' +
-          '<span class="am-card-title">' + esc(s.title || '(untitled)') + '</span>' +
-          '<span class="am-card-type">' + t.icon + ' ' + esc(t.label) + '</span>' +
-          '</button>';
-      }).join('');
-
+      if (!c) { renderCatalog(); return; }
       main.innerHTML =
-        '<div class="am-crumb"><span>Courses</span><span class="am-crumb-sep">›</span>' +
-          '<strong>' + esc(c.code || c.id) + '</strong></div>' +
-        '<div class="am-course-head">' +
-          '<div><h1>' + esc(c.title || c.id) + '</h1>' +
-          '<p>' + (c.screens || []).length + ' screens — click any one to preview it, edit the text, or replace it with a Word document.</p></div>' +
-          '<a class="btn btn-secondary" href="course.html?id=' + esc(c.id) + '" target="_blank" rel="noopener">↗ Open course</a>' +
-        '</div>' +
-        '<div class="am-grid">' + cards + '</div>';
+        '<div class="am-course-shell">' +
+          '<aside class="am-side">' +
+            '<div class="am-side-head">' +
+              '<button type="button" class="am-back" data-back>‹ All courses</button>' +
+              '<div class="am-side-code">' + esc(c.code || c.id) + '</div>' +
+              '<div class="am-side-title">' + esc(c.title || '') + '</div>' +
+            '</div>' +
+            '<div class="ms-tier ms-tier-flat am-screenlist" id="am-screenlist"></div>' +
+          '</aside>' +
+          '<div class="am-content" id="am-content"></div>' +
+        '</div>';
+      main.querySelector('[data-back]').addEventListener('click', renderCatalog);
+      renderScreenList(c);
+      if (screenId) openScreen(courseId, screenId);
+      else document.getElementById('am-content').innerHTML =
+        '<div class="am-empty"><div class="am-empty-ico">👈</div><h1>Pick a screen</h1>' +
+        '<p>Choose a screen in the sidebar to preview it as learners see it, edit it like a document, or replace it with a Word file.</p></div>';
+    }
 
-      main.querySelectorAll('[data-screen]').forEach(function (b) {
-        b.addEventListener('click', function () { openScreen(courseId, b.dataset.screen); });
+    /* Screen list — same visual language as the front-end course sidebar. */
+    function renderScreenList(c) {
+      var list = document.getElementById('am-screenlist');
+      if (!list) return;
+      list.innerHTML = (c.screens || []).map(function (s, i) {
+        var t = typeOf(s.type);
+        return '<a class="ms-ws-item' + (s.id === cur.screenId ? ' active' : '') +
+          '" href="#" data-screen="' + esc(s.id) + '">' +
+          '<span class="ms-ws-num">' + (i + 1) + '</span>' +
+          '<span class="ms-ws-main"><span class="ms-ws-title">' + esc(s.title || '(untitled)') + '</span>' +
+            '<span class="ms-ws-type-badge ' + t.cls + '">' + esc(t.label) +
+              (isEdited(s) ? ' · edited' : '') + '</span></span></a>';
+      }).join('');
+      list.querySelectorAll('[data-screen]').forEach(function (a) {
+        a.addEventListener('click', function (e) { e.preventDefault(); openScreen(cur.courseId, a.dataset.screen); });
       });
     }
 
-    /* ---------- Screen detail: preview + replace + edit ---------- */
+    /* ========== Screen content pane ========== */
     function openScreen(courseId, screenId) {
-      view.courseId = courseId; view.screenId = screenId;
+      cur.screenId = screenId;
       var c = merged(courseId);
       var idx = (c.screens || []).findIndex(function (s) { return s.id === screenId; });
       var s = c.screens[idx];
       var t = typeOf(s.type);
+      renderScreenList(c);
 
-      main.innerHTML =
-        '<div class="am-crumb"><a href="#" data-back="courses">Courses</a><span class="am-crumb-sep">›</span>' +
-          '<a href="#" data-back="course">' + esc(c.code || c.id) + '</a><span class="am-crumb-sep">›</span>' +
-          '<strong>Screen ' + (idx + 1) + '</strong></div>' +
+      var actions;
+      if (t.word) {
+        actions = '<div class="am-replace" id="am-zone">' +
+          '<div class="am-replace-info"><strong>⤓ Replace with a Word document</strong>' +
+          '<span>Drop a <code>.docx</code> here (or click) — its text copies in word-for-word and goes live immediately. Or edit it here like a document.</span></div>' +
+          '<input type="file" id="am-file" accept=".docx" hidden>' +
+          '<div class="am-replace-actions">' +
+            '<button class="btn btn-primary" id="am-upload-btn" type="button">Upload Word file…</button>' +
+            '<button class="btn btn-secondary" id="am-edit-btn" type="button">✎ Edit like a document</button>' +
+            (s.type === 'document' ? '<a class="btn btn-secondary" id="am-dl-btn" href="' + esc(s.src) + '" download>⤓ Download Word</a>' : '') +
+            (isEdited(s) ? '<button class="btn btn-ghost" id="am-revert-btn" type="button">↩ Revert</button>' : '') +
+          '</div></div>';
+      } else if (t.img) {
+        actions = '<div class="am-replace" id="am-zone">' +
+          '<div class="am-replace-info"><strong>🖼 Replace this image</strong>' +
+          '<span>Drop an image here (or click) — PNG, JPG, GIF, SVG, WebP. It appears on the course straight away.</span></div>' +
+          '<input type="file" id="am-imgfile" accept="image/*" hidden>' +
+          '<div class="am-replace-actions">' +
+            '<button class="btn btn-primary" id="am-img-btn" type="button">Upload image…</button>' +
+            (isEdited(s) ? '<button class="btn btn-ghost" id="am-revert-btn" type="button">↩ Revert</button>' : '') +
+          '</div></div>';
+      } else {
+        actions = '<div class="am-replace am-replace-readonly"><div class="am-replace-info">' +
+          '<strong>' + t.icon + ' ' + esc(t.label) + ' screen</strong>' +
+          '<span>This is ' + (s.type === 'youtube' ? 'a video' : 'a ' + esc(t.label).toLowerCase()) +
+          ' — managed by its link / file path below.</span></div>' +
+          '<code class="am-src">' + esc(s.src || '') + '</code></div>';
+      }
 
-        '<div class="am-screen-head">' +
-          '<span class="am-screen-ico">' + t.icon + '</span>' +
-          '<div class="am-screen-headbody">' +
-            '<span class="am-screen-eyebrow">Screen ' + (idx + 1) + ' · ' + esc(t.label) + '</span>' +
-            '<input class="am-screen-title" id="am-title" value="' + esc(s.title || '') + '">' +
-          '</div>' +
+      var pane = document.getElementById('am-content');
+      pane.innerHTML =
+        '<div class="am-screen-head"><span class="am-screen-ico">' + t.icon + '</span>' +
+          '<div class="am-screen-headbody"><span class="am-screen-eyebrow">Screen ' + (idx + 1) + ' · ' + esc(t.label) + '</span>' +
+            '<input class="am-screen-title" id="am-title" value="' + esc(s.title || '') + '"></div>' +
           '<a class="btn btn-secondary" href="course.html?id=' + esc(courseId) + '&screen=' + esc(s.id) + '" target="_blank" rel="noopener">↗ Open in course</a>' +
-        '</div>' +
-
-        (t.word
-          ? '<div class="am-replace" id="am-replace">' +
-              '<div class="am-replace-info"><strong>⤓ Replace with a Word document</strong>' +
-              '<span>Drop a <code>.docx</code> here (or click) — its text is copied in word-for-word and goes live on the course immediately. Re-upload any time to update.</span></div>' +
-              '<input type="file" id="am-file" accept=".docx" hidden>' +
-              '<div class="am-replace-actions">' +
-                '<button class="btn btn-primary" id="am-upload-btn" type="button">Choose Word file…</button>' +
-                '<button class="btn btn-secondary" id="am-edit-btn" type="button">✎ Edit text here</button>' +
-                (isEdited(s) ? '<button class="btn btn-ghost" id="am-revert-btn" type="button">↩ Revert to original</button>' : '') +
-              '</div>' +
-            '</div>'
-          : '<div class="am-replace am-replace-readonly"><div class="am-replace-info">' +
-              '<strong>' + t.icon + ' ' + esc(t.label) + ' screen</strong>' +
-              '<span>This screen is ' + (s.type === 'youtube' ? 'a video' : 'a ' + esc(t.label).toLowerCase()) +
-              ', not a Word document — it is managed by its link / file path below. Word replace applies to Page and Word-document screens.</span></div>' +
-              '<code class="am-src">' + esc(s.src || '') + '</code></div>') +
-
+        '</div>' + actions +
         '<div class="am-status" id="am-status" hidden></div>' +
-        '<div class="am-editor" id="am-editor" hidden></div>' +
+        '<div id="am-editor-host"></div>' +
+        '<div class="am-preview-wrap"><div class="am-preview-label">Preview — exactly as learners see it</div>' +
+          '<div class="am-preview" id="am-preview"><p class="stage-loading">Rendering&hellip;</p></div></div>';
 
-        '<div class="am-preview-wrap">' +
-          '<div class="am-preview-label">Preview — exactly as learners see it</div>' +
-          '<div class="am-preview" id="am-preview"><p class="stage-loading">Rendering&hellip;</p></div>' +
-        '</div>';
-
-      main.querySelector('[data-back="courses"]').addEventListener('click', function (e) { e.preventDefault(); openCourse(courseId); });
-      main.querySelector('[data-back="course"]').addEventListener('click', function (e) { e.preventDefault(); openCourse(courseId); });
-
-      /* Screen title — save on change */
-      var titleInput = document.getElementById('am-title');
-      titleInput.addEventListener('change', function () {
-        CMS.setScreenOverride(courseId, s.id, { title: titleInput.value.trim() });
+      document.getElementById('am-title').addEventListener('change', function () {
+        CMS.setScreenOverride(courseId, s.id, { title: this.value.trim() });
         flash('Title saved — live on the course.');
-        renderRail();
+        renderScreenList(merged(courseId));
       });
 
       if (t.word) {
         var fileInput = document.getElementById('am-file');
         document.getElementById('am-upload-btn').addEventListener('click', function () { fileInput.click(); });
-        fileInput.addEventListener('change', function () {
-          if (fileInput.files[0]) uploadWord(fileInput.files[0], courseId, s);
-        });
-        var dz = document.getElementById('am-replace');
-        ['dragenter', 'dragover'].forEach(function (ev) {
-          dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('drag'); });
-        });
-        ['dragleave', 'drop'].forEach(function (ev) {
-          dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('drag'); });
-        });
-        dz.addEventListener('drop', function (e) {
-          var f = e.dataTransfer && e.dataTransfer.files[0];
-          if (f) uploadWord(f, courseId, s);
-        });
+        fileInput.addEventListener('change', function () { if (fileInput.files[0]) uploadWord(fileInput.files[0], courseId, s); });
         document.getElementById('am-edit-btn').addEventListener('click', function () { openEditor(courseId, s); });
-        var rev = document.getElementById('am-revert-btn');
-        if (rev) rev.addEventListener('click', function () { revert(courseId, s); });
+        wireDrop('am-zone', /\.docx$/i, function (f) { uploadWord(f, courseId, s); });
+      } else if (t.img) {
+        var imgInput = document.getElementById('am-imgfile');
+        document.getElementById('am-img-btn').addEventListener('click', function () { imgInput.click(); });
+        imgInput.addEventListener('change', function () { if (imgInput.files[0]) uploadImage(imgInput.files[0], courseId, s); });
+        wireDrop('am-zone', /^image\//i, function (f) { uploadImage(f, courseId, s); }, true);
       }
+      var rev = document.getElementById('am-revert-btn');
+      if (rev) rev.addEventListener('click', function () { revert(courseId, s); });
 
       renderPreview(s, document.getElementById('am-preview'));
+    }
+
+    function wireDrop(id, accept, onFile, byMime) {
+      var dz = document.getElementById(id);
+      if (!dz) return;
+      ['dragenter', 'dragover'].forEach(function (ev) {
+        dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('drag'); });
+      });
+      ['dragleave', 'drop'].forEach(function (ev) {
+        dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('drag'); });
+      });
+      dz.addEventListener('drop', function (e) {
+        var f = e.dataTransfer && e.dataTransfer.files[0];
+        if (f && accept.test(byMime ? f.type : f.name)) onFile(f);
+        else if (f) flash('That file type is not accepted here.', 'err');
+      });
     }
 
     function flash(msg, kind) {
@@ -221,30 +231,29 @@
       if (!kind || kind === 'ok') el._t = setTimeout(function () { el.hidden = true; }, 3500);
     }
 
-    /* ---------- Render a screen as the front end shows it ---------- */
+    /* ---------- Preview — render as the front end shows it ---------- */
     async function renderPreview(s, box) {
       try {
-        var override = CMS.getHtmlOverride(s.src);
+        var ov = CMS.getHtmlOverride(s.src);
         if (s.type === 'document' || s.type === 'html') {
           var html;
-          if (override != null) {
-            html = bodyOf(override);
-          } else if (s.type === 'document') {
+          if (ov != null) html = bodyOf(ov);
+          else if (s.type === 'document') {
             var buf = await fetch(s.src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); });
             html = (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value || '';
           } else {
-            var txt = await fetch(s.src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); });
-            html = bodyOf(txt);
+            html = bodyOf(await fetch(s.src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }));
           }
           box.innerHTML = '<div class="stage-doc"><div class="stage-doc-inner">' + enhance(html) + '</div></div>';
+        } else if (s.type === 'image') {
+          var src = (ov && /^data:image\//.test(ov)) ? ov : s.src;
+          box.innerHTML = '<div class="am-preview-img"><img src="' + esc(src) + '" alt="' + esc(s.title) + '"></div>';
         } else if (s.type === 'youtube') {
           var m = String(s.src || '').match(/(?:youtu\.be\/|v=|embed\/)([\w-]{6,})/);
           box.innerHTML = m ? '<div class="inline-youtube"><iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen></iframe></div>'
                             : '<p class="stage-loading">Video: ' + esc(s.src) + '</p>';
         } else if (s.type === 'pdf') {
           box.innerHTML = '<iframe class="am-preview-frame" src="' + esc(s.src) + '"></iframe>';
-        } else if (s.type === 'image') {
-          box.innerHTML = '<div class="am-preview-img"><img src="' + esc(s.src) + '" alt="' + esc(s.title) + '"></div>';
         } else {
           box.innerHTML = '<p class="stage-loading">' + esc(typeOf(s.type).label) + ' — <a href="' + esc(s.src) + '" target="_blank" rel="noopener">open / download</a></p>';
         }
@@ -261,7 +270,6 @@
       } catch (e) {}
       return fullHtml;
     }
-    /* Light, deterministic enhancer — inline bare YouTube links only. */
     function enhance(html) {
       try {
         var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
@@ -283,31 +291,48 @@
       flash('Reading “' + file.name + '” and copying the text in word-for-word…');
       try {
         var buf = await file.arrayBuffer();
-        var result = await window.mammoth.convertToHtml({ arrayBuffer: buf });
-        var bodyHtml = result.value || '';
+        var bodyHtml = (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value || '';
         if (!bodyHtml.trim()) { flash('That document looks empty — nothing to import.', 'err'); return; }
-        /* Wrap in the standard page shell so the viewer's .page extraction
-           works. Stored under screen.src — the key the viewer reads. */
-        var full = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
-          '<link rel="stylesheet" href="../../assets/embedded.css"></head><body>' +
-          '<div class="page">' + bodyHtml + '</div></body></html>';
-        CMS.setHtmlOverride(s.src, full);     /* → cms-supabase upserts to the live DB */
+        CMS.setHtmlOverride(s.src, wrapPage(bodyHtml));
         flash('✓ Saved from “' + file.name + '” — live on the course now.');
-        renderPreview(s, document.getElementById('am-preview'));
-        /* refresh the Revert button + edited badges */
         openScreen(courseId, s.id);
-        renderRail();
       } catch (err) {
         flash('Could not import that document: ' + (err && err.message ? err.message : err), 'err');
       }
     }
 
-    /* ---------- Inline text editor ---------- */
+    /* ---------- Image upload → data URI → save ---------- */
+    function uploadImage(file, courseId, s) {
+      if (!/^image\//i.test(file.type)) { flash('Please choose an image file.', 'err'); return; }
+      flash('Reading “' + file.name + '”…');
+      var fr = new FileReader();
+      fr.onload = function () {
+        CMS.setHtmlOverride(s.src, String(fr.result));   /* data: URI */
+        flash('✓ Image updated — live on the course now.');
+        openScreen(courseId, s.id);
+      };
+      fr.onerror = function () { flash('Could not read that image.', 'err'); };
+      fr.readAsDataURL(file);
+    }
+
+    /* ---------- WYSIWYG editor — looks like a Word page, no raw HTML ------ */
+    var TOOLBAR = [
+      ['bold', '<b>B</b>', 'Bold'], ['italic', '<i>I</i>', 'Italic'], ['underline', '<u>U</u>', 'Underline'],
+      ['sep'],
+      ['h2', 'H1', 'Big heading'], ['h3', 'H2', 'Sub-heading'], ['p', '¶', 'Normal text'],
+      ['sep'],
+      ['ul', '• List', 'Bulleted list'], ['ol', '1. List', 'Numbered list'],
+      ['sep'],
+      ['link', '🔗 Link', 'Insert a link'], ['image', '🖼 Image', 'Insert an image'],
+      ['sep'],
+      ['clear', '✗ Clear', 'Clear formatting']
+    ];
     async function openEditor(courseId, s) {
-      var ed = document.getElementById('am-editor');
-      if (!ed.hidden) { ed.hidden = true; ed.innerHTML = ''; return; }
-      ed.hidden = false;
-      ed.innerHTML = '<p class="stage-loading">Loading current text…</p>';
+      var host = document.getElementById('am-editor-host');
+      if (host.dataset.open === '1') { host.dataset.open = '0'; host.innerHTML = ''; return; }
+      host.dataset.open = '1';
+      host.innerHTML = '<div class="am-editor"><p class="stage-loading" style="padding:1rem">Loading…</p></div>';
+
       var bodyHtml = '';
       try {
         var ov = CMS.getHtmlOverride(s.src);
@@ -320,25 +345,58 @@
         }
       } catch (e) { bodyHtml = '<p>(could not load current text)</p>'; }
 
-      ed.innerHTML =
-        '<label class="am-editor-label">Screen text (HTML — paste, type, formatting is kept)</label>' +
-        '<textarea class="am-editor-area" id="am-ta" spellcheck="false">' + esc(bodyHtml.trim()) + '</textarea>' +
-        '<div class="am-editor-actions">' +
-          '<button class="btn btn-ghost" id="am-ed-close" type="button">Close</button>' +
-          '<button class="btn btn-primary" id="am-ed-save" type="button">💾 Save text</button>' +
-        '</div>';
-      var ta = document.getElementById('am-ta');
-      document.getElementById('am-ed-close').addEventListener('click', function () { ed.hidden = true; ed.innerHTML = ''; });
+      var tb = TOOLBAR.map(function (b) {
+        if (b[0] === 'sep') return '<span class="am-tool-sep"></span>';
+        return '<button type="button" class="am-tool-btn" data-cmd="' + b[0] + '" title="' + b[2] + '">' + b[1] + '</button>';
+      }).join('');
+      host.innerHTML =
+        '<div class="am-editor">' +
+          '<div class="am-toolbar">' + tb + '</div>' +
+          '<div class="am-doc" id="am-doc" contenteditable="true"></div>' +
+          '<div class="am-editor-actions">' +
+            '<button class="btn btn-ghost" id="am-ed-close" type="button">Close</button>' +
+            '<button class="btn btn-primary" id="am-ed-save" type="button">💾 Save</button>' +
+          '</div>' +
+        '</div>' +
+        '<input type="file" id="am-ed-img" accept="image/*" hidden>';
+      var doc = document.getElementById('am-doc');
+      doc.innerHTML = enhance(bodyHtml);
+
+      /* Toolbar — mousedown preventDefault keeps the caret in the editor. */
+      host.querySelectorAll('.am-tool-btn').forEach(function (btn) {
+        btn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+        btn.addEventListener('click', function () {
+          doc.focus();
+          var cmd = btn.dataset.cmd;
+          if (cmd === 'bold' || cmd === 'italic' || cmd === 'underline') document.execCommand(cmd, false, null);
+          else if (cmd === 'h2') document.execCommand('formatBlock', false, 'h1');
+          else if (cmd === 'h3') document.execCommand('formatBlock', false, 'h2');
+          else if (cmd === 'p') document.execCommand('formatBlock', false, 'p');
+          else if (cmd === 'ul') document.execCommand('insertUnorderedList', false, null);
+          else if (cmd === 'ol') document.execCommand('insertOrderedList', false, null);
+          else if (cmd === 'clear') document.execCommand('removeFormat', false, null);
+          else if (cmd === 'link') {
+            var url = prompt('Link address (https://…):', 'https://');
+            if (url) document.execCommand('createLink', false, url);
+          } else if (cmd === 'image') {
+            document.getElementById('am-ed-img').click();
+          }
+        });
+      });
+      document.getElementById('am-ed-img').addEventListener('change', function (e) {
+        var f = e.target.files[0];
+        if (!f) return;
+        var fr = new FileReader();
+        fr.onload = function () { doc.focus(); document.execCommand('insertImage', false, String(fr.result)); };
+        fr.readAsDataURL(f);
+        e.target.value = '';
+      });
+      document.getElementById('am-ed-close').addEventListener('click', function () { host.dataset.open = '0'; host.innerHTML = ''; });
       document.getElementById('am-ed-save').addEventListener('click', function () {
-        var full = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
-          '<link rel="stylesheet" href="../../assets/embedded.css"></head><body>' +
-          '<div class="page">' + ta.value + '</div></body></html>';
-        CMS.setHtmlOverride(s.src, full);
-        flash('✓ Text saved — live on the course now.');
-        ed.hidden = true; ed.innerHTML = '';
-        renderPreview(s, document.getElementById('am-preview'));
+        CMS.setHtmlOverride(s.src, wrapPage(doc.innerHTML));
+        flash('✓ Saved — live on the course now.');
+        host.dataset.open = '0'; host.innerHTML = '';
         openScreen(courseId, s.id);
-        renderRail();
       });
     }
 
@@ -350,22 +408,15 @@
         delete all[s.src];
         localStorage.setItem('matrix-lms:cms:html', JSON.stringify(all));
       } catch (e) {}
-      /* Remove from the live DB too, best-effort. */
-      try {
-        if (CMS.supabaseClient) CMS.supabaseClient.from('pages').delete().eq('path', s.src);
-      } catch (e) {}
+      try { if (CMS.supabaseClient) CMS.supabaseClient.from('pages').delete().eq('path', s.src); } catch (e) {}
       flash('Reverted to the original content.');
       openScreen(courseId, s.id);
-      renderRail();
     }
 
     /* ---------- Boot ---------- */
     fetch('data/courses.json').then(function (r) { return r.json(); }).then(function (data) {
       courses = data.courses || [];
-      renderRail();
-      main.innerHTML = '<div class="am-empty"><div class="am-empty-ico">📁</div>' +
-        '<h1>Pick a course on the left</h1>' +
-        '<p>Each course is a folder. Inside, every screen is a file you can preview, edit, or replace with a Word document — saved live, no developer needed.</p></div>';
+      renderCatalog();
     }).catch(function (err) {
       main.innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
     });

@@ -473,7 +473,10 @@
     const wrap = document.createElement('div');
     wrap.className = 'stage-image';
     const img = document.createElement('img');
-    img.src = screen.src;
+    /* An admin-uploaded replacement image is stored as a data: URI
+       override keyed by screen.src — prefer it over the source file. */
+    const ov = window.MatrixCMS ? window.MatrixCMS.getHtmlOverride(screen.src) : null;
+    img.src = (ov && /^data:image\//i.test(ov)) ? ov : screen.src;
     img.alt = screen.title;
     wrap.appendChild(img);
     stage.appendChild(wrap);
