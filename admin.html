@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260544">
+  <link rel="stylesheet" href="assets/styles.css?v=20260545">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260544"></script>
-  <script src="assets/cms-overrides.js?v=20260544"></script>
+  <script src="assets/chrome.js?v=20260545"></script>
+  <script src="assets/cms-overrides.js?v=20260545"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260544"></script>
-  <script src="assets/cms-supabase.js?v=20260544"></script>
+  <script src="assets/supabase-config.js?v=20260545"></script>
+  <script src="assets/cms-supabase.js?v=20260545"></script>
   <script>
   (function () {
     'use strict';
@@ -133,6 +133,40 @@
         return bodyOf(await file.text());
       }
       throw new Error('Unsupported file — use .docx or .doc');
+    }
+
+    /* Strip the "Screen N:" prefix our course downloads put on each
+       screen heading, so a downloaded course re-uploads and matches. */
+    function stripScreenPrefix(title) {
+      return String(title || '').replace(/^\s*screen\s*\d+\s*[:.\-–—]\s*/i, '').trim();
+    }
+    /* First embedded picture (a data: URI) inside a chunk of HTML —
+       used to populate image screens from a section of an uploaded doc. */
+    function firstImageData(html) {
+      try {
+        var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
+        var img = d.body.querySelector('img');
+        var src = img && img.getAttribute('src');
+        return (src && /^data:image\//i.test(src)) ? src : null;
+      } catch (e) { return null; }
+    }
+    /* The image a screen currently shows — an admin override wins. */
+    function imageSrcOf(s) {
+      var ov = CMS.getHtmlOverride(s.src);
+      return (ov && /^data:image\//i.test(ov)) ? ov : s.src;
+    }
+    /* Fetch any URL and return it as a base64 data: URI, so a picture
+       can be embedded directly inside a downloaded Word document. */
+    async function toDataUri(url) {
+      try {
+        var blob = await fetch(url).then(function (r) { if (!r.ok) throw new Error('x'); return r.blob(); });
+        return await new Promise(function (res) {
+          var fr = new FileReader();
+          fr.onload = function () { res(String(fr.result)); };
+          fr.onerror = function () { res(null); };
+          fr.readAsDataURL(blob);
+        });
+      } catch (e) { return null; }
     }
 
     /* ========== URL routing ==========
@@ -450,15 +484,30 @@
         var parts = [];
         for (var i = 0; i < c.screens.length; i++) {
           var s = c.screens[i], t = typeOf(s.type);
+          /* In the combined doc each screen is delimited by ONE clear
+             "Screen N: Title" heading — it reads obviously as a screen
+             marker (not a stray duplicate of the title) and it's the
+             boundary the re-upload splits on. The screen's own content
+             follows beneath it. */
+          var marker = '<h1>Screen ' + (i + 1) + ': ' + esc(s.title) + '</h1>';
+          var content;
           if (t.word) {
-            var body = await getScreenBody(s);
-            zip.file('screens/' + pad2(i + 1) + ' - ' + safeName(s.title) + '.doc',
-              wordDoc(s.title, '<h1>' + esc(s.title) + '</h1>' + body));
-            parts.push('<h1>' + esc(s.title) + '</h1>' + body);
+            content = await getScreenBody(s);
+          } else if (t.img) {
+            var isrc = imageSrcOf(s);
+            var durl = /^data:/i.test(isrc) ? isrc : (await toDataUri(isrc) || isrc);
+            content = '<p><img src="' + esc(durl) + '" style="max-width:100%"></p>';
           } else {
-            parts.push('<h1>' + esc(s.title) + '</h1><p><em>[' + esc(t.label) +
-              ' screen — ' + esc(s.src || '') + ']</em></p>');
+            content = '<p><em>[' + esc(t.label) + ' screen — link kept as-is: ' +
+              esc(s.src || '') + ']</em></p>';
           }
+          /* Per-screen file: just the content, no "Screen N:" marker,
+             so it re-uploads cleanly on its own. */
+          if (t.word || t.img) {
+            zip.file('screens/' + pad2(i + 1) + ' - ' + safeName(s.title) + '.doc',
+              wordDoc(s.title, content));
+          }
+          parts.push(marker + content);
         }
         /* The whole course as one document — each screen is a Heading 1.
            This is the file you edit and re-upload via "Upload whole course". */
@@ -466,10 +515,13 @@
         zip.file('Full course - ' + safeName(c.title) + '.doc', wordDoc(c.title, combined));
         zip.file('README.txt',
           'Matrix LMS — course download for ' + (c.code || c.id) + ' ' + c.title + '\n\n' +
-          '• screens/  — every text screen as its own Word-openable file.\n' +
-          '• Full course - ....doc — the whole course in one document; each\n' +
-          '  screen is a Heading 1. Edit this, then use "Upload whole course"\n' +
-          '  in Admin — it splits on Heading 1 and refills each screen.\n');
+          '• screens/  — each screen as its own Word-openable file (text\n' +
+          '  screens and image screens; pictures are embedded in the file).\n' +
+          '• Full course - ....doc — the whole course in ONE document. Each\n' +
+          '  screen begins with a heading "Screen N: Title". Edit anything\n' +
+          '  below a heading; keep the "Screen N: Title" lines as they are.\n' +
+          '  Then use "Upload whole course" in Admin — it splits on those\n' +
+          '  headings and refills every screen, pictures and all.\n');
         var blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
         download(blob, safeName(c.code || c.id) + ' - course.zip');
         flash('✓ Course downloaded — ' + c.screens.length + ' screen file(s) + the full-course document.');
@@ -481,9 +533,19 @@
     /* ---------- Full-course upload — split a Word doc on Heading 1 ---------- */
     function splitOnHeadings(html) {
       var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
+      var markerRe = /^\s*screen\s*\d+\s*[:.\-–—]/i;
+      /* Prefer our explicit "Screen N: Title" markers as the screen
+         boundaries — that way a Heading 1 INSIDE a worksheet's own
+         content is never mistaken for a new screen. If the document
+         has no such markers (hand-made), fall back to every H1. */
+      var hasMarkers = Array.prototype.some.call(d.body.querySelectorAll('h1'), function (h) {
+        return markerRe.test(h.textContent || '');
+      });
       var sections = [], curSec = null;
       Array.prototype.forEach.call(d.body.childNodes, function (node) {
-        if (node.nodeType === 1 && node.tagName === 'H1') {
+        var isBoundary = node.nodeType === 1 && node.tagName === 'H1' &&
+          (!hasMarkers || markerRe.test(node.textContent || ''));
+        if (isBoundary) {
           curSec = { title: (node.textContent || '').trim(), body: '' };
           sections.push(curSec);
         } else if (curSec) {
@@ -494,14 +556,15 @@
     }
     async function uploadCourse(file, courseId) {
       var pane = document.getElementById('am-content');
-      pane.innerHTML = '<p class="stage-loading">Reading “' + esc(file.name) + '” and splitting it on Heading 1…</p>';
+      pane.innerHTML = '<p class="stage-loading">Reading “' + esc(file.name) + '” and splitting it into screens…</p>';
       try {
         var html = await fileToHtml(file);
         var sections = splitOnHeadings(html);
         if (!sections.length) {
-          pane.innerHTML = '<div class="am-empty"><div class="am-empty-ico">⚠</div><h1>No Heading 1 found</h1>' +
-            '<p>The document needs each screen to start with a <strong>Heading 1</strong> style ' +
-            '(the heading text becomes the screen title). Download the course first to see the exact format.</p>' +
+          pane.innerHTML = '<div class="am-empty"><div class="am-empty-ico">⚠</div><h1>No screens found</h1>' +
+            '<p>Each screen must start with a <strong>Heading&nbsp;1</strong> line — ideally ' +
+            '“<strong>Screen&nbsp;N:&nbsp;Title</strong>”. Use “Download whole course” first to ' +
+            'get a document already in the right format, edit it, then upload it back.</p>' +
             '<button class="btn btn-secondary" id="am-back2" type="button">Back</button></div>';
           document.getElementById('am-back2').addEventListener('click', function () { openCourse(courseId); });
           return;
@@ -510,13 +573,25 @@
         var byTitle = {};
         (c.screens || []).forEach(function (s) {
           var t = typeOf(s.type);
-          if (t.word) byTitle[norm(s.title)] = s;
+          if (t.word || t.img) byTitle[norm(s.title)] = s;
         });
         var matched = [], unmatched = [];
         sections.forEach(function (sec) {
-          var s = byTitle[norm(sec.title)];
-          if (s) { CMS.setHtmlOverride(s.src, wrapPage(sec.body)); matched.push(sec.title); }
-          else unmatched.push(sec.title);
+          var s = byTitle[norm(stripScreenPrefix(sec.title))] || byTitle[norm(sec.title)];
+          if (!s) { unmatched.push(sec.title); return; }
+          var t = typeOf(s.type);
+          if (t.img) {
+            /* Image screen — pull the first embedded picture out of this
+               section and make it the screen's image. */
+            var data = firstImageData(sec.body);
+            if (data) { CMS.setHtmlOverride(s.src, data); matched.push(sec.title); }
+            else unmatched.push(sec.title + ' (no picture found in that section)');
+          } else {
+            /* Text screen — its HTML goes in word-for-word; any pictures
+               inside the document were already embedded by the reader. */
+            CMS.setHtmlOverride(s.src, wrapPage(sec.body));
+            matched.push(sec.title);
+          }
         });
         pane.innerHTML =
           '<div class="am-empty"><div class="am-empty-ico">' + (matched.length ? '✓' : '⚠') + '</div>' +
