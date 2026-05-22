@@ -30,6 +30,7 @@
   var KEY_SCREENS = 'matrix-lms:cms:screens';
   var KEY_HTML    = 'matrix-lms:cms:html';
   var KEY_DIRTY   = 'matrix-lms:cms:dirty';   /* page paths edited locally, awaiting a confirmed Supabase save */
+  var KEY_DBCOURSES = 'matrix-lms:db-courses'; /* full course objects rebuilt from Supabase (for discovery) */
   var SYNC_FLAG   = 'matrix-sb-synced';
 
   var sb;
@@ -84,6 +85,31 @@
       writeJSON(KEY_COURSES, cOv);
       writeJSON(KEY_SCREENS, sOv);
       writeJSON(KEY_HTML, hOv);
+
+      /* Rebuild every Supabase course as a full course object so the
+         catalog / editor / viewer can DISCOVER courses that aren't in the
+         static data/courses.json (e.g. ones added in Admin). Consumers
+         call MatrixCMS.mergeCourses(staticList) to fold these in. */
+      var byCourse = {};
+      (screens || []).forEach(function (s) {
+        (byCourse[s.course_id] = byCourse[s.course_id] || []).push(s);
+      });
+      writeJSON(KEY_DBCOURSES, courses.map(function (c) {
+        var scr = (byCourse[c.id] || []).slice()
+          .sort(function (a, b) { return (a.position || 0) - (b.position || 0); })
+          .map(function (s) {
+            return { id: s.id, type: s.type, title: s.title, hours: s.hours,
+                     equipment: s.equipment, src: s.src, missing: !!s.missing };
+          });
+        return {
+          id: c.id, code: c.code || c.id, kind: c.kind || 'course',
+          title: c.title || '', shortDescription: c.short_description || '',
+          estimatedHours: Number(c.estimated_hours) || 0,
+          certificate: { enabled: !!c.certificate_enabled },
+          categories: Array.isArray(c.categories) ? c.categories : [],
+          screens: scr
+        };
+      }));
 
       /* Once per session, on viewer pages, reload so app.js re-applies the
          now-fresh overrides. Flag is set first so this can't loop; admin is
@@ -173,6 +199,20 @@
   sb.auth.getSession().then(function (r) { sb.__session = r && r.data ? r.data.session : null; }).catch(function () {});
   sb.auth.onAuthStateChange(function (_e, session) { sb.__session = session; });
   CMS.supabaseClient = sb;
+  /* Course discovery: full course objects pulled from Supabase, and a
+     merge helper so any consumer can fold in courses that aren't in the
+     static data/courses.json. */
+  CMS.dbCourses = function () {
+    try { return JSON.parse(localStorage.getItem(KEY_DBCOURSES) || '[]') || []; }
+    catch (_) { return []; }
+  };
+  CMS.mergeCourses = function (staticList) {
+    var out = (staticList || []).slice();
+    var have = {};
+    out.forEach(function (c) { if (c && c.id) have[c.id] = 1; });
+    CMS.dbCourses().forEach(function (c) { if (c && c.id && !have[c.id]) out.push(c); });
+    return out;
+  };
   CMS.supabaseAuth = {
     getSession: function () { return sb.auth.getSession(); },
     signInWithPassword: function (email, password) {

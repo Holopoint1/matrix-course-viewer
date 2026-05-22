@@ -116,7 +116,10 @@
     try {
       const res = await fetch('data/courses.json');
       const data = await res.json();
-      course = data.courses.find((c) => c.id === courseId);
+      /* Include courses that live only in Supabase (added via Admin). */
+      const courseList = (window.MatrixCMS && window.MatrixCMS.mergeCourses)
+        ? window.MatrixCMS.mergeCourses(data.courses) : data.courses;
+      course = courseList.find((c) => c.id === courseId);
       if (!course) throw new Error('Course not found: ' + courseId);
       if (window.MatrixCMS) course = window.MatrixCMS.applyOverrides(course);
       if (window.Gamify) {
