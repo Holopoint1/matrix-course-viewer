@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260558">
+  <link rel="stylesheet" href="assets/styles.css?v=20260559">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260558"></script>
-  <script src="assets/cms-overrides.js?v=20260558"></script>
+  <script src="assets/chrome.js?v=20260559"></script>
+  <script src="assets/cms-overrides.js?v=20260559"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260558"></script>
-  <script src="assets/cms-supabase.js?v=20260558"></script>
+  <script src="assets/supabase-config.js?v=20260559"></script>
+  <script src="assets/cms-supabase.js?v=20260559"></script>
   <script>
   (function () {
     'use strict';
@@ -523,15 +523,105 @@
       list.innerHTML = (c.screens || []).map(function (s, i) {
         var t = typeOf(s.type);
         return '<a class="ms-ws-item' + (s.id === cur.screenId ? ' active' : '') +
-          '" href="#" data-screen="' + esc(s.id) + '">' +
+          '" draggable="true" href="#" data-screen="' + esc(s.id) + '">' +
           '<span class="ms-ws-num">' + (i + 1) + '</span>' +
           '<span class="ms-ws-main"><span class="ms-ws-title">' + esc(s.title || '(untitled)') + '</span>' +
             '<span class="ms-ws-type-badge ' + t.cls + '">' + esc(t.label) +
               (isEdited(s) ? ' · edited' : '') + '</span></span></a>';
       }).join('');
       list.querySelectorAll('[data-screen]').forEach(function (a) {
-        a.addEventListener('click', function (e) { e.preventDefault(); openScreen(cur.courseId, a.dataset.screen); });
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          /* Suppress the synthetic click that follows a drag. */
+          if (_justDragged) return;
+          openScreen(cur.courseId, a.dataset.screen);
+        });
+        wireDragOnItem(a);
       });
+    }
+
+    /* ---- Drag-to-reorder (PowerPoint-style) ---- */
+    var _dragSrc = null;
+    var _justDragged = false;
+    function wireDragOnItem(el) {
+      el.addEventListener('dragstart', function (e) {
+        _dragSrc = el.dataset.screen;
+        el.classList.add('ms-ws-dragging');
+        try {
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', _dragSrc);
+        } catch (_) {}
+      });
+      el.addEventListener('dragend', function () {
+        el.classList.remove('ms-ws-dragging');
+        document.querySelectorAll('.ms-ws-dropping-before, .ms-ws-dropping-after').forEach(function (n) {
+          n.classList.remove('ms-ws-dropping-before', 'ms-ws-dropping-after');
+        });
+        _dragSrc = null;
+        _justDragged = true;
+        setTimeout(function () { _justDragged = false; }, 80);
+      });
+      el.addEventListener('dragover', function (e) {
+        if (!_dragSrc || el.dataset.screen === _dragSrc) return;
+        e.preventDefault();
+        var rect = el.getBoundingClientRect();
+        var after = e.clientY > rect.top + rect.height / 2;
+        el.classList.toggle('ms-ws-dropping-before', !after);
+        el.classList.toggle('ms-ws-dropping-after', after);
+      });
+      el.addEventListener('dragleave', function () {
+        el.classList.remove('ms-ws-dropping-before', 'ms-ws-dropping-after');
+      });
+      el.addEventListener('drop', function (e) {
+        e.preventDefault();
+        var rect = el.getBoundingClientRect();
+        var after = e.clientY > rect.top + rect.height / 2;
+        var src = _dragSrc;
+        el.classList.remove('ms-ws-dropping-before', 'ms-ws-dropping-after');
+        if (src && el.dataset.screen && src !== el.dataset.screen) {
+          reorderScreens(cur.courseId, src, el.dataset.screen, after);
+        }
+      });
+    }
+    function reorderScreens(courseId, sourceId, targetId, after) {
+      var c = merged(courseId);
+      var ids = (c.screens || []).map(function (s) { return s.id; });
+      var srcIdx = ids.indexOf(sourceId);
+      if (srcIdx < 0) return;
+      ids.splice(srcIdx, 1);
+      var dstIdx = ids.indexOf(targetId);
+      if (dstIdx < 0) return;
+      ids.splice(after ? dstIdx + 1 : dstIdx, 0, sourceId);
+      /* Write every screen's new position so applyOverrides sorts correctly. */
+      ids.forEach(function (id, i) { CMS.setScreenOverride(courseId, id, { position: i }); });
+      flash('Screen order updated.');
+      renderScreenList(merged(courseId));
+    }
+
+    /* ---- Delete a screen ---- */
+    function deleteScreen(courseId, s) {
+      if (!confirm('Delete the screen “' + (s.title || 'untitled') + '”?\n\nIt will be hidden from the course immediately.')) return;
+      var rawCourse = getCourse(courseId);
+      var isOriginal = !!(rawCourse && (rawCourse.screens || []).some(function (x) { return x.id === s.id; }));
+      if (isOriginal) {
+        /* Original screens live in the GitHub repo; soft-hide locally so
+           the next pull from Supabase can't bring them back. */
+        if (CMS.addDeletedScreen) CMS.addDeletedScreen(courseId, s.id);
+      } else {
+        /* Added screens were admin-created; remove their override rows. */
+        try {
+          var so = JSON.parse(localStorage.getItem('matrix-lms:cms:screens') || '{}');
+          if (so[courseId]) { delete so[courseId][s.id]; localStorage.setItem('matrix-lms:cms:screens', JSON.stringify(so)); }
+        } catch (e) {}
+        try {
+          var h = JSON.parse(localStorage.getItem('matrix-lms:cms:html') || '{}');
+          delete h[s.src];
+          localStorage.setItem('matrix-lms:cms:html', JSON.stringify(h));
+        } catch (e) {}
+        try { if (CMS.supabaseClient) CMS.supabaseClient.from('screens').delete().eq('id', s.id); } catch (e) {}
+        try { if (CMS.supabaseClient && s.src) CMS.supabaseClient.from('pages').delete().eq('path', s.src); } catch (e) {}
+      }
+      openCourse(courseId, null, 'replace');
     }
 
     /* Lightweight sidebar updates. The screen list is built ONCE per course
@@ -650,6 +740,7 @@
           '<div class="am-screen-headbody"><span class="am-screen-eyebrow">Screen ' + (idx + 1) + ' · ' + esc(t.label) + '</span>' +
             '<input class="am-screen-title" id="am-title" value="' + esc(s.title || '') + '"></div>' +
           '<a class="btn btn-secondary" href="course.html?id=' + esc(courseId) + '&screen=' + esc(s.id) + '" target="_blank" rel="noopener">↗ Open in course</a>' +
+          '<button class="btn btn-ghost am-delete-btn" id="am-delete-btn" type="button" title="Delete this screen">🗑 Delete screen</button>' +
         '</div>' +
         '<div class="am-screen-meta">' +
           '<label class="am-meta-hours">Hours <input type="number" id="am-hours" min="0" step="0.1" value="' +
@@ -687,6 +778,7 @@
         CMS.setScreenOverride(courseId, s.id, { hours: isNaN(h) ? null : h });
         flash('Hours saved — live on the course.');
       });
+      document.getElementById('am-delete-btn').addEventListener('click', function () { deleteScreen(courseId, s); });
 
       if (t.word) {
         var fileInput = document.getElementById('am-file');
@@ -1013,7 +1105,6 @@
           '<div class="am-doc" id="am-doc" contenteditable="true"></div>' +
           '<div class="am-editor-actions">' +
             '<button class="btn btn-ghost" id="am-ed-close" type="button">Close</button>' +
-            '<button class="btn btn-primary" id="am-ed-save" type="button">💾 Save</button>' +
           '</div></div><input type="file" id="am-ed-img" accept="image/*" hidden>';
       var doc = document.getElementById('am-doc');
       doc.innerHTML = enhance(bodyHtml);
@@ -1052,8 +1143,8 @@
         openScreen(courseId, s.id, 'replace');
       }
       document.getElementById('am-ed-close').addEventListener('click', closeEditor);
-      document.getElementById('am-ed-save').addEventListener('click', saveEditor);
-      /* Mirror Save onto the Preview bar so it's reachable from the top. */
+      /* The one and only Save is on the Preview bar — reachable from
+         the top without scrolling to the bottom of the editor. */
       if (topSave) { topSave.hidden = false; topSave.onclick = saveEditor; }
     }
 

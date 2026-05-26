@@ -5055,6 +5055,17 @@ html.am-course-mode, body.am-course-mode { overflow: hidden; height: 100vh; }
   padding: 0.4rem 0.5rem 0.4rem 0.9rem; background: var(--surface-2); border-bottom: 1px solid var(--border);
 }
 .am-preview-save { text-transform: none; letter-spacing: normal; font-size: 0.8rem; padding: 0.32rem 0.8rem; }
+
+/* Delete button on the screen header — red accent so it's clearly destructive */
+.am-delete-btn { color: #b91c1c; border-color: rgba(185, 28, 28, 0.2); }
+.am-delete-btn:hover { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+
+/* Drag-to-reorder the screen list (PowerPoint-style) */
+.am-screenlist .ms-ws-item { cursor: grab; }
+.am-screenlist .ms-ws-item:active { cursor: grabbing; }
+.am-screenlist .ms-ws-item.ms-ws-dragging { opacity: 0.4; }
+.am-screenlist .ms-ws-item.ms-ws-dropping-before { box-shadow: inset 0 3px 0 var(--primary); }
+.am-screenlist .ms-ws-item.ms-ws-dropping-after  { box-shadow: inset 0 -3px 0 var(--primary); }
 .am-preview { padding: 1rem; background: #f4f6fb; }
 .am-preview .stage-doc { padding: 0; background: transparent; }
 .am-preview-frame { width: 100%; height: 560px; border: none; background: #fff; border-radius: var(--r-sm); }

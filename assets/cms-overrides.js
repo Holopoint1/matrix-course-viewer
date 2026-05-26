@@ -213,6 +213,11 @@
     unlock,
     lock,
     exportZip,
-    buildExportPayload
+    buildExportPayload,
+    /* Delete API — Phase-1 soft hide for originals (the file lives in
+       the repo), local-only so a pull won't bring it back. */
+    addDeletedScreen,
+    getDeletedScreens,
+    removeDeletedScreen
   };
 })();
