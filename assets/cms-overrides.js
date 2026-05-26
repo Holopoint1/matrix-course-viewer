@@ -79,20 +79,56 @@
     const merged = Object.assign({}, course, courseOverride || {});
     const origIds = {};
     (course.screens || []).forEach((s) => { origIds[s.id] = true; });
-    merged.screens = (course.screens || []).map((s) => {
+    /* Originals with any overrides applied. Position defaults to the
+       courses.json index — so an un-overridden course keeps its
+       original order, and reordering writes explicit positions. */
+    let screens = (course.screens || []).map((s, i) => {
       const o = screenOverrides[s.id];
-      return o ? Object.assign({}, s, o) : s;
+      const out = o ? Object.assign({}, s, o) : Object.assign({}, s);
+      if (out.position == null || out.position === '') out.position = i;
+      return out;
     });
-    /* Screens ADDED through the admin (e.g. a course upload that
-       included an extra "Screen N" section) live in the overrides but
-       not in the original courses.json. Append them, ordered by the
-       position they were given. */
+    /* Screens ADDED through the admin — present in overrides but not
+       in courses.json. Append them; their position was set when added. */
     const added = Object.keys(screenOverrides)
       .filter((id) => !origIds[id] && screenOverrides[id] && screenOverrides[id].src)
-      .map((id) => Object.assign({ id: id }, screenOverrides[id]))
-      .sort((a, b) => (a.position || 0) - (b.position || 0));
-    if (added.length) merged.screens = merged.screens.concat(added);
+      .map((id) => Object.assign({ id: id }, screenOverrides[id]));
+    if (added.length) screens = screens.concat(added);
+    /* Filter out screens the editor deleted (local-only, Phase 1). */
+    const deleted = getDeletedScreens(course.id);
+    if (deleted.length) {
+      const ds = {}; deleted.forEach((id) => { ds[id] = true; });
+      screens = screens.filter((s) => !ds[s.id]);
+    }
+    /* Final order is by position. */
+    screens.sort((a, b) => (a.position || 0) - (b.position || 0));
+    merged.screens = screens;
     return merged;
+  }
+
+  const KEY_DELETED = 'matrix-lms:cms:deleted-screens';
+  function getDeletedScreens(courseId) {
+    try {
+      const all = JSON.parse(localStorage.getItem(KEY_DELETED) || '{}');
+      return all[courseId] || [];
+    } catch (_) { return []; }
+  }
+  function addDeletedScreen(courseId, screenId) {
+    try {
+      const all = JSON.parse(localStorage.getItem(KEY_DELETED) || '{}');
+      const arr = all[courseId] || [];
+      if (arr.indexOf(screenId) < 0) arr.push(screenId);
+      all[courseId] = arr;
+      localStorage.setItem(KEY_DELETED, JSON.stringify(all));
+    } catch (_) {}
+  }
+  function removeDeletedScreen(courseId, screenId) {
+    try {
+      const all = JSON.parse(localStorage.getItem(KEY_DELETED) || '{}');
+      const arr = (all[courseId] || []).filter((x) => x !== screenId);
+      all[courseId] = arr;
+      localStorage.setItem(KEY_DELETED, JSON.stringify(all));
+    } catch (_) {}
   }
 
   /* Apply HTML override at fetch time — replaces the file content with the

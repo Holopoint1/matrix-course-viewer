@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260557">
+  <link rel="stylesheet" href="assets/styles.css?v=20260558">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260557"></script>
-  <script src="assets/cms-overrides.js?v=20260557"></script>
+  <script src="assets/chrome.js?v=20260558"></script>
+  <script src="assets/cms-overrides.js?v=20260558"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260557"></script>
-  <script src="assets/cms-supabase.js?v=20260557"></script>
+  <script src="assets/supabase-config.js?v=20260558"></script>
+  <script src="assets/cms-supabase.js?v=20260558"></script>
   <script>
   (function () {
     'use strict';
@@ -362,6 +362,7 @@
     /* ========== View 1: catalog ========== */
     function renderCatalog(mode) {
       cur.courseId = null; cur.screenId = null;
+      document.documentElement.classList.remove('am-course-mode');
       document.body.classList.remove('am-course-mode');
       var tiles = courses.map(function (c) {
         var scr = c.screens || [];
@@ -395,6 +396,7 @@
     /* ========== New course form ========== */
     function renderNewCourseForm() {
       cur.courseId = null; cur.screenId = null;
+      document.documentElement.classList.remove('am-course-mode');
       document.body.classList.remove('am-course-mode');
       var suggested = 'NEW001';
       for (var n = 1; n < 999; n++) {
@@ -464,6 +466,7 @@
       cur.courseId = courseId;
       var c = merged(courseId);
       if (!c) { renderCatalog('replace'); return; }
+      document.documentElement.classList.add('am-course-mode');
       document.body.classList.add('am-course-mode');
       main.innerHTML =
         '<div class="am-course-shell">' +

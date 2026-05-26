@@ -4923,8 +4923,11 @@ body.pdf-overlay-open { overflow: hidden; }
    .am-course-mode locks it. The two-pane shell is a fixed box pinned
    below the header; the sidebar and the content pane each scroll
    inside themselves. Because nothing in the page reflows or scrolls,
-   picking a screen physically cannot move the sidebar or the layout. */
-body.am-course-mode { overflow: hidden; }
+   picking a screen physically cannot move the sidebar or the layout.
+   The lock has to apply to BOTH <html> and <body> — body's
+   overflow:hidden does not reliably stop the <html> element from
+   scrolling, especially when the app-shell has min-height:100vh. */
+html.am-course-mode, body.am-course-mode { overflow: hidden; height: 100vh; }
 .am-course-shell {
   display: grid;
   grid-template-columns: 264px 1fr;
