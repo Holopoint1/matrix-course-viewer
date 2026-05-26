@@ -5060,14 +5060,26 @@ html.am-course-mode, body.am-course-mode { overflow: hidden; height: 100vh; }
 .am-delete-btn { color: #b91c1c; border-color: rgba(185, 28, 28, 0.2); }
 .am-delete-btn:hover { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
 
-/* Primary "+ Add screen" action in the sidebar — visually separated */
+/* Primary "+ Add screen" action in the sidebar — clearly separated
+   from the read-only file actions above it with breathing room, a
+   dashed rule, and the matching label so it reads as a different
+   kind of action ("create new" vs "open the existing files"). */
 .am-side-divider {
-  height: 1px; background: var(--border);
-  margin: 0.7rem 0 0.6rem;
+  height: 0; border-top: 1px dashed var(--border-strong);
+  margin: 1.1rem 0 0.95rem;
+  position: relative;
+}
+.am-side-divider::after {
+  content: 'Or add a new one';
+  position: absolute; top: -0.55rem; left: 50%; transform: translateX(-50%);
+  background: var(--surface-2);
+  padding: 0 0.5rem;
+  font-size: 0.62rem; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--text-subtle); font-weight: 700;
 }
 .am-side-act-primary {
   background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 700;
-  margin-top: 0.2rem;
+  margin-top: 0.15rem; padding: 0.55rem 0.8rem; font-size: 0.9rem;
 }
 .am-side-act-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
 

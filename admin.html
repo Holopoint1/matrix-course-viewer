@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260561">
+  <link rel="stylesheet" href="assets/styles.css?v=20260562">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,12 +19,12 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260561"></script>
-  <script src="assets/cms-overrides.js?v=20260561"></script>
+  <script src="assets/chrome.js?v=20260562"></script>
+  <script src="assets/cms-overrides.js?v=20260562"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260561"></script>
-  <script src="assets/cms-supabase.js?v=20260561"></script>
-  <script src="assets/scorm-export.js?v=20260561"></script>
+  <script src="assets/supabase-config.js?v=20260562"></script>
+  <script src="assets/cms-supabase.js?v=20260562"></script>
+  <script src="assets/scorm-export.js?v=20260562"></script>
   <script>
   (function () {
     'use strict';
@@ -259,17 +259,39 @@
       return d.getDate() + ' ' + mon + ' ' + d.getFullYear() + ', ' +
         ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
     }
-    /* Pull each edited screen's last-edit timestamp from Supabase — the
-       pages table has a touch_updated_at trigger, so updated_at is the
-       true last-edit time. Unedited screens simply aren't in the table. */
+    /* The pages table was seeded for every screen in one transaction,
+       so all original rows share the EXACT same updated_at = the seed
+       time. That isn't a real edit. Detect it (any timestamp shared by
+       3+ rows) and treat those as "Original — not yet edited" even
+       though a pages row exists. Real edits use now() per row, so
+       their timestamps are unique. */
+    function detectSeedTime(rows) {
+      var counts = {}, dominant = null;
+      (rows || []).forEach(function (r) {
+        if (r && r.updated_at) counts[r.updated_at] = (counts[r.updated_at] || 0) + 1;
+      });
+      Object.keys(counts).forEach(function (t) {
+        if (counts[t] >= 3 && (!dominant || counts[t] > counts[dominant])) dominant = t;
+      });
+      return dominant;
+    }
     async function loadEditTimes(c) {
       editTimes = {};
       if (!CMS.supabaseClient || !c) return;
       try {
         var srcs = (c.screens || []).map(function (s) { return s.src; }).filter(Boolean);
         if (!srcs.length) return;
-        var res = await CMS.supabaseClient.from('pages').select('path,updated_at').in('path', srcs);
-        (res.data || []).forEach(function (r) { if (r && r.path) editTimes[r.path] = r.updated_at; });
+        /* Pull ALL pages rows to detect the global seed cluster, then
+           filter to this course's screens. */
+        var res = await CMS.supabaseClient.from('pages').select('path,updated_at');
+        var rows = res.data || [];
+        var seedTime = detectSeedTime(rows);
+        var wanted = {}; srcs.forEach(function (p) { wanted[p] = true; });
+        rows.forEach(function (r) {
+          if (!r || !r.path || !r.updated_at || !wanted[r.path]) return;
+          if (seedTime && r.updated_at === seedTime) return;
+          editTimes[r.path] = r.updated_at;
+        });
       } catch (e) {}
     }
     function editTextPlain(s) {
@@ -308,8 +330,11 @@
         ]);
         var srcToCourse = {};
         (res[0].data || []).forEach(function (r) { if (r && r.src) srcToCourse[r.src] = r.course_id; });
+        /* Exclude the seed-time cluster — those aren't real edits. */
+        var seedTime = detectSeedTime(res[1].data || []);
         (res[1].data || []).forEach(function (r) {
           if (!r || !r.path || !r.updated_at) return;
+          if (seedTime && r.updated_at === seedTime) return;
           var cid = srcToCourse[r.path];
           if (!cid) return;
           if (!courseEditTimes[cid] || r.updated_at > courseEditTimes[cid]) courseEditTimes[cid] = r.updated_at;
