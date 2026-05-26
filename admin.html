@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260559">
+  <link rel="stylesheet" href="assets/styles.css?v=20260560">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260559"></script>
-  <script src="assets/cms-overrides.js?v=20260559"></script>
+  <script src="assets/chrome.js?v=20260560"></script>
+  <script src="assets/cms-overrides.js?v=20260560"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260559"></script>
-  <script src="assets/cms-supabase.js?v=20260559"></script>
+  <script src="assets/supabase-config.js?v=20260560"></script>
+  <script src="assets/cms-supabase.js?v=20260560"></script>
   <script>
   (function () {
     'use strict';
@@ -482,6 +482,7 @@
                 '<button type="button" class="am-side-act" id="am-dl-course">⤓ Download whole course</button>' +
                 '<button type="button" class="am-side-act" id="am-ul-course">⤴ Upload whole course</button>' +
                 '<input type="file" id="am-course-file" accept=".docx,.doc,.htm,.html" hidden>' +
+                '<button type="button" class="am-side-act am-side-act-primary" id="am-add-screen">＋ Add screen</button>' +
               '</div>' +
             '</div>' +
             '<div class="ms-tier ms-tier-flat am-screenlist" id="am-screenlist"></div>' +
@@ -505,6 +506,7 @@
       var cf = document.getElementById('am-course-file');
       document.getElementById('am-ul-course').addEventListener('click', function () { cf.click(); });
       cf.addEventListener('change', function () { if (cf.files[0]) uploadCourse(cf.files[0], courseId); });
+      document.getElementById('am-add-screen').addEventListener('click', function () { addScreen(courseId); });
       editTimesReady = loadEditTimes(c);
       renderScreenList(c);
       if (screenId && (c.screens || []).some(function (x) { return x.id === screenId; })) {
@@ -598,6 +600,24 @@
       renderScreenList(merged(courseId));
     }
 
+    /* ---- Add a new (blank) screen and open it for editing ---- */
+    function addScreen(courseId) {
+      var c = merged(courseId);
+      var newPos = (c.screens || []).length;
+      var newId = 'add-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+      var newSrc = 'content/' + (c.code || c.id) + '/' + newId + '.html';
+      var newTitle = 'New screen';
+      CMS.setScreenOverride(courseId, newId, {
+        title: newTitle, type: 'html', src: newSrc, position: newPos
+      });
+      CMS.setHtmlOverride(newSrc, wrapPage('<h1>' + esc(newTitle) + '</h1><p>(edit me)</p>'));
+      editTimes[newSrc] = new Date().toISOString();
+      flash('✓ Added a new screen — rename it in the header, edit the content below.');
+      /* Open the course fresh (re-running renderScreenList with the new
+         screen included) then jump straight into the new screen. */
+      openCourse(courseId, newId, 'push');
+    }
+
     /* ---- Delete a screen ---- */
     function deleteScreen(courseId, s) {
       if (!confirm('Delete the screen “' + (s.title || 'untitled') + '”?\n\nIt will be hidden from the course immediately.')) return;
@@ -684,13 +704,16 @@
           '<h1>' + esc(c.code || c.id) + ' &middot; ' + esc(c.title || '') + '</h1>' +
           '<p>Every screen in this course — its type, title, hours, where the content comes from, ' +
           'and when it was last edited. Originals live in the project files; edits are saved in the ' +
-          'database. Click any row to open that screen.</p></div>' +
+          'database. Click any row to open that screen.</p>' +
+          '<button type="button" class="btn btn-primary" id="am-fm-add">＋ Add screen</button>' +
+        '</div>' +
         '<table class="am-fm-table"><thead><tr>' +
           '<th>#</th><th>Type</th><th>Title</th><th>Hours</th><th>Source file</th><th>Last edited</th>' +
         '</tr></thead><tbody>' + rows + '</tbody></table>';
       pane.querySelectorAll('[data-screen]').forEach(function (tr) {
         tr.addEventListener('click', function () { openScreen(courseId, tr.dataset.screen); });
       });
+      document.getElementById('am-fm-add').addEventListener('click', function () { addScreen(courseId); });
       pane.scrollTop = 0;
     }
 

@@ -5060,6 +5060,15 @@ html.am-course-mode, body.am-course-mode { overflow: hidden; height: 100vh; }
 .am-delete-btn { color: #b91c1c; border-color: rgba(185, 28, 28, 0.2); }
 .am-delete-btn:hover { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
 
+/* Primary "+ Add screen" action in the sidebar — stands out */
+.am-side-act-primary {
+  background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 700;
+}
+.am-side-act-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+
+/* File-manager "+ Add screen" sits right next to the heading */
+.am-head #am-fm-add { margin-top: 0.6rem; }
+
 /* Drag-to-reorder the screen list (PowerPoint-style) */
 .am-screenlist .ms-ws-item { cursor: grab; }
 .am-screenlist .ms-ws-item:active { cursor: grabbing; }
