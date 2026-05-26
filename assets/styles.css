@@ -4890,6 +4890,24 @@ body.pdf-overlay-open { overflow: hidden; }
 .am-tile-meta em { color: var(--success); font-style: normal; font-weight: 700; }
 .am-tile-edited { font-size: 0.7rem; color: var(--text-subtle); margin-top: 0.2rem; }
 
+/* Per-tile delete (top-right circular button) */
+.am-tile-wrap { position: relative; }
+.am-tile-del {
+  position: absolute; top: 10px; right: 10px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer; padding: 0; font-size: 0.95rem;
+  color: #b91c1c;
+  box-shadow: var(--shadow-xs);
+  opacity: 0; transition: opacity 120ms, transform 120ms, background 100ms;
+}
+.am-tile-wrap:hover .am-tile-del,
+.am-tile-del:focus { opacity: 1; }
+.am-tile-del:hover { background: #fef2f2; transform: scale(1.08); border-color: #fecaca; }
+
 /* "+ New course" tile */
 .am-tile-new {
   display: flex; flex-direction: column; align-items: center; justify-content: center;

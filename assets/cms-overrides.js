@@ -131,6 +131,26 @@
     } catch (_) {}
   }
 
+  /* Course-level soft delete (local-only, same Phase-1 approach). */
+  const KEY_DELETED_COURSES = 'matrix-lms:cms:deleted-courses';
+  function getDeletedCourses() {
+    try { return JSON.parse(localStorage.getItem(KEY_DELETED_COURSES) || '[]'); }
+    catch (_) { return []; }
+  }
+  function addDeletedCourse(courseId) {
+    try {
+      const arr = JSON.parse(localStorage.getItem(KEY_DELETED_COURSES) || '[]');
+      if (arr.indexOf(courseId) < 0) arr.push(courseId);
+      localStorage.setItem(KEY_DELETED_COURSES, JSON.stringify(arr));
+    } catch (_) {}
+  }
+  function removeDeletedCourse(courseId) {
+    try {
+      const arr = JSON.parse(localStorage.getItem(KEY_DELETED_COURSES) || '[]').filter((x) => x !== courseId);
+      localStorage.setItem(KEY_DELETED_COURSES, JSON.stringify(arr));
+    } catch (_) {}
+  }
+
   /* Apply HTML override at fetch time — replaces the file content with the
      edited version if one exists. Used by the worksheet renderer in app.js. */
   function applyHtmlOverride(path, originalText) {
@@ -218,6 +238,9 @@
        the repo), local-only so a pull won't bring it back. */
     addDeletedScreen,
     getDeletedScreens,
-    removeDeletedScreen
+    removeDeletedScreen,
+    addDeletedCourse,
+    getDeletedCourses,
+    removeDeletedCourse
   };
 })();
