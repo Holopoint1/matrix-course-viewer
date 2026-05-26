@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260556">
+  <link rel="stylesheet" href="assets/styles.css?v=20260557">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260556"></script>
-  <script src="assets/cms-overrides.js?v=20260556"></script>
+  <script src="assets/chrome.js?v=20260557"></script>
+  <script src="assets/cms-overrides.js?v=20260557"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260556"></script>
-  <script src="assets/cms-supabase.js?v=20260556"></script>
+  <script src="assets/supabase-config.js?v=20260557"></script>
+  <script src="assets/cms-supabase.js?v=20260557"></script>
   <script>
   (function () {
     'use strict';
@@ -295,22 +295,24 @@
       courseEditTimes = {};
       if (!CMS.supabaseClient) return;
       try {
+        /* ONLY use pages.updated_at — courses.updated_at and
+           screens.updated_at carry the seed time for every untouched
+           row, which would make every course look "edited just now"
+           even when nobody has touched it. The pages table only has
+           a row when content was actually edited, so it's the clean
+           signal. */
         var res = await Promise.all([
-          CMS.supabaseClient.from('courses').select('id,updated_at'),
-          CMS.supabaseClient.from('screens').select('course_id,src,updated_at'),
+          CMS.supabaseClient.from('screens').select('course_id,src'),
           CMS.supabaseClient.from('pages').select('path,updated_at')
         ]);
-        function bump(id, t) {
-          if (!id || !t) return;
-          if (!courseEditTimes[id] || t > courseEditTimes[id]) courseEditTimes[id] = t;
-        }
-        (res[0].data || []).forEach(function (r) { bump(r.id, r.updated_at); });
         var srcToCourse = {};
+        (res[0].data || []).forEach(function (r) { if (r && r.src) srcToCourse[r.src] = r.course_id; });
         (res[1].data || []).forEach(function (r) {
-          if (r && r.src) srcToCourse[r.src] = r.course_id;
-          bump(r && r.course_id, r && r.updated_at);
+          if (!r || !r.path || !r.updated_at) return;
+          var cid = srcToCourse[r.path];
+          if (!cid) return;
+          if (!courseEditTimes[cid] || r.updated_at > courseEditTimes[cid]) courseEditTimes[cid] = r.updated_at;
         });
-        (res[2].data || []).forEach(function (r) { bump(srcToCourse[r && r.path], r && r.updated_at); });
       } catch (e) {}
     }
     function repaintCatalogTimes() {
@@ -775,12 +777,11 @@
       }
     }
 
-    /* ---------- Full-course download — zip of per-screen files + combined doc ---------- */
+    /* ---------- Full-course download — ONE Word .docx ---------- */
     async function downloadCourse(courseId) {
       var c = merged(courseId);
       flash('Building the course download — rendering ' + c.screens.length + ' screens…');
       try {
-        var zip = new JSZip();
         var parts = [];
         for (var i = 0; i < c.screens.length; i++) {
           var s = c.screens[i], t = typeOf(s.type);
@@ -794,11 +795,6 @@
           } else {
             content = '<p><em>[' + esc(t.label) + ' screen — link kept as-is: ' +
               esc(s.src || '') + ']</em></p>';
-          }
-          /* Per-screen file: a real .docx, exactly ONE plain title heading. */
-          if (t.word || t.img) {
-            zip.file('screens/' + pad2(i + 1) + ' - ' + safeName(s.title) + '.docx',
-              await htmlToDocxBlob(fullHtmlDoc(markScreen(content, s.title, s.title), s.title)));
           }
           /* Combined doc: exactly ONE heading per screen, "Screen N:
              Title" — the obvious editing label AND the re-upload split
@@ -828,22 +824,9 @@
         /* Name files with the CP/CO course code up front — several
            courses share a title, so the code is what tells them apart. */
         var codeName = safeName((c.code || c.id) + ' - ' + c.title);
-        zip.file(codeName + '.docx',
-          await htmlToDocxBlob(fullHtmlDoc(combined, (c.code || c.id) + ' ' + c.title)));
-        zip.file('README.txt',
-          'Matrix LMS — course download for ' + (c.code || c.id) + ' ' + c.title + '\n\n' +
-          '• screens/  — each screen as its own Word .docx (text screens and\n' +
-          '  image screens; pictures are embedded in the file).\n' +
-          '• ' + codeName + '.docx — the whole course in ONE Word document.\n' +
-          '  Each screen begins with a heading "Screen N: Title". Edit\n' +
-          '  anything below a heading; keep the "Screen N: Title" lines.\n' +
-          '  Then use "Upload whole course" in Admin — it splits on those\n' +
-          '  headings and refills every screen, pictures and all.\n\n' +
-          'Open and save these in Microsoft Word as .docx (do NOT save as the\n' +
-          'old .doc format). Google Docs: use File > Download > .docx.\n');
-        var blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
-        download(blob, codeName + '.zip');
-        flash('✓ Course downloaded — ' + c.screens.length + ' screen file(s) + the full-course document.');
+        var blob = await htmlToDocxBlob(fullHtmlDoc(combined, (c.code || c.id) + ' ' + c.title));
+        download(blob, codeName + '.docx');
+        flash('✓ Course downloaded as a single Word document.');
       } catch (err) {
         flash('Could not build the course download: ' + esc(err.message || err), 'err');
       }
