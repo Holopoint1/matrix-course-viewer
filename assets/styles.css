@@ -3045,7 +3045,18 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 .stage-doc-inner > p:first-child strong { font-size: 1.4rem; color: var(--primary-dark); letter-spacing: -0.01em; }
 .stage-doc-inner ul, .stage-doc-inner ol { padding-left: 1.4em; margin: 0 0 0.85em; }
 .stage-doc-inner li { margin-bottom: 0.3em; }
-.stage-doc-inner img { max-width: 100%; height: auto; border-radius: var(--r-sm); margin: 0.7em 0; }
+.stage-doc-inner img {
+  max-width: 100%; height: auto;
+  border-radius: var(--r-sm); margin: 0.7em 0;
+  /* Honour the picture's own EXIF orientation. Modern browsers do this
+     by default for <img>, but a few contexts override to "none", which
+     leaves photos on their side after Word strips/keeps EXIF
+     inconsistently. Force it on for every image in screen content. */
+  image-orientation: from-image;
+}
+/* Same default for any image in admin previews / file manager / new course thumbnails */
+.am-preview img, .am-preview-img img, .am-doc img, .am-tile-thumb img,
+.am-scorm-frame img { image-orientation: from-image; max-width: 100%; height: auto; }
 .stage-doc-inner table { border-collapse: collapse; margin: 1em 0; width: 100%; font-size: 0.95em; }
 .stage-doc-inner th, .stage-doc-inner td { border: 1px solid var(--border); padding: 0.45em 0.7em; vertical-align: top; }
 .stage-doc-inner th { background: var(--primary-50); }

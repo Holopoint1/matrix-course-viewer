@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260568">
+  <link rel="stylesheet" href="assets/styles.css?v=20260569">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260568"></script>
-  <script src="assets/cms-overrides.js?v=20260568"></script>
+  <script src="assets/chrome.js?v=20260569"></script>
+  <script src="assets/cms-overrides.js?v=20260569"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260568"></script>
-  <script src="assets/cms-supabase.js?v=20260568"></script>
+  <script src="assets/supabase-config.js?v=20260569"></script>
+  <script src="assets/cms-supabase.js?v=20260569"></script>
   <script>
   (function () {
     'use strict';
@@ -908,7 +908,7 @@
         '<div id="am-editor-host"></div>' +
         '<div class="am-preview-wrap"><div class="am-preview-label">' +
           '<span>Preview — exactly as learners see it</span>' +
-          (t.word ? '<button class="btn btn-primary am-preview-save" id="am-preview-save" type="button">💾 Save</button>' : '') +
+          (t.word ? '<button class="btn btn-primary am-preview-save" id="am-preview-save" type="button" hidden>💾 Save</button>' : '') +
           '</div>' +
           '<div class="am-preview" id="am-preview"><p class="stage-loading">Rendering&hellip;</p></div></div>';
       /* The content pane is a fixed height and scrolls internally, so the
@@ -932,32 +932,9 @@
         flash('Hours saved — live on the course.');
       });
       document.getElementById('am-delete-btn').addEventListener('click', function () { deleteScreen(courseId, s); });
-      /* Always-visible Save button on the Preview bar (text screens
-         only — image / video / pdf are saved via their own controls).
-         If the editor is open it saves the editor; otherwise it
-         re-confirms the screen state and flashes Saved. */
-      var psBtn = document.getElementById('am-preview-save');
-      if (psBtn) {
-        psBtn.addEventListener('click', function () {
-          var docEl = document.getElementById('am-doc');
-          if (docEl) {
-            CMS.setHtmlOverride(s.src, wrapPage(docEl.innerHTML));
-            editTimes[s.src] = new Date().toISOString();
-            flash('✓ Saved.');
-          } else {
-            var patch = {};
-            var titleEl = document.getElementById('am-title');
-            var hoursEl = document.getElementById('am-hours');
-            if (titleEl) patch.title = titleEl.value.trim();
-            if (hoursEl && hoursEl.value !== '') {
-              var h = parseFloat(hoursEl.value);
-              if (!isNaN(h)) patch.hours = h;
-            }
-            if (Object.keys(patch).length) CMS.setScreenOverride(courseId, s.id, patch);
-            flash('✓ Saved.');
-          }
-        });
-      }
+      /* Save button is hidden until the WYSIWYG editor opens.
+         Title and hours auto-save on change, and a course upload
+         already commits content — there's nothing to save otherwise. */
 
       if (t.word) {
         var fileInput = document.getElementById('am-file');
@@ -1256,6 +1233,8 @@
       var host = document.getElementById('am-editor-host');
       if (host.dataset.open === '1') {
         host.dataset.open = '0'; host.innerHTML = '';
+        var ps = document.getElementById('am-preview-save');
+        if (ps) ps.hidden = true;
         return;
       }
       host.dataset.open = '1';
@@ -1297,11 +1276,21 @@
         fr.onload = function () { doc.focus(); document.execCommand('insertImage', false, String(fr.result)); };
         fr.readAsDataURL(f); e.target.value = '';
       });
-      function closeEditor() { host.dataset.open = '0'; host.innerHTML = ''; }
+      var topSave = document.getElementById('am-preview-save');
+      function closeEditor() {
+        host.dataset.open = '0'; host.innerHTML = '';
+        if (topSave) topSave.hidden = true;
+      }
+      function saveEditor() {
+        CMS.setHtmlOverride(s.src, wrapPage(doc.innerHTML));
+        editTimes[s.src] = new Date().toISOString();
+        flash('✓ Saved — live on the course now.');
+        closeEditor();
+        openScreen(courseId, s.id, 'replace');
+      }
       document.getElementById('am-ed-close').addEventListener('click', closeEditor);
-      /* Save is wired by openScreen on the Preview bar — it adapts to
-         whether the editor is open (saves its text) or closed (saves
-         title + hours). One single, always-visible Save per screen. */
+      /* Reveal the Save on the Preview bar only while editing. */
+      if (topSave) { topSave.hidden = false; topSave.onclick = saveEditor; }
     }
 
     /* ---------- Boot ---------- */
