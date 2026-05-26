@@ -4883,6 +4883,40 @@ body.pdf-overlay-open { overflow: hidden; }
 .am-tile-body strong { font-size: 0.9rem; color: var(--text); line-height: 1.35; }
 .am-tile-meta { font-size: 0.76rem; color: var(--text-muted); }
 .am-tile-meta em { color: var(--success); font-style: normal; font-weight: 700; }
+.am-tile-edited { font-size: 0.7rem; color: var(--text-subtle); margin-top: 0.2rem; }
+
+/* "+ New course" tile */
+.am-tile-new {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.4rem; min-height: 220px;
+  background: var(--surface);
+  border: 2px dashed var(--border-strong);
+  color: var(--text-subtle);
+}
+.am-tile-new:hover {
+  border-color: var(--primary); color: var(--primary); background: var(--primary-50);
+  transform: none; box-shadow: none;
+}
+.am-tile-new-icon { font-size: 2.2rem; line-height: 1; }
+.am-tile-new-text { font-size: 0.95rem; font-weight: 700; }
+
+/* New-course form */
+.am-newcourse {
+  display: flex; flex-direction: column; gap: 0.9rem;
+  max-width: 540px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 1.2rem 1.4rem;
+}
+.am-newcourse label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.82rem; }
+.am-newcourse label > span { font-weight: 700; color: var(--text); }
+.am-newcourse input, .am-newcourse textarea {
+  font: inherit; padding: 0.45rem 0.6rem; border: 1px solid var(--border);
+  border-radius: var(--r-sm); background: var(--surface); color: var(--text);
+}
+.am-newcourse input:focus, .am-newcourse textarea:focus { outline: none; border-color: var(--primary); }
+.am-newcourse .am-nc-check { flex-direction: row; align-items: center; gap: 0.5rem; }
+.am-newcourse .am-nc-check span { font-weight: 500; }
+.am-nc-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.4rem; }
 
 /* ---- Course open: a fixed app-style work area ----
    When a course is open the PAGE ITSELF DOES NOT SCROLL — body

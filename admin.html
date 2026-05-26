@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260555">
+  <link rel="stylesheet" href="assets/styles.css?v=20260556">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260555"></script>
-  <script src="assets/cms-overrides.js?v=20260555"></script>
+  <script src="assets/chrome.js?v=20260556"></script>
+  <script src="assets/cms-overrides.js?v=20260556"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260555"></script>
-  <script src="assets/cms-supabase.js?v=20260555"></script>
+  <script src="assets/supabase-config.js?v=20260556"></script>
+  <script src="assets/cms-supabase.js?v=20260556"></script>
   <script>
   (function () {
     'use strict';
@@ -35,6 +35,7 @@
     var cur = { courseId: null, screenId: null };
     var editTimes = {};                /* screen src -> ISO time of its last content edit */
     var editTimesReady = Promise.resolve();
+    var courseEditTimes = {};          /* course id -> ISO time of latest edit anywhere in the course */
 
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -279,6 +280,47 @@
     function hoursText(s) {
       return (s && s.hours != null && s.hours !== '') ? String(s.hours) : '—';
     }
+    /* Thumbnail for a course tile — admin upload (saved as a pages row
+       at the synthetic path cms-thumbnail/<courseId>) wins; otherwise
+       fall back to the legacy content/<id>/opening.svg image. */
+    function thumbnailFor(c) {
+      var ov = CMS.getHtmlOverride && CMS.getHtmlOverride('cms-thumbnail/' + c.id);
+      if (ov && /^data:image\//i.test(ov)) return ov;
+      return 'content/' + c.id + '/opening.svg';
+    }
+    /* When was THIS course last edited anywhere — its own row, any of
+       its screens' rows, or any of its pages' content rows. Aggregated
+       once on the catalog and painted onto each tile. */
+    async function loadCourseEditTimes() {
+      courseEditTimes = {};
+      if (!CMS.supabaseClient) return;
+      try {
+        var res = await Promise.all([
+          CMS.supabaseClient.from('courses').select('id,updated_at'),
+          CMS.supabaseClient.from('screens').select('course_id,src,updated_at'),
+          CMS.supabaseClient.from('pages').select('path,updated_at')
+        ]);
+        function bump(id, t) {
+          if (!id || !t) return;
+          if (!courseEditTimes[id] || t > courseEditTimes[id]) courseEditTimes[id] = t;
+        }
+        (res[0].data || []).forEach(function (r) { bump(r.id, r.updated_at); });
+        var srcToCourse = {};
+        (res[1].data || []).forEach(function (r) {
+          if (r && r.src) srcToCourse[r.src] = r.course_id;
+          bump(r && r.course_id, r && r.updated_at);
+        });
+        (res[2].data || []).forEach(function (r) { bump(srcToCourse[r && r.path], r && r.updated_at); });
+      } catch (e) {}
+    }
+    function repaintCatalogTimes() {
+      document.querySelectorAll('.am-tile[data-course]').forEach(function (b) {
+        var span = b.querySelector('.am-tile-edited');
+        if (!span) return;
+        var iso = courseEditTimes[b.dataset.course];
+        span.textContent = iso ? ('Last edited ' + fmtTime(iso)) : '';
+      });
+    }
 
     /* ========== URL routing ==========
        Each view has its own address, so a refresh, a bookmark or a
@@ -323,20 +365,96 @@
         var scr = c.screens || [];
         var edited = scr.filter(function (s) { return isEdited(s); }).length;
         return '<button type="button" class="am-tile" data-course="' + esc(c.id) + '">' +
-          '<span class="am-tile-thumb" style="background-image:url(\'content/' + esc(c.id) + '/opening.svg\')">' +
+          '<span class="am-tile-thumb" style="background-image:url(\'' + esc(thumbnailFor(c)) + '\')">' +
             '<span class="am-tile-code">' + esc(c.code || c.id) + '</span></span>' +
           '<span class="am-tile-body"><strong>' + esc(c.title || c.id) + '</strong>' +
             '<span class="am-tile-meta">' + scr.length + ' screens' +
-              (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span></span></button>';
+              (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span>' +
+            '<span class="am-tile-edited"></span></span></button>';
       }).join('');
+      tiles += '<button type="button" class="am-tile am-tile-new" id="am-tile-new">' +
+        '<span class="am-tile-new-icon">＋</span>' +
+        '<span class="am-tile-new-text">New course</span></button>';
       main.innerHTML =
         '<div class="am-head"><span class="am-head-eyebrow">Content manager</span><h1>Courses</h1>' +
-          '<p>Pick a course — it opens with the same screen sidebar learners see. Click any screen to preview it, edit it like a document, or replace it with a Word file.</p></div>' +
+          '<p>Pick a course to edit, or click <strong>＋ New course</strong> to start a fresh one.</p></div>' +
         '<div class="am-catalog">' + tiles + '</div>';
       main.querySelectorAll('[data-course]').forEach(function (b) {
         b.addEventListener('click', function () { openCourse(b.dataset.course); });
       });
+      var nt = document.getElementById('am-tile-new');
+      if (nt) nt.addEventListener('click', renderNewCourseForm);
       setUrl(null, null, mode || 'push');
+      /* Paint cached times now (if any), then refresh from Supabase. */
+      repaintCatalogTimes();
+      loadCourseEditTimes().then(repaintCatalogTimes);
+    }
+
+    /* ========== New course form ========== */
+    function renderNewCourseForm() {
+      cur.courseId = null; cur.screenId = null;
+      document.body.classList.remove('am-course-mode');
+      var suggested = 'NEW001';
+      for (var n = 1; n < 999; n++) {
+        var trial = 'NEW' + ('00' + n).slice(-3);
+        if (!courses.some(function (x) { return x.id === trial; })) { suggested = trial; break; }
+      }
+      main.innerHTML =
+        '<div class="am-head"><span class="am-head-eyebrow">Add a course</span><h1>New course</h1>' +
+        '<p>Create a brand-new course. Once it&rsquo;s created, open it and add screens — either one by one, or by uploading a Word document.</p></div>' +
+        '<form class="am-newcourse" id="am-newcourse-form">' +
+          '<label><span>Course code</span><input id="am-nc-code" required value="' +
+            esc(suggested) + '" pattern="[A-Za-z0-9_-]+"></label>' +
+          '<label><span>Title</span><input id="am-nc-title" required ' +
+            'placeholder="e.g. Introduction to Microcontrollers"></label>' +
+          '<label><span>Short description</span><textarea id="am-nc-desc" rows="3" ' +
+            'placeholder="What is the course about?"></textarea></label>' +
+          '<label><span>Estimated hours</span><input id="am-nc-hours" type="number" min="0" step="0.5" ' +
+            'placeholder="e.g. 4.5"></label>' +
+          '<label class="am-nc-check"><input type="checkbox" id="am-nc-cert"> ' +
+            '<span>Award a certificate when learners complete the course</span></label>' +
+          '<div class="am-nc-actions">' +
+            '<button type="button" class="btn btn-ghost" id="am-nc-cancel">Cancel</button>' +
+            '<button type="submit" class="btn btn-primary">Create course</button>' +
+          '</div></form>';
+      document.getElementById('am-nc-cancel').addEventListener('click', function () { renderCatalog('replace'); });
+      document.getElementById('am-newcourse-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        createNewCourse();
+      });
+      setUrl(null, null, 'replace');
+    }
+    function createNewCourse() {
+      var code = document.getElementById('am-nc-code').value.trim();
+      var title = document.getElementById('am-nc-title').value.trim();
+      if (!code || !title) return;
+      if (courses.some(function (c) { return c.id === code; })) {
+        alert('A course with code "' + code + '" already exists. Choose a different code.');
+        return;
+      }
+      var desc = document.getElementById('am-nc-desc').value.trim();
+      var hoursRaw = document.getElementById('am-nc-hours').value;
+      var hours = hoursRaw === '' ? undefined : parseFloat(hoursRaw);
+      var cert = document.getElementById('am-nc-cert').checked;
+      /* Stub locally so openCourse can find it right away. */
+      courses.push({ id: code, code: code, title: title, screens: [] });
+      /* Also stash in the discovery cache so it survives a reload
+         even if the Supabase pull hasn't completed yet. */
+      try {
+        var key = 'matrix-lms:db-courses';
+        var arr = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!arr.some(function (x) { return x && x.id === code; })) {
+          arr.push({ id: code, code: code, kind: 'course', title: title,
+            shortDescription: desc || '', estimatedHours: isNaN(hours) ? 0 : hours,
+            certificate: { enabled: !!cert }, categories: [], screens: [] });
+          localStorage.setItem(key, JSON.stringify(arr));
+        }
+      } catch (e) {}
+      var patch = { title: title, code: code, certificate: { enabled: !!cert } };
+      if (desc) patch.shortDescription = desc;
+      if (hours !== undefined && !isNaN(hours)) patch.estimatedHours = hours;
+      CMS.setCourseOverride(code, patch);
+      openCourse(code, null, 'push');
     }
 
     /* ========== View 2: course open ========== */
@@ -354,6 +472,8 @@
               '<div class="am-side-title">' + esc(c.title || '') + '</div>' +
               '<div class="am-side-actions">' +
                 '<button type="button" class="am-side-act" id="am-fm-btn">📁 File manager</button>' +
+                '<button type="button" class="am-side-act" id="am-thumb-btn">🖼 Change thumbnail</button>' +
+                '<input type="file" id="am-thumb-file" accept="image/*" hidden>' +
                 '<button type="button" class="am-side-act" id="am-dl-course">⤓ Download whole course</button>' +
                 '<button type="button" class="am-side-act" id="am-ul-course">⤴ Upload whole course</button>' +
                 '<input type="file" id="am-course-file" accept=".docx,.doc,.htm,.html" hidden>' +
@@ -365,6 +485,17 @@
         '</div>';
       main.querySelector('[data-back]').addEventListener('click', function () { renderCatalog('push'); });
       document.getElementById('am-fm-btn').addEventListener('click', function () { showFileManager(courseId); });
+      var thumbFile = document.getElementById('am-thumb-file');
+      document.getElementById('am-thumb-btn').addEventListener('click', function () { thumbFile.click(); });
+      thumbFile.addEventListener('change', function () {
+        var f = thumbFile.files[0]; if (!f) return;
+        var fr = new FileReader();
+        fr.onload = function () {
+          CMS.setHtmlOverride('cms-thumbnail/' + courseId, String(fr.result));
+          alert('Thumbnail updated — it will appear on the catalog.');
+        };
+        fr.readAsDataURL(f); thumbFile.value = '';
+      });
       document.getElementById('am-dl-course').addEventListener('click', function () { downloadCourse(courseId); });
       var cf = document.getElementById('am-course-file');
       document.getElementById('am-ul-course').addEventListener('click', function () { cf.click(); });
