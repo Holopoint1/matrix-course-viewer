@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260569">
+  <link rel="stylesheet" href="assets/styles.css?v=20260570">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260569"></script>
-  <script src="assets/cms-overrides.js?v=20260569"></script>
+  <script src="assets/chrome.js?v=20260570"></script>
+  <script src="assets/cms-overrides.js?v=20260570"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260569"></script>
-  <script src="assets/cms-supabase.js?v=20260569"></script>
+  <script src="assets/supabase-config.js?v=20260570"></script>
+  <script src="assets/cms-supabase.js?v=20260570"></script>
   <script>
   (function () {
     'use strict';
@@ -396,17 +396,13 @@
       var tiles = visibleCourses.map(function (c) {
         var scr = c.screens || [];
         var edited = scr.filter(function (s) { return isEdited(s); }).length;
-        return '<div class="am-tile-wrap">' +
-          '<button type="button" class="am-tile" data-course="' + esc(c.id) + '">' +
-            '<span class="am-tile-thumb" style="background-image:url(\'' + esc(thumbnailFor(c)) + '\')">' +
-              '<span class="am-tile-code">' + esc(c.code || c.id) + '</span></span>' +
-            '<span class="am-tile-body"><strong>' + esc(c.title || c.id) + '</strong>' +
-              '<span class="am-tile-meta">' + scr.length + ' screens' +
-                (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span>' +
-              '<span class="am-tile-edited"></span></span>' +
-          '</button>' +
-          '<button type="button" class="am-tile-del" data-del-course="' + esc(c.id) + '" title="Delete course">🗑</button>' +
-        '</div>';
+        return '<button type="button" class="am-tile" data-course="' + esc(c.id) + '">' +
+          '<span class="am-tile-thumb" style="background-image:url(\'' + esc(thumbnailFor(c)) + '\')">' +
+            '<span class="am-tile-code">' + esc(c.code || c.id) + '</span></span>' +
+          '<span class="am-tile-body"><strong>' + esc(c.title || c.id) + '</strong>' +
+            '<span class="am-tile-meta">' + scr.length + ' screens' +
+              (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span>' +
+            '<span class="am-tile-edited"></span></span></button>';
       }).join('');
       main.innerHTML =
         '<div class="am-head"><div class="am-head-row"><div>' +
@@ -420,12 +416,6 @@
         '<div class="am-catalog">' + tiles + '</div>';
       main.querySelectorAll('[data-course]').forEach(function (b) {
         b.addEventListener('click', function () { openCourse(b.dataset.course); });
-      });
-      main.querySelectorAll('[data-del-course]').forEach(function (b) {
-        b.addEventListener('click', function (e) {
-          e.stopPropagation();
-          deleteCourse(b.dataset.delCourse);
-        });
       });
       var nb = document.getElementById('am-new-course-btn');
       if (nb) nb.addEventListener('click', renderNewCourseForm);
@@ -529,6 +519,7 @@
                 '<button type="button" class="am-side-act" id="am-scorm-btn">🎓 SCORM viewer</button>' +
                 '<div class="am-side-divider"></div>' +
                 '<button type="button" class="am-side-act am-side-act-primary" id="am-add-screen">＋ Add screen</button>' +
+                '<button type="button" class="am-side-act am-side-act-danger" id="am-del-course">🗑 Delete course</button>' +
               '</div>' +
             '</div>' +
             '<div class="ms-tier ms-tier-flat am-screenlist" id="am-screenlist"></div>' +
@@ -554,6 +545,7 @@
       cf.addEventListener('change', function () { if (cf.files[0]) uploadCourse(cf.files[0], courseId); });
       document.getElementById('am-add-screen').addEventListener('click', function () { addScreen(courseId); });
       document.getElementById('am-scorm-btn').addEventListener('click', function () { openScormViewer(courseId); });
+      document.getElementById('am-del-course').addEventListener('click', function () { deleteCourse(courseId); });
       editTimesReady = loadEditTimes(c);
       renderScreenList(c);
       if (screenId && (c.screens || []).some(function (x) { return x.id === screenId; })) {
