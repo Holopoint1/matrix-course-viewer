@@ -5120,10 +5120,11 @@ html.am-course-mode, body.am-course-mode { overflow: hidden; height: 100vh; }
 }
 .am-side-act-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
 
-/* Danger action in the sidebar (Delete course) */
+/* Danger action in the sidebar (Delete course) — sits with the rest
+   of the read-only actions, above the divider and the Add screen
+   primary button. */
 .am-side-act-danger {
   color: #b91c1c; border-color: rgba(185, 28, 28, 0.25);
-  margin-top: 0.4rem;
 }
 .am-side-act-danger:hover { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
 
