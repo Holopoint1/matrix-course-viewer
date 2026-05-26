@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260562">
+  <link rel="stylesheet" href="assets/styles.css?v=20260563">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,12 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260562"></script>
-  <script src="assets/cms-overrides.js?v=20260562"></script>
+  <script src="assets/chrome.js?v=20260563"></script>
+  <script src="assets/cms-overrides.js?v=20260563"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260562"></script>
-  <script src="assets/cms-supabase.js?v=20260562"></script>
-  <script src="assets/scorm-export.js?v=20260562"></script>
+  <script src="assets/supabase-config.js?v=20260563"></script>
+  <script src="assets/cms-supabase.js?v=20260563"></script>
   <script>
   (function () {
     'use strict';
@@ -508,7 +507,7 @@
                 '<button type="button" class="am-side-act" id="am-dl-course">⤓ Download whole course</button>' +
                 '<button type="button" class="am-side-act" id="am-ul-course">⤴ Upload whole course</button>' +
                 '<input type="file" id="am-course-file" accept=".docx,.doc,.htm,.html" hidden>' +
-                '<button type="button" class="am-side-act" id="am-scorm-btn">📦 Export SCORM</button>' +
+                '<button type="button" class="am-side-act" id="am-scorm-btn">🎓 SCORM viewer</button>' +
                 '<div class="am-side-divider"></div>' +
                 '<button type="button" class="am-side-act am-side-act-primary" id="am-add-screen">＋ Add screen</button>' +
               '</div>' +
@@ -535,7 +534,7 @@
       document.getElementById('am-ul-course').addEventListener('click', function () { cf.click(); });
       cf.addEventListener('change', function () { if (cf.files[0]) uploadCourse(cf.files[0], courseId); });
       document.getElementById('am-add-screen').addEventListener('click', function () { addScreen(courseId); });
-      document.getElementById('am-scorm-btn').addEventListener('click', function () { exportScorm(courseId); });
+      document.getElementById('am-scorm-btn').addEventListener('click', function () { openScormViewer(courseId); });
       editTimesReady = loadEditTimes(c);
       renderScreenList(c);
       if (screenId && (c.screens || []).some(function (x) { return x.id === screenId; })) {
@@ -629,20 +628,24 @@
       renderScreenList(merged(courseId));
     }
 
-    /* ---- SCORM export for this course (uses the existing Tools-page builder) ---- */
-    async function exportScorm(courseId) {
-      if (!window.MatrixScormExport || !window.MatrixScormExport.build) {
-        flash('SCORM exporter not loaded.', 'err'); return;
-      }
-      flash('Building SCORM package — this can take a few seconds…');
-      try {
-        var res = await window.MatrixScormExport.build(courseId);
-        download(res.blob, res.filename);
-        var st = res.stats || {};
-        flash('✓ SCORM package downloaded' + (st.screens ? ' — ' + st.screens + ' screen(s)' : '') + '.');
-      } catch (err) {
-        flash('Could not build SCORM: ' + esc(err.message || err), 'err');
-      }
+    /* ---- SCORM viewer — preview the course running in the player,
+       embedded inline (the same player a SCORM-conformant LMS hosts).
+       No export / download involved. */
+    function openScormViewer(courseId) {
+      cur.screenId = null;
+      markActiveScreen(null);
+      var pane = document.getElementById('am-content');
+      if (!pane) return;
+      var c = merged(courseId);
+      pane.innerHTML =
+        '<div class="am-head"><span class="am-head-eyebrow">SCORM viewer</span>' +
+          '<h1>' + esc(c.code || c.id) + ' &middot; ' + esc(c.title || '') + '</h1>' +
+          '<p>Live preview of the course running in the player — the same player a SCORM-conformant ' +
+          'LMS embeds. Navigate it just like a learner would.</p></div>' +
+        '<div class="am-scorm-viewer">' +
+          '<iframe class="am-scorm-frame" src="course.html?id=' + encodeURIComponent(courseId) + '"></iframe>' +
+        '</div>';
+      pane.scrollTop = 0;
     }
 
     /* ---- Add a new (blank) screen and open it for editing ---- */
