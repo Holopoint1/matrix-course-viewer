@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260563">
+  <link rel="stylesheet" href="assets/styles.css?v=20260564">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,11 +19,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260563"></script>
-  <script src="assets/cms-overrides.js?v=20260563"></script>
+  <script src="assets/chrome.js?v=20260564"></script>
+  <script src="assets/cms-overrides.js?v=20260564"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260563"></script>
-  <script src="assets/cms-supabase.js?v=20260563"></script>
+  <script src="assets/supabase-config.js?v=20260564"></script>
+  <script src="assets/cms-supabase.js?v=20260564"></script>
   <script>
   (function () {
     'use strict';
@@ -400,18 +400,21 @@
               (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span>' +
             '<span class="am-tile-edited"></span></span></button>';
       }).join('');
-      tiles += '<button type="button" class="am-tile am-tile-new" id="am-tile-new">' +
-        '<span class="am-tile-new-icon">＋</span>' +
-        '<span class="am-tile-new-text">New course</span></button>';
       main.innerHTML =
-        '<div class="am-head"><span class="am-head-eyebrow">Content manager</span><h1>Courses</h1>' +
-          '<p>Pick a course to edit, or click <strong>＋ New course</strong> to start a fresh one.</p></div>' +
+        '<div class="am-head"><div class="am-head-row"><div>' +
+          '<span class="am-head-eyebrow">Content manager</span>' +
+          '<h1>Courses</h1>' +
+          '<p>Pick a course to edit, or add a new one.</p></div>' +
+          '<div class="am-head-actions">' +
+            '<button type="button" class="btn btn-primary" id="am-new-course-btn">＋ New course</button>' +
+            '<a class="btn btn-secondary" href="files.html">🧰 Tools</a>' +
+          '</div></div></div>' +
         '<div class="am-catalog">' + tiles + '</div>';
       main.querySelectorAll('[data-course]').forEach(function (b) {
         b.addEventListener('click', function () { openCourse(b.dataset.course); });
       });
-      var nt = document.getElementById('am-tile-new');
-      if (nt) nt.addEventListener('click', renderNewCourseForm);
+      var nb = document.getElementById('am-new-course-btn');
+      if (nb) nb.addEventListener('click', renderNewCourseForm);
       setUrl(null, null, mode || 'push');
       /* Paint cached times now (if any), then refresh from Supabase. */
       repaintCatalogTimes();

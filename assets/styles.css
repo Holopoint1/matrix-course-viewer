@@ -4851,6 +4851,11 @@ body.pdf-overlay-open { overflow: hidden; }
 }
 .am-head h1 { margin: 0.15rem 0 0.2rem; font-family: var(--font-display); font-size: 1.5rem; color: var(--text); }
 .am-head p { margin: 0; color: var(--text-muted); font-size: 0.9rem; max-width: 620px; }
+.am-head-row {
+  display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 0.8rem;
+}
+.am-head-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; padding-top: 0.4rem; }
+.am-head-actions .btn { white-space: nowrap; padding: 0.55rem 1rem; font-size: 0.95rem; }
 
 .am-catalog {
   display: grid;
