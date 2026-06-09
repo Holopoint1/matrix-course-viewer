@@ -109,6 +109,15 @@
       const ds = {}; deleted.forEach((id) => { ds[id] = true; });
       screens = screens.filter((s) => !ds[s.id]);
     }
+    /* Defensive dedupe by screen id so a stale override + a fresh
+       sheet row can never both surface for the same screen. */
+    const seen = {};
+    screens = screens.filter((s) => {
+      if (!s || !s.id) return false;
+      if (seen[s.id]) return false;
+      seen[s.id] = true;
+      return true;
+    });
     /* Final order is by position. */
     screens.sort((a, b) => (a.position || 0) - (b.position || 0));
     merged.screens = screens;

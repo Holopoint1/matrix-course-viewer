@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260573">
+  <link rel="stylesheet" href="assets/styles.css?v=20260574">
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
@@ -19,12 +19,12 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260573"></script>
-  <script src="assets/cms-overrides.js?v=20260573"></script>
+  <script src="assets/chrome.js?v=20260574"></script>
+  <script src="assets/cms-overrides.js?v=20260574"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/supabase-config.js?v=20260573"></script>
-  <script src="assets/cms-supabase.js?v=20260573"></script>
-  <script src="assets/sheet-loader.js?v=20260573"></script>
+  <script src="assets/supabase-config.js?v=20260574"></script>
+  <script src="assets/cms-supabase.js?v=20260574"></script>
+  <script src="assets/sheet-loader.js?v=20260574"></script>
   <script>
   (function () {
     'use strict';
@@ -1290,7 +1290,19 @@
     /* Back / Forward re-render the matching view without touching history. */
     window.addEventListener('popstate', function () { routeFromUrl('none'); });
 
-    fetch('data/courses.json').then(function (r) { return r.json(); }).then(function (data) {
+    fetch('data/courses.json').then(function (r) { return r.json(); }).then(async function (data) {
+      /* Wait for Google Sheets to load (max 5s) so sheet-controlled
+         courses fold in on the FIRST render. Without this the catalog
+         briefly shows the Supabase / static version with admin-added
+         extras before the sheet replaces it on a later reload. */
+      if (window.MatrixSheets && window.MatrixSheets.refresh) {
+        try {
+          await Promise.race([
+            window.MatrixSheets.refresh(),
+            new Promise(function (r) { setTimeout(r, 5000); })
+          ]);
+        } catch (_) {}
+      }
       /* Fold in any courses that live only in Supabase (e.g. added here). */
       courses = (window.MatrixCMS && window.MatrixCMS.mergeCourses)
         ? window.MatrixCMS.mergeCourses(data.courses || []) : (data.courses || []);
