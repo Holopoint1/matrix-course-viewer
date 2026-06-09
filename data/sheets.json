@@ -1,0 +1,10 @@
+{
+  "_doc": "List of Google Sheets that define course structure. Each sheet's rows become a course's screens. Files referenced in the 'File' column live in content/<code>/. To publish a new course, share its sheet 'Anyone with the link, Viewer' and add an entry here.",
+  "sheets": [
+    {
+      "code": "CO0001",
+      "title": "Flowcode and E-blocks 3 CPD Course",
+      "url": "https://docs.google.com/spreadsheets/d/1P3J31je7DWFHQeSQG49NxUauQPHnInYj/edit"
+    }
+  ]
+}

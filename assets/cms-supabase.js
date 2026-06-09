@@ -208,9 +208,22 @@
   };
   CMS.mergeCourses = function (staticList) {
     var out = (staticList || []).slice();
-    var have = {};
-    out.forEach(function (c) { if (c && c.id) have[c.id] = 1; });
-    CMS.dbCourses().forEach(function (c) { if (c && c.id && !have[c.id]) out.push(c); });
+    var byId = {};
+    out.forEach(function (c, i) { if (c && c.id) byId[c.id] = i; });
+    /* Supabase-only courses (added in admin) — append if not in static. */
+    CMS.dbCourses().forEach(function (c) {
+      if (!c || !c.id) return;
+      if (byId[c.id] == null) { byId[c.id] = out.length; out.push(c); }
+    });
+    /* Google Sheet courses — REPLACE the static / Supabase version
+       (sheet is the publisher-controlled structure source). */
+    if (window.MatrixSheets && typeof window.MatrixSheets.cached === 'function') {
+      window.MatrixSheets.cached().forEach(function (c) {
+        if (!c || !c.id) return;
+        if (byId[c.id] != null) out[byId[c.id]] = c;
+        else { byId[c.id] = out.length; out.push(c); }
+      });
+    }
     return out;
   };
   CMS.supabaseAuth = {
