@@ -74,27 +74,36 @@
      with edits merged in. Does not mutate the input. */
   function applyOverrides(course) {
     if (!course || typeof course !== 'object') return course;
+    /* A sheet-controlled course (loaded by sheet-loader.js) is the
+       SOLE source of structural truth. Don't append admin-added
+       screens to it; the publisher manages the screen list in the
+       Google Sheet. (Per-screen content overrides — pages table —
+       still apply via getHtmlOverride at render time.) */
+    const fromSheet = course._source === 'sheet';
     const courseOverride = getCourseOverride(course.id);
     const screenOverrides = getScreenOverrides(course.id);
     const merged = Object.assign({}, course, courseOverride || {});
     const origIds = {};
     (course.screens || []).forEach((s) => { origIds[s.id] = true; });
     /* Originals with any overrides applied. Position defaults to the
-       courses.json index — so an un-overridden course keeps its
-       original order, and reordering writes explicit positions. */
+       courses.json / sheet index — so an un-overridden course keeps
+       its original order, and reordering writes explicit positions. */
     let screens = (course.screens || []).map((s, i) => {
       const o = screenOverrides[s.id];
-      const out = o ? Object.assign({}, s, o) : Object.assign({}, s);
+      const out = (o && !fromSheet) ? Object.assign({}, s, o) : Object.assign({}, s);
       if (out.position == null || out.position === '') out.position = i;
       return out;
     });
-    /* Screens ADDED through the admin — present in overrides but not
-       in courses.json. Append them; their position was set when added. */
-    const added = Object.keys(screenOverrides)
-      .filter((id) => !origIds[id] && screenOverrides[id] && screenOverrides[id].src)
-      .map((id) => Object.assign({ id: id }, screenOverrides[id]));
-    if (added.length) screens = screens.concat(added);
-    /* Filter out screens the editor deleted (local-only, Phase 1). */
+    if (!fromSheet) {
+      /* Append admin-added screens (present in overrides but not in
+         courses.json) for non-sheet courses only. */
+      const added = Object.keys(screenOverrides)
+        .filter((id) => !origIds[id] && screenOverrides[id] && screenOverrides[id].src)
+        .map((id) => Object.assign({ id: id }, screenOverrides[id]));
+      if (added.length) screens = screens.concat(added);
+    }
+    /* Filter out screens the editor deleted (local-only, Phase 1).
+       This still works for sheet courses too. */
     const deleted = getDeletedScreens(course.id);
     if (deleted.length) {
       const ds = {}; deleted.forEach((id) => { ds[id] = true; });
