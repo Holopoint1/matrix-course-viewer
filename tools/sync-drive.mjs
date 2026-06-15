@@ -26,10 +26,16 @@ const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
 
 function getAuth() {
-  if (!process.env.DRIVE_SA_KEY) throw new Error('DRIVE_SA_KEY secret is missing');
+  const raw = (process.env.DRIVE_SA_KEY || '').trim();
+  if (!raw) throw new Error('DRIVE_SA_KEY secret is missing or empty');
   let creds;
-  try { creds = JSON.parse(process.env.DRIVE_SA_KEY); }
-  catch (e) { throw new Error('DRIVE_SA_KEY is not valid JSON — re-paste the whole key file'); }
+  try { creds = JSON.parse(raw); }
+  catch (e) {
+    throw new Error(`DRIVE_SA_KEY is not valid JSON (length=${raw.length}, starts with "${raw.slice(0, 1)}", ends with "${raw.slice(-1)}"). It must be the WHOLE .json key file — starting with { and ending with }.`);
+  }
+  if (!creds.client_email || !creds.private_key) {
+    throw new Error('DRIVE_SA_KEY parsed but has no client_email/private_key — that is not the service-account key file.');
+  }
   return new google.auth.JWT({
     email: creds.client_email,
     key: creds.private_key,
