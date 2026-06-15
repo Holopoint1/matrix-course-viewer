@@ -1,0 +1,137 @@
+[
+  {
+    "order": 1,
+    "tagType": "HTML",
+    "filename": "",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/ (proposed)",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 2,
+    "tagType": "worksheet",
+    "filename": "",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/ (proposed)",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 3,
+    "tagType": "worksheet",
+    "filename": "CP1972-Cont.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 4,
+    "tagType": "worksheet",
+    "filename": "CP1972-Prep.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "teacher content",
+    "mediaRefs": []
+  },
+  {
+    "order": 5,
+    "tagType": "worksheet",
+    "filename": "CP1972-1.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 6,
+    "tagType": "worksheet",
+    "filename": "CP1972-2.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 7,
+    "tagType": "worksheet",
+    "filename": "CP1972-3.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 8,
+    "tagType": "worksheet",
+    "filename": "CP1972-4.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 9,
+    "tagType": "worksheet",
+    "filename": "CP1972-5.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 10,
+    "tagType": "worksheet",
+    "filename": "CP1972-6.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 11,
+    "tagType": "worksheet",
+    "filename": "CP1972-7.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 12,
+    "tagType": "worksheet",
+    "filename": "CP1972-8.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 13,
+    "tagType": "worksheet",
+    "filename": "CP1972-9.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 14,
+    "tagType": "worksheet",
+    "filename": "CP1972-10.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 15,
+    "tagType": "worksheet",
+    "filename": "CP1972-11.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  }
+]

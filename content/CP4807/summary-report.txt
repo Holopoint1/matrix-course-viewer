@@ -1,0 +1,109 @@
+Document Splitter — Output Summary
+===================================
+Source file: CP4807 - Introduction to microcontrollers 05 04 26 (1).docx
+Media ZIP: None loaded
+Detected blocks: 32
+Valid filenames: 32
+
+Filenames found:
+- CP4807-head.doc
+- CP4807-Cont.doc
+- CP4807-0.doc
+- CP4807-1.doc
+- CP4807-2.doc
+- CP4807-3.doc
+- CP4807-4.doc
+- CP4807-5.doc
+- CP4807-6.doc
+- CP4807-7.doc
+- CP4807-8.doc
+- CP4807-9.doc
+- CP4807-10.doc
+- CP4807-11.doc
+- CP4807-12.doc
+- CP4807-TN.htm
+- CP4807-H1.htm
+- CP4807-H2.htm
+- CP4807-H3.htm
+- CP4807-H4.htm
+- CP4807-H5.htm
+- CP4807-H6.htm
+- CP4807-H7.htm
+- CP4807-H8.htm
+- CP4807-H9.htm
+- CP4807-A1.htm
+- CP4807-A2.htm
+- CP4807-A3.htm
+- CP4807-P1.htm
+- CP4807-marking scheme.htm
+- CP4807-CPDcert
+- CP4807-SOW.htm
+
+Warnings and errors:
+- [WARN] Stray tag markup in CP4807-Cont.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-0.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-1.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-2.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-3.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-4.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-5.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-6.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-7.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-8.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-9.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-10.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-11.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-12.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP4807-TN.htm: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Missing media file: Block 4 (CP4807-1.doc) references flashing light.jpg in <image> but no matching media file is available.
+
+Proposed outputs:
+- Block 1: CP4807-head.doc -> Worksheet or document output -> outputs/docx/ (lines 1-12)
+- Block 2: CP4807-Cont.doc -> Worksheet or document output -> outputs/docx/ (lines 15-40)
+- Block 3: CP4807-0.doc -> Worksheet or document output -> outputs/docx/ (lines 42-63)
+- Block 4: CP4807-1.doc -> Worksheet or document output -> outputs/docx/ (lines 65-84)
+- Block 5: CP4807-2.doc -> Worksheet or document output -> outputs/docx/ (lines 87-124)
+- Block 6: CP4807-3.doc -> Worksheet or document output -> outputs/docx/ (lines 126-144)
+- Block 7: CP4807-4.doc -> Worksheet or document output -> outputs/docx/ (lines 145-168)
+- Block 8: CP4807-5.doc -> Worksheet or document output -> outputs/docx/ (lines 169-185)
+- Block 9: CP4807-6.doc -> Worksheet or document output -> outputs/docx/ (lines 186-212)
+- Block 10: CP4807-7.doc -> Worksheet or document output -> outputs/docx/ (lines 213-230)
+- Block 11: CP4807-8.doc -> Worksheet or document output -> outputs/docx/ (lines 231-251)
+- Block 12: CP4807-9.doc -> Worksheet or document output -> outputs/docx/ (lines 252-268)
+- Block 13: CP4807-10.doc -> Worksheet or document output -> outputs/docx/ (lines 269-285)
+- Block 14: CP4807-11.doc -> Worksheet or document output -> outputs/docx/ (lines 286-307)
+- Block 15: CP4807-12.doc -> Worksheet or document output -> outputs/docx/ (lines 308-322)
+- Block 16: CP4807-TN.htm -> Learner HTML -> outputs/html/ (lines 323-435)
+- Block 17: CP4807-H1.htm -> Learner HTML -> outputs/html/ (lines 438-469)
+- Block 18: CP4807-H2.htm -> Learner HTML -> outputs/html/ (lines 471-487)
+- Block 19: CP4807-H3.htm -> Learner HTML -> outputs/html/ (lines 490-506)
+- Block 20: CP4807-H4.htm -> Learner HTML -> outputs/html/ (lines 510-523)
+- Block 21: CP4807-H5.htm -> Learner HTML -> outputs/html/ (lines 527-529)
+- Block 22: CP4807-H6.htm -> Learner HTML -> outputs/html/ (lines 533-547)
+- Block 23: CP4807-H7.htm -> Learner HTML -> outputs/html/ (lines 551-567)
+- Block 24: CP4807-H8.htm -> Learner HTML -> outputs/html/ (lines 571-583)
+- Block 25: CP4807-H9.htm -> Learner HTML -> outputs/html/ (lines 587-603)
+- Block 26: CP4807-A1.htm -> Learner HTML -> outputs/html/ (lines 608-627)
+- Block 27: CP4807-A2.htm -> Learner HTML -> outputs/html/ (lines 631-652)
+- Block 28: CP4807-A3.htm -> Learner HTML -> outputs/html/ (lines 655-678)
+- Block 29: CP4807-P1.htm -> Learner HTML -> outputs/html/ (lines 682-697)
+- Block 30: CP4807-marking scheme.htm -> Learner HTML -> outputs/html/ (lines 701-709)
+- Block 31: CP4807-CPDcert -> Worksheet or document output -> outputs/docx/ (lines 712-732)
+- Block 32: CP4807-SOW.htm -> Learner HTML -> outputs/html/ (lines 742-746)
+
+Media summary:
+- Embedded images in DOCX: 2
+- Files loaded from ZIP: 0
+- Explicit media refs: 1
+- Matched media: 0
+- Missing refs: 1
+- Ambiguous refs: 0
+- Unused media files: 0
+
+SCORM readiness:
+- SCORM 1.2 package ready. Missing values defaulted automatically.
+
+Output note:
+- HTML outputs are generated using mammoth.js for faithful formatting preservation.
+- DOCX outputs are real Word files assembled from the source document XML.
+- All matched media files are embedded inline in HTML outputs and included in the bundle ZIP.

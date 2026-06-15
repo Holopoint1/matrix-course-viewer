@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="cp4807---introduction-to-microcontrollers-05-04-26-1--package"
+  version="1.0"
+  xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+  xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 ims_xml.xsd
+  http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata><schema>ADL SCORM</schema><schemaversion>1.2</schemaversion></metadata>
+  <organizations default="cp4807---introduction-to-microcontrollers-05-04-26-1--package-org">
+    <organization identifier="cp4807---introduction-to-microcontrollers-05-04-26-1--package-org">
+      <title>CP4807 - Introduction to microcontrollers 05 04 26 (1)</title>
+      <item identifier="item-1" identifierref="res-16"><title>CP4807-TN.htm</title></item>
+      <item identifier="item-2" identifierref="res-17"><title>CP4807-H1.htm</title></item>
+      <item identifier="item-3" identifierref="res-18"><title>CP4807-H2.htm</title></item>
+      <item identifier="item-4" identifierref="res-19"><title>CP4807-H3.htm</title></item>
+      <item identifier="item-5" identifierref="res-20"><title>CP4807-H4.htm</title></item>
+      <item identifier="item-6" identifierref="res-21"><title>CP4807-H5.htm</title></item>
+      <item identifier="item-7" identifierref="res-22"><title>CP4807-H6.htm</title></item>
+      <item identifier="item-8" identifierref="res-23"><title>CP4807-H7.htm</title></item>
+      <item identifier="item-9" identifierref="res-24"><title>CP4807-H8.htm</title></item>
+      <item identifier="item-10" identifierref="res-25"><title>CP4807-H9.htm</title></item>
+      <item identifier="item-11" identifierref="res-26"><title>CP4807-A1.htm</title></item>
+      <item identifier="item-12" identifierref="res-27"><title>CP4807-A2.htm</title></item>
+      <item identifier="item-13" identifierref="res-28"><title>CP4807-A3.htm</title></item>
+      <item identifier="item-14" identifierref="res-29"><title>CP4807-P1.htm</title></item>
+      <item identifier="item-15" identifierref="res-30"><title>CP4807-marking scheme.htm</title></item>
+      <item identifier="item-16" identifierref="res-32"><title>CP4807-SOW.htm</title></item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="res-1" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-head.docx"><file href="generated/CP4807-head.docx" /></resource>
+    <resource identifier="res-2" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-Cont.docx"><file href="generated/CP4807-Cont.docx" /></resource>
+    <resource identifier="res-3" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-0.docx"><file href="generated/CP4807-0.docx" /></resource>
+    <resource identifier="res-4" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-1.docx"><file href="generated/CP4807-1.docx" /></resource>
+    <resource identifier="res-5" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-2.docx"><file href="generated/CP4807-2.docx" /></resource>
+    <resource identifier="res-6" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-3.docx"><file href="generated/CP4807-3.docx" /></resource>
+    <resource identifier="res-7" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-4.docx"><file href="generated/CP4807-4.docx" /></resource>
+    <resource identifier="res-8" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-5.docx"><file href="generated/CP4807-5.docx" /></resource>
+    <resource identifier="res-9" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-6.docx"><file href="generated/CP4807-6.docx" /></resource>
+    <resource identifier="res-10" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-7.docx"><file href="generated/CP4807-7.docx" /></resource>
+    <resource identifier="res-11" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-8.docx"><file href="generated/CP4807-8.docx" /></resource>
+    <resource identifier="res-12" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-9.docx"><file href="generated/CP4807-9.docx" /></resource>
+    <resource identifier="res-13" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-10.docx"><file href="generated/CP4807-10.docx" /></resource>
+    <resource identifier="res-14" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-11.docx"><file href="generated/CP4807-11.docx" /></resource>
+    <resource identifier="res-15" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-12.docx"><file href="generated/CP4807-12.docx" /></resource>
+    <resource identifier="res-16" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-TN.htm"><file href="generated/CP4807-TN.htm" /></resource>
+    <resource identifier="res-17" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H1.htm"><file href="generated/CP4807-H1.htm" /></resource>
+    <resource identifier="res-18" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H2.htm"><file href="generated/CP4807-H2.htm" /></resource>
+    <resource identifier="res-19" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H3.htm"><file href="generated/CP4807-H3.htm" /></resource>
+    <resource identifier="res-20" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H4.htm"><file href="generated/CP4807-H4.htm" /></resource>
+    <resource identifier="res-21" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H5.htm"><file href="generated/CP4807-H5.htm" /></resource>
+    <resource identifier="res-22" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H6.htm"><file href="generated/CP4807-H6.htm" /></resource>
+    <resource identifier="res-23" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H7.htm"><file href="generated/CP4807-H7.htm" /></resource>
+    <resource identifier="res-24" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H8.htm"><file href="generated/CP4807-H8.htm" /></resource>
+    <resource identifier="res-25" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-H9.htm"><file href="generated/CP4807-H9.htm" /></resource>
+    <resource identifier="res-26" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-A1.htm"><file href="generated/CP4807-A1.htm" /></resource>
+    <resource identifier="res-27" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-A2.htm"><file href="generated/CP4807-A2.htm" /></resource>
+    <resource identifier="res-28" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-A3.htm"><file href="generated/CP4807-A3.htm" /></resource>
+    <resource identifier="res-29" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-P1.htm"><file href="generated/CP4807-P1.htm" /></resource>
+    <resource identifier="res-30" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-marking scheme.htm"><file href="generated/CP4807-marking scheme.htm" /></resource>
+    <resource identifier="res-31" type="webcontent" adlcp:scormtype="asset" href="generated/CP4807-CPDcert.docx"><file href="generated/CP4807-CPDcert.docx" /></resource>
+    <resource identifier="res-32" type="webcontent" adlcp:scormtype="sco" href="generated/CP4807-SOW.htm"><file href="generated/CP4807-SOW.htm" /></resource>
+  </resources>
+</manifest>

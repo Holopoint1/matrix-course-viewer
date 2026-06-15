@@ -1,0 +1,85 @@
+Document Splitter — Output Summary
+===================================
+Source file: CP1972 - sensors and microcontrollers 07 05 26.docx
+Media ZIP: None loaded
+Detected blocks: 15
+Valid filenames: 13
+
+Filenames found:
+- CP1972-Cont.doc
+- CP1972-Prep.doc
+- CP1972-1.doc
+- CP1972-2.doc
+- CP1972-3.doc
+- CP1972-4.doc
+- CP1972-5.doc
+- CP1972-6.doc
+- CP1972-7.doc
+- CP1972-8.doc
+- CP1972-9.doc
+- CP1972-10.doc
+- CP1972-11.doc
+
+Warnings and errors:
+- [DANGER] Nested or interrupted HTML block: A new <worksheet> tag was found at line 1 before <HTML> was closed.
+- [WARN] Missing filename in HTML block: The <HTML> block starting at line 1 has no <filename> value.
+- [WARN] Stray tag markup in HTML block at line 1: 13 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Missing filename in worksheet block: The <worksheet> block starting at line 1 has no <filename> value.
+- [WARN] Stray tag markup in CP1972-Cont.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP1972-Prep.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 78 before <worksheet> was closed for CP1972-1.doc.
+- [WARN] Stray tag markup in CP1972-1.doc: 11 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 97 before <worksheet> was closed for CP1972-2.doc.
+- [WARN] Stray tag markup in CP1972-2.doc: 10 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 114 before <worksheet> was closed for CP1972-3.doc.
+- [WARN] Stray tag markup in CP1972-3.doc: 9 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 141 before <worksheet> was closed for CP1972-4.doc.
+- [WARN] Stray tag markup in CP1972-4.doc: 8 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 165 before <worksheet> was closed for CP1972-5.doc.
+- [WARN] Stray tag markup in CP1972-5.doc: 7 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 185 before <worksheet> was closed for CP1972-6.doc.
+- [WARN] Stray tag markup in CP1972-6.doc: 6 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 204 before <worksheet> was closed for CP1972-7.doc.
+- [WARN] Stray tag markup in CP1972-7.doc: 5 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 226 before <worksheet> was closed for CP1972-8.doc.
+- [WARN] Stray tag markup in CP1972-8.doc: 4 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 248 before <worksheet> was closed for CP1972-9.doc.
+- [WARN] Stray tag markup in CP1972-9.doc: 3 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 265 before <worksheet> was closed for CP1972-10.doc.
+- [WARN] Stray tag markup in CP1972-10.doc: 2 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [DANGER] Unclosed worksheet block: The <worksheet> block for CP1972-11.doc starts at line 265 but has no matching closing tag.
+- [WARN] Stray tag markup in CP1972-11.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+
+Proposed outputs:
+- Block 1: (missing filename) -> Learner HTML -> outputs/html/ (proposed) (lines 1-1)
+- Block 2: (missing filename) -> Worksheet or document output -> outputs/docx/ (proposed) (lines 1-15)
+- Block 3: CP1972-Cont.doc -> Worksheet or document output -> outputs/docx/ (lines 16-38)
+- Block 4: CP1972-Prep.doc -> Worksheet or document output -> outputs/docx/ (lines 43-57)
+- Block 5: CP1972-1.doc -> Worksheet or document output -> outputs/docx/ (lines 60-60)
+- Block 6: CP1972-2.doc -> Worksheet or document output -> outputs/docx/ (lines 78-78)
+- Block 7: CP1972-3.doc -> Worksheet or document output -> outputs/docx/ (lines 97-97)
+- Block 8: CP1972-4.doc -> Worksheet or document output -> outputs/docx/ (lines 114-114)
+- Block 9: CP1972-5.doc -> Worksheet or document output -> outputs/docx/ (lines 141-141)
+- Block 10: CP1972-6.doc -> Worksheet or document output -> outputs/docx/ (lines 165-165)
+- Block 11: CP1972-7.doc -> Worksheet or document output -> outputs/docx/ (lines 185-185)
+- Block 12: CP1972-8.doc -> Worksheet or document output -> outputs/docx/ (lines 204-204)
+- Block 13: CP1972-9.doc -> Worksheet or document output -> outputs/docx/ (lines 226-226)
+- Block 14: CP1972-10.doc -> Worksheet or document output -> outputs/docx/ (lines 248-248)
+- Block 15: CP1972-11.doc -> Worksheet or document output -> outputs/docx/ (lines 265-265)
+
+Media summary:
+- Embedded images in DOCX: 2
+- Files loaded from ZIP: 0
+- Explicit media refs: 0
+- Matched media: 0
+- Missing refs: 0
+- Ambiguous refs: 0
+- Unused media files: 0
+
+SCORM readiness:
+- No SCORM specification found in this document.
+
+Output note:
+- HTML outputs are generated using mammoth.js for faithful formatting preservation.
+- DOCX outputs are real Word files assembled from the source document XML.
+- All matched media files are embedded inline in HTML outputs and included in the bundle ZIP.

@@ -1,0 +1,74 @@
+[
+  {
+    "order": 1,
+    "tagType": "worksheet",
+    "filename": "CP0507-Cont.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 2,
+    "tagType": "worksheet",
+    "filename": "CP0507-Cont.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 3,
+    "tagType": "worksheet",
+    "filename": "CP0507-Prep.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "teacher content",
+    "mediaRefs": []
+  },
+  {
+    "order": 4,
+    "tagType": "worksheet",
+    "filename": "CP0507-1.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 5,
+    "tagType": "worksheet",
+    "filename": "CP0507-2.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 6,
+    "tagType": "worksheet",
+    "filename": "CP0507-3.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 7,
+    "tagType": "worksheet",
+    "filename": "CP0507-4.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 8,
+    "tagType": "worksheet",
+    "filename": "CP0507-5.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  }
+]

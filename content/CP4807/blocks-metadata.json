@@ -1,0 +1,297 @@
+[
+  {
+    "order": 1,
+    "tagType": "worksheet",
+    "filename": "CP4807-head.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 2,
+    "tagType": "worksheet",
+    "filename": "CP4807-Cont.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 3,
+    "tagType": "worksheet",
+    "filename": "CP4807-0.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 4,
+    "tagType": "worksheet",
+    "filename": "CP4807-1.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "flashing light.jpg",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "tagType": "worksheet",
+    "filename": "CP4807-2.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 6,
+    "tagType": "worksheet",
+    "filename": "CP4807-3.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 7,
+    "tagType": "worksheet",
+    "filename": "CP4807-4.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 8,
+    "tagType": "worksheet",
+    "filename": "CP4807-5.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 9,
+    "tagType": "worksheet",
+    "filename": "CP4807-6.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 10,
+    "tagType": "worksheet",
+    "filename": "CP4807-7.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 11,
+    "tagType": "worksheet",
+    "filename": "CP4807-8.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 12,
+    "tagType": "worksheet",
+    "filename": "CP4807-9.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 13,
+    "tagType": "worksheet",
+    "filename": "CP4807-10.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 14,
+    "tagType": "worksheet",
+    "filename": "CP4807-11.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 15,
+    "tagType": "worksheet",
+    "filename": "CP4807-12.doc",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 16,
+    "tagType": "HTML",
+    "filename": "CP4807-TN.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "teacher content",
+    "mediaRefs": []
+  },
+  {
+    "order": 17,
+    "tagType": "HTML",
+    "filename": "CP4807-H1.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "homework",
+    "mediaRefs": []
+  },
+  {
+    "order": 18,
+    "tagType": "HTML",
+    "filename": "CP4807-H2.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 19,
+    "tagType": "HTML",
+    "filename": "CP4807-H3.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "project brief",
+    "mediaRefs": []
+  },
+  {
+    "order": 20,
+    "tagType": "HTML",
+    "filename": "CP4807-H4.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 21,
+    "tagType": "HTML",
+    "filename": "CP4807-H5.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "assessment",
+    "mediaRefs": []
+  },
+  {
+    "order": 22,
+    "tagType": "HTML",
+    "filename": "CP4807-H6.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 23,
+    "tagType": "HTML",
+    "filename": "CP4807-H7.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 24,
+    "tagType": "HTML",
+    "filename": "CP4807-H8.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 25,
+    "tagType": "HTML",
+    "filename": "CP4807-H9.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "project brief",
+    "mediaRefs": []
+  },
+  {
+    "order": 26,
+    "tagType": "HTML",
+    "filename": "CP4807-A1.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "assessment",
+    "mediaRefs": []
+  },
+  {
+    "order": 27,
+    "tagType": "HTML",
+    "filename": "CP4807-A2.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "homework",
+    "mediaRefs": []
+  },
+  {
+    "order": 28,
+    "tagType": "HTML",
+    "filename": "CP4807-A3.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "homework",
+    "mediaRefs": []
+  },
+  {
+    "order": 29,
+    "tagType": "HTML",
+    "filename": "CP4807-P1.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "project brief",
+    "mediaRefs": []
+  },
+  {
+    "order": 30,
+    "tagType": "HTML",
+    "filename": "CP4807-marking scheme.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "teacher content",
+    "mediaRefs": []
+  },
+  {
+    "order": 31,
+    "tagType": "Document",
+    "filename": "CP4807-CPDcert",
+    "outputType": "Worksheet or document output",
+    "destination": "outputs/docx/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 32,
+    "tagType": "HTML",
+    "filename": "CP4807-SOW.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "teacher content",
+    "mediaRefs": []
+  }
+]

@@ -1,0 +1,13 @@
+SCORM 1.2 package ready. Missing values defaulted automatically.
+
+SCORM version: FOUND
+Launch file: FOUND
+Manifest data: FOUND
+Completion model: FOUND
+Tracking model: FOUND
+Navigation / sequencing: FOUND
+
+Media ZIP loaded: No
+Matched media files: 0
+Missing media refs: 1
+Ambiguous media refs: 0

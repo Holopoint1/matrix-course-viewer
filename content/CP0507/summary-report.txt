@@ -1,0 +1,55 @@
+Document Splitter — Output Summary
+===================================
+Source file: CP0507 - motors and microcontrollers FIXED.docx
+Media ZIP: None loaded
+Detected blocks: 8
+Valid filenames: 8
+
+Filenames found:
+- CP0507-Cont.doc
+- CP0507-Cont.doc
+- CP0507-Prep.doc
+- CP0507-1.doc
+- CP0507-2.doc
+- CP0507-3.doc
+- CP0507-4.doc
+- CP0507-5.doc
+
+Warnings and errors:
+- [DANGER] Nested or interrupted worksheet block: A new <worksheet> tag was found at line 4 before <worksheet> was closed for CP0507-Cont.doc.
+- [WARN] Stray tag markup in CP0507-Cont.doc: 7 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP0507-Cont.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP0507-Prep.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP0507-1.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Filename found outside a block: CP0507-2.doc appears at line 65 but is not inside <HTML>, <worksheet>, or <document>.
+- [WARN] Stray tag markup in CP0507-3.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP0507-4.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Stray tag markup in CP0507-5.doc: 1 paragraph(s) inside this block contain raw tag text (e.g. <worksheet>, <filename>). These will be stripped from the exported file automatically.
+- [WARN] Duplicate filename: CP0507-Cont.doc appears 2 times across detected blocks.
+
+Proposed outputs:
+- Block 1: CP0507-Cont.doc -> Worksheet or document output -> outputs/docx/ (lines 1-1)
+- Block 2: CP0507-Cont.doc -> Worksheet or document output -> outputs/docx/ (lines 4-16)
+- Block 3: CP0507-Prep.doc -> Worksheet or document output -> outputs/docx/ (lines 17-42)
+- Block 4: CP0507-1.doc -> Worksheet or document output -> outputs/docx/ (lines 43-64)
+- Block 5: CP0507-2.doc -> Worksheet or document output -> outputs/docx/ (lines 66-82)
+- Block 6: CP0507-3.doc -> Worksheet or document output -> outputs/docx/ (lines 83-102)
+- Block 7: CP0507-4.doc -> Worksheet or document output -> outputs/docx/ (lines 103-120)
+- Block 8: CP0507-5.doc -> Worksheet or document output -> outputs/docx/ (lines 121-143)
+
+Media summary:
+- Embedded images in DOCX: 0
+- Files loaded from ZIP: 0
+- Explicit media refs: 0
+- Matched media: 0
+- Missing refs: 0
+- Ambiguous refs: 0
+- Unused media files: 0
+
+SCORM readiness:
+- No SCORM specification found in this document.
+
+Output note:
+- HTML outputs are generated using mammoth.js for faithful formatting preservation.
+- DOCX outputs are real Word files assembled from the source document XML.
+- All matched media files are embedded inline in HTML outputs and included in the bundle ZIP.
