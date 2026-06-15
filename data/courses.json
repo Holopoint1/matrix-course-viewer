@@ -500,9 +500,8 @@
           "type": "html",
           "title": "test",
           "hours": 122321,
-          "src": "content/CP4807/test.jpg",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0002/test.jpg",
+          "equipment": "Flowcode / E-blocks3"
         }
       ],
       "categories": [
