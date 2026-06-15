@@ -114,7 +114,7 @@
 
   async function init() {
     try {
-      const res = await fetch('data/courses.json');
+      const res = await fetch('data/courses.json?t=' + Date.now());
       const data = await res.json();
       /* Include courses that live only in Supabase (added via Admin). */
       const courseList = (window.MatrixCMS && window.MatrixCMS.mergeCourses)
@@ -998,7 +998,7 @@
     parts.push('<span class="meta-field"><span class="meta-k">Type:</span> ' + escapeHtml(screen.type.toUpperCase()) + '</span>');
 
     const isUrl = /^https?:/i.test(screen.src || '');
-    const asset = screen.src ? (isUrl ? shortUrl(screen.src) : filename(screen.src)) : '';
+    const asset = screen.src ? (isUrl ? shortUrl(screen.src) : screen.src) : '';
     if (asset) {
       parts.push('<span class="meta-field"><span class="meta-k">Asset:</span> <code>' + escapeHtml(asset) + '</code></span>');
     }

@@ -56,7 +56,7 @@
 
       try {
         await window.Gamify.init();
-        const res = await fetch('data/courses.json');
+        const res = await fetch('data/courses.json?t=' + Date.now());
         const data = await res.json();
         /* Include Supabase-only courses (added via Admin), then apply overrides. */
         if (window.MatrixCMS) {
