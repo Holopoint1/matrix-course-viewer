@@ -172,10 +172,14 @@
     }
   }
 
-  window.MatrixSheets = { cached: cached, refresh: refresh };
-
-  /* Auto-refresh on script load so the cache is up to date for the
-     next render. The current render uses whatever's already cached
-     (stale-while-revalidate). */
-  if (typeof window !== 'undefined') refresh();
+  /* RETIRED (2026-06-15): course structure now comes from data/courses.json,
+     generated server-side by the Drive->GitHub sync (tools/sync-drive.mjs).
+     The old client-side CSV fetch is disabled so it can't clobber the synced
+     data (and it also hit cross-origin limits). Exposed as no-ops so existing
+     callers (mergeCourses, admin.html) keep working without changes. */
+  void cached; void refresh; /* keep references; legacy impls unused */
+  window.MatrixSheets = {
+    cached: function () { return []; },
+    refresh: function () { return Promise.resolve([]); },
+  };
 })();

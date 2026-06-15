@@ -1,5 +1,5 @@
 {
-  "_doc": "List of Google Sheets that define course structure. Each sheet's rows become a course's screens. Files referenced in the 'File' column live in content/<code>/. To publish a new course, share its sheet 'Anyone with the link, Viewer' and add an entry here.",
+  "_doc": "Definition Google Sheets the Drive->GitHub sync (tools/sync-drive.mjs) reads server-side to rebuild data/courses.json. Each sheet's rows become a course's screens; the File column holds a content/<code>/... path or a URL. Edit the sheet, then the next sync run (or the manual button) updates the live course.",
   "sheets": [
     {
       "code": "CO0001",
@@ -9,17 +9,7 @@
       "certificate": true,
       "certificateTemplate": "Flowcode & E-blocks 3 CPD Course",
       "categories": ["CPD", "Embedded"],
-      "url": "https://docs.google.com/spreadsheets/d/1jpzVcP-xsaL4x0sGynLULjJJJd6ZJI77bd6AzR-NWso/edit"
-    },
-    {
-      "code": "CO0002",
-      "title": "Introduction to Microcontrollers",
-      "kind": "course",
-      "description": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
-      "certificate": true,
-      "certificateTemplate": "Introduction to Microcontrollers",
-      "categories": ["Embedded", "Curriculum"],
-      "url": "https://docs.google.com/spreadsheets/d/1YfYNoihr8IIQvHd7T5HFy4awdpx0fbD-rarJlzmtAzI/edit"
+      "url": "https://docs.google.com/spreadsheets/d/1F3uQEN5x6BZki607IBpKwecj846K39HpcWuqArjTDoA/edit"
     }
   ]
 }
