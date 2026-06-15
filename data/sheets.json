@@ -10,6 +10,16 @@
       "certificateTemplate": "Flowcode & E-blocks 3 CPD Course",
       "categories": ["CPD", "Embedded"],
       "url": "https://docs.google.com/spreadsheets/d/1jpzVcP-xsaL4x0sGynLULjJJJd6ZJI77bd6AzR-NWso/edit"
+    },
+    {
+      "code": "CO0002",
+      "title": "Introduction to Microcontrollers",
+      "kind": "course",
+      "description": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
+      "certificate": true,
+      "certificateTemplate": "Introduction to Microcontrollers",
+      "categories": ["Embedded", "Curriculum"],
+      "url": "https://docs.google.com/spreadsheets/d/1YfYNoihr8IIQvHd7T5HFy4awdpx0fbD-rarJlzmtAzI/edit"
     }
   ]
 }
