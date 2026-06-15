@@ -126,16 +126,20 @@
     var sheetId = extractSheetId(entry.url);
     if (!sheetId) throw new Error('Could not extract sheet id from URL: ' + entry.url);
     var rows = await fetchSheetRows(sheetId);
+    var screens = rowsToScreens(rows, entry.code);
+    var totalHours = screens.reduce(function (sum, s) { return sum + (Number(s.hours) || 0); }, 0);
+    var certificate = { enabled: !!entry.certificate };
+    if (entry.certificateTemplate) certificate.templateName = entry.certificateTemplate;
     return {
       id: entry.code,
       code: entry.code,
       title: entry.title || entry.code,
       kind: entry.kind || 'course',
       shortDescription: entry.description || '',
-      estimatedHours: 0,
-      certificate: { enabled: !!entry.certificate },
+      estimatedHours: Math.round(totalHours * 10) / 10,
+      certificate: certificate,
       categories: Array.isArray(entry.categories) ? entry.categories : [],
-      screens: rowsToScreens(rows, entry.code),
+      screens: screens,
       _source: 'sheet'
     };
   }

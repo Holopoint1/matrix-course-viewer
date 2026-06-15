@@ -4,7 +4,12 @@
     {
       "code": "CO0001",
       "title": "Flowcode and E-blocks 3 CPD Course",
-      "url": "https://docs.google.com/spreadsheets/d/1P3J31je7DWFHQeSQG49NxUauQPHnInYj/edit"
+      "kind": "course",
+      "description": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
+      "certificate": true,
+      "certificateTemplate": "Flowcode & E-blocks 3 CPD Course",
+      "categories": ["CPD", "Embedded"],
+      "url": "https://docs.google.com/spreadsheets/d/1jpzVcP-xsaL4x0sGynLULjJJJd6ZJI77bd6AzR-NWso/edit"
     }
   ]
 }
