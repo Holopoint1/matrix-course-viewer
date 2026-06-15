@@ -9,6 +9,12 @@ on:
         default: 'CO0001'
   schedule:
     - cron: '*/15 * * * *'   # every 15 min — the "auto-refresh"
+  push:
+    branches: [main]
+    paths:
+      - 'tools/sync-drive.mjs'
+      - 'data/sheets.json'
+      - '.github/workflows/sync-from-drive.yml'
 
 permissions:
   contents: write
