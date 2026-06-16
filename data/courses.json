@@ -77,7 +77,7 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
-          "src": "content/CO0001/Microcontroller basics 1 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -86,7 +86,7 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
-          "src": "content/CO0001/Microcontroller basics 2 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -95,7 +95,7 @@
           "type": "html",
           "title": "Now try the worksheets",
           "hours": 0.1,
-          "src": "content/CO0001/Now try the worksheets.htm",
+          "src": "content/CO0002/Now try the worksheets.HTM",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Now try the worksheets.htm",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -104,7 +104,7 @@
           "type": "html",
           "title": "Other resources",
           "hours": 0.1,
-          "src": "content/CO0001/Other resources.htm",
+          "src": "content/CO0002/Other resources.HTM",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Other resources.htm",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -231,7 +231,7 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - welcome.html",
+          "src": "content/CO0002/CO0002 – welcome.HTM",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -240,7 +240,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - LO.html",
+          "src": "content/CO0002/CO0002 – LO.HTM",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -648,7 +648,7 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
-          "src": "content/CO0003/Microcontroller basics 1 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
           "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -657,7 +657,7 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
-          "src": "content/CO0003/Microcontroller basics 2 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
           "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -916,7 +916,7 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
-          "src": "content/CO0004/Microcontroller basics 1 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -925,7 +925,7 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
-          "src": "content/CO0004/Microcontroller basics 2 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1364,10 +1364,9 @@
           "type": "document",
           "title": "Title page",
           "hours": 0.5,
-          "src": "content/CP2563/CP2563-head.docx",
+          "src": "content/CP4807/CP4807-head.docx",
           "path": "LMS Project Assets/CP2563 - Microcontrollers for T levels/CP2563-head.docx",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CP2563-s2",
@@ -1649,10 +1648,9 @@
           "type": "document",
           "title": "Title page",
           "hours": 0.5,
-          "src": "content/CP7244/CP7244-head.docx",
+          "src": "content/CP4807/CP4807-head.docx",
           "path": "LMS Project Assets/CP7244 - Digital Techniques for Aviation Technicians/CP7244-head.docx",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CP7244-s2",
