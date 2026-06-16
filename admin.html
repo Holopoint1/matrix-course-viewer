@@ -402,6 +402,7 @@
             '<span class="am-tile-code">' + esc(c.code || c.id) + '</span></span>' +
           '<span class="am-tile-body"><strong>' + esc(c.title || c.id) + '</strong>' +
             '<span class="am-tile-meta">' + scr.length + ' screens' +
+              (c.draft ? ' · <em style="color:#d97706">DRAFT — auto-built from files; add a definition sheet (Active: yes) to publish</em>' : '') +
               (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span>' +
             '<span class="am-tile-edited"></span></span></button>';
       }).join('');

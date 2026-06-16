@@ -288,6 +288,36 @@ function writeAccuracyReport(db, driveFilesByCode) {
   for (const [id, c] of Object.entries(courses)) c.stale.forEach((s) => console.log(`  ⚠ ${id}: "${s.title}" shows stale '${s.showing}' (not in ${s.expectedIn} Drive folder)`));
 }
 
+/* Build a DRAFT course straight from a folder's files when it has NO definition
+ * sheet — "upload files, get a course". Screen type comes from each file's
+ * extension, title from its name. Most images are treated as embedded assets;
+ * one opening/cover image becomes the title screen. Marked draft:true so it
+ * shows in the admin for the publisher to refine, but stays OFF the public
+ * catalogue until a definition sheet (Active: yes) finishes it. */
+const EXT_TYPE = { png: 'image', jpg: 'image', jpeg: 'image', gif: 'image', webp: 'image', svg: 'image', bmp: 'image', pdf: 'pdf', doc: 'document', docx: 'document', ppt: 'powerpoint', pptx: 'powerpoint', xls: 'spreadsheet', xlsx: 'spreadsheet', htm: 'html', html: 'html' };
+const extOf = (name) => (String(name).match(/\.([a-z0-9]+)$/i) || ['', ''])[1].toLowerCase();
+const typeFromFile = (name) => EXT_TYPE[extOf(name)] || null;
+function titleFromFile(name, code) {
+  return String(name).replace(/\.[a-z0-9]+$/i, '').replace(new RegExp('^' + code + '\\s*[-–—:]*\\s*', 'i'), '').replace(/[-_]+/g, ' ').trim() || name;
+}
+async function buildDraftFromFiles(folder, code, db, byId) {
+  const files = [];
+  await collectFiles(folder.id, files);
+  const typed = files.map((f) => ({ name: f.name, type: typeFromFile(f.name) })).filter((f) => f.type);
+  const images = typed.filter((f) => f.type === 'image');
+  const content = typed.filter((f) => f.type !== 'image').sort((a, b) => a.name.localeCompare(b.name));
+  let opening = images.find((f) => /opening|cover|title|intro/i.test(f.name));
+  if (!opening && images.length && images.length <= 3) opening = images.slice().sort((a, b) => a.name.localeCompare(b.name))[0];
+  const ordered = (opening ? [opening] : []).concat(content);
+  if (!ordered.length) return false;                            // nothing screen-worthy → not a course
+  const screens = ordered.map((f, i) => ({ id: `${code}-s${i + 1}`, type: f.type, title: titleFromFile(f.name, code), hours: 0, src: `content/${code}/${f.name}` }));
+  const title = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim() || code;
+  const course = { id: code, code, kind: 'course', title, shortDescription: '', estimatedHours: 0, certificate: { enabled: false }, screens, categories: [], draft: true, _source: 'auto-files' };
+  if (byId[code] != null) db.courses[byId[code]] = course; else { byId[code] = db.courses.length; db.courses.push(course); }
+  console.log(`\n${code} (auto-built DRAFT from ${screens.length} file(s)): "${title}"`);
+  return true;
+}
+
 /* ---------- phase 2b: auto-discover unregistered course folders ----------
  * Any "<CODE> - Title" folder that (a) isn't already registered in sheets.json
  * and (b) contains a "<CODE> - definition" sheet becomes a course automatically.
@@ -298,7 +328,7 @@ function writeAccuracyReport(db, driveFilesByCode) {
  * cell at all — is held back as a draft, so nothing appears by accident. */
 const PUBLISH_VALUES = ['yes', 'true', 'on', '1', 'live', 'published', 'active', 'y'];
 async function autoDiscoverPhase(db, byId, registered) {
-  let added = 0, drafts = 0;
+  let added = 0, drafts = 0, built = 0;
   const folders = (await listChildren(ROOT_FOLDER_ID))
     .filter((f) => f.mimeType === 'application/vnd.google-apps.folder' && codeOf(f.name));
   for (const folder of folders) {
@@ -307,7 +337,16 @@ async function autoDiscoverPhase(db, byId, registered) {
     if (ONLY_COURSE && code !== ONLY_COURSE) continue;
     const children = await listChildren(folder.id);
     const def = children.find((c) => c.mimeType === 'application/vnd.google-apps.spreadsheet' && /definition/i.test(c.name || ''));
-    if (!def) continue;                                       // no definition sheet → not a course yet
+    if (!def) {
+      // No definition sheet → auto-build a draft from the files — but NEVER
+      // clobber a course that already exists from a real source (sheet/manual).
+      const existing = byId[code] != null ? db.courses[byId[code]] : null;
+      if (!existing || existing._source === 'auto-files') {
+        try { if (await buildDraftFromFiles(folder, code, db, byId)) built++; }
+        catch (e) { console.error(`  ! ${code}: auto-build failed — ${e.message}`); }
+      }
+      continue;
+    }
 
     let csv;
     try {
@@ -342,7 +381,7 @@ async function autoDiscoverPhase(db, byId, registered) {
     console.log(`\n${code} (auto-discovered): "${title}" — ${screens.length} screens${missing.length ? `, ${missing.length} missing file(s):` : ' (all files resolve ✓)'}`);
     missing.forEach((m) => console.log(`  ⚠ ${m}`));
   }
-  console.log(`\nAuto-discovery: ${added} new course(s), ${drafts} held as draft.`);
+  console.log(`\nAuto-discovery: ${added} new course(s), ${built} auto-built draft(s) from files, ${drafts} held as draft.`);
 }
 
 async function main() {

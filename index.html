@@ -110,7 +110,7 @@
           root.innerHTML = '';
           /* Only show top-level CO* courses in the main grid; CP* packs
              render in their own section below. */
-          const allCourses = data.courses.filter((c) => c.kind !== 'pack');
+          const allCourses = data.courses.filter((c) => c.kind !== 'pack' && !c.draft);
           const visible = activeCategory
             ? allCourses.filter((c) => (c.categories || []).indexOf(activeCategory) >= 0)
             : allCourses;
@@ -125,7 +125,7 @@
         renderPills();
 
         let totalScreens = 0;
-        for (const c of data.courses.filter((c) => c.kind !== 'pack')) totalScreens += c.screens.length;
+        for (const c of data.courses.filter((c) => c.kind !== 'pack' && !c.draft)) totalScreens += c.screens.length;
 
         function renderCard(course, mount, opts) {
           opts = opts || {};
@@ -189,7 +189,7 @@
         const streak = window.Gamify.getStreak();
         const totalTime = window.Gamify.getTotalSecondsAllCourses();
         /* Hero counter shows full courses, not packs. */
-        stats.querySelector('[data-stat="courses"]').textContent = data.courses.filter((c) => c.kind !== 'pack').length;
+        stats.querySelector('[data-stat="courses"]').textContent = data.courses.filter((c) => c.kind !== 'pack' && !c.draft).length;
         stats.querySelector('[data-stat="time"]').textContent = totalTime > 0 ? window.Gamify.formatDuration(totalTime) : '0m';
         stats.querySelector('[data-stat="streak"]').textContent = streak.days || 0;
         /* Missing-resources summary moved to the TOOLS screen — the catalog
