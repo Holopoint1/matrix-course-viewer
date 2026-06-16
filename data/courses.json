@@ -6,7 +6,7 @@
       "kind": "course",
       "title": "Flowcode and E-blocks 3 CPD Course",
       "shortDescription": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
-      "estimatedHours": 11.9,
+      "estimatedHours": 3.9,
       "certificate": {
         "enabled": true,
         "templateName": "Flowcode & E-blocks 3 CPD Course"
@@ -35,9 +35,10 @@
           "type": "html",
           "title": "Equipment",
           "hours": 0.1,
-          "src": "content/CO0001/CO0001 - LO.docx",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/media/CO0001-LO.docx",
-          "equipment": "Flowcode / E-blocks3"
+          "src": "content/CO0001/CO0001-equip.htm",
+          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/media/CO0001-equip.htm",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s4",
@@ -170,42 +171,6 @@
           "src": "content/CP4807/CP4807-5.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0001-s19",
-          "type": "image",
-          "title": "test",
-          "hours": 2,
-          "src": "content/CO0001/test.jpg",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test.jpg",
-          "equipment": "tsestt"
-        },
-        {
-          "id": "CO0001-s20",
-          "type": "image",
-          "title": "test",
-          "hours": 2,
-          "src": "content/CO0001/test.jpg",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test.jpg",
-          "equipment": "tsestt"
-        },
-        {
-          "id": "CO0001-s21",
-          "type": "image",
-          "title": "test",
-          "hours": 2,
-          "src": "content/CO0001/test.jpg",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test.jpg",
-          "equipment": "tsestt"
-        },
-        {
-          "id": "CO0001-s22",
-          "type": "document",
-          "title": "test",
-          "hours": 2,
-          "src": "content/CO0001/test.docx",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/media/test.docx",
-          "equipment": "tsestt"
         }
       ],
       "categories": [

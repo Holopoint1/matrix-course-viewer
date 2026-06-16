@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T16:26:30.285Z",
+  "generatedAt": "2026-06-16T16:31:31.070Z",
   "courses": {
     "CO0001": {
       "stale": [
@@ -24,7 +24,13 @@
           "expectedIn": "CO0001"
         }
       ],
-      "missing": []
+      "missing": [
+        {
+          "title": "Equipment",
+          "file": "CO0001-equip.htm",
+          "expectedIn": "CO0001"
+        }
+      ]
     },
     "CP2563": {
       "stale": [],
@@ -70,6 +76,7 @@
   "unusedMedia": {
     "CO0001": [
       "CO0001 – LO.HTM.docx",
+      "test.jpg",
       "CO0001 – CPD objectives.HTM.jpg",
       "CO0001 - content.docx"
     ]
