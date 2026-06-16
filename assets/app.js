@@ -998,7 +998,9 @@
     parts.push('<span class="meta-field"><span class="meta-k">Type:</span> ' + escapeHtml(screen.type.toUpperCase()) + '</span>');
 
     const isUrl = /^https?:/i.test(screen.src || '');
-    const asset = screen.src ? (isUrl ? shortUrl(screen.src) : screen.src) : '';
+    // Show the Drive-style location (strip the website's internal "content/"
+    // prefix) so the ASSET label mirrors where the file lives in Drive.
+    const asset = screen.src ? (isUrl ? shortUrl(screen.src) : screen.src.replace(/^content\//i, '')) : '';
     if (asset) {
       parts.push('<span class="meta-field"><span class="meta-k">Asset:</span> <code>' + escapeHtml(asset) + '</code></span>');
     }
