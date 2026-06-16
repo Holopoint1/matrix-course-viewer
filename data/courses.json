@@ -161,7 +161,7 @@
       "kind": "course",
       "title": "Introduction to Microcontrollers",
       "shortDescription": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
-      "estimatedHours": 84.5,
+      "estimatedHours": 116.5,
       "certificate": {
         "enabled": true,
         "templateName": "Introduction to Microcontrollers"
@@ -494,6 +494,46 @@
           "hours": 24,
           "src": "content/CP4807/CP4807-H9.htm",
           "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s42",
+          "type": "html",
+          "title": "Homework 7",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-H7.htm",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s43",
+          "type": "document",
+          "title": "Touch control systems",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-11.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s44",
+          "type": "html",
+          "title": "Homework 8",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-H8.htm",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s45",
+          "type": "document",
+          "title": "Web mirror",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-12.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s46",
+          "type": "html",
+          "title": "Homework 9",
+          "hours": 24,
+          "src": "content/CP4807/CP4807-H9.htm",
+          "equipment": "Flowcode / E-blocks3"
         }
       ],
       "categories": [
@@ -515,212 +555,212 @@
       },
       "screens": [
         {
-          "id": "co3-s01",
+          "id": "CO0003-s1",
           "type": "image",
           "title": "Introduction to microcontrollers",
           "hours": 0,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CO0003/opening.svg",
-          "thumbnail": "content/CO0003/opening.svg"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s02",
+          "id": "CO0003-s2",
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0003/CO0003 - welcome.html"
+          "src": "content/CO0003/CO0003 - welcome.html",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s03",
+          "id": "CO0003-s3",
           "type": "youtube",
           "title": "Introducing E-blocks 3",
           "hours": 0.2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://youtu.be/KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv"
+          "src": "https://youtu.be/KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s04",
+          "id": "CO0003-s4",
           "type": "youtube",
           "title": "Introducing Flowcode",
           "hours": 0.2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://youtu.be/tDdptTbvDM0?si=19xqKAzPCOO3In5e"
+          "src": "https://youtu.be/tDdptTbvDM0?si=19xqKAzPCOO3In5e",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s05",
+          "id": "CO0003-s5",
           "type": "pdf",
           "title": "E-blocks datasheet",
           "hours": 0.2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf"
+          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s06",
+          "id": "CO0003-s6",
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0003/Microcontroller basics 1 24 02 26.pptx"
+          "src": "content/CO0003/Microcontroller basics 1 24 02 26.pptx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s07",
+          "id": "CO0003-s7",
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0003/Microcontroller basics 2 24 02 26.pptx"
+          "src": "content/CO0003/Microcontroller basics 2 24 02 26.pptx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s08",
+          "id": "CO0003-s8",
           "type": "html",
           "title": "Getting started guide",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://www.flowcode.co.uk/wiki/index.php?title=Embedded_Getting_Started_Guide"
+          "src": "https://www.flowcode.co.uk/wiki/index.php?title=Embedded_Getting_Started_Guide",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s09",
+          "id": "CO0003-s9",
           "type": "document",
           "title": "First program",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-1.docx"
+          "src": "content/CP4807/CP4807-1.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s10",
+          "id": "CO0003-s10",
           "type": "document",
           "title": "Performing calculations",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-2.docx"
+          "src": "content/CP4807/CP4807-2.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s11",
+          "id": "CO0003-s11",
           "type": "document",
           "title": "Connection points",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-3.docx"
+          "src": "content/CP4807/CP4807-3.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s12",
+          "id": "CO0003-s12",
           "type": "document",
           "title": "Digital inputs",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-4.docx"
+          "src": "content/CP4807/CP4807-4.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s13",
+          "id": "CO0003-s13",
           "type": "html",
           "title": "Homework 1",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-H1.htm"
+          "src": "content/CP4807/CP4807-H1.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s14",
+          "id": "CO0003-s14",
           "type": "document",
           "title": "Making decisions",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-5.docx"
+          "src": "content/CP4807/CP4807-5.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s15",
+          "id": "CO0003-s15",
           "type": "document",
           "title": "Macros / subroutines",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-6.docx"
+          "src": "content/CP4807/CP4807-6.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s16",
+          "id": "CO0003-s16",
           "type": "document",
           "title": "Using prototype boards",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-7.docx"
+          "src": "content/CP4807/CP4807-7.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s17",
+          "id": "CO0003-s17",
           "type": "document",
           "title": "Analogue inputs",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-1.docx"
+          "src": "content/CP1972/CP1972-1.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s18",
+          "id": "CO0003-s18",
           "type": "document",
           "title": "Colour graphical displays",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-8.docx"
+          "src": "content/CP4807/CP4807-8.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s19",
+          "id": "CO0003-s19",
           "type": "html",
           "title": "Homework 2",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-H2.htm"
+          "src": "content/CP4807/CP4807-H2.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s20",
+          "id": "CO0003-s20",
           "type": "document",
           "title": "Light sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-2.docx"
+          "src": "content/CP1972/CP1972-2.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s21",
+          "id": "CO0003-s21",
           "type": "document",
           "title": "Analogue temperature sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-3.docx"
+          "src": "content/CP1972/CP1972-3.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s22",
+          "id": "CO0003-s22",
           "type": "html",
           "title": "Homework 3",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-H3.htm"
+          "src": "content/CP4807/CP4807-H3.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s23",
+          "id": "CO0003-s23",
           "type": "document",
           "title": "Basic DC motors",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-1.docx"
+          "src": "content/CP0507/CP0507-1.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s24",
+          "id": "CO0003-s24",
           "type": "document",
           "title": "Full bridge motor control",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-2.docx"
+          "src": "content/CP0507/CP0507-2.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co3-s25",
+          "id": "CO0003-s25",
           "type": "document",
           "title": "Servo motor control",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-4.docx"
+          "src": "content/CP0507/CP0507-4.docx",
+          "equipment": "Flowcode / E-blocks3"
         }
       ],
       "categories": [
         "Aviation",
         "EASA",
         "Curriculum"
-      ]
+      ],
+      "_source": "sheet"
     },
     {
       "id": "CO0004",
@@ -735,276 +775,276 @@
       },
       "screens": [
         {
-          "id": "co4-s01",
+          "id": "CO0004-s1",
           "type": "image",
           "title": "Introduction to microcontrollers",
           "hours": 0,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CO0004/CO0004 - opening.jpg",
-          "thumbnail": "content/CO0004/opening.svg"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s02",
+          "id": "CO0004-s2",
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0004/CO0004 - welcome.html"
+          "src": "content/CO0004/CO0004 - welcome.html",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s03",
+          "id": "CO0004-s3",
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0004/CO0004 - LO.html"
+          "src": "content/CO0004/CO0004 - LO.html",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s04",
+          "id": "CO0004-s4",
           "type": "html",
           "title": "Equipment",
           "hours": 0.1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0004/CO0004 - Equip.html"
+          "src": "content/CO0004/CO0004 - Equip.html",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s05",
+          "id": "CO0004-s5",
           "type": "youtube",
           "title": "Introducing E-blocks 3",
           "hours": 0.2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://youtu.be/KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv"
+          "src": "https://youtu.be/KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s06",
+          "id": "CO0004-s6",
           "type": "youtube",
           "title": "Introducing Flowcode",
           "hours": 0.2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://youtu.be/tDdptTbvDM0?si=19xqKAzPCOO3In5e"
+          "src": "https://youtu.be/tDdptTbvDM0?si=19xqKAzPCOO3In5e",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s07",
+          "id": "CO0004-s7",
           "type": "pdf",
           "title": "E-blocks datasheet",
           "hours": 0.2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf"
+          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s08",
+          "id": "CO0004-s8",
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0004/Microcontroller basics 1 24 02 26.pptx"
+          "src": "content/CO0004/Microcontroller basics 1 24 02 26.pptx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s09",
+          "id": "CO0004-s9",
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CO0004/Microcontroller basics 2 24 02 26.pptx"
+          "src": "content/CO0004/Microcontroller basics 2 24 02 26.pptx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s10",
+          "id": "CO0004-s10",
           "type": "html",
           "title": "Getting started guide",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "https://www.flowcode.co.uk/wiki/index.php?title=Embedded_Getting_Started_Guide"
+          "src": "https://www.flowcode.co.uk/wiki/index.php?title=Embedded_Getting_Started_Guide",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s11",
+          "id": "CO0004-s11",
           "type": "document",
           "title": "First program",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-1.docx"
+          "src": "content/CP4807/CP4807-1.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s12",
+          "id": "CO0004-s12",
           "type": "document",
           "title": "Performing calculations",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-2.docx"
+          "src": "content/CP4807/CP4807-2.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s13",
+          "id": "CO0004-s13",
           "type": "document",
           "title": "Connection points",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-3.docx"
+          "src": "content/CP4807/CP4807-3.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s14",
+          "id": "CO0004-s14",
           "type": "document",
           "title": "Digital inputs",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-4.docx"
+          "src": "content/CP4807/CP4807-4.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s15",
+          "id": "CO0004-s15",
           "type": "html",
           "title": "Homework 1",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-H1.htm"
+          "src": "content/CP4807/CP4807-H1.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s16",
+          "id": "CO0004-s16",
           "type": "document",
           "title": "Making decisions",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-5.docx"
+          "src": "content/CP4807/CP4807-5.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s17",
+          "id": "CO0004-s17",
           "type": "document",
           "title": "Macros / subroutines",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-6.docx"
+          "src": "content/CP4807/CP4807-6.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s18",
+          "id": "CO0004-s18",
           "type": "document",
           "title": "Using prototype boards",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-7.docx"
+          "src": "content/CP4807/CP4807-7.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s19",
+          "id": "CO0004-s19",
           "type": "document",
           "title": "Analogue inputs",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-1.docx"
+          "src": "content/CP1972/CP1972-1.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s20",
+          "id": "CO0004-s20",
           "type": "document",
           "title": "Colour graphical displays",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-8.docx"
+          "src": "content/CP4807/CP4807-8.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s21",
+          "id": "CO0004-s21",
           "type": "html",
           "title": "Homework 2",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-H2.htm"
+          "src": "content/CP4807/CP4807-H2.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s22",
+          "id": "CO0004-s22",
           "type": "document",
           "title": "Light sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-2.docx"
+          "src": "content/CP1972/CP1972-2.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s23",
+          "id": "CO0004-s23",
           "type": "document",
           "title": "Analogue temperature sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-3.docx"
+          "src": "content/CP1972/CP1972-3.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s24",
+          "id": "CO0004-s24",
           "type": "html",
           "title": "Homework 3",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-H3.htm"
+          "src": "content/CP4807/CP4807-H3.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s25",
+          "id": "CO0004-s25",
           "type": "html",
           "title": "Assessment 1",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-A1.htm"
+          "src": "content/CP4807/CP4807-A1.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s26",
+          "id": "CO0004-s26",
           "type": "document",
           "title": "Digital temperature sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-4.docx"
+          "src": "content/CP1972/CP1972-4.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s27",
+          "id": "CO0004-s27",
           "type": "document",
           "title": "Digital accelerometer",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-5.docx"
+          "src": "content/CP1972/CP1972-5.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s28",
+          "id": "CO0004-s28",
           "type": "html",
           "title": "Assessment 2",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-A2.htm"
+          "src": "content/CP4807/CP4807-A2.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s29",
+          "id": "CO0004-s29",
           "type": "document",
           "title": "Basic DC motors",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-1.docx"
+          "src": "content/CP0507/CP0507-1.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s30",
+          "id": "CO0004-s30",
           "type": "document",
           "title": "Full bridge motor control",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-2.docx"
+          "src": "content/CP0507/CP0507-2.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s31",
+          "id": "CO0004-s31",
           "type": "document",
           "title": "Stepper motor control",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-3.docx"
+          "src": "content/CP0507/CP0507-3.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s32",
+          "id": "CO0004-s32",
           "type": "document",
           "title": "Servo motor control",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-4.docx"
+          "src": "content/CP0507/CP0507-4.docx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "co4-s33",
+          "id": "CO0004-s33",
           "type": "html",
           "title": "Homework 6",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-H6.htm"
+          "src": "content/CP4807/CP4807-H6.htm",
+          "equipment": "Flowcode / E-blocks3"
         }
       ],
       "categories": [
         "T-Level",
         "Embedded",
         "Curriculum"
-      ]
+      ],
+      "_source": "sheet"
     },
     {
       "id": "CP0507",
