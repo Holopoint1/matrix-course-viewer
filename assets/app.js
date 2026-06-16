@@ -998,9 +998,12 @@
     parts.push('<span class="meta-field"><span class="meta-k">Type:</span> ' + escapeHtml(screen.type.toUpperCase()) + '</span>');
 
     const isUrl = /^https?:/i.test(screen.src || '');
-    // Show the Drive-style location (strip the website's internal "content/"
-    // prefix) so the ASSET label mirrors where the file lives in Drive.
-    const asset = screen.src ? (isUrl ? shortUrl(screen.src) : screen.src.replace(/^content\//i, '')) : '';
+    // Show the real Google Drive location: prefer screen.path (the Drive path
+    // typed in the definition); otherwise fall back to the site path with the
+    // internal "content/" prefix stripped. The publisher never sees "content/".
+    const asset = isUrl
+      ? shortUrl(screen.src)
+      : (screen.path || (screen.src || '').replace(/^content\//i, ''));
     if (asset) {
       parts.push('<span class="meta-field"><span class="meta-k">Asset:</span> <code>' + escapeHtml(asset) + '</code></span>');
     }

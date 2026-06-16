@@ -135,27 +135,28 @@ function rowsToScreens(rows, code) {
     const equipment = String(cell(r, ['equipment'])).trim();
     const title = String(cell(r, ['title'])).trim();
     const file = cleanFile(cell(r, ['file', 'src']));
-    let src;
+    let src, drivePath;
     if (/^https?:/i.test(file)) src = file;                 // a URL → use as-is
-    else if (/^content\//i.test(file)) src = file;          // already a site path → use as-is
+    else if (/^content\//i.test(file)) src = file;          // legacy site path → use as-is
     else {
-      /* Otherwise it's a DRIVE-style path the publisher typed — e.g.
-         "CP4807 - Introduction to microcontrollers/CP4807-1.docx", or just
-         "CP4807/CP4807-1.docx", or a bare "opening.svg". Translate it to the
-         site location content/<CODE>/<filename>: take the filename (last
-         segment) and derive <CODE> from the first folder segment (e.g.
-         "CP4807 - Introduction..." -> CP4807). A bare filename uses THIS
-         course's folder. So a publisher only ever types the Drive folder. */
+      /* A Google DRIVE path the publisher typed — anything from a bare
+         "opening.svg" to a full "LMS Project Assets/CO0001 - FC E-blocks CPD
+         course/media/CO0001 - opening.png". Resolve the fetch location
+         content/<CODE>/<filename> (CODE = the first path segment that looks
+         like a course code, else THIS course) and KEEP the typed Drive path
+         verbatim so the sheet + viewer can show the real Drive location. */
       const parts = file.split(/[\\/]+/).filter(Boolean);
       const name = parts[parts.length - 1];
-      if (parts.length <= 1) {
-        src = 'content/' + code + '/' + name;
-      } else {
-        const m = parts[0].match(/([A-Za-z]{2}\d{4})/);
-        src = 'content/' + (m ? m[1].toUpperCase() : code) + '/' + name;
+      let folderCode = code;
+      for (const seg of parts.slice(0, -1)) {
+        const m = seg.match(/([A-Za-z]{2}\d{4})/);
+        if (m) { folderCode = m[1].toUpperCase(); break; }
       }
+      src = 'content/' + folderCode + '/' + name;
+      drivePath = file;                                     // the real Drive path, for display
     }
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
+    if (drivePath) screen.path = drivePath;
     if (equipment) screen.equipment = equipment;
     // flag local files that don't exist on disk (so we can see gaps)
     if (!/^https?:/i.test(src) && !fs.existsSync(path.resolve(src))) { screen.missing = true; missing.push(`${title} → ${src}`); }
