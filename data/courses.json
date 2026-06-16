@@ -1625,6 +1625,74 @@
         "Curriculum pack"
       ],
       "_source": "sheet"
+    },
+    {
+      "id": "ZZ9999",
+      "code": "ZZ9999",
+      "kind": "course",
+      "title": "Test Course — System Check",
+      "shortDescription": "A self-contained course for verifying the Matrix Course Viewer end to end — image, HTML, video, worksheet, progress and certificate. Safe to delete.",
+      "estimatedHours": 2.8,
+      "certificate": {
+        "enabled": true,
+        "templateName": "Test Course — System Check"
+      },
+      "screens": [
+        {
+          "id": "ZZ9999-s1",
+          "type": "image",
+          "title": "Title card",
+          "hours": 0,
+          "src": "content/ZZ9999/opening.svg"
+        },
+        {
+          "id": "ZZ9999-s2",
+          "type": "html",
+          "title": "Welcome",
+          "hours": 0.25,
+          "src": "content/ZZ9999/welcome.html"
+        },
+        {
+          "id": "ZZ9999-s3",
+          "type": "html",
+          "title": "Learning objectives",
+          "hours": 0.25,
+          "src": "content/ZZ9999/objectives.html",
+          "equipment": "None"
+        },
+        {
+          "id": "ZZ9999-s4",
+          "type": "youtube",
+          "title": "Intro video",
+          "hours": 0.5,
+          "src": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+        },
+        {
+          "id": "ZZ9999-s5",
+          "type": "document",
+          "title": "Sample worksheet",
+          "hours": 1,
+          "src": "content/ZZ9999/worksheet.docx"
+        },
+        {
+          "id": "ZZ9999-s6",
+          "type": "html",
+          "title": "Knowledge check",
+          "hours": 0.5,
+          "src": "content/ZZ9999/assessment.html"
+        },
+        {
+          "id": "ZZ9999-s7",
+          "type": "html",
+          "title": "Completion",
+          "hours": 0.25,
+          "src": "content/ZZ9999/complete.html"
+        }
+      ],
+      "categories": [
+        "Test"
+      ],
+      "_source": "manual"
     }
   ]
 }

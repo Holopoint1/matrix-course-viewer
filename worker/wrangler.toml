@@ -1,0 +1,19 @@
+# Cloudflare Worker that fires the LMS Drive→GitHub sync reliably.
+#  - Cron trigger every 5 min  → replaces GitHub's unreliable */5 schedule.
+#  - POST endpoint             → the admin "Publish now" button calls this.
+# The GitHub token is NOT here — it's a Worker secret (see worker/README.md).
+name = "matrix-course-sync"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+account_id = "49264a52040e6ced3fd501fd9260477c"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+GH_OWNER = "Holopoint1"
+GH_REPO = "matrix-course-viewer"
+GH_WORKFLOW = "sync-from-drive.yml"
+GH_REF = "main"
+# Only requests from this origin are allowed through CORS (the live site).
+ALLOW_ORIGIN = "https://holopoint1.github.io"

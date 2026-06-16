@@ -1312,5 +1312,76 @@
     });
   })();
   </script>
+
+  <!-- ===== Publish to live (fires the Drive→GitHub sync via the Worker) ===== -->
+  <script>
+  (function () {
+    'use strict';
+    // Endpoint + soft key. The KEY must match the Worker's PUBLISH_KEY secret
+    // (see worker/README.md). It's a gate, not a vault — the sync is harmless
+    // to re-run, so exposure on this public page only risks an extra sync.
+    var PUBLISH_ENDPOINT = 'https://matrix-course-sync.ad5046.workers.dev/';
+    var PUBLISH_KEY = 'mcv-publish-9f3a2c';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'publish-now-btn';
+    btn.textContent = '🚀 Publish to live';
+    btn.style.cssText = [
+      'position:fixed', 'right:20px', 'bottom:20px', 'z-index:9999',
+      'padding:12px 18px', 'border:0', 'border-radius:10px', 'cursor:pointer',
+      'font:600 15px/1 Segoe UI,Arial,sans-serif', 'color:#fff',
+      'background:#2563eb', 'box-shadow:0 6px 18px rgba(0,0,0,.28)'
+    ].join(';');
+
+    var toast = document.createElement('div');
+    toast.style.cssText = [
+      'position:fixed', 'right:20px', 'bottom:74px', 'z-index:9999',
+      'max-width:320px', 'padding:11px 14px', 'border-radius:10px',
+      'font:400 13px/1.45 Segoe UI,Arial,sans-serif', 'color:#fff',
+      'box-shadow:0 6px 18px rgba(0,0,0,.28)', 'display:none', 'white-space:pre-line'
+    ].join(';');
+
+    function showToast(msg, kind) {
+      toast.textContent = msg;
+      toast.style.background = kind === 'ok' ? '#16a34a' : (kind === 'warn' ? '#d97706' : '#dc2626');
+      toast.style.display = 'block';
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(function () { toast.style.display = 'none'; }, kind === 'ok' ? 9000 : 12000);
+    }
+
+    btn.addEventListener('click', function () {
+      btn.disabled = true;
+      var label = btn.textContent;
+      btn.textContent = '⏳ Publishing…';
+      btn.style.background = '#64748b';
+      fetch(PUBLISH_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Publish-Key': PUBLISH_KEY }
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (body) { return { status: r.status, body: body }; });
+      }).then(function (res) {
+        if (res.status === 200 && res.body.ok) {
+          showToast('✅ Publishing started.\nYour changes go live in about 1–2 minutes. Refresh the site to see them.', 'ok');
+        } else if (res.status === 429) {
+          showToast('⏳ Already publishing — give it a moment, then try again.', 'warn');
+        } else if (res.status === 401) {
+          showToast('🔒 Publish key rejected. Check the Worker’s PUBLISH_KEY secret matches this page.', 'err');
+        } else {
+          showToast('⚠️ Publish failed (' + res.status + ').\n' + (res.body.detail || res.body.error || 'Check the Worker is deployed with its GH_TOKEN.'), 'err');
+        }
+      }).catch(function () {
+        showToast('⚠️ Could not reach the publish service.\nThe Worker may not be deployed yet — see worker/README.md.', 'err');
+      }).then(function () {
+        btn.disabled = false;
+        btn.textContent = label;
+        btn.style.background = '#2563eb';
+      });
+    });
+
+    document.body.appendChild(toast);
+    document.body.appendChild(btn);
+  })();
+  </script>
 </body>
 </html>
