@@ -231,7 +231,7 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 – welcome.HTM",
+          "src": "content/CO0002/CO0002 - welcome.html",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -240,7 +240,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 – LO.HTM",
+          "src": "content/CO0002/CO0002 - LO.html",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
