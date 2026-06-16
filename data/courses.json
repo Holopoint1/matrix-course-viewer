@@ -187,6 +187,7 @@
           "title": "Introduction to microcontrollers",
           "hours": 0,
           "src": "content/CO0002/CO0002 - opening.png",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - opening.png",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -195,6 +196,7 @@
           "title": "Welcome",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - welcome.html",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -203,6 +205,7 @@
           "title": "Learning objectives",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - LO.html",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -211,6 +214,7 @@
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - Equip.html",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - Equip.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -243,6 +247,7 @@
           "title": "Microcontroller basics 1",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -251,6 +256,7 @@
           "title": "Microcontroller basics 2",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -267,6 +273,7 @@
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -275,6 +282,7 @@
           "title": "Performing calculations",
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -283,6 +291,7 @@
           "title": "Connection points",
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -291,6 +300,7 @@
           "title": "Digital inputs",
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -299,6 +309,7 @@
           "title": "Homework 1",
           "hours": 2,
           "src": "content/CP4807/CP4807-H1.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -307,6 +318,7 @@
           "title": "Making decisions",
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -315,6 +327,7 @@
           "title": "Macros / subroutines",
           "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -323,6 +336,7 @@
           "title": "Using prototype boards",
           "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -331,6 +345,7 @@
           "title": "Analogue inputs",
           "hours": 2,
           "src": "content/CP1972/CP1972-1.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -339,6 +354,7 @@
           "title": "Colour graphical displays",
           "hours": 2,
           "src": "content/CP4807/CP4807-8.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-8.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -347,6 +363,7 @@
           "title": "Homework 2",
           "hours": 2,
           "src": "content/CP4807/CP4807-H2.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H2.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -355,6 +372,7 @@
           "title": "Light sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-2.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -363,6 +381,7 @@
           "title": "Analogue temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-3.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -371,6 +390,7 @@
           "title": "Homework 3",
           "hours": 2,
           "src": "content/CP4807/CP4807-H3.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H3.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -379,6 +399,7 @@
           "title": "Assessment 1",
           "hours": 2,
           "src": "content/CP4807/CP4807-A1.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-A1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -387,6 +408,7 @@
           "title": "Digital temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-4.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -395,6 +417,7 @@
           "title": "Digital accelerometer",
           "hours": 2,
           "src": "content/CP1972/CP1972-5.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -403,6 +426,7 @@
           "title": "Assessment 2",
           "hours": 2,
           "src": "content/CP4807/CP4807-A2.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-A2.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -411,6 +435,7 @@
           "title": "Basic DC motors",
           "hours": 2,
           "src": "content/CP0507/CP0507-1.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -419,6 +444,7 @@
           "title": "Full bridge motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-2.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -427,6 +453,7 @@
           "title": "Stepper motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-3.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -435,6 +462,7 @@
           "title": "Servo motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-4.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -443,6 +471,7 @@
           "title": "Homework 6",
           "hours": 2,
           "src": "content/CP4807/CP4807-H6.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H6.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -451,6 +480,7 @@
           "title": "Floats and INTs",
           "hours": 2,
           "src": "content/CP1972/CP1972-6.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -459,6 +489,7 @@
           "title": "Pin interrupts",
           "hours": 2,
           "src": "content/CP4807/CP4807-9.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-9.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -467,6 +498,7 @@
           "title": "Timer interrupts",
           "hours": 2,
           "src": "content/CP4807/CP4807-10.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-10.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -475,6 +507,7 @@
           "title": "Homework 7",
           "hours": 2,
           "src": "content/CP4807/CP4807-H7.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H7.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -483,6 +516,7 @@
           "title": "Touch control systems",
           "hours": 2,
           "src": "content/CP4807/CP4807-11.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-11.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -491,6 +525,7 @@
           "title": "Homework 8",
           "hours": 2,
           "src": "content/CP4807/CP4807-H8.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H8.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -499,6 +534,7 @@
           "title": "Web mirror",
           "hours": 2,
           "src": "content/CP4807/CP4807-12.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-12.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -507,6 +543,7 @@
           "title": "Homework 9",
           "hours": 24,
           "src": "content/CP4807/CP4807-H9.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H9.htm",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
@@ -534,6 +571,7 @@
           "title": "Introduction to microcontrollers",
           "hours": 0,
           "src": "content/CO0003/opening.svg",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/opening.svg",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -542,6 +580,7 @@
           "title": "Welcome",
           "hours": 0.1,
           "src": "content/CO0003/CO0003 - welcome.html",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/CO0003 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -574,6 +613,7 @@
           "title": "Microcontroller basics 1",
           "hours": 0.3,
           "src": "content/CO0003/Microcontroller basics 1 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -582,6 +622,7 @@
           "title": "Microcontroller basics 2",
           "hours": 0.3,
           "src": "content/CO0003/Microcontroller basics 2 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -598,6 +639,7 @@
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -606,6 +648,7 @@
           "title": "Performing calculations",
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -614,6 +657,7 @@
           "title": "Connection points",
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -622,6 +666,7 @@
           "title": "Digital inputs",
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -630,6 +675,7 @@
           "title": "Homework 1",
           "hours": 2,
           "src": "content/CP4807/CP4807-H1.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -638,6 +684,7 @@
           "title": "Making decisions",
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -646,6 +693,7 @@
           "title": "Macros / subroutines",
           "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -654,6 +702,7 @@
           "title": "Using prototype boards",
           "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -662,6 +711,7 @@
           "title": "Analogue inputs",
           "hours": 2,
           "src": "content/CP1972/CP1972-1.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -670,6 +720,7 @@
           "title": "Colour graphical displays",
           "hours": 2,
           "src": "content/CP4807/CP4807-8.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-8.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -678,6 +729,7 @@
           "title": "Homework 2",
           "hours": 2,
           "src": "content/CP4807/CP4807-H2.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H2.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -686,6 +738,7 @@
           "title": "Light sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-2.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -694,6 +747,7 @@
           "title": "Analogue temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-3.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -702,6 +756,7 @@
           "title": "Homework 3",
           "hours": 2,
           "src": "content/CP4807/CP4807-H3.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H3.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -710,6 +765,7 @@
           "title": "Basic DC motors",
           "hours": 2,
           "src": "content/CP0507/CP0507-1.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -718,6 +774,7 @@
           "title": "Full bridge motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-2.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -726,6 +783,7 @@
           "title": "Servo motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-4.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
@@ -742,7 +800,7 @@
       "kind": "course",
       "title": "Microcontrollers for T-Levels",
       "shortDescription": "T-Level Engineering microcontroller pathway built on the CP4807 / CP1972 / CP0507 worksheet base. Covers digital and analogue I/O, motor control (including stepper), interrupts, and full assessment-led progression.",
-      "estimatedHours": 52.5,
+      "estimatedHours": 46.5,
       "certificate": {
         "enabled": true,
         "templateName": "Microcontrollers for T-Levels"
@@ -754,6 +812,7 @@
           "title": "Introduction to microcontrollers",
           "hours": 0,
           "src": "content/CO0004/CO0004 - opening.jpg",
+          "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - opening.jpg",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -762,6 +821,7 @@
           "title": "Welcome",
           "hours": 0.1,
           "src": "content/CO0004/CO0004 - welcome.html",
+          "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -770,6 +830,7 @@
           "title": "Learning objectives",
           "hours": 0.1,
           "src": "content/CO0004/CO0004 - LO.html",
+          "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -778,6 +839,7 @@
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0004/CO0004 - Equip.html",
+          "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - Equip.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -810,6 +872,7 @@
           "title": "Microcontroller basics 1",
           "hours": 0.3,
           "src": "content/CO0004/Microcontroller basics 1 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -818,6 +881,7 @@
           "title": "Microcontroller basics 2",
           "hours": 0.3,
           "src": "content/CO0004/Microcontroller basics 2 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -834,6 +898,7 @@
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -842,6 +907,7 @@
           "title": "Performing calculations",
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -850,6 +916,7 @@
           "title": "Connection points",
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -858,6 +925,7 @@
           "title": "Digital inputs",
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -866,6 +934,7 @@
           "title": "Homework 1",
           "hours": 2,
           "src": "content/CP4807/CP4807-H1.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -874,6 +943,7 @@
           "title": "Making decisions",
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -882,6 +952,7 @@
           "title": "Macros / subroutines",
           "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -890,6 +961,7 @@
           "title": "Using prototype boards",
           "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -898,6 +970,7 @@
           "title": "Analogue inputs",
           "hours": 2,
           "src": "content/CP1972/CP1972-1.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -906,6 +979,7 @@
           "title": "Colour graphical displays",
           "hours": 2,
           "src": "content/CP4807/CP4807-8.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-8.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -914,6 +988,7 @@
           "title": "Homework 2",
           "hours": 2,
           "src": "content/CP4807/CP4807-H2.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H2.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -922,6 +997,7 @@
           "title": "Light sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-2.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -930,6 +1006,7 @@
           "title": "Analogue temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-3.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -938,6 +1015,7 @@
           "title": "Homework 3",
           "hours": 2,
           "src": "content/CP4807/CP4807-H3.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H3.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -946,6 +1024,7 @@
           "title": "Assessment 1",
           "hours": 2,
           "src": "content/CP4807/CP4807-A1.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-A1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -954,6 +1033,7 @@
           "title": "Digital temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-4.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -962,6 +1042,7 @@
           "title": "Digital accelerometer",
           "hours": 2,
           "src": "content/CP1972/CP1972-5.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -970,6 +1051,7 @@
           "title": "Assessment 2",
           "hours": 2,
           "src": "content/CP4807/CP4807-A2.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-A2.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -978,6 +1060,7 @@
           "title": "Basic DC motors",
           "hours": 2,
           "src": "content/CP0507/CP0507-1.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -986,6 +1069,7 @@
           "title": "Full bridge motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-2.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -994,6 +1078,7 @@
           "title": "Stepper motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-3.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1002,6 +1087,7 @@
           "title": "Servo motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-4.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1010,34 +1096,8 @@
           "title": "Homework 6",
           "hours": 2,
           "src": "content/CP4807/CP4807-H6.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H6.htm",
           "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0004-s34",
-          "type": "image",
-          "title": "TESTT",
-          "hours": 1,
-          "src": "content/CP4807/media/test.jpg",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
-        },
-        {
-          "id": "CO0004-s35",
-          "type": "document",
-          "title": "TESTT",
-          "hours": 2,
-          "src": "content/CP4807/media/test",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
-        },
-        {
-          "id": "CO0004-s36",
-          "type": "document",
-          "title": "TESTT",
-          "hours": 3,
-          "src": "content/CP4807/media/test",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
         }
       ],
       "categories": [
@@ -1260,6 +1320,7 @@
           "title": "Title page",
           "hours": 0.5,
           "src": "content/CP2563/CP2563-head.docx",
+          "path": "LMS Project Assets/CP2563 - Microcontrollers for T levels/CP2563-head.docx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -1269,6 +1330,7 @@
           "title": "Contents",
           "hours": 0.1,
           "src": "content/CP2563/CP2563-cont.docx",
+          "path": "LMS Project Assets/CP2563 - Microcontrollers for T levels/CP2563-cont.docx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -1278,6 +1340,7 @@
           "title": "First program",
           "hours": 2,
           "src": "content/CP4807/CP4807-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1286,6 +1349,7 @@
           "title": "Performing calculations",
           "hours": 2,
           "src": "content/CP4807/CP4807-2.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1294,6 +1358,7 @@
           "title": "Connection points",
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1302,6 +1367,7 @@
           "title": "Digital inputs",
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1310,6 +1376,7 @@
           "title": "Making decisions",
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1318,6 +1385,7 @@
           "title": "Macros / subroutines",
           "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1326,6 +1394,7 @@
           "title": "Using prototype boards",
           "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1334,6 +1403,7 @@
           "title": "Analogue inputs",
           "hours": 2,
           "src": "content/CP1972/CP1972-1.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1342,6 +1412,7 @@
           "title": "Colour graphical displays",
           "hours": 2,
           "src": "content/CP4807/CP4807-8.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-8.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1350,6 +1421,7 @@
           "title": "Light sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-2.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1358,6 +1430,7 @@
           "title": "Analogue temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-3.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1366,6 +1439,7 @@
           "title": "Basic DC motors",
           "hours": 2,
           "src": "content/CP0507/CP0507-1.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1374,6 +1448,7 @@
           "title": "Full bridge motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-2.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1382,6 +1457,7 @@
           "title": "Servo motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-4.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1390,6 +1466,7 @@
           "title": "Teacher notes",
           "hours": 0.5,
           "src": "content/CP4807/TN-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/TN-1.docx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         }
@@ -1528,6 +1605,7 @@
           "title": "Title page",
           "hours": 0.5,
           "src": "content/CP7244/CP7244-head.docx",
+          "path": "LMS Project Assets/CP7244 - Digital Techniques for Aviation Technicians/CP7244-head.docx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -1537,6 +1615,7 @@
           "title": "Contents",
           "hours": 0.1,
           "src": "content/CP7244/CP7244-cont.docx",
+          "path": "LMS Project Assets/CP7244 - Digital Techniques for Aviation Technicians/CP7244-cont.docx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -1546,6 +1625,7 @@
           "title": "First program",
           "hours": 2,
           "src": "content/CP4807/CP4807-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1554,6 +1634,7 @@
           "title": "Performing calculations",
           "hours": 2,
           "src": "content/CP4807/CP4807-2.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1562,6 +1643,7 @@
           "title": "Connection points",
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1570,6 +1652,7 @@
           "title": "Digital inputs",
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1578,6 +1661,7 @@
           "title": "Making decisions",
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1586,6 +1670,7 @@
           "title": "Macros / subroutines",
           "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1594,6 +1679,7 @@
           "title": "Using prototype boards",
           "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1602,6 +1688,7 @@
           "title": "Analogue inputs",
           "hours": 2,
           "src": "content/CP1972/CP1972-1.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1610,6 +1697,7 @@
           "title": "Colour graphical displays",
           "hours": 2,
           "src": "content/CP4807/CP4807-8.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-8.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1618,6 +1706,7 @@
           "title": "Light sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-2.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1626,6 +1715,7 @@
           "title": "Analogue temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-3.docx",
+          "path": "LMS Project Assets/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1634,6 +1724,7 @@
           "title": "Basic DC motors",
           "hours": 2,
           "src": "content/CP0507/CP0507-1.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1642,6 +1733,7 @@
           "title": "Full bridge motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-2.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1650,6 +1742,7 @@
           "title": "Servo motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-4.docx",
+          "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1658,6 +1751,7 @@
           "title": "Teacher notes",
           "hours": 0.5,
           "src": "content/CP4807/TN-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/TN-1.docx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         }
