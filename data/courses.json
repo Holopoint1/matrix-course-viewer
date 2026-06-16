@@ -161,7 +161,7 @@
       "kind": "course",
       "title": "Introduction to Microcontrollers",
       "shortDescription": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
-      "estimatedHours": 116.5,
+      "estimatedHours": 84.5,
       "certificate": {
         "enabled": true,
         "templateName": "Introduction to Microcontrollers"
@@ -489,46 +489,6 @@
         },
         {
           "id": "CO0002-s41",
-          "type": "html",
-          "title": "Homework 9",
-          "hours": 24,
-          "src": "content/CP4807/CP4807-H9.htm",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0002-s42",
-          "type": "html",
-          "title": "Homework 7",
-          "hours": 2,
-          "src": "content/CP4807/CP4807-H7.htm",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0002-s43",
-          "type": "document",
-          "title": "Touch control systems",
-          "hours": 2,
-          "src": "content/CP4807/CP4807-11.docx",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0002-s44",
-          "type": "html",
-          "title": "Homework 8",
-          "hours": 2,
-          "src": "content/CP4807/CP4807-H8.htm",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0002-s45",
-          "type": "document",
-          "title": "Web mirror",
-          "hours": 2,
-          "src": "content/CP4807/CP4807-12.docx",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0002-s46",
           "type": "html",
           "title": "Homework 9",
           "hours": 24,
@@ -1247,15 +1207,156 @@
       "code": "CP2563",
       "kind": "pack",
       "title": "Microcontrollers for T-Levels",
-      "shortDescription": "T-Level Engineering microcontroller worksheets. Content not yet split — see the assets folder for the master doc.",
-      "estimatedHours": 0,
+      "shortDescription": "T-Level Engineering microcontroller worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
+      "estimatedHours": 29.1,
       "certificate": {
         "enabled": false
       },
-      "screens": [],
+      "screens": [
+        {
+          "id": "CP2563-s1",
+          "type": "document",
+          "title": "Title page",
+          "hours": 0.5,
+          "src": "content/CP2563/CP2563-head.docx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CP2563-s2",
+          "type": "document",
+          "title": "Contents",
+          "hours": 0.1,
+          "src": "content/CP2563/CP2563-cont.docx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CP2563-s3",
+          "type": "document",
+          "title": "First program",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-1.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s4",
+          "type": "document",
+          "title": "Performing calculations",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-2.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s5",
+          "type": "document",
+          "title": "Connection points",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-3.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s6",
+          "type": "document",
+          "title": "Digital inputs",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-4.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s7",
+          "type": "document",
+          "title": "Making decisions",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-5.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s8",
+          "type": "document",
+          "title": "Macros / subroutines",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-6.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s9",
+          "type": "document",
+          "title": "Using prototype boards",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-7.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s10",
+          "type": "document",
+          "title": "Analogue inputs",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-1.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s11",
+          "type": "document",
+          "title": "Colour graphical displays",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-8.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s12",
+          "type": "document",
+          "title": "Light sensor",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-2.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s13",
+          "type": "document",
+          "title": "Analogue temperature sensor",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-3.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s14",
+          "type": "document",
+          "title": "Basic DC motors",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-1.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s15",
+          "type": "document",
+          "title": "Full bridge motor control",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-2.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s16",
+          "type": "document",
+          "title": "Servo motor control",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-4.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP2563-s17",
+          "type": "document",
+          "title": "Teacher notes",
+          "hours": 0.5,
+          "src": "content/CP4807/TN-1.docx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        }
+      ],
       "categories": [
         "Curriculum pack"
-      ]
+      ],
+      "_source": "sheet"
     },
     {
       "id": "CP4807",
@@ -1374,15 +1475,156 @@
       "code": "CP7244",
       "kind": "pack",
       "title": "Digital Techniques for Aviation Technicians",
-      "shortDescription": "EASA Unit 5 Digital Techniques worksheets. Content not yet split — see the assets folder for the master doc.",
-      "estimatedHours": 0,
+      "shortDescription": "EASA Unit 5 Digital Techniques worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
+      "estimatedHours": 29.1,
       "certificate": {
         "enabled": false
       },
-      "screens": [],
+      "screens": [
+        {
+          "id": "CP7244-s1",
+          "type": "document",
+          "title": "Title page",
+          "hours": 0.5,
+          "src": "content/CP7244/CP7244-head.docx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CP7244-s2",
+          "type": "document",
+          "title": "Contents",
+          "hours": 0.1,
+          "src": "content/CP7244/CP7244-cont.docx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CP7244-s3",
+          "type": "document",
+          "title": "First program",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-1.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s4",
+          "type": "document",
+          "title": "Performing calculations",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-2.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s5",
+          "type": "document",
+          "title": "Connection points",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-3.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s6",
+          "type": "document",
+          "title": "Digital inputs",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-4.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s7",
+          "type": "document",
+          "title": "Making decisions",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-5.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s8",
+          "type": "document",
+          "title": "Macros / subroutines",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-6.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s9",
+          "type": "document",
+          "title": "Using prototype boards",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-7.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s10",
+          "type": "document",
+          "title": "Analogue inputs",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-1.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s11",
+          "type": "document",
+          "title": "Colour graphical displays",
+          "hours": 2,
+          "src": "content/CP4807/CP4807-8.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s12",
+          "type": "document",
+          "title": "Light sensor",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-2.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s13",
+          "type": "document",
+          "title": "Analogue temperature sensor",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-3.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s14",
+          "type": "document",
+          "title": "Basic DC motors",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-1.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s15",
+          "type": "document",
+          "title": "Full bridge motor control",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-2.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s16",
+          "type": "document",
+          "title": "Servo motor control",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-4.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP7244-s17",
+          "type": "document",
+          "title": "Teacher notes",
+          "hours": 0.5,
+          "src": "content/CP4807/TN-1.docx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        }
+      ],
       "categories": [
         "Curriculum pack"
-      ]
+      ],
+      "_source": "sheet"
     }
   ]
 }
