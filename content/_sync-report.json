@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T14:12:18.843Z",
+  "generatedAt": "2026-06-16T14:15:05.597Z",
   "courses": {
     "CO0001": {
       "stale": [
@@ -19,11 +19,6 @@
     "CO0002": {
       "stale": [
         {
-          "title": "Introduction to microcontrollers",
-          "showing": "CO0002 - opening.png",
-          "expectedIn": "CO0002"
-        },
-        {
           "title": "Equipment",
           "showing": "CO0002 - Equip.html",
           "expectedIn": "CO0002"
@@ -34,11 +29,6 @@
     "CO0003": {
       "stale": [
         {
-          "title": "Introduction to microcontrollers",
-          "showing": "opening.svg",
-          "expectedIn": "CO0003"
-        },
-        {
           "title": "Welcome",
           "showing": "CO0003 - welcome.html",
           "expectedIn": "CO0003"
@@ -48,11 +38,6 @@
     },
     "CO0004": {
       "stale": [
-        {
-          "title": "Introduction to microcontrollers",
-          "showing": "CO0004 - opening.jpg",
-          "expectedIn": "CO0004"
-        },
         {
           "title": "Welcome",
           "showing": "CO0004 - welcome.html",
@@ -107,8 +92,7 @@
       "complete.html",
       "assessment.html",
       "objectives.html",
-      "welcome.html",
-      "opening.svg"
+      "welcome.html"
     ],
     "CP2563": [
       "CP2563_definition.xlsx",
@@ -158,8 +142,6 @@
     ],
     "CP4807": [
       "test.docx",
-      "CO0004 - opening.jpg",
-      "CO0002 - opening.png",
       "close-up-of-a-yellow-construction-sign-for-traffic-2025-02-03-16-16-23-utc.jpg",
       "view-of-city-traffic-with-traffic-lights-in-the-f-2025-03-16-12-41-45-utc.jpg",
       "red-and-green-round-lamps-and-buttons-on-black-con-2024-12-17-00-11-57-utc.jpg",
@@ -233,6 +215,7 @@
       "test.jpg",
       "CO0001 – CPD objectives.HTM.jpg",
       "CO0001 - LO.docx",
+      "CO0001 - opening.png",
       "CO0001 - content.docx"
     ],
     "CO0002": [
