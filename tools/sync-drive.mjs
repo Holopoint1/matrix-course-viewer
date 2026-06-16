@@ -195,6 +195,9 @@ function matchInSet(want, type, set) {
 function tolerantMatch(name, type, folderCode, byCode) {
   const own = byCode[folderCode];
   if (own && own.has(name)) return null;                  // exact file present → leave as typed
+  // a file with this EXACT name sitting in another course's folder (misfiled)
+  const exact = Object.keys(byCode).filter((c) => c !== folderCode && byCode[c] && byCode[c].has(name));
+  if (exact.length === 1) return { code: exact[0], name };
   const want = normKey(name);
   const inOwn = matchInSet(want, type, own);
   if (inOwn) return { code: folderCode, name: inOwn };    // same-folder rename / drift
