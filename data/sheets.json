@@ -74,6 +74,18 @@
         "Curriculum pack"
       ],
       "url": "https://docs.google.com/spreadsheets/d/1ZAFTt16-TUm8GqSM4TiRBPqEJMPTi0Wz39s9zeuROFc/edit"
+    },
+    {
+      "code": "ZZ9999",
+      "title": "Test Course — System Check",
+      "kind": "course",
+      "description": "A self-contained course for verifying the Matrix Course Viewer end to end — image, HTML, video, worksheet, progress and certificate. Safe to delete.",
+      "certificate": true,
+      "certificateTemplate": "Test Course — System Check",
+      "categories": [
+        "Test"
+      ],
+      "url": "https://docs.google.com/spreadsheets/d/1Z3FMMayRg7Bo--Fxy2eBc4hjyjuUV9nrc8ZypLOwtfw/edit"
     }
   ]
 }
