@@ -728,7 +728,7 @@
       "kind": "course",
       "title": "Microcontrollers for T-Levels",
       "shortDescription": "T-Level Engineering microcontroller pathway built on the CP4807 / CP1972 / CP0507 worksheet base. Covers digital and analogue I/O, motor control (including stepper), interrupts, and full assessment-led progression.",
-      "estimatedHours": 46.5,
+      "estimatedHours": 52.5,
       "certificate": {
         "enabled": true,
         "templateName": "Microcontrollers for T-Levels"
@@ -997,6 +997,33 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-H6.htm",
           "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0004-s34",
+          "type": "image",
+          "title": "TESTT",
+          "hours": 1,
+          "src": "content/CP4807/media/test.jpg",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CO0004-s35",
+          "type": "document",
+          "title": "TESTT",
+          "hours": 2,
+          "src": "content/CP4807/media/test",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CO0004-s36",
+          "type": "document",
+          "title": "TESTT",
+          "hours": 3,
+          "src": "content/CP4807/media/test",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         }
       ],
       "categories": [
@@ -1643,14 +1670,16 @@
           "type": "image",
           "title": "Title card",
           "hours": 0,
-          "src": "content/ZZ9999/opening.svg"
+          "src": "content/ZZ9999/opening.svg",
+          "equipment": "None"
         },
         {
           "id": "ZZ9999-s2",
           "type": "html",
           "title": "Welcome",
           "hours": 0.25,
-          "src": "content/ZZ9999/welcome.html"
+          "src": "content/ZZ9999/welcome.html",
+          "equipment": "None"
         },
         {
           "id": "ZZ9999-s3",
@@ -1665,28 +1694,32 @@
           "type": "youtube",
           "title": "Intro video",
           "hours": 0.5,
-          "src": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+          "src": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+          "equipment": "None"
         },
         {
           "id": "ZZ9999-s5",
           "type": "document",
           "title": "Sample worksheet",
           "hours": 1,
-          "src": "content/CP4807/CP4807-1.docx"
+          "src": "content/CP4807/CP4807-1.docx",
+          "equipment": "None"
         },
         {
           "id": "ZZ9999-s6",
           "type": "html",
           "title": "Knowledge check",
           "hours": 0.5,
-          "src": "content/ZZ9999/assessment.html"
+          "src": "content/ZZ9999/assessment.html",
+          "equipment": "None"
         },
         {
           "id": "ZZ9999-s7",
           "type": "html",
           "title": "Completion",
           "hours": 0.25,
-          "src": "content/ZZ9999/complete.html"
+          "src": "content/ZZ9999/complete.html",
+          "equipment": "None"
         }
       ],
       "categories": [
