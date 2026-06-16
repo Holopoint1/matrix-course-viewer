@@ -172,7 +172,23 @@ function parseSettings(rows, headerIdx) {
   return out;
 }
 
-function rowsToScreens(rows, code) {
+/* ---- Tolerant file matching: forgive naming drift between sheets & Drive ----
+   A sheet may say "opening.svg" / "CO0001 - LO.html" while the real Drive file
+   is "CO0001 - opening.png" / "CO0001 – LO.HTM". When the exact name isn't in the
+   folder, match by a normalised key (drop code prefix, dashes, case, extension)
+   and the screen type — but only ever snap when the match is unambiguous. */
+const TYPE_EXTS = { image: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp'], html: ['htm', 'html'], document: ['doc', 'docx'], powerpoint: ['ppt', 'pptx'], spreadsheet: ['xls', 'xlsx'], pdf: ['pdf'] };
+const normKey = (name) => String(name).toLowerCase().replace(/^[a-z]{2}\d{4}\s*[-–—:]*\s*/, '').replace(/\.[a-z0-9]+$/, '').replace(/[-_\s]+/g, ' ').trim();
+function tolerantMatch(name, type, driveSet) {
+  if (!driveSet || driveSet.has(name)) return null;       // exact file exists, or no Drive data → leave as typed
+  const want = normKey(name);
+  let cands = [...driveSet].filter((f) => normKey(f) === want);
+  const exts = TYPE_EXTS[type];
+  if (cands.length > 1 && exts) cands = cands.filter((f) => exts.includes((f.match(/\.([a-z0-9]+)$/i) || ['', ''])[1].toLowerCase()));
+  return cands.length === 1 ? cands[0] : null;            // unambiguous match only
+}
+
+function rowsToScreens(rows, code, driveFiles = {}) {
   if (!rows.length) return { screens: [], missing: [] };
   const headerIdx = findHeaderRow(rows);
   const header = rows[headerIdx].map((h) => String(h || '').trim().toLowerCase());
@@ -196,18 +212,21 @@ function rowsToScreens(rows, code) {
          like a course code, else THIS course) and KEEP the typed Drive path
          verbatim so the sheet + viewer can show the real Drive location. */
       const parts = file.split(/[\\/]+/).filter(Boolean);
-      const name = parts[parts.length - 1];
+      let name = parts[parts.length - 1];
       let folderCode = code;
       for (const seg of parts.slice(0, -1)) {
         const m = seg.match(/([A-Za-z]{2}\d{4})/);
         if (m) { folderCode = m[1].toUpperCase(); break; }
       }
-      src = 'content/' + folderCode + '/' + name;
       /* A Google Doc/Sheet/Slides is referenced by its bare name (no extension);
          the sync exports it to .docx/.xlsx/.pptx, so when the Screen type implies
          an Office file and no extension was given, fetch that exported file. */
       const gExt = { document: '.docx', spreadsheet: '.xlsx', powerpoint: '.pptx' }[type];
-      if (gExt && !/\.[a-z0-9]{2,6}$/i.test(name)) src += gExt;
+      if (gExt && !/\.[a-z0-9]{2,6}$/i.test(name)) name += gExt;
+      /* Snap to the real Drive file if the exact name drifted (see tolerantMatch). */
+      const real = tolerantMatch(name, type, driveFiles[folderCode]);
+      if (real) name = real;
+      src = 'content/' + folderCode + '/' + name;
       drivePath = file;                                     // the real Drive path, for display (shown as typed)
     }
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
@@ -241,7 +260,7 @@ async function generatePhase(driveFilesByCode = {}) {
       csv = typeof res.data === 'string' ? res.data : String(res.data);
     } catch (err) { console.error(`  ! ${code}: failed to read definition sheet — ${err.message}`); continue; }
 
-    const { screens, missing } = rowsToScreens(parseCsv(csv), code);
+    const { screens, missing } = rowsToScreens(parseCsv(csv), code, driveFilesByCode);
     const totalHours = screens.reduce((s, x) => s + (Number(x.hours) || 0), 0);
     const course = {
       id: code, code, kind: e.kind || 'course',
@@ -258,7 +277,7 @@ async function generatePhase(driveFilesByCode = {}) {
     missing.forEach((m) => console.log(`  ⚠ ${m}`));
   }
 
-  await autoDiscoverPhase(db, byId, registered);
+  await autoDiscoverPhase(db, byId, registered, driveFilesByCode);
 
   writeAccuracyReport(db, driveFilesByCode);
 
@@ -350,7 +369,7 @@ async function buildDraftFromFiles(folder, code, db, byId) {
  * Active: yes (or true/on/live/published). Anything else — including no Active
  * cell at all — is held back as a draft, so nothing appears by accident. */
 const PUBLISH_VALUES = ['yes', 'true', 'on', '1', 'live', 'published', 'active', 'y'];
-async function autoDiscoverPhase(db, byId, registered) {
+async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
   let added = 0, drafts = 0, built = 0;
   const folders = (await listChildren(ROOT_FOLDER_ID))
     .filter((f) => f.mimeType === 'application/vnd.google-apps.folder' && codeOf(f.name));
@@ -382,7 +401,7 @@ async function autoDiscoverPhase(db, byId, registered) {
     const activeRaw = String(settings.active || settings.status || settings.published || '').trim().toLowerCase();
     if (!PUBLISH_VALUES.includes(activeRaw)) { drafts++; console.log(`  · ${code}: held as draft (Active="${activeRaw || 'unset'}")`); continue; }
 
-    const { screens, missing } = rowsToScreens(rows, code);
+    const { screens, missing } = rowsToScreens(rows, code, driveFilesByCode);
     const titleFromFolder = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim();
     const title = settings.title || titleFromFolder || code;
     const certRaw = String(settings.certificate || settings.certificates || '').toLowerCase();
