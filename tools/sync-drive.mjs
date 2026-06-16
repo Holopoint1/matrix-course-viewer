@@ -27,6 +27,16 @@ const COURSES_JSON = path.resolve('data', 'courses.json');
 const SHEETS_JSON = path.resolve('data', 'sheets.json');
 const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
+/* Google-native docs can't be downloaded directly, but they CAN be exported to
+   their Office equivalents — so a publisher can author a screen straight from a
+   Google Doc/Sheet/Slides and the sync turns it into a real file the viewer can
+   show. (The definition sheets themselves are skipped — read via CSV elsewhere.) */
+const GOOGLE_EXPORT = {
+  'application/vnd.google-apps.document':     { mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',   ext: '.docx' },
+  'application/vnd.google-apps.spreadsheet':  { mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',         ext: '.xlsx' },
+  'application/vnd.google-apps.presentation': { mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', ext: '.pptx' },
+};
+const exportName = (f) => { const e = GOOGLE_EXPORT[f.mimeType]; return e && !f.name.toLowerCase().endsWith(e.ext) ? f.name + e.ext : f.name; };
 
 function getAuth() {
   const raw = (process.env.DRIVE_SA_KEY || '').trim();
@@ -66,15 +76,21 @@ async function listChildren(folderId) {
 
 async function collectFiles(folderId, acc) {
   for (const c of await listChildren(folderId)) {
-    if (c.mimeType === 'application/vnd.google-apps.folder') await collectFiles(c.id, acc);
-    else if (!GOOGLE_NATIVE.test(c.mimeType)) acc.push(c);
+    if (c.mimeType === 'application/vnd.google-apps.folder') { await collectFiles(c.id, acc); continue; }
+    if (GOOGLE_NATIVE.test(c.mimeType)) {
+      // Export Google Docs/Sheets/Slides; skip the definition sheets + other Google types (Forms etc.)
+      if (GOOGLE_EXPORT[c.mimeType] && !/\bdefinition\b/i.test(c.name)) acc.push(c);
+    } else acc.push(c);                                    // a real uploaded file
   }
 }
 
 const localMd5 = (p) => { try { return crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex'); } catch { return null; } };
 
-async function download(fileId, dest) {
-  const res = await drive.files.get({ fileId, alt: 'media', supportsAllDrives: true }, { responseType: 'arraybuffer' });
+async function download(file, dest) {
+  const exp = GOOGLE_EXPORT[file.mimeType];
+  const res = exp
+    ? await drive.files.export({ fileId: file.id, mimeType: exp.mime }, { responseType: 'arraybuffer' })
+    : await drive.files.get({ fileId: file.id, alt: 'media', supportsAllDrives: true }, { responseType: 'arraybuffer' });
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, Buffer.from(res.data));
 }
@@ -93,13 +109,15 @@ async function downloadPhase() {
     if (ONLY_COURSE && code !== ONLY_COURSE) continue;
     const files = [];
     await collectFiles(folder.id, files);
-    driveFilesByCode[code] = new Set(files.map((f) => f.name)); // what REALLY exists in Drive now
+    driveFilesByCode[code] = new Set(files.map(exportName)); // names as they land in content/ (Google docs get an Office ext)
     console.log(`\n${code} — ${files.length} file(s)`);
     for (const f of files) {
-      const dest = path.join(CONTENT_DIR, code, f.name);
-      if (f.md5Checksum && f.md5Checksum === localMd5(dest)) { skipped++; continue; }
-      try { await download(f.id, dest); console.log(`  ✓ ${f.name}`); downloaded++; }
-      catch (e) { console.error(`  ✗ ${f.name}: ${e.message}`); failed++; }
+      const name = exportName(f);
+      const dest = path.join(CONTENT_DIR, code, name);
+      // real files: md5-skip when unchanged. Google-native files have no md5, so always re-export (keeps edits fresh).
+      if (!GOOGLE_EXPORT[f.mimeType] && f.md5Checksum && f.md5Checksum === localMd5(dest)) { skipped++; continue; }
+      try { await download(f, dest); console.log(`  ✓ ${name}`); downloaded++; }
+      catch (e) { console.error(`  ✗ ${name}: ${e.message}`); failed++; }
     }
   }
   console.log(`\nDownload: ${downloaded} new/updated, ${skipped} unchanged, ${failed} failed.`);
@@ -185,7 +203,12 @@ function rowsToScreens(rows, code) {
         if (m) { folderCode = m[1].toUpperCase(); break; }
       }
       src = 'content/' + folderCode + '/' + name;
-      drivePath = file;                                     // the real Drive path, for display
+      /* A Google Doc/Sheet/Slides is referenced by its bare name (no extension);
+         the sync exports it to .docx/.xlsx/.pptx, so when the Screen type implies
+         an Office file and no extension was given, fetch that exported file. */
+      const gExt = { document: '.docx', spreadsheet: '.xlsx', powerpoint: '.pptx' }[type];
+      if (gExt && !/\.[a-z0-9]{2,6}$/i.test(name)) src += gExt;
+      drivePath = file;                                     // the real Drive path, for display (shown as typed)
     }
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
     if (drivePath) screen.path = drivePath;
