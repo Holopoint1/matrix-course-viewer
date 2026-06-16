@@ -8,7 +8,7 @@ on:
         required: false
         default: 'CO0001'
   schedule:
-    - cron: '*/15 * * * *'   # every 15 min — the "auto-refresh"
+    - cron: '*/5 * * * *'    # every 5 min (GitHub's practical minimum; scheduled runs are best-effort and can lag a few min at busy times)
   push:
     branches: [main]
     paths:
