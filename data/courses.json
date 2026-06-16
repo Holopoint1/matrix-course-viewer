@@ -194,8 +194,8 @@
           "type": "document",
           "title": "test",
           "hours": 2,
-          "src": "content/CP4807/test",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test",
+          "src": "content/CP4807/test.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test.docx",
           "equipment": "tsestt",
           "missing": true
         }

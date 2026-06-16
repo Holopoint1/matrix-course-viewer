@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T12:56:19.837Z",
+  "generatedAt": "2026-06-16T13:00:58.563Z",
   "courses": {
     "CO0001": {
       "stale": [
@@ -42,7 +42,7 @@
       "missing": [
         {
           "title": "test",
-          "file": "test",
+          "file": "test.docx",
           "expectedIn": "CP4807"
         }
       ]
