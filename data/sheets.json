@@ -8,7 +8,10 @@
       "description": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
       "certificate": true,
       "certificateTemplate": "Flowcode & E-blocks 3 CPD Course",
-      "categories": ["CPD", "Embedded"],
+      "categories": [
+        "CPD",
+        "Embedded"
+      ],
       "url": "https://docs.google.com/spreadsheets/d/1F3uQEN5x6BZki607IBpKwecj846K39HpcWuqArjTDoA/edit"
     },
     {
@@ -18,7 +21,10 @@
       "description": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
       "certificate": true,
       "certificateTemplate": "Introduction to Microcontrollers",
-      "categories": ["Embedded", "Curriculum"],
+      "categories": [
+        "Embedded",
+        "Curriculum"
+      ],
       "url": "https://docs.google.com/spreadsheets/d/1MdZIVW2D3J8QGcKtO--jlyymsVf1IDwsou6xK8YQHoI/edit"
     },
     {
@@ -28,7 +34,11 @@
       "description": "EASA Unit 5 Digital Techniques for Aviation Technicians, delivered as a SCORM-ready browser course. Microcontroller fundamentals through to motor control — adapted for aviation maintenance learners.",
       "certificate": true,
       "certificateTemplate": "Digital Techniques for Aviation Technicians",
-      "categories": ["Aviation", "EASA", "Curriculum"],
+      "categories": [
+        "Aviation",
+        "EASA",
+        "Curriculum"
+      ],
       "url": "https://docs.google.com/spreadsheets/d/1Rsvi3XFmJSFbTc8rz6gGWNfzWIJbm2uA5tS6REAy0Wo/edit"
     },
     {
@@ -38,7 +48,11 @@
       "description": "T-Level Engineering microcontroller pathway built on the CP4807 / CP1972 / CP0507 worksheet base. Covers digital and analogue I/O, motor control (including stepper), interrupts, and full assessment-led progression.",
       "certificate": true,
       "certificateTemplate": "Microcontrollers for T-Levels",
-      "categories": ["T-Level", "Embedded", "Curriculum"],
+      "categories": [
+        "T-Level",
+        "Embedded",
+        "Curriculum"
+      ],
       "url": "https://docs.google.com/spreadsheets/d/1E7zs8cI2QeI40VI79N2YtyYokiPm7I56yORoxjZI_7w/edit"
     },
     {
@@ -46,7 +60,9 @@
       "title": "Microcontrollers for T-Levels",
       "kind": "pack",
       "description": "T-Level Engineering microcontroller worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
-      "categories": ["Curriculum pack"],
+      "categories": [
+        "Curriculum pack"
+      ],
       "url": "https://docs.google.com/spreadsheets/d/1CvDs4WXOR3N5Xn_EdMaY5QlL1FOy-MAbUu4uDoPHTHM/edit"
     },
     {
@@ -54,8 +70,22 @@
       "title": "Digital Techniques for Aviation Technicians",
       "kind": "pack",
       "description": "EASA Unit 5 Digital Techniques worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
-      "categories": ["Curriculum pack"],
+      "categories": [
+        "Curriculum pack"
+      ],
       "url": "https://docs.google.com/spreadsheets/d/1ZAFTt16-TUm8GqSM4TiRBPqEJMPTi0Wz39s9zeuROFc/edit"
+    },
+    {
+      "code": "ZZ9999",
+      "title": "Test Course — System Check",
+      "kind": "course",
+      "description": "A self-contained course for verifying the Matrix Course Viewer end to end — image, HTML, video, worksheet, progress and certificate. Safe to delete.",
+      "certificate": true,
+      "certificateTemplate": "Test Course — System Check",
+      "categories": [
+        "Test"
+      ],
+      "url": "https://docs.google.com/spreadsheets/d/1Z3FMMayRg7Bo--Fxy2eBc4hjyjuUV9nrc8ZypLOwtfw/edit"
     }
   ]
 }

@@ -1672,7 +1672,7 @@
           "type": "document",
           "title": "Sample worksheet",
           "hours": 1,
-          "src": "content/ZZ9999/worksheet.docx"
+          "src": "content/CP4807/CP4807-1.docx"
         },
         {
           "id": "ZZ9999-s6",
@@ -1692,7 +1692,7 @@
       "categories": [
         "Test"
       ],
-      "_source": "manual"
+      "_source": "sheet"
     }
   ]
 }
