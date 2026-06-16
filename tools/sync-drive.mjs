@@ -83,6 +83,7 @@ const codeOf = (name) => { const m = String(name).match(/^([A-Za-z]{2}\d{4})/); 
 
 /* ---------- phase 1: download asset files ---------- */
 async function downloadPhase() {
+  const driveFilesByCode = {}; // CODE -> Set(actual filenames in that Drive folder, incl. subfolders)
   const folders = (await listChildren(ROOT_FOLDER_ID))
     .filter((f) => f.mimeType === 'application/vnd.google-apps.folder' && codeOf(f.name));
   if (!folders.length) throw new Error('No course folders visible — is "LMS Project Assets" shared (Viewer) with the service account?');
@@ -92,6 +93,7 @@ async function downloadPhase() {
     if (ONLY_COURSE && code !== ONLY_COURSE) continue;
     const files = [];
     await collectFiles(folder.id, files);
+    driveFilesByCode[code] = new Set(files.map((f) => f.name)); // what REALLY exists in Drive now
     console.log(`\n${code} — ${files.length} file(s)`);
     for (const f of files) {
       const dest = path.join(CONTENT_DIR, code, f.name);
@@ -101,6 +103,7 @@ async function downloadPhase() {
     }
   }
   console.log(`\nDownload: ${downloaded} new/updated, ${skipped} unchanged, ${failed} failed.`);
+  return driveFilesByCode;
 }
 
 /* ---------- CSV + screen helpers (server-side, so no CORS) ---------- */
@@ -195,7 +198,7 @@ function rowsToScreens(rows, code) {
 }
 
 /* ---------- phase 2: generate courses.json from the definition sheets ---------- */
-async function generatePhase() {
+async function generatePhase(driveFilesByCode = {}) {
   const db = JSON.parse(fs.readFileSync(COURSES_JSON, 'utf8'));
   const byId = {}; db.courses.forEach((c, i) => { byId[c.id] = i; });
 
@@ -234,8 +237,55 @@ async function generatePhase() {
 
   await autoDiscoverPhase(db, byId, registered);
 
+  writeAccuracyReport(db, driveFilesByCode);
+
   fs.writeFileSync(COURSES_JSON, JSON.stringify(db, null, 2) + '\n');
   console.log('\nWrote data/courses.json');
+}
+
+/* ---------- directory-accuracy report ----------
+ * "0 missing" only means a file of that NAME exists in the published copy — it
+ * can still be a stale leftover while the real Drive file goes unused. This
+ * compares every screen's file against what's ACTUALLY in the Drive folder now:
+ *   stale  = the screen points at a file that is no longer in its Drive folder
+ *            (so it's rendering an old leftover), and
+ *   unused = a file sitting in a Drive folder that no screen references.
+ * Written to content/_sync-report.json (committed with the rest of content/). */
+function srcParts(src) {
+  if (!src || /^https?:/i.test(src)) return null;
+  const m = String(src).match(/^content\/([^/]+)\/(.+)$/);
+  return m ? { folderCode: m[1].toUpperCase(), name: m[2] } : null;
+}
+function writeAccuracyReport(db, driveFilesByCode) {
+  const referencedByFolder = {}; // folderCode -> Set(name) used by any screen
+  for (const c of db.courses) for (const s of (c.screens || [])) {
+    const p = srcParts(s.src); if (!p) continue;
+    (referencedByFolder[p.folderCode] = referencedByFolder[p.folderCode] || new Set()).add(p.name);
+  }
+  const courses = {};
+  for (const c of db.courses) {
+    if (!c.screens || !c.screens.length) continue;
+    const stale = [], missing = [];
+    for (const s of c.screens) {
+      const p = srcParts(s.src); if (!p) continue;
+      if (s.missing) { missing.push({ title: s.title, file: p.name, expectedIn: p.folderCode }); continue; }
+      const driveSet = driveFilesByCode[p.folderCode];
+      if (driveSet && !driveSet.has(p.name)) stale.push({ title: s.title, showing: p.name, expectedIn: p.folderCode });
+    }
+    if (stale.length || missing.length) courses[c.id] = { stale, missing };
+  }
+  const unusedMedia = {};
+  for (const code of Object.keys(driveFilesByCode)) {
+    const ref = referencedByFolder[code] || new Set();
+    const unused = [...driveFilesByCode[code]].filter((n) => !ref.has(n) && !/^_|\.tmp$/.test(n));
+    if (unused.length) unusedMedia[code] = unused;
+  }
+  const report = { generatedAt: new Date().toISOString(), courses, unusedMedia };
+  fs.writeFileSync(path.join(CONTENT_DIR, '_sync-report.json'), JSON.stringify(report, null, 2) + '\n');
+  const staleCount = Object.values(courses).reduce((n, c) => n + c.stale.length, 0);
+  const orphanCount = Object.values(unusedMedia).reduce((n, a) => n + a.length, 0);
+  console.log(`\nAccuracy report: ${staleCount} stale reference(s), ${orphanCount} unused Drive file(s). See content/_sync-report.json`);
+  for (const [id, c] of Object.entries(courses)) c.stale.forEach((s) => console.log(`  ⚠ ${id}: "${s.title}" shows stale '${s.showing}' (not in ${s.expectedIn} Drive folder)`));
 }
 
 /* ---------- phase 2b: auto-discover unregistered course folders ----------
@@ -296,8 +346,8 @@ async function autoDiscoverPhase(db, byId, registered) {
 }
 
 async function main() {
-  await downloadPhase();
-  await generatePhase();
+  const driveFilesByCode = await downloadPhase();
+  await generatePhase(driveFilesByCode);
   console.log('\nSync complete.');
 }
 main().catch((e) => { console.error('SYNC FAILED:', e.message); process.exit(1); });
