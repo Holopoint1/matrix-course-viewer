@@ -243,8 +243,10 @@ async function generatePhase() {
  * and (b) contains a "<CODE> - definition" sheet becomes a course automatically.
  * Metadata comes from a settings block at the top of that sheet (Title,
  * Certificate, Categories, Kind, Active); Title falls back to the folder name.
- * A course is held back as a draft only if its Active cell says no/false/draft. */
-const DRAFT_VALUES = ['no', 'false', 'draft', 'off', 'hidden', '0'];
+ * Publishing is OPT-IN: a discovered folder only goes live if its sheet says
+ * Active: yes (or true/on/live/published). Anything else — including no Active
+ * cell at all — is held back as a draft, so nothing appears by accident. */
+const PUBLISH_VALUES = ['yes', 'true', 'on', '1', 'live', 'published', 'active', 'y'];
 async function autoDiscoverPhase(db, byId, registered) {
   let added = 0, drafts = 0;
   const folders = (await listChildren(ROOT_FOLDER_ID))
@@ -265,8 +267,8 @@ async function autoDiscoverPhase(db, byId, registered) {
 
     const rows = parseCsv(csv);
     const settings = parseSettings(rows, findHeaderRow(rows));
-    const activeRaw = String(settings.active || settings.status || settings.published || '').toLowerCase();
-    if (DRAFT_VALUES.includes(activeRaw)) { drafts++; console.log(`  · ${code}: held as draft (Active=${activeRaw})`); continue; }
+    const activeRaw = String(settings.active || settings.status || settings.published || '').trim().toLowerCase();
+    if (!PUBLISH_VALUES.includes(activeRaw)) { drafts++; console.log(`  · ${code}: held as draft (Active="${activeRaw || 'unset'}")`); continue; }
 
     const { screens, missing } = rowsToScreens(rows, code);
     const titleFromFolder = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim();
