@@ -40,6 +40,22 @@
       "certificateTemplate": "Microcontrollers for T-Levels",
       "categories": ["T-Level", "Embedded", "Curriculum"],
       "url": "https://docs.google.com/spreadsheets/d/1E7zs8cI2QeI40VI79N2YtyYokiPm7I56yORoxjZI_7w/edit"
+    },
+    {
+      "code": "CP2563",
+      "title": "Microcontrollers for T-Levels",
+      "kind": "pack",
+      "description": "T-Level Engineering microcontroller worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
+      "categories": ["Curriculum pack"],
+      "url": "https://docs.google.com/spreadsheets/d/1CvDs4WXOR3N5Xn_EdMaY5QlL1FOy-MAbUu4uDoPHTHM/edit"
+    },
+    {
+      "code": "CP7244",
+      "title": "Digital Techniques for Aviation Technicians",
+      "kind": "pack",
+      "description": "EASA Unit 5 Digital Techniques worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
+      "categories": ["Curriculum pack"],
+      "url": "https://docs.google.com/spreadsheets/d/1ZAFTt16-TUm8GqSM4TiRBPqEJMPTi0Wz39s9zeuROFc/edit"
     }
   ]
 }
