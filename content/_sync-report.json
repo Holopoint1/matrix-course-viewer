@@ -1,13 +1,8 @@
 {
-  "generatedAt": "2026-06-16T14:41:34.399Z",
+  "generatedAt": "2026-06-16T14:46:27.122Z",
   "courses": {
     "CO0001": {
       "stale": [
-        {
-          "title": "Equipment",
-          "showing": "CO0001 - Equip.html",
-          "expectedIn": "CO0001"
-        },
         {
           "title": "Microcontroller basics 1",
           "showing": "Microcontroller basics 1 24 02 26.pptx",
