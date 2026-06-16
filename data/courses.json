@@ -595,7 +595,7 @@
       "kind": "course",
       "title": "Digital Techniques for Aviation Technicians",
       "shortDescription": "EASA Unit 5 Digital Techniques for Aviation Technicians, delivered as a SCORM-ready browser course. Microcontroller fundamentals through to motor control — adapted for aviation maintenance learners.",
-      "estimatedHours": 34.3,
+      "estimatedHours": 36.3,
       "certificate": {
         "enabled": true,
         "templateName": "Digital Techniques for Aviation Technicians"
@@ -821,6 +821,15 @@
           "src": "content/CP0507/CP0507-4.docx",
           "path": "LMS Project Assets/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0003-s26",
+          "type": "document",
+          "title": "test",
+          "hours": 2,
+          "src": "content/CO0001/test.docx",
+          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/media/test.docx",
+          "equipment": "tsestt"
         }
       ],
       "categories": [
