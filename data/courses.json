@@ -114,7 +114,7 @@
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -123,7 +123,7 @@
           "title": "Performing calculations",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-2.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -132,7 +132,7 @@
           "title": "Connection points",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-3.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -141,7 +141,7 @@
           "title": "Digital inputs",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-4.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -223,7 +223,7 @@
           "title": "Introduction to microcontrollers",
           "hours": 0,
           "src": "content/CO0001/CO0001 - opening.png",
-          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - opening.png",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/CO0002 - opening.png",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -232,7 +232,7 @@
           "title": "Welcome",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - welcome.html",
-          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - welcome.html",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/CO0002 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -241,7 +241,7 @@
           "title": "Learning objectives",
           "hours": 0.1,
           "src": "content/CO0001/CO0001 – LO.HTM",
-          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - LO.html",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/CO0002 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -250,7 +250,7 @@
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - Equip.html",
-          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - Equip.html",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/CO0002 - Equip.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -283,7 +283,7 @@
           "title": "Microcontroller basics 1",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
-          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/Microcontroller basics 1 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -292,7 +292,7 @@
           "title": "Microcontroller basics 2",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
-          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/Microcontroller basics 2 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -607,7 +607,7 @@
           "title": "Introduction to microcontrollers",
           "hours": 0,
           "src": "content/CO0001/CO0001 - opening.png",
-          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/opening.svg",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/media/opening.svg",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -616,7 +616,7 @@
           "title": "Welcome",
           "hours": 0.1,
           "src": "content/CO0003/CO0003 - welcome.html",
-          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/CO0003 - welcome.html",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/media/CO0003 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -649,7 +649,7 @@
           "title": "Microcontroller basics 1",
           "hours": 0.3,
           "src": "content/CO0003/Microcontroller basics 1 24 02 26.pptx",
-          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/Microcontroller basics 1 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/media/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -658,7 +658,7 @@
           "title": "Microcontroller basics 2",
           "hours": 0.3,
           "src": "content/CO0003/Microcontroller basics 2 24 02 26.pptx",
-          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/Microcontroller basics 2 24 02 26.pptx",
+          "path": "LMS Project Assets/CO0003 - Digital Techniques for Aviation Technicians/media/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -675,7 +675,7 @@
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -684,7 +684,7 @@
           "title": "Performing calculations",
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -693,7 +693,7 @@
           "title": "Connection points",
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -702,7 +702,7 @@
           "title": "Digital inputs",
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -711,7 +711,7 @@
           "title": "Homework 1",
           "hours": 2,
           "src": "content/CP4807/CP4807-H1.htm",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H1.htm",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-H1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -720,7 +720,7 @@
           "title": "Making decisions",
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -729,7 +729,7 @@
           "title": "Macros / subroutines",
           "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -738,7 +738,7 @@
           "title": "Using prototype boards",
           "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/CP4807-7.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
