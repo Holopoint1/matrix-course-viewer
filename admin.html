@@ -409,17 +409,17 @@
         '<div class="am-head"><div class="am-head-row"><div>' +
           '<span class="am-head-eyebrow">Content manager</span>' +
           '<h1>Courses</h1>' +
-          '<p>Pick a course to edit, or add a new one.</p></div>' +
+          '<p>Pick a course to edit. New courses are created in Google Drive — tap the guide.</p></div>' +
           '<div class="am-head-actions">' +
-            '<button type="button" class="btn btn-primary" id="am-new-course-btn">＋ New course</button>' +
+            '<button type="button" class="btn btn-primary" id="am-guide-btn">📖 How to add a course</button>' +
             '<button type="button" class="btn btn-secondary" id="am-tpl-btn" title="Download a course template Word document">📄 Download template</button>' +
           '</div></div></div>' +
         '<div class="am-catalog">' + tiles + '</div>';
       main.querySelectorAll('[data-course]').forEach(function (b) {
         b.addEventListener('click', function () { openCourse(b.dataset.course); });
       });
-      var nb = document.getElementById('am-new-course-btn');
-      if (nb) nb.addEventListener('click', renderNewCourseForm);
+      var gb = document.getElementById('am-guide-btn');
+      if (gb) gb.addEventListener('click', renderGuide);
       var tb = document.getElementById('am-tpl-btn');
       if (tb) tb.addEventListener('click', downloadCourseTemplate);
       setUrl(null, null, mode || 'push');
@@ -428,72 +428,104 @@
       loadCourseEditTimes().then(repaintCatalogTimes);
     }
 
-    /* ========== New course form ========== */
-    function renderNewCourseForm() {
+    /* ========== Publisher guide (replaces the old in-app "New course" flow,
+       which created Supabase-only courses. Courses now live in Google Drive and
+       are auto-discovered by the sync — see tools/sync-drive.mjs). ========== */
+    var DRIVE_ROOT_URL = 'https://drive.google.com/drive/folders/1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu';
+    function renderGuide() {
       cur.courseId = null; cur.screenId = null;
       document.documentElement.classList.remove('am-course-mode');
       document.body.classList.remove('am-course-mode');
-      var suggested = 'NEW001';
-      for (var n = 1; n < 999; n++) {
-        var trial = 'NEW' + ('00' + n).slice(-3);
-        if (!courses.some(function (x) { return x.id === trial; })) { suggested = trial; break; }
-      }
       main.innerHTML =
-        '<div class="am-head"><span class="am-head-eyebrow">Add a course</span><h1>New course</h1>' +
-        '<p>Create a brand-new course. Once it&rsquo;s created, open it and add screens — either one by one, or by uploading a Word document.</p></div>' +
-        '<form class="am-newcourse" id="am-newcourse-form">' +
-          '<label><span>Course code</span><input id="am-nc-code" required value="' +
-            esc(suggested) + '" pattern="[A-Za-z0-9_-]+"></label>' +
-          '<label><span>Title</span><input id="am-nc-title" required ' +
-            'placeholder="e.g. Introduction to Microcontrollers"></label>' +
-          '<label><span>Short description</span><textarea id="am-nc-desc" rows="3" ' +
-            'placeholder="What is the course about?"></textarea></label>' +
-          '<label><span>Estimated hours</span><input id="am-nc-hours" type="number" min="0" step="0.5" ' +
-            'placeholder="e.g. 4.5"></label>' +
-          '<label class="am-nc-check"><input type="checkbox" id="am-nc-cert"> ' +
-            '<span>Award a certificate when learners complete the course</span></label>' +
-          '<div class="am-nc-actions">' +
-            '<button type="button" class="btn btn-ghost" id="am-nc-cancel">Cancel</button>' +
-            '<button type="submit" class="btn btn-primary">Create course</button>' +
-          '</div></form>';
-      document.getElementById('am-nc-cancel').addEventListener('click', function () { renderCatalog('replace'); });
-      document.getElementById('am-newcourse-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        createNewCourse();
-      });
+        '<div class="am-head"><div class="am-head-row"><div>' +
+          '<span class="am-head-eyebrow">Publisher guide</span>' +
+          '<h1>How to add &amp; edit courses</h1>' +
+          '<p>Everything you need — even if you have never touched this system before.</p></div>' +
+          '<div class="am-head-actions"><button type="button" class="btn btn-secondary" id="am-guide-back">‹ Back to courses</button></div>' +
+        '</div></div>' +
+        '<div class="am-guide">' + guideHtml() + '</div>';
+      document.getElementById('am-guide-back').addEventListener('click', function () { renderCatalog('push'); });
       setUrl(null, null, 'replace');
     }
-    function createNewCourse() {
-      var code = document.getElementById('am-nc-code').value.trim();
-      var title = document.getElementById('am-nc-title').value.trim();
-      if (!code || !title) return;
-      if (courses.some(function (c) { return c.id === code; })) {
-        alert('A course with code "' + code + '" already exists. Choose a different code.');
-        return;
-      }
-      var desc = document.getElementById('am-nc-desc').value.trim();
-      var hoursRaw = document.getElementById('am-nc-hours').value;
-      var hours = hoursRaw === '' ? undefined : parseFloat(hoursRaw);
-      var cert = document.getElementById('am-nc-cert').checked;
-      /* Stub locally so openCourse can find it right away. */
-      courses.push({ id: code, code: code, title: title, screens: [] });
-      /* Also stash in the discovery cache so it survives a reload
-         even if the Supabase pull hasn't completed yet. */
-      try {
-        var key = 'matrix-lms:db-courses';
-        var arr = JSON.parse(localStorage.getItem(key) || '[]');
-        if (!arr.some(function (x) { return x && x.id === code; })) {
-          arr.push({ id: code, code: code, kind: 'course', title: title,
-            shortDescription: desc || '', estimatedHours: isNaN(hours) ? 0 : hours,
-            certificate: { enabled: !!cert }, categories: [], screens: [] });
-          localStorage.setItem(key, JSON.stringify(arr));
-        }
-      } catch (e) {}
-      var patch = { title: title, code: code, certificate: { enabled: !!cert } };
-      if (desc) patch.shortDescription = desc;
-      if (hours !== undefined && !isNaN(hours)) patch.estimatedHours = hours;
-      CMS.setCourseOverride(code, patch);
-      openCourse(code, null, 'push');
+    function guideHtml() {
+      return `
+<style>
+  .am-guide{max-width:780px;line-height:1.6;color:#0f172a}
+  .am-guide h2{margin:30px 0 10px;font-size:21px;border-bottom:1px solid #e2e8f0;padding-bottom:6px}
+  .am-guide h3{margin:18px 0 6px;font-size:16px}
+  .am-guide .gcard{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin:14px 0}
+  .am-guide .gnote{background:#eff6ff;border-left:4px solid #3b82f6;border-radius:8px;padding:12px 14px;margin:16px 0;font-size:14px}
+  .am-guide .gwarn{background:#fff7ed;border-left:4px solid #f59e0b;border-radius:8px;padding:12px 14px;margin:16px 0;font-size:14px}
+  .am-guide code{background:#1e293b;color:#e2e8f0;padding:2px 6px;border-radius:5px;font-size:13px;white-space:nowrap}
+  .am-guide table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
+  .am-guide th,.am-guide td{border:1px solid #cbd5e1;padding:7px 9px;text-align:left;vertical-align:top}
+  .am-guide th{background:#f1f5f9}
+  .am-guide ol,.am-guide ul{padding-left:22px}
+  .am-guide li{margin:7px 0}
+  .am-guide a{color:#2563eb}
+</style>
+
+<div class="gnote"><strong>The one big idea:</strong> every course lives in <strong>Google Drive</strong>. This website is just a live mirror of your Drive. You make changes in Drive, press <strong>🚀 Publish to live</strong>, and a minute or two later the site matches Drive. You never touch any code.</div>
+
+<h2>1. Where everything lives</h2>
+<p>All courses sit in one Drive folder, <strong>“LMS Project Assets”</strong> (<a href="${DRIVE_ROOT_URL}" target="_blank" rel="noopener">open it ↗</a>). Inside, <strong>each course is one folder</strong>, named like this:</p>
+<div class="gcard"><code>CO0005 - Advanced Robotics</code><br><span style="color:#64748b;font-size:13px">↑ a 2-letter + 4-number code, a dash, then the course title</span></div>
+<p>Inside a course folder there are two things:</p>
+<ul>
+  <li>A <strong>“… - definition” Google Sheet</strong> — the list of screens. This is the one that matters.</li>
+  <li>The <strong>content files</strong> — Word docs, images, PDFs. You can tuck images into a <code>media</code> sub-folder to stay tidy; it makes no difference to the site.</li>
+</ul>
+
+<h2>2. The definition sheet (how a course is built)</h2>
+<p>It's a simple table — <strong>each row is one screen</strong> the learner sees, top to bottom. Two parts:</p>
+<h3>Part A — Settings (a few rows at the very top)</h3>
+<table>
+  <tr><td><code>Active</code></td><td><code>yes</code></td><td>Type <code>yes</code> to make it live. Anything else keeps it a hidden draft.</td></tr>
+  <tr><td><code>Certificate</code></td><td><code>yes</code></td><td>Give a certificate on completion? <em>(optional)</em></td></tr>
+  <tr><td><code>Categories</code></td><td>Robotics, T-Level</td><td>Filter tags on the catalogue <em>(optional)</em></td></tr>
+</table>
+<h3>Part B — The screens (after a blank row)</h3>
+<table>
+  <tr><th>Screen type</th><th>Hours</th><th>Equipment</th><th>Title</th><th>File</th></tr>
+  <tr><td>HTML</td><td>0.25</td><td></td><td>Welcome</td><td>welcome.html</td></tr>
+  <tr><td>YouTube</td><td>0.5</td><td></td><td>Intro video</td><td>https://youtu.be/…</td></tr>
+  <tr><td>Document</td><td>1</td><td></td><td>Worksheet 1</td><td>worksheet1.docx</td></tr>
+</table>
+<ul>
+  <li><strong>Screen type</strong> — one of <code>Image</code>, <code>HTML</code>, <code>YouTube</code>, <code>PDF</code>, <code>Document</code> (Word), <code>PowerPoint</code>, <code>Spreadsheet</code>.</li>
+  <li><strong>Title</strong> — the heading the learner sees.</li>
+  <li><strong>File</strong> — just type the <strong>file's name</strong> (e.g. <code>welcome.html</code>). The system finds it in your course folder automatically, even inside <code>media</code>. For videos or web PDFs, paste the full link instead.</li>
+  <li><strong>Hours</strong> — rough learning time (totals up). <strong>Equipment</strong> — an optional note.</li>
+</ul>
+
+<h2>3. Add a brand-new course</h2>
+<ol>
+  <li>In Drive, open the <strong>“TEMPLATE — New course”</strong> folder and its definition sheet → <strong>File → Make a copy</strong>.</li>
+  <li>Make a <strong>new folder</strong> in “LMS Project Assets” named with your code + title, e.g. <code>CO0005 - Advanced Robotics</code>.</li>
+  <li>Move your copied sheet into it and rename it <code>CO0005 - definition</code>. Add your files (optionally in a <code>media</code> sub-folder).</li>
+  <li>Fill in the sheet — one row per screen — and set <code>Active</code> to <code>yes</code>.</li>
+  <li>Come back here and press <strong>🚀 Publish to live</strong> (bottom-right). ~1–2 minutes later it's on the site.</li>
+</ol>
+<div class="gnote"><strong>Where did the “New course” button go?</strong> Courses are created in Drive now — one single home for everything, so nothing can fall out of sync. This guide <em>is</em> the button. 🙂</div>
+
+<h2>4. Edit an existing course</h2>
+<ol>
+  <li>Open that course's folder in Drive.</li>
+  <li>Edit the definition sheet (add / remove / reorder rows), or replace a file — keep the same file name and it simply swaps in.</li>
+  <li>Press <strong>🚀 Publish to live</strong>.</li>
+</ol>
+
+<h2>5. Publishing &amp; how long it takes</h2>
+<p>The <strong>🚀 Publish to live</strong> button (bottom-right of every admin screen) tells the site to re-read Drive. A progress bar walks through <em>Syncing → Deploying → Live</em>. It is <strong>not instant</strong> — expect <strong>about 1–2 minutes</strong>, then it offers a Refresh. (It also re-checks itself automatically every few minutes.)</p>
+
+<h2>6. Drafts &amp; safety</h2>
+<ul>
+  <li>A course only goes live when its sheet says <code>Active: yes</code>. Build it over days with <code>Active: no</code> and nobody sees it until you flip it.</li>
+  <li>A folder without the code-style name, or without a definition sheet, is ignored — so stray folders can't accidentally become courses.</li>
+  <li><strong>Removing a course:</strong> set <code>Active: no</code> and publish to hide it. To delete it for good, also remove its folder from Drive and ask whoever manages the system to tidy the published list.</li>
+</ul>
+<div class="gwarn"><strong>Golden rules:</strong> keep the folder name as <code>CODE - Title</code>; keep the definition sheet's name ending in <code>definition</code>; set <code>Active: yes</code> when it's ready; then Publish.</div>
+`;
     }
 
     /* ========== View 2: course open ========== */
