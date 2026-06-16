@@ -17,7 +17,7 @@
           "type": "image",
           "title": "Introduction to microcontrollers",
           "hours": 0,
-          "src": "content/CO0001/opening.svg",
+          "src": "content/CO0001/CO0001 - opening.png",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/opening.svg",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -26,7 +26,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0001/CO0001 - LO.html",
+          "src": "content/CO0001/CO0001 – LO.HTM",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/CO0001 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -231,7 +231,7 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - welcome.html",
+          "src": "content/CO0002/CO0002 – welcome.HTM",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - welcome.html",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -240,7 +240,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - LO.html",
+          "src": "content/CO0002/CO0002 – LO.HTM",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/CO0002 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
