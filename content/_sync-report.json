@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T16:31:31.070Z",
+  "generatedAt": "2026-06-16T16:36:22.726Z",
   "courses": {
     "CO0001": {
       "stale": [
@@ -27,7 +27,7 @@
       "missing": [
         {
           "title": "Equipment",
-          "file": "CO0001-equip.htm",
+          "file": "CO0001 - equip.htm",
           "expectedIn": "CO0001"
         }
       ]
