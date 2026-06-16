@@ -161,7 +161,7 @@
       "kind": "course",
       "title": "Introduction to Microcontrollers",
       "shortDescription": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
-      "estimatedHours": 122405.5,
+      "estimatedHours": 84.5,
       "certificate": {
         "enabled": true,
         "templateName": "Introduction to Microcontrollers"
@@ -493,14 +493,6 @@
           "title": "Homework 9",
           "hours": 24,
           "src": "content/CP4807/CP4807-H9.htm",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0002-s42",
-          "type": "image",
-          "title": "test",
-          "hours": 122321,
-          "src": "content/CO0002/test.jpg",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
