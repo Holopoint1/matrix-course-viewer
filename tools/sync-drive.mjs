@@ -123,13 +123,42 @@ const normType = (t) => { const k = String(t || '').trim().toLowerCase(); return
 const cleanFile = (s) => String(s || '').replace(/^\s*["“”']\s*/, '').replace(/\s*["“”']\s*$/, '').trim();
 const sheetIdFromUrl = (u) => { const m = String(u || '').match(/\/d\/([a-zA-Z0-9_-]+)/); return m ? m[1] : null; };
 
+/* A definition sheet's screens table can be preceded by an optional "settings"
+   block — key:value rows like "Active: yes" or "Certificate: no" — which is how
+   AUTO-DISCOVERED courses carry their metadata. Find the real header row so both
+   legacy sheets (header at row 0) and settings-block sheets parse correctly. */
+function findHeaderRow(rows) {
+  for (let i = 0; i < rows.length; i++) {
+    const cells = (rows[i] || []).map((c) => String(c || '').trim().toLowerCase());
+    if (cells.some((c) => c === 'screen type' || c === 'type') && cells.some((c) => c === 'title')) return i;
+  }
+  return 0; // legacy: no settings block, header is the first row
+}
+
+/* Parse the key:value rows above the screens header. Accepts "Active: yes" in a
+   single cell, or "Active" | "yes" across two columns. Keys are lower-cased. */
+function parseSettings(rows, headerIdx) {
+  const out = {};
+  for (let i = 0; i < headerIdx; i++) {
+    const cells = (rows[i] || []).map((c) => String(c == null ? '' : c).trim());
+    if (!cells.some((c) => c)) continue;
+    let key, val;
+    if (cells[0] && cells[0].includes(':')) {
+      const p = cells[0].split(':'); key = p.shift().trim(); val = p.join(':').trim() || (cells[1] || '').trim();
+    } else { key = (cells[0] || '').replace(/:$/, '').trim(); val = (cells[1] || '').trim(); }
+    if (key) out[key.toLowerCase()] = val;
+  }
+  return out;
+}
+
 function rowsToScreens(rows, code) {
   if (!rows.length) return { screens: [], missing: [] };
-  const header = rows[0].map((h) => String(h || '').trim().toLowerCase());
+  const headerIdx = findHeaderRow(rows);
+  const header = rows[headerIdx].map((h) => String(h || '').trim().toLowerCase());
   const idx = {}; header.forEach((h, i) => { idx[h] = i; });
   const cell = (r, names) => { for (const n of names) if (idx[n] != null) return r[idx[n]]; return ''; };
   const screens = [], missing = [];
-  rows.slice(1).filter((r) => r.some((c) => String(c || '').trim())).forEach((r, i) => {
+  rows.slice(headerIdx + 1).filter((r) => r.some((c) => String(c || '').trim())).forEach((r, i) => {
     const type = normType(cell(r, ['screen type', 'type']));
     const hours = parseFloat(String(cell(r, ['hours'])).trim()) || 0;
     const equipment = String(cell(r, ['equipment'])).trim();
@@ -167,13 +196,14 @@ function rowsToScreens(rows, code) {
 
 /* ---------- phase 2: generate courses.json from the definition sheets ---------- */
 async function generatePhase() {
-  if (!fs.existsSync(SHEETS_JSON)) { console.log('No data/sheets.json — skipping courses.json generation.'); return; }
-  const cfg = JSON.parse(fs.readFileSync(SHEETS_JSON, 'utf8'));
-  const entries = (cfg && cfg.sheets) || [];
-  if (!entries.length) { console.log('No sheets registered — skipping courses.json generation.'); return; }
-
   const db = JSON.parse(fs.readFileSync(COURSES_JSON, 'utf8'));
   const byId = {}; db.courses.forEach((c, i) => { byId[c.id] = i; });
+
+  let entries = [];
+  if (fs.existsSync(SHEETS_JSON)) {
+    try { entries = (JSON.parse(fs.readFileSync(SHEETS_JSON, 'utf8')) || {}).sheets || []; } catch (_) {}
+  }
+  const registered = new Set(entries.map((e) => String(e.code).toUpperCase()));
 
   for (const e of entries) {
     const code = String(e.code).toUpperCase();
@@ -202,8 +232,65 @@ async function generatePhase() {
     missing.forEach((m) => console.log(`  ⚠ ${m}`));
   }
 
+  await autoDiscoverPhase(db, byId, registered);
+
   fs.writeFileSync(COURSES_JSON, JSON.stringify(db, null, 2) + '\n');
   console.log('\nWrote data/courses.json');
+}
+
+/* ---------- phase 2b: auto-discover unregistered course folders ----------
+ * Any "<CODE> - Title" folder that (a) isn't already registered in sheets.json
+ * and (b) contains a "<CODE> - definition" sheet becomes a course automatically.
+ * Metadata comes from a settings block at the top of that sheet (Title,
+ * Certificate, Categories, Kind, Active); Title falls back to the folder name.
+ * A course is held back as a draft only if its Active cell says no/false/draft. */
+const DRAFT_VALUES = ['no', 'false', 'draft', 'off', 'hidden', '0'];
+async function autoDiscoverPhase(db, byId, registered) {
+  let added = 0, drafts = 0;
+  const folders = (await listChildren(ROOT_FOLDER_ID))
+    .filter((f) => f.mimeType === 'application/vnd.google-apps.folder' && codeOf(f.name));
+  for (const folder of folders) {
+    const code = codeOf(folder.name);
+    if (registered.has(code)) continue;                       // a registered course always wins
+    if (ONLY_COURSE && code !== ONLY_COURSE) continue;
+    const children = await listChildren(folder.id);
+    const def = children.find((c) => c.mimeType === 'application/vnd.google-apps.spreadsheet' && /definition/i.test(c.name || ''));
+    if (!def) continue;                                       // no definition sheet → not a course yet
+
+    let csv;
+    try {
+      const res = await drive.files.export({ fileId: def.id, mimeType: 'text/csv' }, { responseType: 'text' });
+      csv = typeof res.data === 'string' ? res.data : String(res.data);
+    } catch (err) { console.error(`  ! ${code}: cannot read "${def.name}" — ${err.message}`); continue; }
+
+    const rows = parseCsv(csv);
+    const settings = parseSettings(rows, findHeaderRow(rows));
+    const activeRaw = String(settings.active || settings.status || settings.published || '').toLowerCase();
+    if (DRAFT_VALUES.includes(activeRaw)) { drafts++; console.log(`  · ${code}: held as draft (Active=${activeRaw})`); continue; }
+
+    const { screens, missing } = rowsToScreens(rows, code);
+    const titleFromFolder = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim();
+    const title = settings.title || titleFromFolder || code;
+    const certRaw = String(settings.certificate || settings.certificates || '').toLowerCase();
+    const certEnabled = certRaw ? !['no', 'false', 'off', '0', 'none'].includes(certRaw) : true;
+    const cats = String(settings.categories || settings.category || '').split(',').map((s) => s.trim()).filter(Boolean);
+    const totalHours = screens.reduce((s, x) => s + (Number(x.hours) || 0), 0);
+    const course = {
+      id: code, code, kind: (settings.kind || 'course').toLowerCase(),
+      title,
+      shortDescription: settings.description || '',
+      estimatedHours: Math.round(totalHours * 10) / 10,
+      certificate: Object.assign({ enabled: certEnabled }, certEnabled ? { templateName: title } : {}),
+      screens,
+      categories: cats,
+      _source: 'auto',
+    };
+    if (byId[code] != null) db.courses[byId[code]] = course; else { byId[code] = db.courses.length; db.courses.push(course); }
+    added++;
+    console.log(`\n${code} (auto-discovered): "${title}" — ${screens.length} screens${missing.length ? `, ${missing.length} missing file(s):` : ' (all files resolve ✓)'}`);
+    missing.forEach((m) => console.log(`  ⚠ ${m}`));
+  }
+  console.log(`\nAuto-discovery: ${added} new course(s), ${drafts} held as draft.`);
 }
 
 async function main() {
