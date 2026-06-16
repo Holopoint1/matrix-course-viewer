@@ -6,7 +6,7 @@
       "kind": "course",
       "title": "Flowcode and E-blocks 3 CPD Course",
       "shortDescription": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
-      "estimatedHours": 5.8,
+      "estimatedHours": 11.8,
       "certificate": {
         "enabled": true,
         "templateName": "Flowcode & E-blocks 3 CPD Course"
@@ -170,6 +170,34 @@
           "src": "content/CP4807/test.jpg",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test.jpg",
           "equipment": "tsestt"
+        },
+        {
+          "id": "CO0001-s19",
+          "type": "image",
+          "title": "test",
+          "hours": 2,
+          "src": "content/CP4807/test.jpg",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test.jpg",
+          "equipment": "tsestt"
+        },
+        {
+          "id": "CO0001-s20",
+          "type": "image",
+          "title": "test",
+          "hours": 2,
+          "src": "content/CP4807/test.jpg",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test.jpg",
+          "equipment": "tsestt"
+        },
+        {
+          "id": "CO0001-s21",
+          "type": "document",
+          "title": "test",
+          "hours": 2,
+          "src": "content/CP4807/test",
+          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/media/test",
+          "equipment": "tsestt",
+          "missing": true
         }
       ],
       "categories": [
