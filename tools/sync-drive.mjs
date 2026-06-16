@@ -179,13 +179,32 @@ function parseSettings(rows, headerIdx) {
    and the screen type — but only ever snap when the match is unambiguous. */
 const TYPE_EXTS = { image: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp'], html: ['htm', 'html'], document: ['doc', 'docx'], powerpoint: ['ppt', 'pptx'], spreadsheet: ['xls', 'xlsx'], pdf: ['pdf'] };
 const normKey = (name) => String(name).toLowerCase().replace(/^[a-z]{2}\d{4}\s*[-–—:]*\s*/, '').replace(/\.[a-z0-9]+$/, '').replace(/[-_\s]+/g, ' ').trim();
-function tolerantMatch(name, type, driveSet) {
-  if (!driveSet || driveSet.has(name)) return null;       // exact file exists, or no Drive data → leave as typed
-  const want = normKey(name);
-  let cands = [...driveSet].filter((f) => normKey(f) === want);
+const matchExt = (f) => (f.match(/\.([a-z0-9]+)$/i) || ['', ''])[1].toLowerCase();
+function matchInSet(want, type, set) {
+  if (!set) return null;
+  let c = [...set].filter((f) => normKey(f) === want);
   const exts = TYPE_EXTS[type];
-  if (cands.length > 1 && exts) cands = cands.filter((f) => exts.includes((f.match(/\.([a-z0-9]+)$/i) || ['', ''])[1].toLowerCase()));
-  return cands.length === 1 ? cands[0] : null;            // unambiguous match only
+  if (c.length > 1 && exts) c = c.filter((f) => exts.includes(matchExt(f)));
+  return c.length === 1 ? c[0] : null;                    // unique match within this folder
+}
+/* Find the real Drive file for a screen whose exact filename has drifted. Tries
+   the screen's OWN folder first; then — for shared content that lives in another
+   course's folder (e.g. CO0001 reusing CO0002's PowerPoints) — every other
+   folder, accepting a cross-folder match only when it is globally unique.
+   Returns {code, name} or null. */
+function tolerantMatch(name, type, folderCode, byCode) {
+  const own = byCode[folderCode];
+  if (own && own.has(name)) return null;                  // exact file present → leave as typed
+  const want = normKey(name);
+  const inOwn = matchInSet(want, type, own);
+  if (inOwn) return { code: folderCode, name: inOwn };    // same-folder rename / drift
+  const hits = [];
+  for (const code of Object.keys(byCode)) {
+    if (code === folderCode) continue;
+    const m = matchInSet(want, type, byCode[code]);
+    if (m) hits.push({ code, name: m });
+  }
+  return hits.length === 1 ? hits[0] : null;              // cross-folder only when globally unique
 }
 
 function rowsToScreens(rows, code, driveFiles = {}) {
@@ -223,9 +242,10 @@ function rowsToScreens(rows, code, driveFiles = {}) {
          an Office file and no extension was given, fetch that exported file. */
       const gExt = { document: '.docx', spreadsheet: '.xlsx', powerpoint: '.pptx' }[type];
       if (gExt && !/\.[a-z0-9]{2,6}$/i.test(name)) name += gExt;
-      /* Snap to the real Drive file if the exact name drifted (see tolerantMatch). */
-      const real = tolerantMatch(name, type, driveFiles[folderCode]);
-      if (real) name = real;
+      /* Snap to the real Drive file if the exact name drifted, even if it lives
+         in another course's folder (shared content). See tolerantMatch. */
+      const real = tolerantMatch(name, type, folderCode, driveFiles);
+      if (real) { folderCode = real.code; name = real.name; }
       src = 'content/' + folderCode + '/' + name;
       drivePath = file;                                     // the real Drive path, for display (shown as typed)
     }
