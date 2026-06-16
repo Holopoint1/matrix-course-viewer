@@ -136,9 +136,25 @@ function rowsToScreens(rows, code) {
     const title = String(cell(r, ['title'])).trim();
     const file = cleanFile(cell(r, ['file', 'src']));
     let src;
-    if (/^https?:/i.test(file)) src = file;
-    else if (/^content\//i.test(file)) src = file;
-    else src = 'content/' + code + '/' + file;            // bare name → course folder
+    if (/^https?:/i.test(file)) src = file;                 // a URL → use as-is
+    else if (/^content\//i.test(file)) src = file;          // already a site path → use as-is
+    else {
+      /* Otherwise it's a DRIVE-style path the publisher typed — e.g.
+         "CP4807 - Introduction to microcontrollers/CP4807-1.docx", or just
+         "CP4807/CP4807-1.docx", or a bare "opening.svg". Translate it to the
+         site location content/<CODE>/<filename>: take the filename (last
+         segment) and derive <CODE> from the first folder segment (e.g.
+         "CP4807 - Introduction..." -> CP4807). A bare filename uses THIS
+         course's folder. So a publisher only ever types the Drive folder. */
+      const parts = file.split(/[\\/]+/).filter(Boolean);
+      const name = parts[parts.length - 1];
+      if (parts.length <= 1) {
+        src = 'content/' + code + '/' + name;
+      } else {
+        const m = parts[0].match(/([A-Za-z]{2}\d{4})/);
+        src = 'content/' + (m ? m[1].toUpperCase() : code) + '/' + name;
+      }
+    }
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
     if (equipment) screen.equipment = equipment;
     // flag local files that don't exist on disk (so we can see gaps)
