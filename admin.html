@@ -1313,7 +1313,7 @@
   })();
   </script>
 
-  <!-- ===== Publish to live (fires the Drive→GitHub sync via the Worker) ===== -->
+  <!-- ===== Publish to live: Worker dispatch + live progress tracking ===== -->
   <script>
   (function () {
     'use strict';
@@ -1322,65 +1322,143 @@
     // to re-run, so exposure on this public page only risks an extra sync.
     var PUBLISH_ENDPOINT = 'https://matrix-course-sync.ad5046.workers.dev/';
     var PUBLISH_KEY = 'mcv-publish-9f3a2c';
+    // Public read of the workflow's runs so we can show real progress. If the
+    // unauthenticated GitHub API rate-limits us, we fall back to a timer.
+    var RUNS_API = 'https://api.github.com/repos/Holopoint1/matrix-course-viewer/actions/workflows/sync-from-drive.yml/runs?per_page=5';
+    var POLL_MS = 5000;          // how often we check the run
+    var DEPLOY_WAIT_MS = 30000;  // rough GitHub Pages rebuild time after the sync commits
+
+    // ---------- UI ----------
+    var card = document.createElement('div');
+    card.style.cssText = ['position:fixed', 'right:20px', 'bottom:78px', 'z-index:9999',
+      'width:300px', 'padding:14px 16px', 'border-radius:12px', 'background:#0f172a', 'color:#fff',
+      'font:400 13px/1.45 Segoe UI,Arial,sans-serif', 'box-shadow:0 8px 24px rgba(0,0,0,.35)', 'display:none'].join(';');
+    card.innerHTML =
+      '<div id="pub-status" style="font-weight:600;margin-bottom:9px;display:flex;align-items:center;gap:8px">Starting…</div>' +
+      '<div style="height:8px;border-radius:6px;background:#1e293b;overflow:hidden">' +
+        '<div id="pub-bar" style="height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#3b82f6,#22d3ee)"></div>' +
+      '</div>' +
+      '<div id="pub-note" style="margin-top:9px;color:#94a3b8;font-size:12px"></div>' +
+      '<button id="pub-refresh" style="display:none;margin-top:11px;width:100%;padding:9px;border:0;border-radius:8px;cursor:pointer;font:600 13px Segoe UI,Arial,sans-serif;color:#fff;background:#16a34a">↻ Refresh to see changes</button>';
 
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.id = 'publish-now-btn';
     btn.textContent = '🚀 Publish to live';
-    btn.style.cssText = [
-      'position:fixed', 'right:20px', 'bottom:20px', 'z-index:9999',
+    btn.style.cssText = ['position:fixed', 'right:20px', 'bottom:20px', 'z-index:9999',
       'padding:12px 18px', 'border:0', 'border-radius:10px', 'cursor:pointer',
-      'font:600 15px/1 Segoe UI,Arial,sans-serif', 'color:#fff',
-      'background:#2563eb', 'box-shadow:0 6px 18px rgba(0,0,0,.28)'
-    ].join(';');
+      'font:600 15px/1 Segoe UI,Arial,sans-serif', 'color:#fff', 'background:#2563eb', 'box-shadow:0 6px 18px rgba(0,0,0,.28)'].join(';');
 
-    var toast = document.createElement('div');
-    toast.style.cssText = [
-      'position:fixed', 'right:20px', 'bottom:74px', 'z-index:9999',
-      'max-width:320px', 'padding:11px 14px', 'border-radius:10px',
-      'font:400 13px/1.45 Segoe UI,Arial,sans-serif', 'color:#fff',
-      'box-shadow:0 6px 18px rgba(0,0,0,.28)', 'display:none', 'white-space:pre-line'
-    ].join(';');
+    var elStatus, elBar, elNote, elRefresh;
+    var target = 0, visible = 0, ease = null;
 
-    function showToast(msg, kind) {
-      toast.textContent = msg;
-      toast.style.background = kind === 'ok' ? '#16a34a' : (kind === 'warn' ? '#d97706' : '#dc2626');
-      toast.style.display = 'block';
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(function () { toast.style.display = 'none'; }, kind === 'ok' ? 9000 : 12000);
+    function startEase() {
+      if (ease) return;
+      ease = setInterval(function () {
+        visible += (target - visible) * 0.08;
+        if (visible > 99) visible = 99;
+        elBar.style.width = visible.toFixed(1) + '%';
+      }, 180);
+    }
+    function stopEase() { if (ease) { clearInterval(ease); ease = null; } }
+    function setBar(pct) { target = pct; startEase(); }
+    function jumpBar(pct) { stopEase(); target = visible = pct; elBar.style.width = pct + '%'; }
+    function status(txt, spin) {
+      elStatus.innerHTML = (spin ? '<span style="display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:pubspin .8s linear infinite"></span>' : '') + txt;
+    }
+    function note(txt) { elNote.textContent = txt; }
+    function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+    function resetBtn() { btn.disabled = false; btn.textContent = '🚀 Publish to live'; btn.style.background = '#2563eb'; }
+
+    function latestRuns() {
+      return fetch(RUNS_API, { headers: { 'Accept': 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { return j && j.workflow_runs ? j.workflow_runs : null; })
+        .catch(function () { return null; }); // null = unreachable / rate-limited
     }
 
-    btn.addEventListener('click', function () {
-      btn.disabled = true;
-      var label = btn.textContent;
-      btn.textContent = '⏳ Publishing…';
-      btn.style.background = '#64748b';
-      fetch(PUBLISH_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Publish-Key': PUBLISH_KEY }
-      }).then(function (r) {
-        return r.json().catch(function () { return {}; }).then(function (body) { return { status: r.status, body: body }; });
-      }).then(function (res) {
-        if (res.status === 200 && res.body.ok) {
-          showToast('✅ Publishing started.\nYour changes go live in about 1–2 minutes. Refresh the site to see them.', 'ok');
-        } else if (res.status === 429) {
-          showToast('⏳ Already publishing — give it a moment, then try again.', 'warn');
-        } else if (res.status === 401) {
-          showToast('🔒 Publish key rejected. Check the Worker’s PUBLISH_KEY secret matches this page.', 'err');
-        } else {
-          showToast('⚠️ Publish failed (' + res.status + ').\n' + (res.body.detail || res.body.error || 'Check the Worker is deployed with its GH_TOKEN.'), 'err');
-        }
-      }).catch(function () {
-        showToast('⚠️ Could not reach the publish service.\nThe Worker may not be deployed yet — see worker/README.md.', 'err');
-      }).then(function () {
-        btn.disabled = false;
-        btn.textContent = label;
-        btn.style.background = '#2563eb';
-      });
-    });
+    function finishOK() {
+      jumpBar(100); elBar.style.background = '#16a34a';
+      status('✅ Published — it’s live', false);
+      note('Click refresh to load your changes.');
+      elRefresh.style.display = 'block'; resetBtn();
+    }
+    function finishErr(msg) {
+      stopEase(); elBar.style.background = '#dc2626';
+      status('⚠️ ' + msg, false); note('Nothing was lost — you can press Publish again.');
+      resetBtn();
+    }
 
-    document.body.appendChild(toast);
+    // Watch one run by id until it completes, then wait for the Pages deploy.
+    function trackRun(runId, t0) {
+      function poll() {
+        if (Date.now() - t0 > 4 * 60 * 1000) { // safety cap
+          status('Still working…', false);
+          note('Taking longer than usual — try refresh in a minute.');
+          elRefresh.style.display = 'block'; resetBtn(); return;
+        }
+        latestRuns().then(function (runs) {
+          if (runs === null) { setBar(95); return sleep(DEPLOY_WAIT_MS).then(finishOK); }
+          var run = null;
+          for (var i = 0; i < runs.length; i++) { if (runs[i].id === runId) { run = runs[i]; break; } }
+          if (!run) { setBar(20); return sleep(POLL_MS).then(poll); }
+          if (run.status === 'queued') { status('Queued at GitHub…', true); setBar(22); return sleep(POLL_MS).then(poll); }
+          if (run.status === 'in_progress') { status('Syncing from Google Drive…', true); setBar(72); return sleep(POLL_MS).then(poll); }
+          if (run.status === 'completed') {
+            if (run.conclusion === 'success') {
+              status('Deploying to the site…', true); jumpBar(90); setBar(98);
+              return sleep(DEPLOY_WAIT_MS).then(finishOK);
+            }
+            return finishErr('Sync failed (' + run.conclusion + '). Check the Actions tab.');
+          }
+          return sleep(POLL_MS).then(poll);
+        });
+      }
+      poll();
+    }
+
+    function publish() {
+      btn.disabled = true; btn.textContent = '⏳ Publishing…'; btn.style.background = '#64748b';
+      card.style.display = 'block'; elRefresh.style.display = 'none';
+      elBar.style.background = 'linear-gradient(90deg,#3b82f6,#22d3ee)';
+      jumpBar(6); status('Starting…', true);
+      note('This takes about 1–2 minutes. You can keep working — it runs in the background.');
+
+      latestRuns().then(function (before) {
+        var baseId = before && before[0] ? before[0].id : null;
+        return fetch(PUBLISH_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Publish-Key': PUBLISH_KEY } })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (b) { return { status: r.status, body: b }; }); })
+          .then(function (res) {
+            if (res.status === 401) return finishErr('Publish key rejected.');
+            if (res.status !== 200 && res.status !== 429) return finishErr('Couldn’t start publish (' + res.status + ').');
+            // 200 = we triggered it; 429 = one is already running. Either way, find the run and track it.
+            status('Queued at GitHub…', true); setBar(18);
+            var t0 = Date.now();
+            (function find() {
+              if (Date.now() - t0 > 45000) { setBar(95); return sleep(DEPLOY_WAIT_MS).then(finishOK); }
+              latestRuns().then(function (runs) {
+                if (runs === null) { setBar(95); return sleep(DEPLOY_WAIT_MS).then(finishOK); }
+                var run = runs[0];
+                if (run && run.id !== baseId) return trackRun(run.id, t0);                                   // our fresh run
+                if (run && run.id === baseId && run.status !== 'completed') return trackRun(run.id, t0);      // 429: already running
+                return sleep(3000).then(find);
+              });
+            })();
+          });
+      }).catch(function () { finishErr('Could not reach the publish service.'); });
+    }
+
+    document.body.appendChild(card);
     document.body.appendChild(btn);
+    elStatus = card.querySelector('#pub-status');
+    elBar = card.querySelector('#pub-bar');
+    elNote = card.querySelector('#pub-note');
+    elRefresh = card.querySelector('#pub-refresh');
+    elRefresh.addEventListener('click', function () { location.reload(); });
+    btn.addEventListener('click', publish);
+
+    var sx = document.createElement('style');
+    sx.textContent = '@keyframes pubspin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(sx);
   })();
   </script>
 </body>
