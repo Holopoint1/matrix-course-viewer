@@ -35,32 +35,6 @@ const SHARED = {
 
 const COURSE_SPECS = {
 
-  CO0001: {
-    title: 'Flowcode and E-blocks 3 CPD Course',
-    shortDescription: 'A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.',
-    categories: ['CPD', 'Embedded'],
-    certificate: { enabled: true, templateName: 'Flowcode & E-blocks 3 CPD Course' },
-    rows: [
-      ['image',      0,   'Introduction to microcontrollers', 'CO0001 - opening.png'],
-      ['html',       0.1, 'Learning objectives',              'CO0001 - LO.html'],
-      ['html',       0.1, 'Equipment',                        'CO0001 - Equip.html'],
-      ['html',       0.2, 'Welcome',                          'CP4807 - CPD objectives.htm'],
-      ['youtube',    0.2, 'Introducing E-blocks 3',           'https://youtu.be/KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv'],
-      ['youtube',    0.2, 'Introducing Flowcode',             'https://youtu.be/tDdptTbvDM0?si=19xqKAzPCOO3In5e'],
-      ['pdf',        0.2, 'E-blocks datasheet',               'https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf'],
-      ['powerpoint', 0.3, 'Microcontroller basics 1',         'Microcontroller basics 1 24 02 26.pptx'],
-      ['powerpoint', 0.3, 'Microcontroller basics 2',         'Microcontroller basics 2 24 02 26.pptx'],
-      ['html',       0.1, 'Now try the worksheets',           'Now try the worksheets.htm'],
-      ['html',       0.1, 'Other resources',                  'Other resources.htm'],
-      ['document',   1,   'First program',                    'CP4807-1.docx'],
-      ['document',   0.2, 'Performing calculations',          'CP4807-2.docx'],
-      ['document',   0.2, 'Connection points',                'CP4807-3.docx'],
-      ['document',   0.2, 'Digital inputs',                   'CP4807-4.docx'],
-      ['html',       0.2, 'Homework 1',                       'CP4807-H1.htm'],
-      ['document',   0.2, 'Making decisions',                 'CP4807-5.docx']
-    ]
-  },
-
   CO0002: {
     title: 'Introduction to Microcontrollers',
     shortDescription: 'The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.',

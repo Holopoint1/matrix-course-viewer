@@ -2,19 +2,6 @@
   "_doc": "Definition Google Sheets the Drive->GitHub sync (tools/sync-drive.mjs) reads server-side to rebuild data/courses.json. Each sheet's rows become a course's screens; the File column holds a content/<code>/... path or a URL. Edit the '(live)' sheet, then the next sync run (every 5 min, or the manual button) updates the live course.",
   "sheets": [
     {
-      "code": "CO0001",
-      "title": "Flowcode and E-blocks 3 CPD Course",
-      "kind": "course",
-      "description": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
-      "certificate": true,
-      "certificateTemplate": "Flowcode & E-blocks 3 CPD Course",
-      "categories": [
-        "CPD",
-        "Embedded"
-      ],
-      "url": "https://docs.google.com/spreadsheets/d/1BvV-7jV1Gn-Km7Uz3nztG33QzFOQj0RzfbtbKVtDt3Q/edit"
-    },
-    {
       "code": "CO0002",
       "title": "Introduction to Microcontrollers",
       "kind": "course",

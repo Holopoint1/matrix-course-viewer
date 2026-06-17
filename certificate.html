@@ -255,9 +255,7 @@
           if (course) {
             document.getElementById('cert-code').textContent = course.code || course.id;
             document.getElementById('cert-title').textContent = course.title || '';
-            document.getElementById('cert-body').textContent = course.id === 'CO0001'
-              ? 'has successfully completed a Continuing Professional Development course in E-blocks 3 and Flowcode'
-              : 'has successfully completed the course';
+            document.getElementById('cert-body').textContent = 'has successfully completed the course';
             document.title = 'Certificate · ' + (course.title || course.id);
           }
 
