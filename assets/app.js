@@ -713,9 +713,15 @@
       bodyHtml = enhanceWorksheetHtml(bodyHtml);
       inner.innerHTML = bodyHtml;
     } catch (err) {
-      /* graceful fallback: iframe the file as-is */
-      wrap.remove();
-      renderIframe(stage, screen.src);
+      /* A fetch failure (404 / removed-or-renamed file / network) → a clear
+         warning, never a broken frame. A parse hiccup on a real HTML file →
+         fall back to iframing it as-is. */
+      if (/^HTTP|Failed to fetch|NetworkError|Load failed/i.test(err.message || '')) {
+        inner.innerHTML = '<p class="stage-warn-inline" style="color:var(--warn,#b45309);font-weight:600">⚠ Couldn\'t load <code>' + escapeHtml(filename(screen.src)) + '</code> (' + escapeHtml(err.message) + '). The file may have been removed or renamed in Drive.</p>';
+      } else {
+        wrap.remove();
+        renderIframe(stage, screen.src);
+      }
     }
   }
 
