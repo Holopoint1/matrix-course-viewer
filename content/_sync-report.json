@@ -1,14 +1,19 @@
 {
-  "generatedAt": "2026-06-17T22:15:47.445Z",
+  "generatedAt": "2026-06-17T22:19:09.860Z",
   "courses": {
+    "CO0002": {
+      "stale": [
+        {
+          "title": "Equipment",
+          "showing": "CO0002 - Equip.html",
+          "expectedIn": "CO0002"
+        }
+      ],
+      "missing": []
+    },
     "CP2563": {
       "stale": [],
       "missing": [
-        {
-          "title": "Title page",
-          "file": "CP2563-head.docx",
-          "expectedIn": "CP2563"
-        },
         {
           "title": "Contents",
           "file": "CP2563-cont.docx",
@@ -24,11 +29,6 @@
     "CP7244": {
       "stale": [],
       "missing": [
-        {
-          "title": "Title page",
-          "file": "CP7244-head.docx",
-          "expectedIn": "CP7244"
-        },
         {
           "title": "Contents",
           "file": "CP7244-cont.docx",
@@ -53,29 +53,191 @@
           "title": "Welcome",
           "file": "CP4807 - CPD objectives.htm",
           "expectedIn": "CP4807"
-        },
-        {
-          "title": "Microcontroller basics 1",
-          "file": "Microcontroller basics 1 24 02 26.pptx",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "Now try the worksheets",
-          "file": "Now try the worksheets.htm",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "Other resources",
-          "file": "Other resources.htm",
-          "expectedIn": "CO0001"
         }
       ]
     }
   },
   "unusedMedia": {
+    "ZZ9999": [
+      "complete.html",
+      "assessment.html",
+      "objectives.html",
+      "welcome.html",
+      "opening.svg"
+    ],
+    "CP2563": [
+      "CP2563_definition.xlsx",
+      "CP2563 - definition.docx",
+      "CP2563 - Content.docx"
+    ],
+    "CO0004": [
+      "CO0004 - definition.docx",
+      "CO0004 - content.docx"
+    ],
+    "CP0507": [
+      "CP0507 - motors and microcontrollers FIXED.docx",
+      "summary-report.txt",
+      "scorm-readiness.txt",
+      "blocks-metadata.json",
+      "PIC development centre.png",
+      "e-blocks upstream.jpg",
+      "20250409_164925.jpg",
+      "DC motors part 3 cover.jpg",
+      "e-blocks3 logo.png",
+      "Stepper motors cover.jpg",
+      "Servo motors cover.jpg",
+      "DC motors part 2 cover.jpg",
+      "DC motors part 1 cover.jpg",
+      "DC motors part 1 cover.png",
+      "DC motors part 3 cover.png",
+      "DC motors part 2 cover.png",
+      "BL0167 LED board.png",
+      "BL0145 switch.png",
+      "BL0169 display.png",
+      "router.png",
+      "aeroplane.png",
+      "quadrocopter.png",
+      "wheelchair.png",
+      "ESP32 board.png",
+      "BL0055-75-3.png",
+      "PIC board.png",
+      "Combo board.png",
+      "Actuators board.png",
+      "Servo motors cover.png",
+      "Stepper motors cover.png",
+      "20250115_115215.jpg",
+      "ws1 dc motor.png",
+      "cover.png",
+      "youtube logo.png",
+      "Matrix_Logo.svg"
+    ],
+    "CP4807": [
+      "test.docx",
+      "test.jpg",
+      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
+      "CP4807-P1.htm",
+      "CP4807-0.docx",
+      "CP4807-A3.htm",
+      "CP4807-SOW.htm",
+      "CP4807-marking scheme.htm",
+      "CP4807-TN.htm",
+      "CP4807-CPDcert.docx",
+      "CP4807-H5.htm",
+      "CP4807-H4.htm",
+      "CP4807-Cont.docx",
+      "Introducing E-blocks CP40807.pptx",
+      "Introducing E-blocks 18 02 26.pptx",
+      "summary-report.txt",
+      "imsmanifest.xml",
+      "blocks-metadata.json",
+      "scorm-readiness.txt",
+      "CP4807 - introduction to microcontrollers 13 05 26.docx",
+      "CO0004 - opening.jpg",
+      "close-up-of-a-yellow-construction-sign-for-traffic-2025-02-03-16-16-23-utc.jpg",
+      "view-of-city-traffic-with-traffic-lights-in-the-f-2025-03-16-12-41-45-utc.jpg",
+      "red-and-green-round-lamps-and-buttons-on-black-con-2024-12-17-00-11-57-utc.jpg",
+      "sound-engineer-using-control-panel-2025-02-11-14-06-41-utc.jpg",
+      "electricity-hub-2025-03-05-05-12-40-utc.jpg",
+      "a-red-and-yellow-button-with-a-yellow-box-2025-03-14-19-12-07-utc.jpg",
+      "holding-digital-tablet-in-cozy-living-room-with-fi-2025-01-08-11-37-09-utc.jpg",
+      "hand-holding-a-stopwatch-2025-02-10-06-05-41-utc.jpg",
+      "persons-hands-use-electric-scale-or-weighter-micr-2025-01-27-03-10-49-utc.jpg",
+      "controlling-smart-devices-with-a-digital-tablet-at-2025-03-14-12-33-14-utc.jpg",
+      "web mirror candy.jpg",
+      "web mirror.jpg",
+      "hardware control.png",
+      "touch screen control.jpg",
+      "Backup_of_proto board images.cdr",
+      "hardware tracker.png",
+      "colour touch screen.jpg",
+      "proto board with parts.png",
+      "project diagram.png",
+      "prototype board.jpg",
+      "protoboard.svg",
+      "project diagram.svg",
+      "heater control.png",
+      "stop watch.jpg",
+      "binary.jpg",
+      "stop switch.jpg",
+      "electronics board.jpg",
+      "touch screen.jpg",
+      "making decisions.jpg",
+      "Digital inputs.jpg",
+      "music panel.jpg",
+      "control panel.jpg",
+      "traffic lights.jpg",
+      "traffic lights.cpt",
+      "flashing light.jpg",
+      "BLXXXX programming Arduino microcontrollers.png",
+      "e-blocks3 logo.png",
+      "intro to micros cover.jpg",
+      "youtube logo.png",
+      "timer interrupts.png",
+      "pin interrupts.png",
+      "Macros.jpg",
+      "B H M N.jpg",
+      "counter.jpg",
+      "first program.jpg",
+      "Flowcode Embedded introduction.jpg"
+    ],
+    "CO0003": [
+      "CO0003 - content.docx",
+      "CO0003 - definition.docx"
+    ],
     "CO0001": [
       "CO0001 – LO.HTM.docx",
       "CO0001 - content.docx"
+    ],
+    "CO0002": [
+      "test.jpg",
+      "CO0002-H1.htm",
+      "CO0002-H4.htm",
+      "CO0002-H2.htm",
+      "CO0002-H8.htm",
+      "CO0002-A1.htm",
+      "CO0002-H5.htm",
+      "CO0002-H9.htm",
+      "CO0002-H6.htm",
+      "CO0002-marking scheme.htm",
+      "CO0002-A2.htm",
+      "CO0002-H3.htm",
+      "CO0002-A3.htm",
+      "CO0002-H7.htm",
+      "CO0002-P1.htm",
+      "Untitled document.docx",
+      "CO0002 - content.docx"
+    ],
+    "CP7244": [
+      "CP7244 - definition.docx",
+      "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
+    ],
+    "CP1972": [
+      "CP1972 - sensors and microcontrollers 07 05 26.docx",
+      "blocks-metadata.json",
+      "scorm-readiness.txt",
+      "summary-report.txt",
+      "compressive cell.png",
+      "cantilever.png",
+      "weather station.jpg",
+      "pump.png",
+      "tyre.jpg",
+      "crane.jpg",
+      "scales.jpg",
+      "flow sensors.jpg",
+      "furnace.jpg",
+      "Thermistor.jpg",
+      "temperature sensor.png",
+      "temperature sensor.cpt",
+      "bubble level.png",
+      "thermometer.jpg",
+      "thermistor image.jpg",
+      "street light.jpg",
+      "old radio.jpg",
+      "e-blocks3 logo.png",
+      "sensors adn microcontrollers.jpg",
+      "youtube logo.png",
+      "analogue.png",
+      "Matrix_Logo.svg"
     ]
   }
 }
