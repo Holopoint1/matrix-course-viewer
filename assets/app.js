@@ -431,6 +431,24 @@
     }
   }
 
+  /* Render by the ACTUAL file, not just the declared screen type — so a screen
+     mistakenly typed "HTML" but pointing at a .docx still renders as a document
+     (via mammoth) instead of dumping raw file bytes. URLs keep their declared
+     type (a YouTube/PDF link has no useful extension). */
+  function effectiveType(screen) {
+    const src = screen.src || '';
+    if (/^https?:/i.test(src)) return screen.type;
+    const ext = (src.split('.').pop() || '').toLowerCase();
+    const byExt = {
+      docx: 'document', doc: 'document', odt: 'document', rtf: 'document',
+      pptx: 'powerpoint', ppt: 'powerpoint',
+      xlsx: 'spreadsheet', xls: 'spreadsheet', csv: 'spreadsheet',
+      pdf: 'pdf',
+      png: 'image', jpg: 'image', jpeg: 'image', gif: 'image', svg: 'image', webp: 'image', bmp: 'image',
+      htm: 'html', html: 'html',
+    };
+    return byExt[ext] || screen.type;
+  }
   function renderStage(screen) {
     const stage = els.screenStage;
     stage.innerHTML = '';
@@ -447,7 +465,7 @@
       return;
     }
 
-    switch (screen.type) {
+    switch (effectiveType(screen)) {
       case 'image':
         renderImage(stage, screen);
         return;
