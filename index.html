@@ -63,6 +63,9 @@
           if (window.MatrixCMS.mergeCourses) data.courses = window.MatrixCMS.mergeCourses(data.courses);
           data.courses = data.courses.map((c) => window.MatrixCMS.applyOverrides(c));
         }
+        /* Catalogue order: by course code (CO0001 first) so it never drifts when
+           the sync re-adds a course at the end of courses.json. */
+        data.courses.sort((a, b) => String(a.id || a.code || '').localeCompare(String(b.id || b.code || '')));
 
         /* ---------- Build category filter pills ----------
            Pills are derived from the actual `categories` arrays on each course.
