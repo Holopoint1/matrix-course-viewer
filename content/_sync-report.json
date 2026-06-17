@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T08:16:17.077Z",
+  "generatedAt": "2026-06-17T08:26:21.604Z",
   "courses": {
     "CP2563": {
       "stale": [],
@@ -48,6 +48,11 @@
           "title": "Equipment",
           "file": "CO0001 - Equip.html",
           "expectedIn": "CO0001"
+        },
+        {
+          "title": "Welcome",
+          "file": "CP4807 - CPD objectives.htm",
+          "expectedIn": "CP4807"
         },
         {
           "title": "Microcontroller basics 1",

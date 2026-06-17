@@ -1648,7 +1648,8 @@
           "hours": 0.2,
           "src": "content/CP4807/CP4807 - CPD objectives.htm",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807 - CPD objectives.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s5",
