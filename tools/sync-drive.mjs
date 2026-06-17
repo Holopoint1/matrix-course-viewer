@@ -21,7 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
-const ROOT_FOLDER_ID = '1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu'; // "LMS Project Assets" (sync rev 3)
+const ROOT_FOLDER_ID = '1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu'; // "LMS Project Assets" (sync rev 4 — re-run to re-flag removed files as missing)
 const CONTENT_DIR = path.resolve('content');
 const COURSES_JSON = path.resolve('data', 'courses.json');
 const SHEETS_JSON = path.resolve('data', 'sheets.json');
