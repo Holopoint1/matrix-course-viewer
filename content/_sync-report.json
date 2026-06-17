@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T16:45:48.562Z",
+  "generatedAt": "2026-06-17T16:50:47.421Z",
   "courses": {
     "CP2563": {
       "stale": [],
@@ -75,7 +75,6 @@
   "unusedMedia": {
     "CO0001": [
       "CO0001 – LO.HTM.docx",
-      "CO0001 – CPD objectives.HTM.jpg",
       "CO0001 - content.docx"
     ]
   }
