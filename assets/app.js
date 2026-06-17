@@ -703,6 +703,10 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         text = await res.text();
       }
+      if (looksBinary(text)) {
+        inner.innerHTML = '<p class="stage-warn-inline" style="color:var(--warn,#b45309);font-weight:600">⚠ This screen is set to <strong>' + escapeHtml(screen.type) + '</strong>, but <code>' + escapeHtml(filename(screen.src)) + '</code> isn\'t a web page — it looks like an Office or binary file. Set the screen type to match the file (e.g. <strong>Document</strong>), or use a real <code>.html</code> file.</p>';
+        return;
+      }
       const doc = new DOMParser().parseFromString(text, 'text/html');
       const pageEl = doc.querySelector('.page');
       let bodyHtml = pageEl ? pageEl.innerHTML : (doc.body ? doc.body.innerHTML : text);
@@ -997,6 +1001,18 @@
     return String(p || '').split(/[\\/]/).pop();
   }
 
+  /* Detect content that is NOT a web page so we never dump raw bytes at a
+     learner: Office files (.docx/.xlsx/.pptx) are zips starting "PK", PDFs
+     start "%PDF-", and binary in general has many control characters. */
+  function looksBinary(s) {
+    if (!s) return false;
+    if (s.charCodeAt(0) === 0x50 && s.charCodeAt(1) === 0x4B) return true; // "PK" = zip / Office
+    if (s.slice(0, 5) === '%PDF-') return true;
+    let ctrl = 0; const n = Math.min(s.length, 1000);
+    for (let i = 0; i < n; i++) { const c = s.charCodeAt(i); if (c === 0 || c === 0xFFFD || c < 9 || (c > 13 && c < 32)) ctrl++; }
+    return n > 0 && ctrl / n > 0.05;
+  }
+
   function formatMeta(screen) {
     /* Labelled screen info, e.g.
        Title: Homework 1   ·   Time: 2 hours   ·   Type: HTML   ·   Asset: CP4807-H1.htm
@@ -1013,7 +1029,14 @@
       parts.push('<span class="meta-field"><span class="meta-k">Time:</span> ' + timeLabel + '</span>');
     }
 
-    parts.push('<span class="meta-field"><span class="meta-k">Type:</span> ' + escapeHtml(screen.type.toUpperCase()) + '</span>');
+    /* Warn the publisher if the declared type doesn't match the actual file
+       (e.g. type HTML but the file is a .docx) — the viewer still renders it
+       correctly, but the mismatch should be fixed in the definition. */
+    const effType = effectiveType(screen);
+    const typeWarn = (!/^https?:/i.test(screen.src || '') && effType !== screen.type)
+      ? ' <span class="meta-warn" title="Set the Screen type to match the file" style="color:var(--warn,#b45309)">⚠ file is ' + escapeHtml(effType) + '</span>'
+      : '';
+    parts.push('<span class="meta-field"><span class="meta-k">Type:</span> ' + escapeHtml(screen.type.toUpperCase()) + typeWarn + '</span>');
 
     const isUrl = /^https?:/i.test(screen.src || '');
     // Show the real Google Drive location: prefer screen.path (the Drive path
