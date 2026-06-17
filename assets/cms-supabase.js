@@ -44,6 +44,13 @@
 
   /* ---- Pull Supabase → localStorage (the existing engine reads these) ---- */
   async function pull() {
+    /* Clear the discovered-courses cache UP FRONT (synchronously, before any
+       await) so it's empty by the time the catalogue's mergeCourses() runs on
+       this same load. dbCourses is sourced ONLY from a live Supabase pull, so
+       if the project is gone/empty/unreachable this stays empty and no ghost
+       courses (deleted in the files, or removed in admin) can survive in the
+       catalogue. A successful pull below repopulates it from live data. */
+    try { localStorage.removeItem(KEY_DBCOURSES); } catch (_) {}
     try {
       var res = await Promise.all([
         sb.from('courses').select('*'),
