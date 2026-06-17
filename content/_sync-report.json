@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T08:56:23.904Z",
+  "generatedAt": "2026-06-17T08:58:31.966Z",
   "courses": {
     "CP2563": {
       "stale": [],
@@ -57,11 +57,6 @@
         {
           "title": "Microcontroller basics 1",
           "file": "Microcontroller basics 1 24 02 26.pptx",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "Microcontroller basics 2",
-          "file": "Microcontroller basics 2 24 02 26.pptx",
           "expectedIn": "CO0001"
         },
         {
