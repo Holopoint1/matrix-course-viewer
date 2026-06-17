@@ -24,7 +24,7 @@
         {
           "id": "CO0001-s2",
           "type": "html",
-          "title": "Learning objectives",
+          "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0001/CO0001 - LO.docx",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/media/CO0001 - LO.htm",
@@ -33,7 +33,7 @@
         {
           "id": "CO0001-s3",
           "type": "html",
-          "title": "Equipment",
+          "title": "",
           "hours": 0.1,
           "src": "content/CO0001/CO0001 - equip.htm",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/media/CO0001 - equip.htm",
