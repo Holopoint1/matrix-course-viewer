@@ -28,34 +28,6 @@
       "url": "https://docs.google.com/spreadsheets/d/1NTi0DM_x17nw09179MHFQlH5uZkOV_NaA4ZhyFN6QnE/edit"
     },
     {
-      "code": "CO0003",
-      "title": "Digital Techniques for Aviation Technicians",
-      "kind": "course",
-      "description": "EASA Unit 5 Digital Techniques for Aviation Technicians, delivered as a SCORM-ready browser course. Microcontroller fundamentals through to motor control — adapted for aviation maintenance learners.",
-      "certificate": true,
-      "certificateTemplate": "Digital Techniques for Aviation Technicians",
-      "categories": [
-        "Aviation",
-        "EASA",
-        "Curriculum"
-      ],
-      "url": "https://docs.google.com/spreadsheets/d/1DEVVVFuThmlG073XUaHrbENuAAF-KnUaH9JsWnXV7z4/edit"
-    },
-    {
-      "code": "CO0004",
-      "title": "Microcontrollers for T-Levels",
-      "kind": "course",
-      "description": "T-Level Engineering microcontroller pathway built on the CP4807 / CP1972 / CP0507 worksheet base. Covers digital and analogue I/O, motor control (including stepper), interrupts, and full assessment-led progression.",
-      "certificate": true,
-      "certificateTemplate": "Microcontrollers for T-Levels",
-      "categories": [
-        "T-Level",
-        "Embedded",
-        "Curriculum"
-      ],
-      "url": "https://docs.google.com/spreadsheets/d/1P0oyxvSCoiLf_b9sswADRoqxHeAMadRio164e7hsUHc/edit"
-    },
-    {
       "code": "CP2563",
       "title": "Microcontrollers for T-Levels",
       "kind": "pack",
