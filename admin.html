@@ -1339,6 +1339,11 @@
       /* Fold in any courses that live only in Supabase (e.g. added here). */
       courses = (window.MatrixCMS && window.MatrixCMS.mergeCourses)
         ? window.MatrixCMS.mergeCourses(data.courses || []) : (data.courses || []);
+      /* Order by course code (CO0001 first) so the admin catalog matches the
+         public catalog and never drifts with merge/load order. */
+      courses.sort(function (a, b) {
+        return String(a.id || a.code || '').localeCompare(String(b.id || b.code || ''));
+      });
       routeFromUrl('replace');
     }).catch(function (err) {
       main.innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
