@@ -221,7 +221,7 @@ function rowsToScreens(rows, code, driveFiles = {}) {
     const type = normType(cell(r, ['screen type', 'type']));
     const hours = parseFloat(String(cell(r, ['hours'])).trim()) || 0;
     const equipment = String(cell(r, ['equipment'])).trim();
-    const title = String(cell(r, ['title'])).trim();
+    let title = String(cell(r, ['title'])).trim();
     const file = cleanFile(cell(r, ['file', 'src']));
     let src, drivePath;
     if (/^https?:/i.test(file)) src = file;                 // a URL → use as-is
@@ -251,6 +251,19 @@ function rowsToScreens(rows, code, driveFiles = {}) {
       if (real) { folderCode = real.code; name = real.name; }
       src = 'content/' + folderCode + '/' + name;
       drivePath = file;                                     // the real Drive path, for display (shown as typed)
+    }
+    /* Bulletproofing: a new row with a File but a blank Title still becomes a
+       properly named screen — derive a human title from the file/URL so rows
+       can never publish as nameless screens. */
+    if (!title) {
+      const base = /^https?:/i.test(file)
+        ? (file.split(/[?#]/)[0].split(/[\\/]+/).filter(Boolean).pop() || '')
+        : (String(file).split(/[\\/]+/).filter(Boolean).pop() || '');
+      title = base
+        .replace(/\.[a-z0-9]{2,6}$/i, '')                   // drop extension
+        .replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '')      // drop "CO0001 - " prefix
+        .replace(/[-_]+/g, ' ')
+        .trim() || `Screen ${i + 1}`;
     }
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
     if (drivePath) screen.path = drivePath;
