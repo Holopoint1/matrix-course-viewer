@@ -3063,6 +3063,25 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 .stage-doc-inner code { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; background: var(--primary-50); padding: 0.1em 0.35em; border-radius: 4px; }
 .stage-doc-inner pre { background: var(--primary-50); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 0.9em 1em; overflow-x: auto; }
 
+/* ── docx-preview: render the .docx with its OWN embedded styles, verbatim.
+   The worksheet-theme rules above are scoped to .stage-doc-inner and would
+   leak into the rendered document (forcing full-width tables, header tints,
+   borders on borderless cells, 68ch paragraphs, etc.). These higher-
+   specificity rules neutralise that leakage so the document looks exactly as
+   authored — docx-preview's own inline styles still win where present. */
+.stage-doc-inner .docx-wrapper { background: transparent; padding: 1rem 0; box-shadow: none; display: block; }
+.stage-doc-inner .docx-wrapper section.docx { margin: 0 auto 1rem; background: #fff; box-shadow: 0 1px 8px rgba(20,25,56,.12); }
+.stage-doc-inner .docx-wrapper p { max-width: none; margin: revert; }
+.stage-doc-inner .docx-wrapper table { width: auto; border-collapse: collapse; margin: revert; font-size: inherit; }
+.stage-doc-inner .docx-wrapper th, .stage-doc-inner .docx-wrapper td { border: none; background: transparent; padding: revert; vertical-align: revert; }
+.stage-doc-inner .docx-wrapper th { font-weight: inherit; }
+.stage-doc-inner .docx-wrapper img { max-width: none; height: revert; border-radius: 0; box-shadow: none; }
+.stage-doc-inner .docx-wrapper ul, .stage-doc-inner .docx-wrapper ol { padding-left: revert; margin: revert; }
+.stage-doc-inner .docx-wrapper strong { color: inherit; }
+.stage-doc-inner .docx-wrapper code { background: transparent; padding: 0; border-radius: 0; }
+/* Let wide pages scroll rather than overflow the layout */
+.stage-doc-inner { overflow-x: auto; }
+
 .stage-doc-toolbar {
   max-width: 800px;
   margin: 0 auto 0.9rem;

@@ -709,8 +709,9 @@
       }
       const doc = new DOMParser().parseFromString(text, 'text/html');
       const pageEl = doc.querySelector('.page');
-      let bodyHtml = pageEl ? pageEl.innerHTML : (doc.body ? doc.body.innerHTML : text);
-      bodyHtml = enhanceWorksheetHtml(bodyHtml);
+      /* Show the authored HTML verbatim — NO enhanceWorksheetHtml() — so
+         tables, headings and layout appear exactly as written, no restructuring. */
+      const bodyHtml = pageEl ? pageEl.innerHTML : (doc.body ? doc.body.innerHTML : text);
       inner.innerHTML = bodyHtml;
     } catch (err) {
       /* A fetch failure (404 / removed-or-renamed file / network) → a clear
@@ -930,11 +931,12 @@
     }
   }
 
+  /* Render a .docx VERBATIM with docx-preview — it uses the document's own
+     embedded styles (tables with borders/shading/column widths, fonts,
+     spacing, numbering, headers/footers), so worksheets display exactly as
+     authored in Word. No mammoth, no styleMap, no enhanceWorksheetHtml — i.e.
+     no restructuring of the source. */
   async function renderDocument(stage, screen) {
-    if (typeof window.mammoth === 'undefined') {
-      stage.innerHTML = '<p class="stage-loading">Document renderer is loading&hellip;</p>';
-      await waitForMammoth();
-    }
     const wrap = document.createElement('div');
     wrap.className = 'stage-doc';
     wrap.innerHTML = `
@@ -950,40 +952,48 @@
     });
 
     try {
-      /* Admin CMS edit wins over the source .docx — same override key
-         (screen.src) the HTML-screen renderer uses, so a worksheet edited
-         in the admin shows here immediately. The override is a full HTML
-         doc; pull its .page / body, then run the normal enhancer. */
+      /* Admin CMS edit wins over the source .docx — shown verbatim (no
+         enhancer), same override key the HTML-screen renderer uses. */
       const cmsOverride = window.MatrixCMS ? window.MatrixCMS.getHtmlOverride(screen.src) : null;
-      let html;
       if (cmsOverride != null) {
         const odoc = new DOMParser().parseFromString(cmsOverride, 'text/html');
         const opage = odoc.querySelector('.page');
-        html = enhanceWorksheetHtml(opage ? opage.innerHTML : (odoc.body ? odoc.body.innerHTML : cmsOverride));
-      } else {
-        html = docCache.get(screen.src);
-        if (!html) {
-          const res = await fetch(screen.src);
-          if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
-          const buf = await res.arrayBuffer();
-          const result = await window.mammoth.convertToHtml({ arrayBuffer: buf }, MAMMOTH_OPTS);
-          html = enhanceWorksheetHtml(result.value || '');
-          docCache.set(screen.src, html);
-        }
+        inner.innerHTML = opage ? opage.innerHTML : (odoc.body ? odoc.body.innerHTML : cmsOverride);
+        return;
       }
-      inner.innerHTML = html;
-      /* Wire Hint Seeker — first reveal of any hints section in this
-         worksheet unlocks the achievement. */
-      inner.querySelectorAll('details.hints-details').forEach((d) => {
-        d.addEventListener('toggle', function onToggle() {
-          if (d.open && window.Gamify && typeof window.Gamify.markHintRevealed === 'function') {
-            window.Gamify.markHintRevealed();
-          }
-        });
+
+      if (typeof window.docx === 'undefined' || !window.docx.renderAsync) await waitForDocx();
+      const res = await fetch(screen.src);
+      if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
+      const buf = await res.arrayBuffer();
+      inner.innerHTML = '';
+      await window.docx.renderAsync(buf, inner, inner, {
+        className: 'docx',
+        inWrapper: true,
+        ignoreWidth: false,
+        ignoreHeight: false,
+        breakPages: true,
+        experimental: true,
+        renderHeaders: true,
+        renderFooters: true,
+        renderFootnotes: true,
+        useBase64URL: true
       });
     } catch (err) {
       inner.innerHTML = `<p style="color:var(--warn);">Could not render document: ${escapeHtml(err.message)}</p>`;
     }
+  }
+
+  function waitForDocx(timeoutMs = 10000) {
+    return new Promise((resolve, reject) => {
+      const start = Date.now();
+      const tick = () => {
+        if (typeof window.docx !== 'undefined' && window.docx.renderAsync) return resolve();
+        if (Date.now() - start > timeoutMs) return reject(new Error('Document renderer not available'));
+        setTimeout(tick, 100);
+      };
+      tick();
+    });
   }
 
   function waitForMammoth(timeoutMs = 10000) {
