@@ -210,6 +210,36 @@ function tolerantMatch(name, type, folderCode, byCode) {
   return hits.length === 1 ? hits[0] : null;              // cross-folder only when globally unique
 }
 
+/* Last-resort heal: if a screen's resolved file isn't on disk under content/,
+   but a copy with the SAME filename already exists elsewhere in the published
+   tree (e.g. shared content sitting under another course's folder), point the
+   screen at that real file instead of publishing a dead 404. Exact basename
+   (case-insensitive) and globally unique only — never a fuzzy guess. */
+let _pubIndex = null;
+function publishedIndex() {
+  if (_pubIndex) return _pubIndex;
+  const exact = new Map();
+  const root = path.resolve('content');
+  const walk = (dir) => {
+    let ents; try { ents = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const e of ents) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) { walk(p); continue; }
+      const rel = 'content/' + path.relative(root, p).split(path.sep).join('/');
+      const k = e.name.toLowerCase();
+      const a = exact.get(k); if (a) a.push(rel); else exact.set(k, [rel]);
+    }
+  };
+  walk(root);
+  _pubIndex = exact;
+  return _pubIndex;
+}
+function healFromPublished(src) {
+  const base = String(src).split('/').pop().toLowerCase();
+  const c = publishedIndex().get(base);
+  return (c && c.length === 1) ? c[0] : null;            // unique filename match only
+}
+
 function rowsToScreens(rows, code, driveFiles = {}) {
   if (!rows.length) return { screens: [], missing: [] };
   const headerIdx = findHeaderRow(rows);
@@ -268,8 +298,13 @@ function rowsToScreens(rows, code, driveFiles = {}) {
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
     if (drivePath) screen.path = drivePath;
     if (equipment) screen.equipment = equipment;
-    // flag local files that don't exist on disk (so we can see gaps)
-    if (!/^https?:/i.test(src) && !fs.existsSync(path.resolve(src))) { screen.missing = true; missing.push(`${title} → ${src}`); }
+    // flag local files that don't exist on disk (so we can see gaps) — but first
+    // try to heal to an identically-named file already published elsewhere.
+    if (!/^https?:/i.test(src) && !fs.existsSync(path.resolve(src))) {
+      const healed = healFromPublished(src);
+      if (healed) { screen.src = healed; }
+      else { screen.missing = true; missing.push(`${title} → ${src}`); }
+    }
     screens.push(screen);
   });
   return { screens, missing };
