@@ -1140,9 +1140,9 @@
           "type": "sheet",
           "title": "T levels mapping spreadsheet",
           "hours": 0.2,
-          "src": "content/CO0001/undefined",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0001/T levels mapping.xlsx",
+          "path": "\\CO0001 - FC E-blocks CPD course\\media\\T levels mapping.xlsx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s7",
@@ -1158,9 +1158,9 @@
           "type": "sheet",
           "title": "Digital Techniques mapping spreadsheet",
           "hours": 0.2,
-          "src": "content/CO0001/undefined",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0001/Digital techniques mapping.xlsx",
+          "path": "\\CO0001 - FC E-blocks CPD course\\media\\Digital techniques mapping.xlsx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s9",

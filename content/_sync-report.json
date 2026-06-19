@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T13:55:29.408Z",
+  "generatedAt": "2026-06-19T13:56:03.009Z",
   "courses": {
     "CO0002": {
       "stale": [],
@@ -70,16 +70,6 @@
       "stale": [],
       "missing": [
         {
-          "title": "T levels mapping spreadsheet",
-          "file": "undefined",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "Digital Techniques mapping spreadsheet",
-          "file": "undefined",
-          "expectedIn": "CO0001"
-        },
-        {
           "title": "Equipment",
           "file": "CO0002 – Equip.HTM",
           "expectedIn": "CO0002"
@@ -89,8 +79,6 @@
   },
   "unusedMedia": {
     "CO0001": [
-      "T levels mapping.xlsx",
-      "Digital techniques mapping.xlsx",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
     ]
