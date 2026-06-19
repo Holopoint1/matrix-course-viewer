@@ -1,6 +1,26 @@
 {
-  "generatedAt": "2026-06-19T05:35:26.210Z",
+  "generatedAt": "2026-06-19T05:40:30.063Z",
   "courses": {
+    "CO0002": {
+      "stale": [],
+      "missing": [
+        {
+          "title": "Welcome",
+          "file": "CO0002 - welcome.htm",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Learning objectives",
+          "file": "CO0002 - LO.htm",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Equipment",
+          "file": "CO0002 - Equip.htm",
+          "expectedIn": "CO0002"
+        }
+      ]
+    },
     "CP2563": {
       "stale": [],
       "missing": [
