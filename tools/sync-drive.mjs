@@ -246,7 +246,7 @@ function rowsToScreens(rows, code, driveFiles = {}) {
     let title = String(cell(r, ['title'])).trim();
     const file = cleanFile(cell(r, ['file', 'src']));
     let src, drivePath;
-    if (/^https?:/i.test(file)) src = file;                 // a URL → use as-is
+    if (/^https?:/i.test(file)) src = file.replace(/\\/g, '/'); // a URL → normalise backslashes (https:\\… → https://…)
     else if (/^content\//i.test(file)) src = file;          // legacy site path → use as-is
     else {
       /* A Google DRIVE path the publisher typed — anything from a bare
@@ -267,12 +267,11 @@ function rowsToScreens(rows, code, driveFiles = {}) {
          an Office file and no extension was given, fetch that exported file. */
       const gExt = { document: '.docx', spreadsheet: '.xlsx', powerpoint: '.pptx' }[type];
       if (gExt && !/\.[a-z0-9]{2,6}$/i.test(name)) name += gExt;
-      /* Snap to the real Drive file if the exact name drifted, even if it lives
-         in another course's folder (shared content). See tolerantMatch. */
-      const real = tolerantMatch(name, type, folderCode, driveFiles);
-      if (real) { folderCode = real.code; name = real.name; }
+      /* EXACT matching only — display precisely the file named in the definition.
+         No fuzzy / cross-folder substitution: if the exact name isn't present the
+         screen is reported missing (below), so the ASSET line can never lie. */
       src = 'content/' + folderCode + '/' + name;
-      drivePath = file;                                     // the real Drive path, for display (shown as typed)
+      drivePath = file.replace(/\\/g, '/');                 // real Drive path (forward slashes for display)
     }
     /* Bulletproofing: a new row with a File but a blank Title still becomes a
        properly named screen — derive a human title from the file/URL so rows
