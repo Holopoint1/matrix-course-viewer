@@ -178,7 +178,7 @@ function parseSettings(rows, headerIdx) {
    folder, match by a normalised key (drop code prefix, dashes, case, extension)
    and the screen type — but only ever snap when the match is unambiguous. */
 const TYPE_EXTS = { image: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp'], html: ['htm', 'html'], document: ['doc', 'docx'], powerpoint: ['ppt', 'pptx'], spreadsheet: ['xls', 'xlsx'], pdf: ['pdf'] };
-const normKey = (name) => String(name).toLowerCase().replace(/^[a-z]{2}\d{4}\s*[-–—:]*\s*/, '').replace(/\.[a-z0-9]+$/, '').replace(/[-_\s]+/g, ' ').trim();
+const normKey = (name) => String(name).toLowerCase().replace(/\.[a-z0-9]+$/, '').replace(/[-–—_\s]+/g, ' ').trim();
 const matchExt = (f) => (f.match(/\.([a-z0-9]+)$/i) || ['', ''])[1].toLowerCase();
 function matchInSet(want, type, set) {
   if (!set) return null;
@@ -194,20 +194,12 @@ function matchInSet(want, type, set) {
    Returns {code, name} or null. */
 function tolerantMatch(name, type, folderCode, byCode) {
   const own = byCode[folderCode];
-  if (own && own.has(name)) return null;                  // exact file present → leave as typed
-  // a file with this EXACT name sitting in another course's folder (misfiled)
-  const exact = Object.keys(byCode).filter((c) => c !== folderCode && byCode[c] && byCode[c].has(name));
-  if (exact.length === 1) return { code: exact[0], name };
-  const want = normKey(name);
-  const inOwn = matchInSet(want, type, own);
-  if (inOwn) return { code: folderCode, name: inOwn };    // same-folder rename / drift
-  const hits = [];
-  for (const code of Object.keys(byCode)) {
-    if (code === folderCode) continue;
-    const m = matchInSet(want, type, byCode[code]);
-    if (m) hits.push({ code, name: m });
-  }
-  return hits.length === 1 ? hits[0] : null;              // cross-folder only when globally unique
+  if (!own || own.has(name)) return null;                 // no folder data, or exact file present → leave as typed
+  /* Forgive ONLY same-folder name drift (.htm vs .html, hyphen vs en-dash) within
+     the SAME course. NEVER match another course's folder — that cross-course snap
+     is what made CO0002 grab CO0001's "opening" file. */
+  const inOwn = matchInSet(normKey(name), type, own);
+  return inOwn ? { code: folderCode, name: inOwn } : null;
 }
 
 /* Last-resort heal: if a screen's resolved file isn't on disk under content/,
@@ -301,9 +293,9 @@ function rowsToScreens(rows, code, driveFiles = {}) {
     // flag local files that don't exist on disk (so we can see gaps) — but first
     // try to heal to an identically-named file already published elsewhere.
     if (!/^https?:/i.test(src) && !fs.existsSync(path.resolve(src))) {
-      const healed = healFromPublished(src);
-      if (healed) { screen.src = healed; }
-      else { screen.missing = true; missing.push(`${title} → ${src}`); }
+      /* No cross-folder "healing" — an exact miss is reported as missing, never
+         silently swapped for a same-named file in another course. */
+      screen.missing = true; missing.push(`${title} → ${src}`);
     }
     screens.push(screen);
   });
