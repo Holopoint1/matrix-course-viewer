@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T09:55:26.696Z",
+  "generatedAt": "2026-06-19T10:00:30.123Z",
   "courses": {
     "CO0002": {
       "stale": [],
@@ -69,7 +69,6 @@
   },
   "unusedMedia": {
     "CO0001": [
-      "BTEC unit 6.xlsx",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
     ]
