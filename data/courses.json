@@ -18,7 +18,7 @@
           "title": "Introduction to microcontrollers",
           "hours": 0,
           "src": "content/CO0002/CO0002 - opening.png",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 - opening.png",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - opening.png",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -27,7 +27,7 @@
           "title": "Welcome",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - welcome.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 - welcome.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - welcome.htm",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -37,7 +37,7 @@
           "title": "Learning objectives",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - LO.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 - LO.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - LO.htm",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -47,9 +47,8 @@
           "title": "Scheme of work",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - SOW.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 - SOW.htm",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - SOW.htm",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s5",
@@ -57,7 +56,7 @@
           "title": "Scheme of work",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 definition.xlsx",
-          "path": "\\CO0002 - Introduction to microcontrollers\\CO0002 definition.xlsx",
+          "path": "/CO0002 - Introduction to microcontrollers/CO0002 definition.xlsx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -67,7 +66,7 @@
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - Equip.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 - Equip.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - Equip.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -75,7 +74,7 @@
           "type": "youtube",
           "title": "Introducing E-blocks 3",
           "hours": 0.2,
-          "src": "https:\\\\youtu.be\\KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv",
+          "src": "https://youtu.be/KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -83,7 +82,7 @@
           "type": "youtube",
           "title": "Introducing Flowcode",
           "hours": 0.2,
-          "src": "https:\\\\youtu.be\\tDdptTbvDM0?si=19xqKAzPCOO3In5e",
+          "src": "https://youtu.be/tDdptTbvDM0?si=19xqKAzPCOO3In5e",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -91,7 +90,7 @@
           "type": "pdf",
           "title": "E-blocks datasheet",
           "hours": 0.2,
-          "src": "https:\\\\www.matrixtsl.com\\wp-content\\uploads\\2026\\03\\CP9645-Eblocks-3-Datasheet-1.pdf",
+          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -100,7 +99,7 @@
           "title": "Microcontroller basics 1",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Microcontroller basics 1 24 02 26.pptx",
+          "path": "/CO0002 - Introduction to microcontrollers/media/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -109,7 +108,7 @@
           "title": "Microcontroller basics 2",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Microcontroller basics 2 24 02 26.pptx",
+          "path": "/CO0002 - Introduction to microcontrollers/media/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -117,7 +116,7 @@
           "type": "html",
           "title": "Getting started guide",
           "hours": 1,
-          "src": "https:\\\\www.flowcode.co.uk\\wiki\\index.php?title=Embedded_Getting_Started_Guide",
+          "src": "https://www.flowcode.co.uk/wiki/index.php?title=Embedded_Getting_Started_Guide",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -126,7 +125,7 @@
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-1.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -135,7 +134,7 @@
           "title": "Performing calculations",
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-2.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -144,7 +143,7 @@
           "title": "Connection points",
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-3.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -153,7 +152,7 @@
           "title": "Digital inputs",
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-4.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -162,7 +161,7 @@
           "title": "Homework 1",
           "hours": 2,
           "src": "content/CO0002/CO0002-H1.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H1.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -171,7 +170,7 @@
           "title": "Making decisions",
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-5.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -180,7 +179,7 @@
           "title": "Macros / subroutines",
           "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-6.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -189,7 +188,7 @@
           "title": "Using prototype boards",
           "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-7.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -198,7 +197,7 @@
           "title": "Analogue inputs",
           "hours": 2,
           "src": "content/CP1972/CP1972-1.docx",
-          "path": "\\CP1972 - Sensors and microcontrollers\\CP1972-1.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -207,7 +206,7 @@
           "title": "Colour graphical displays",
           "hours": 2,
           "src": "content/CP4807/CP4807-8.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-8.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-8.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -216,7 +215,7 @@
           "title": "Homework 2",
           "hours": 2,
           "src": "content/CO0002/CO0002-H2.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H2.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H2.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -225,7 +224,7 @@
           "title": "Light sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-2.docx",
-          "path": "\\CP1972 - Sensors and microcontrollers\\CP1972-2.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -234,7 +233,7 @@
           "title": "Analogue temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-3.docx",
-          "path": "\\CP1972 - Sensors and microcontrollers\\CP1972-3.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -243,7 +242,7 @@
           "title": "Homework 3",
           "hours": 2,
           "src": "content/CO0002/CO0002-H3.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H3.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H3.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -252,7 +251,7 @@
           "title": "Assessment 1",
           "hours": 2,
           "src": "content/CO0002/CO0002-A1.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-A1.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-A1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -261,7 +260,7 @@
           "title": "Digital temperature sensor",
           "hours": 2,
           "src": "content/CP1972/CP1972-4.docx",
-          "path": "\\CP1972 - Sensors and microcontrollers\\CP1972-4.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -270,7 +269,7 @@
           "title": "Digital accelerometer",
           "hours": 2,
           "src": "content/CP1972/CP1972-5.docx",
-          "path": "\\CP1972 - Sensors and microcontrollers\\CP1972-5.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-5.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -279,7 +278,7 @@
           "title": "Homework 4",
           "hours": 2,
           "src": "content/CO0002/CO0002-H4.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H4.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H4.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -288,7 +287,7 @@
           "title": "Assessment 2",
           "hours": 2,
           "src": "content/CO0002/CO0002-A2.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-A2.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-A2.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -297,7 +296,7 @@
           "title": "Homework 5",
           "hours": 2,
           "src": "content/CO0002/CO0002-H5.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H5.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H5.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -306,7 +305,7 @@
           "title": "Basic DC motors",
           "hours": 2,
           "src": "content/CP0507/CP0507-1.docx",
-          "path": "\\CP0507 - Motors and microcontrollers\\CP0507-1.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -315,7 +314,7 @@
           "title": "Full bridge motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-2.docx",
-          "path": "\\CP0507 - Motors and microcontrollers\\CP0507-2.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -324,7 +323,7 @@
           "title": "Stepper motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-3.docx",
-          "path": "\\CP0507 - Motors and microcontrollers\\CP0507-3.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -333,7 +332,7 @@
           "title": "Servo motor control",
           "hours": 2,
           "src": "content/CP0507/CP0507-4.docx",
-          "path": "\\CP0507 - Motors and microcontrollers\\CP0507-4.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -342,7 +341,7 @@
           "title": "Homework 6",
           "hours": 2,
           "src": "content/CO0002/CO0002-H6.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H6.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H6.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -351,7 +350,7 @@
           "title": "Floats and INTs",
           "hours": 2,
           "src": "content/CP1972/CP1972-6.docx",
-          "path": "\\CP1972 - Sensors and microcontrollers\\CP1972-6.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-6.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -360,7 +359,7 @@
           "title": "Pin interrupts",
           "hours": 2,
           "src": "content/CP4807/CP4807-9.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-9.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-9.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -369,7 +368,7 @@
           "title": "Timer interrupts",
           "hours": 3,
           "src": "content/CP4807/CP4807-10.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-10.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-10.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -378,7 +377,7 @@
           "title": "Homework 7",
           "hours": 2,
           "src": "content/CO0002/CO0002-H7.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H7.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H7.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -387,7 +386,7 @@
           "title": "Touch control systems",
           "hours": 4,
           "src": "content/CP4807/CP4807-11.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-11.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-11.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -396,7 +395,7 @@
           "title": "Homework 8",
           "hours": 2,
           "src": "content/CO0002/CO0002-H8.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H8.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H8.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -405,7 +404,7 @@
           "title": "Web mirror",
           "hours": 4,
           "src": "content/CP4807/CP4807-12.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-12.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-12.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -414,7 +413,7 @@
           "title": "Project",
           "hours": 30,
           "src": "content/CO0002/CO0002-P1.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-P1.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-P1.htm",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
@@ -1095,9 +1094,10 @@
           "type": "image",
           "title": "Introduction to microcontrollers",
           "hours": 0,
-          "src": "content/CO0001/CO0001 - opening.png",
-          "path": "\\CO0001 - Introduction to microcontrollers\\media\\CO0001 – opening.png",
-          "equipment": "Flowcode / E-blocks3"
+          "src": "content/CO0001/CO0001 – opening.png",
+          "path": "/CO0001 - Introduction to microcontrollers/media/CO0001 – opening.png",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s2",
@@ -1105,7 +1105,7 @@
           "title": "Welcome",
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – CPD objectives.HTM",
-          "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – CPD objectives.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – CPD objectives.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1114,7 +1114,7 @@
           "title": "Delivering BTEC Unit 6 on microcontrollers",
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – BTEC.HTM",
-          "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – BTEC.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – BTEC.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1123,7 +1123,7 @@
           "title": "BTEC syllabus mapping spreadsheet",
           "hours": 0.2,
           "src": "content/CO0001/BTEC unit 6 mapping for intro to micros.xlsx",
-          "path": "\\CO0001 - FC E-blocks CPD course\\media\\BTEC unit 6 mapping for intro to micros.xlsx",
+          "path": "/CO0001 - FC E-blocks CPD course/media/BTEC unit 6 mapping for intro to micros.xlsx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1132,7 +1132,7 @@
           "title": "Delivering T levels",
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – T levels.HTM",
-          "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – T levels.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – T levels.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1141,7 +1141,7 @@
           "title": "T levels mapping spreadsheet",
           "hours": 0.2,
           "src": "content/CO0001/T levels mapping.xlsx",
-          "path": "\\CO0001 - FC E-blocks CPD course\\media\\T levels mapping.xlsx",
+          "path": "/CO0001 - FC E-blocks CPD course/media/T levels mapping.xlsx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1150,7 +1150,7 @@
           "title": "Delivering EASA Digital Techniques",
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – Digital Techniques.HTM",
-          "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – Digital Techniques.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – Digital Techniques.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1159,7 +1159,7 @@
           "title": "Digital Techniques mapping spreadsheet",
           "hours": 0.2,
           "src": "content/CO0001/Digital techniques mapping.xlsx",
-          "path": "\\CO0001 - FC E-blocks CPD course\\media\\Digital techniques mapping.xlsx",
+          "path": "/CO0001 - FC E-blocks CPD course/media/Digital techniques mapping.xlsx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1168,7 +1168,7 @@
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 – Equip.HTM",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 – Equip.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 – Equip.HTM",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -1178,7 +1178,7 @@
           "title": "Learning objectives",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 – LO.HTM",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 – LO.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 – LO.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1211,7 +1211,7 @@
           "title": "Microcontroller basics 1",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Microcontroller basics 1 24 02 26.pptx",
+          "path": "/CO0002 - Introduction to microcontrollers/media/Microcontroller basics 1 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1220,7 +1220,7 @@
           "title": "Microcontroller basics 2",
           "hours": 0.3,
           "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Microcontroller basics 2 24 02 26.pptx",
+          "path": "/CO0002 - Introduction to microcontrollers/media/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1229,7 +1229,7 @@
           "title": "Now try the worksheets",
           "hours": 0.1,
           "src": "content/CO0002/Now try the worksheets.HTM",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Now try the worksheets.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/Now try the worksheets.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1238,7 +1238,7 @@
           "title": "Other resources",
           "hours": 0.1,
           "src": "content/CO0002/Other resources.HTM",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Other resources.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/Other resources.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1247,7 +1247,7 @@
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-1.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1256,7 +1256,7 @@
           "title": "Performing calculations",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-2.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-2.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1265,7 +1265,7 @@
           "title": "Connection points",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-3.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-3.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1274,7 +1274,7 @@
           "title": "Digital inputs",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-4.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-4.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1283,7 +1283,7 @@
           "title": "Homework 1",
           "hours": 0.2,
           "src": "content/CO0002/CO0002-H1.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H1.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1292,7 +1292,7 @@
           "title": "Making decisions",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-5.docx",
-          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-5.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
