@@ -53,7 +53,7 @@
         },
         {
           "id": "CO0002-s5",
-          "type": "html",
+          "type": "sheet",
           "title": "Scheme of work",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 definition.xlsx",
