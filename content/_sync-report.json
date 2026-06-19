@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T10:00:30.123Z",
+  "generatedAt": "2026-06-19T10:02:23.263Z",
   "courses": {
     "CO0002": {
       "stale": [],
@@ -59,6 +59,31 @@
     "CO0001": {
       "stale": [],
       "missing": [
+        {
+          "title": "Delivering BTEC Unit 6 on microcontrollers",
+          "file": "CO0001 – BTEC.HTM",
+          "expectedIn": "CO0001"
+        },
+        {
+          "title": "Delivering T levels",
+          "file": "CO0001 – T levels.HTM",
+          "expectedIn": "CO0001"
+        },
+        {
+          "title": "T levels mapping spreadsheet",
+          "file": "undefined",
+          "expectedIn": "CO0001"
+        },
+        {
+          "title": "Delivering EASA Digital Techniques",
+          "file": "CO0001 – Digital Techniques.HTM",
+          "expectedIn": "CO0001"
+        },
+        {
+          "title": "Digital Techniques mapping spreadsheet",
+          "file": "undefined",
+          "expectedIn": "CO0001"
+        },
         {
           "title": "Equipment",
           "file": "CO0002 – Equip.HTM",
