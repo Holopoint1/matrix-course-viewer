@@ -1077,8 +1077,7 @@
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – BTEC.HTM",
           "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – BTEC.HTM",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s4",
@@ -1096,8 +1095,7 @@
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – T levels.HTM",
           "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – T levels.HTM",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s6",
@@ -1115,8 +1113,7 @@
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – Digital Techniques.HTM",
           "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – Digital Techniques.HTM",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s8",
