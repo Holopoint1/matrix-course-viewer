@@ -6,7 +6,7 @@
       "kind": "course",
       "title": "Introduction to Microcontrollers",
       "shortDescription": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
-      "estimatedHours": 80.7,
+      "estimatedHours": 99.7,
       "certificate": {
         "enabled": true,
         "templateName": "Introduction to Microcontrollers"
@@ -276,6 +276,15 @@
         {
           "id": "CO0002-s30",
           "type": "html",
+          "title": "Homework 4",
+          "hours": 2,
+          "src": "content/CO0002/CO0002-H4.htm",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H4.htm",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s31",
+          "type": "html",
           "title": "Assessment 2",
           "hours": 2,
           "src": "content/CO0002/CO0002-A2.htm",
@@ -283,7 +292,16 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s31",
+          "id": "CO0002-s32",
+          "type": "html",
+          "title": "Homework 5",
+          "hours": 2,
+          "src": "content/CO0002/CO0002-H5.htm",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H5.htm",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s33",
           "type": "document",
           "title": "Basic DC motors",
           "hours": 2,
@@ -292,7 +310,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s32",
+          "id": "CO0002-s34",
           "type": "document",
           "title": "Full bridge motor control",
           "hours": 2,
@@ -301,7 +319,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s33",
+          "id": "CO0002-s35",
           "type": "document",
           "title": "Stepper motor control",
           "hours": 2,
@@ -310,7 +328,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s34",
+          "id": "CO0002-s36",
           "type": "document",
           "title": "Servo motor control",
           "hours": 2,
@@ -319,7 +337,25 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s35",
+          "id": "CO0002-s37",
+          "type": "html",
+          "title": "Homework 6",
+          "hours": 2,
+          "src": "content/CO0002/CO0002-H6.htm",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H6.htm",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s38",
+          "type": "document",
+          "title": "Floats and INTs",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-6.docx",
+          "path": "\\CP1972 - Sensors and microcontrollers\\CP1972-6.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0002-s39",
           "type": "document",
           "title": "Pin interrupts",
           "hours": 2,
@@ -328,16 +364,16 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s36",
+          "id": "CO0002-s40",
           "type": "document",
           "title": "Timer interrupts",
-          "hours": 2,
+          "hours": 3,
           "src": "content/CP4807/CP4807-10.docx",
           "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-10.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s37",
+          "id": "CO0002-s41",
           "type": "html",
           "title": "Homework 7",
           "hours": 2,
@@ -346,16 +382,16 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s38",
+          "id": "CO0002-s42",
           "type": "document",
           "title": "Touch control systems",
-          "hours": 2,
+          "hours": 4,
           "src": "content/CP4807/CP4807-11.docx",
           "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-11.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s39",
+          "id": "CO0002-s43",
           "type": "html",
           "title": "Homework 8",
           "hours": 2,
@@ -364,21 +400,21 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s40",
+          "id": "CO0002-s44",
           "type": "document",
           "title": "Web mirror",
-          "hours": 2,
+          "hours": 4,
           "src": "content/CP4807/CP4807-12.docx",
           "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-12.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s41",
+          "id": "CO0002-s45",
           "type": "html",
-          "title": "Homework 9",
-          "hours": 24,
-          "src": "content/CO0002/CO0002-H9.htm",
-          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H9.htm",
+          "title": "Project",
+          "hours": 30,
+          "src": "content/CO0002/CO0002-P1.htm",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-P1.htm",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
