@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T13:50:26.853Z",
+  "generatedAt": "2026-06-19T13:55:29.408Z",
   "courses": {
     "CO0002": {
       "stale": [],
@@ -89,6 +89,8 @@
   },
   "unusedMedia": {
     "CO0001": [
+      "T levels mapping.xlsx",
+      "Digital techniques mapping.xlsx",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
     ]
