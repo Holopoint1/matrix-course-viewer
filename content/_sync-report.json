@@ -1,21 +1,6 @@
 {
-  "generatedAt": "2026-06-19T08:25:28.256Z",
+  "generatedAt": "2026-06-19T08:28:33.484Z",
   "courses": {
-    "CO0002": {
-      "stale": [],
-      "missing": [
-        {
-          "title": "Welcome",
-          "file": "CO0002 - welcome.htm",
-          "expectedIn": "CO0002"
-        },
-        {
-          "title": "Learning objectives",
-          "file": "CO0002 - LO.htm",
-          "expectedIn": "CO0002"
-        }
-      ]
-    },
     "CP2563": {
       "stale": [],
       "missing": [
@@ -57,19 +42,130 @@
       ]
     },
     "CO0001": {
-      "stale": [],
-      "missing": [
+      "stale": [
         {
-          "title": "Equipment",
-          "file": "CO0002 – Equip.HTM",
+          "title": "Now try the worksheets",
+          "showing": "Now try the worksheets.HTM",
           "expectedIn": "CO0002"
         }
-      ]
+      ],
+      "missing": []
     }
   },
   "unusedMedia": {
+    "ZZ9999": [
+      "complete.html",
+      "assessment.html",
+      "objectives.html",
+      "welcome.html",
+      "opening.svg"
+    ],
+    "CP2563": [
+      "CP2563_definition.xlsx",
+      "CP2563 - definition.docx",
+      "CP2563 - Content.docx"
+    ],
+    "CO0004": [
+      "opening.png"
+    ],
+    "CP0507": [
+      "CP0507 - motors and microcontrollers FIXED.docx",
+      "summary-report.txt",
+      "scorm-readiness.txt",
+      "blocks-metadata.json",
+      "PIC development centre.png",
+      "e-blocks upstream.jpg",
+      "20250409_164925.jpg",
+      "DC motors part 3 cover.jpg",
+      "e-blocks3 logo.png",
+      "Stepper motors cover.jpg",
+      "Servo motors cover.jpg",
+      "DC motors part 2 cover.jpg",
+      "DC motors part 1 cover.jpg",
+      "DC motors part 1 cover.png",
+      "DC motors part 3 cover.png",
+      "DC motors part 2 cover.png",
+      "BL0167 LED board.png",
+      "BL0145 switch.png",
+      "BL0169 display.png",
+      "router.png",
+      "aeroplane.png",
+      "quadrocopter.png",
+      "wheelchair.png",
+      "ESP32 board.png",
+      "BL0055-75-3.png",
+      "PIC board.png",
+      "Combo board.png",
+      "Actuators board.png",
+      "Servo motors cover.png",
+      "Stepper motors cover.png",
+      "20250115_115215.jpg",
+      "ws1 dc motor.png",
+      "cover.png",
+      "youtube logo.png",
+      "Matrix_Logo.svg"
+    ],
+    "CP4807": [
+      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
+      "summary-report.txt",
+      "imsmanifest.xml",
+      "blocks-metadata.json",
+      "scorm-readiness.txt",
+      "CP4807 - introduction to microcontrollers 13 05 26.docx",
+      "CP4807-0.docx",
+      "CP4807-head.docx",
+      "CP4807-Cont.docx"
+    ],
+    "CO0003": [
+      "CO0003 – LO.HTM",
+      "CO0003 – welcome.HTM",
+      "opening.png"
+    ],
     "CO0001": [
+      "Now try the worksheets.HTM",
       "CO0001 - content.docx"
+    ],
+    "CO0002": [
+      "CO0002 - Equip.docx",
+      "Now try the worksheets.HTM.docx",
+      "CO0002-H8.docx",
+      "CO0002-H4.htm",
+      "CO0002-H5.htm",
+      "CO0002-marking scheme.htm",
+      "CO0002-A3.htm",
+      "CO0002-P1.htm"
+    ],
+    "CP7244": [
+      "CP7244 - definition.docx",
+      "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
+    ],
+    "CP1972": [
+      "CP1972 - sensors and microcontrollers 07 05 26.docx",
+      "blocks-metadata.json",
+      "scorm-readiness.txt",
+      "summary-report.txt",
+      "compressive cell.png",
+      "cantilever.png",
+      "weather station.jpg",
+      "pump.png",
+      "tyre.jpg",
+      "crane.jpg",
+      "scales.jpg",
+      "flow sensors.jpg",
+      "furnace.jpg",
+      "Thermistor.jpg",
+      "temperature sensor.png",
+      "temperature sensor.cpt",
+      "bubble level.png",
+      "thermometer.jpg",
+      "thermistor image.jpg",
+      "street light.jpg",
+      "old radio.jpg",
+      "e-blocks3 logo.png",
+      "sensors adn microcontrollers.jpg",
+      "youtube logo.png",
+      "analogue.png",
+      "Matrix_Logo.svg"
     ]
   }
 }
