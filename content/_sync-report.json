@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T04:35:27.516Z",
+  "generatedAt": "2026-06-19T04:40:29.226Z",
   "courses": {
     "CP2563": {
       "stale": [],
@@ -44,12 +44,22 @@
     "CO0001": {
       "stale": [
         {
+          "title": "Microcontroller basics 2",
+          "showing": "Microcontroller basics 2 24 02 26.pptx",
+          "expectedIn": "CO0001"
+        },
+        {
           "title": "jdtest",
           "showing": "jdtest.htm",
           "expectedIn": "CO0001"
         }
       ],
       "missing": [
+        {
+          "title": "Equipment",
+          "file": "CO0001 - LO.htm",
+          "expectedIn": "CO0001"
+        },
         {
           "title": "equip",
           "file": "CO0001 - equip.htm",
@@ -70,7 +80,6 @@
   },
   "unusedMedia": {
     "CO0001": [
-      "CO0001 – LO.HTM.docx",
       "CO0001 - content.docx"
     ]
   }

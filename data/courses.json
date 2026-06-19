@@ -35,7 +35,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0001/CO0001 - LO.docx",
+          "src": "content/CO0002/CO0002 - LO.html",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/CO0002 - LO.html",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -86,7 +86,7 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
-          "src": "content/CO0001/Microcontroller basics 2 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
           "path": "LMS Project Assets/CO0002 - Introduction to microcontrollers/media/Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1064,9 +1064,10 @@
           "type": "html",
           "title": "Equipment",
           "hours": 0.1,
-          "src": "content/CO0001/CO0001 - LO.docx",
+          "src": "content/CO0001/CO0001 - LO.htm",
           "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/CO0001 - LO.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s3",
