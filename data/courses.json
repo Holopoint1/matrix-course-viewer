@@ -1055,10 +1055,9 @@
           "type": "image",
           "title": "Introduction to microcontrollers",
           "hours": 0,
-          "src": "content/CO0001/CO001 – opening.png",
-          "path": "\\CO0001 - Introduction to microcontrollers\\media\\CO001 – opening.png",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0001/CO0001 - opening.png",
+          "path": "\\CO0001 - Introduction to microcontrollers\\media\\CO0001 – opening.png",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s2",
