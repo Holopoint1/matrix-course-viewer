@@ -1067,8 +1067,7 @@
           "hours": 0.2,
           "src": "content/CO0001/CO0001 – CPD objectives.HTM",
           "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – CPD objectives.HTM",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s3",

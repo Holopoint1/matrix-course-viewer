@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T04:55:23.677Z",
+  "generatedAt": "2026-06-19T05:00:30.238Z",
   "courses": {
     "CP2563": {
       "stale": [],
@@ -47,11 +47,6 @@
         {
           "title": "Introduction to microcontrollers",
           "file": "CO001 – opening.png",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "Welcome",
-          "file": "CO0001 – CPD objectives.HTM",
           "expectedIn": "CO0001"
         },
         {
