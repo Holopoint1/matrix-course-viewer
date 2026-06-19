@@ -1044,7 +1044,7 @@
       "kind": "course",
       "title": "Flowcode and E-blocks 3 CPD Course",
       "shortDescription": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
-      "estimatedHours": 4.3,
+      "estimatedHours": 3.8,
       "certificate": {
         "enabled": true,
         "templateName": "Flowcode & E-blocks 3 CPD Course"
@@ -1055,39 +1055,39 @@
           "type": "image",
           "title": "Introduction to microcontrollers",
           "hours": 0,
-          "src": "content/CO0001/CO0001 - opening.png",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/CO0001 - opening.png",
-          "equipment": "Flowcode / E-blocks3"
+          "src": "content/CO0001/CO001 – opening.png",
+          "path": "\\CO0001 - Introduction to microcontrollers\\media\\CO001 – opening.png",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s2",
           "type": "html",
-          "title": "Equipment",
-          "hours": 0.1,
-          "src": "content/CO0001/CO0001 - LO.htm",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/CO0001 - LO.htm",
+          "title": "Welcome",
+          "hours": 0.2,
+          "src": "content/CO0001/CO0001 – CPD objectives.HTM",
+          "path": "\\CO0001 - FC E-blocks CPD course\\media\\CO0001 – CPD objectives.HTM",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
         {
           "id": "CO0001-s3",
           "type": "html",
-          "title": "equip",
+          "title": "Equipment",
           "hours": 0.1,
-          "src": "content/CO0001/CO0001 - equip.htm",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/CO0001 - equip.htm",
+          "src": "content/CO0002/CO0002 – Equip.HTM",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 – Equip.HTM",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
         {
           "id": "CO0001-s4",
           "type": "html",
-          "title": "Welcome",
-          "hours": 0.2,
-          "src": "content/CP4807/CP4807 - CPD objectives.htm",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807 - CPD objectives.htm",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "title": "Learning objectives",
+          "hours": 0.1,
+          "src": "content/CO0002/CO0002 – LO.HTM",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002 – LO.HTM",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s5",
@@ -1118,18 +1118,17 @@
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
-          "src": "content/CO0001/Microcontroller basics 1 24 02 26.pptx",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Microcontroller basics 1 24 02 26.pptx",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0002/Microcontroller basics 1 24 02 26.pptx",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Microcontroller basics 1 24 02 26.pptx",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s9",
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
-          "src": "content/CO0001/Microcontroller basics 2 24 02 26.pptx",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Microcontroller basics 2 24 02 26.pptx",
+          "src": "content/CO0002/Microcontroller basics 2 24 02 26.pptx",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Microcontroller basics 2 24 02 26.pptx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1138,7 +1137,7 @@
           "title": "Now try the worksheets",
           "hours": 0.1,
           "src": "content/CO0002/Now try the worksheets.HTM",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Now try the worksheets.htm",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Now try the worksheets.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1147,88 +1146,61 @@
           "title": "Other resources",
           "hours": 0.1,
           "src": "content/CO0002/Other resources.HTM",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/Other resources.htm",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\Other resources.HTM",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s12",
-          "type": "html",
-          "title": "jdtest",
-          "hours": 0.1,
-          "src": "content/CO0001/jdtest.htm",
-          "path": "LMS Project Assets/CO0001 - FC E-blocks CPD course/jdtest.htm",
-          "equipment": "Flowcode / E-blocks4"
-        },
-        {
-          "id": "CO0001-s13",
           "type": "document",
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-1.docx",
+          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-1.docx",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0001-s13",
+          "type": "document",
+          "title": "Performing calculations",
+          "hours": 0.2,
+          "src": "content/CP4807/CP4807-2.docx",
+          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-2.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s14",
           "type": "document",
-          "title": "Performing calculations",
+          "title": "Connection points",
           "hours": 0.2,
-          "src": "content/CP4807/CP4807-2.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-2.docx",
+          "src": "content/CP4807/CP4807-3.docx",
+          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-3.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s15",
           "type": "document",
-          "title": "Connection points",
+          "title": "Digital inputs",
           "hours": 0.2,
-          "src": "content/CP4807/CP4807-3.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-3.docx",
+          "src": "content/CP4807/CP4807-4.docx",
+          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-4.docx",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s16",
-          "type": "document",
-          "title": "Digital inputs",
+          "type": "html",
+          "title": "Homework 1",
           "hours": 0.2,
-          "src": "content/CP4807/CP4807-4.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-4.docx",
+          "src": "content/CO0002/CO0002-H1.htm",
+          "path": "\\CO0002 - Introduction to microcontrollers\\media\\CO0002-H1.htm",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s17",
-          "type": "html",
-          "title": "Homework 1",
-          "hours": 0.2,
-          "src": "content/CP4807/CP4807-H1.htm",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-H1.htm",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0001-s18",
           "type": "document",
           "title": "Making decisions",
           "hours": 0.2,
           "src": "content/CP4807/CP4807-5.docx",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-5.docx",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0001-s19",
-          "type": "html",
-          "title": "Homework xx",
-          "hours": 0.2,
-          "src": "content/CP4807/CP4807-H1.htm",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-H1.htm",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0001-s20",
-          "type": "html",
-          "title": "Homework xx",
-          "hours": 0.2,
-          "src": "content/CP4807/CP4807-H1.htm",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807_split/generated/CP4807-H1.htm",
+          "path": "\\CP4807 - Introduction to microcontrollers\\CP4807-5.docx",
           "equipment": "Flowcode / E-blocks3"
         }
       ],

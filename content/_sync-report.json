@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T04:45:30.520Z",
+  "generatedAt": "2026-06-19T04:50:26.696Z",
   "courses": {
     "CP2563": {
       "stale": [],
@@ -42,38 +42,22 @@
       ]
     },
     "CO0001": {
-      "stale": [
-        {
-          "title": "Microcontroller basics 2",
-          "showing": "Microcontroller basics 2 24 02 26.pptx",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "jdtest",
-          "showing": "jdtest.htm",
-          "expectedIn": "CO0001"
-        }
-      ],
+      "stale": [],
       "missing": [
         {
-          "title": "Equipment",
-          "file": "CO0001 - LO.htm",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "equip",
-          "file": "CO0001 - equip.htm",
+          "title": "Introduction to microcontrollers",
+          "file": "CO001 – opening.png",
           "expectedIn": "CO0001"
         },
         {
           "title": "Welcome",
-          "file": "CP4807 - CPD objectives.htm",
-          "expectedIn": "CP4807"
+          "file": "CO0001 – CPD objectives.HTM",
+          "expectedIn": "CO0001"
         },
         {
-          "title": "Microcontroller basics 1",
-          "file": "Microcontroller basics 1 24 02 26.pptx",
-          "expectedIn": "CO0001"
+          "title": "Equipment",
+          "file": "CO0002 – Equip.HTM",
+          "expectedIn": "CO0002"
         }
       ]
     }
