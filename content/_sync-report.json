@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-19T12:05:27.939Z",
+  "generatedAt": "2026-06-19T12:10:27.160Z",
   "courses": {
     "CO0002": {
       "stale": [],
@@ -12,6 +12,11 @@
         {
           "title": "Learning objectives",
           "file": "CO0002 - LO.htm",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Scheme of work",
+          "file": "CO0002 - SOW.htm",
           "expectedIn": "CO0002"
         },
         {
