@@ -1,8 +1,19 @@
 {
-  "generatedAt": "2026-06-20T21:55:37.121Z",
+  "generatedAt": "2026-06-20T21:57:28.350Z",
   "courses": {
     "CO0002": {
-      "stale": [],
+      "stale": [
+        {
+          "title": "Equipment",
+          "showing": "CO0002 - Equip.htm",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Floats and INTs",
+          "showing": "CP1972-6.docx",
+          "expectedIn": "CP1972"
+        }
+      ],
       "missing": [
         {
           "title": "Welcome",
@@ -20,6 +31,66 @@
           "expectedIn": "CO0002"
         }
       ]
+    },
+    "CP0507": {
+      "stale": [
+        {
+          "title": "Preparation",
+          "showing": "CP0507-Prep.docx",
+          "expectedIn": "CP0507"
+        },
+        {
+          "title": "Contents",
+          "showing": "CP0507-Cont.docx",
+          "expectedIn": "CP0507"
+        }
+      ],
+      "missing": []
+    },
+    "CP1972": {
+      "stale": [
+        {
+          "title": "Preparation",
+          "showing": "CP1972-Prep.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Contents",
+          "showing": "CP1972-Cont.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 6 — Floats and INTs",
+          "showing": "CP1972-6.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 7 — Thermocouples",
+          "showing": "CP1972-7.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 8 — Flow sensors",
+          "showing": "CP1972-8.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 9 — Compressive force sensors",
+          "showing": "CP1972-9.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 10 — Cantilever strain sensors",
+          "showing": "CP1972-10.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 11 — Pressure sensors",
+          "showing": "CP1972-11.docx",
+          "expectedIn": "CP1972"
+        }
+      ],
+      "missing": []
     },
     "CP2563": {
       "stale": [],
@@ -62,7 +133,23 @@
       ]
     },
     "CO0001": {
-      "stale": [],
+      "stale": [
+        {
+          "title": "Learning objectives",
+          "showing": "CO0002 – LO.HTM",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Now try the worksheets",
+          "showing": "Now try the worksheets.HTM",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Other resources",
+          "showing": "Other resources.HTM",
+          "expectedIn": "CO0002"
+        }
+      ],
       "missing": [
         {
           "title": "Introduction to microcontrollers",
@@ -78,10 +165,60 @@
     }
   },
   "unusedMedia": {
+    "ZZ9999": [
+      "complete.html",
+      "assessment.html",
+      "objectives.html",
+      "welcome.html",
+      "opening.svg"
+    ],
+    "CP2563": [
+      "CP2563_definition.xlsx",
+      "CP2563 - definition.docx",
+      "CP2563 - Content.docx"
+    ],
+    "CO0004": [
+      "opening.png"
+    ],
+    "CP4807": [
+      "CP4807-TN.docx",
+      "CO4807-4.docx",
+      "CP4807 - introduction to microcontrollers image test.docx",
+      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
+      "summary-report.txt",
+      "imsmanifest.xml",
+      "blocks-metadata.json",
+      "scorm-readiness.txt",
+      "CP4807-0.docx",
+      "CP4807-head.docx",
+      "CP4807-Cont.docx",
+      "CP4807 - Introduction to microcontrollers 15 07 25.docx"
+    ],
+    "CO0003": [
+      "CO0003 – LO.HTM",
+      "CO0003 – welcome.HTM",
+      "opening.png"
+    ],
     "CO0001": [
       "CO0001 - opening.png",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
+    ],
+    "CO0002": [
+      "CO0002 - Equip.HTM",
+      "bits.docx",
+      "Now try the worksheets.htm.docx",
+      "Other resources.htm",
+      "CO0002 – LO.htm",
+      "CO0002 – welcome.htm",
+      "CO0002-H8.docx",
+      "CO0002-H9.htm",
+      "CO0002-marking scheme.htm",
+      "CO0002-A3.htm"
+    ],
+    "CP7244": [
+      "CP7244 - definition.docx",
+      "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
     ]
   }
 }
