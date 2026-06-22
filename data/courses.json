@@ -26,9 +26,10 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 – welcome.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - welcome.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "src": "content/CO0002/CO0002 -- welcome.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 -- welcome.htm",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0002-s3",

@@ -1,26 +1,25 @@
 {
-  "generatedAt": "2026-06-22T11:30:44.422Z",
+  "generatedAt": "2026-06-22T11:31:41.414Z",
   "summary": {
     "courses": 7,
     "screens": 134,
-    "displaying": 128,
-    "missing": 6,
-    "autofixed": 4
+    "displaying": 127,
+    "missing": 7,
+    "autofixed": 3
   },
   "courses": {
     "CO0002": {
       "title": "Introduction to Microcontrollers",
       "stale": [],
-      "missing": [],
-      "autofixed": [
+      "missing": [
         {
           "title": "Welcome",
-          "asked": "CO0002 - welcome.htm",
-          "used": "CO0002 – welcome.htm",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
+          "asked": "CO0002 -- welcome.htm",
+          "expectedIn": "CO0002",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0002 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        }
+      ],
+      "autofixed": [
         {
           "title": "Learning objectives",
           "asked": "CO0002 - LO.htm",
