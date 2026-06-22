@@ -1,53 +1,106 @@
 {
-  "generatedAt": "2026-06-22T11:05:41.280Z",
+  "generatedAt": "2026-06-22T11:12:50.766Z",
+  "summary": {
+    "courses": 7,
+    "screens": 134,
+    "displaying": 128,
+    "missing": 6,
+    "autofixed": 4
+  },
   "courses": {
     "CO0002": {
+      "title": "Introduction to Microcontrollers",
       "stale": [],
-      "missing": [
+      "missing": [],
+      "autofixed": [
         {
-          "title": "Scheme of work",
-          "file": "CO0002 scheme of work.xlsx",
-          "expectedIn": "CO0002"
+          "title": "Welcome",
+          "asked": "CO0002 - welcome.htm",
+          "used": "CO0002 – welcome.htm",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
+        },
+        {
+          "title": "Learning objectives",
+          "asked": "CO0002 - LO.htm",
+          "used": "CO0002 – LO.htm",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
         }
       ]
     },
     "CP2563": {
+      "title": "Microcontrollers for T-Levels",
       "stale": [],
       "missing": [
         {
           "title": "Title page",
-          "file": "CP2563-head.docx",
-          "expectedIn": "CP2563"
+          "asked": "CP2563-head.docx",
+          "expectedIn": "CP2563",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP2563 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Contents",
-          "file": "CP2563-cont.docx",
-          "expectedIn": "CP2563"
+          "asked": "CP2563-cont.docx",
+          "expectedIn": "CP2563",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP2563 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Teacher notes",
-          "file": "TN-1.docx",
-          "expectedIn": "CP4807"
+          "asked": "TN-1.docx",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
-      ]
+      ],
+      "autofixed": []
     },
     "CP7244": {
+      "title": "Digital Techniques for Aviation Technicians",
       "stale": [],
       "missing": [
         {
           "title": "Title page",
-          "file": "CP7244-head.docx",
-          "expectedIn": "CP7244"
+          "asked": "CP7244-head.docx",
+          "expectedIn": "CP7244",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Contents",
-          "file": "CP7244-cont.docx",
-          "expectedIn": "CP7244"
+          "asked": "CP7244-cont.docx",
+          "expectedIn": "CP7244",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Teacher notes",
-          "file": "TN-1.docx",
-          "expectedIn": "CP4807"
+          "asked": "TN-1.docx",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        }
+      ],
+      "autofixed": []
+    },
+    "CO0001": {
+      "title": "Flowcode and E-blocks 3 CPD Course",
+      "stale": [],
+      "missing": [],
+      "autofixed": [
+        {
+          "title": "Introduction to microcontrollers",
+          "asked": "CO0001 – opening.png",
+          "used": "CO0001 - opening.png",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
+        },
+        {
+          "title": "Equipment",
+          "asked": "CO0002 – Equip.HTM",
+          "used": "CO0002 - Equip.htm",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
         }
       ]
     }
