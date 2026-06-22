@@ -1,16 +1,22 @@
 {
-  "generatedAt": "2026-06-22T15:45:41.449Z",
+  "generatedAt": "2026-06-22T15:46:52.651Z",
   "summary": {
-    "courses": 7,
-    "screens": 134,
-    "displaying": 128,
-    "missing": 6,
-    "autofixed": 4
+    "courses": 9,
+    "screens": 199,
+    "displaying": 192,
+    "missing": 7,
+    "autofixed": 6
   },
   "courses": {
     "CO0002": {
       "title": "Introduction to Microcontrollers",
-      "stale": [],
+      "stale": [
+        {
+          "title": "Floats and INTs",
+          "showing": "CP1972-6.docx",
+          "expectedIn": "CP1972"
+        }
+      ],
       "missing": [],
       "autofixed": [
         {
@@ -30,6 +36,70 @@
           ]
         }
       ]
+    },
+    "CP0507": {
+      "title": "Motors and Microcontrollers",
+      "stale": [
+        {
+          "title": "Preparation",
+          "showing": "CP0507-Prep.docx",
+          "expectedIn": "CP0507"
+        },
+        {
+          "title": "Contents",
+          "showing": "CP0507-Cont.docx",
+          "expectedIn": "CP0507"
+        }
+      ],
+      "missing": [],
+      "autofixed": []
+    },
+    "CP1972": {
+      "title": "Sensors and Microcontrollers",
+      "stale": [
+        {
+          "title": "Preparation",
+          "showing": "CP1972-Prep.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Contents",
+          "showing": "CP1972-Cont.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 6 — Floats and INTs",
+          "showing": "CP1972-6.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 7 — Thermocouples",
+          "showing": "CP1972-7.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 8 — Flow sensors",
+          "showing": "CP1972-8.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 9 — Compressive force sensors",
+          "showing": "CP1972-9.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 10 — Cantilever strain sensors",
+          "showing": "CP1972-10.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 11 — Pressure sensors",
+          "showing": "CP1972-11.docx",
+          "expectedIn": "CP1972"
+        }
+      ],
+      "missing": [],
+      "autofixed": []
     },
     "CP2563": {
       "title": "Microcontrollers for T-Levels",
@@ -83,7 +153,23 @@
     },
     "CO0001": {
       "title": "Flowcode and E-blocks 3 CPD Course",
-      "stale": [],
+      "stale": [
+        {
+          "title": "Learning objectives",
+          "showing": "CO0002 – LO.HTM",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Now try the worksheets",
+          "showing": "Now try the worksheets.HTM",
+          "expectedIn": "CO0002"
+        },
+        {
+          "title": "Other resources",
+          "showing": "Other resources.HTM",
+          "expectedIn": "CO0002"
+        }
+      ],
       "missing": [],
       "autofixed": [
         {
@@ -103,12 +189,155 @@
           ]
         }
       ]
+    },
+    "CO0003": {
+      "title": "Digital Techniques for Aviation Technicians",
+      "stale": [],
+      "missing": [
+        {
+          "title": "Introduction to microcontrollers",
+          "asked": "CO0003 - opening.png",
+          "expectedIn": "CO0003",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0003 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        }
+      ],
+      "autofixed": [
+        {
+          "title": "Welcome",
+          "asked": "CO0003 - welcome.htm",
+          "used": "CO0003 – welcome.HTM",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
+        },
+        {
+          "title": "Learning objectives",
+          "asked": "CO0003 - LO.htm",
+          "used": "CO0003 – LO.HTM",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
+        }
+      ]
+    },
+    "CO0004": {
+      "title": "Microcontrollers for T-Levels",
+      "stale": [
+        {
+          "title": "Introduction to microcontrollers",
+          "showing": "CO0004 - opening.jpg",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Welcome",
+          "showing": "CO0004 - welcome.html",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Learning objectives",
+          "showing": "CO0004 - LO.html",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Equipment",
+          "showing": "CO0004 - Equip.html",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Microcontroller basics 1",
+          "showing": "Microcontroller basics 1 24 02 26.pptx",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Microcontroller basics 2",
+          "showing": "Microcontroller basics 2 24 02 26.pptx",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Homework 1",
+          "showing": "CP4807-H1.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Homework 2",
+          "showing": "CP4807-H2.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Homework 3",
+          "showing": "CP4807-H3.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Assessment 1",
+          "showing": "CP4807-A1.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Assessment 2",
+          "showing": "CP4807-A2.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Homework 6",
+          "showing": "CP4807-H6.htm",
+          "expectedIn": "CP4807"
+        }
+      ],
+      "missing": [],
+      "autofixed": []
     }
   },
   "unusedMedia": {
+    "ZZ9999": [
+      "complete.html",
+      "assessment.html",
+      "objectives.html",
+      "welcome.html",
+      "opening.svg"
+    ],
+    "CP2563": [
+      "CP2563_definition.xlsx",
+      "CP2563 - definition.docx",
+      "CP2563 - Content.docx"
+    ],
+    "CO0004": [
+      "opening.png"
+    ],
+    "CP4807": [
+      "CP4807-TN.docx",
+      "CO4807-4.docx",
+      "CP4807 - introduction to microcontrollers image test.docx",
+      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
+      "summary-report.txt",
+      "imsmanifest.xml",
+      "blocks-metadata.json",
+      "scorm-readiness.txt",
+      "CP4807-0.docx",
+      "CP4807-head.docx",
+      "CP4807-Cont.docx",
+      "CP4807 - Introduction to microcontrollers 15 07 25.docx"
+    ],
+    "CO0003": [
+      "opening.png"
+    ],
     "CO0001": [
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
+    ],
+    "CO0002": [
+      "CO0002 - Equip.docx",
+      "bits.docx",
+      "Now try the worksheets.htm.docx",
+      "Other resources.htm",
+      "CO0002-H8.docx",
+      "CO0002-H9.htm",
+      "CO0002-marking scheme.htm",
+      "CO0002-A3.htm"
+    ],
+    "CP7244": [
+      "CP7244 - definition.docx",
+      "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
     ]
   }
 }
