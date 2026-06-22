@@ -1,19 +1,9 @@
 {
-  "generatedAt": "2026-06-22T10:30:43.034Z",
+  "generatedAt": "2026-06-22T10:41:07.190Z",
   "courses": {
     "CO0002": {
       "stale": [],
       "missing": [
-        {
-          "title": "Welcome",
-          "file": "CO0002 - welcome.htm",
-          "expectedIn": "CO0002"
-        },
-        {
-          "title": "Learning objectives",
-          "file": "CO0002 - LO.htm",
-          "expectedIn": "CO0002"
-        },
         {
           "title": "Scheme of work",
           "file": "CO0002 definition.xlsx",
@@ -60,26 +50,10 @@
           "expectedIn": "CP4807"
         }
       ]
-    },
-    "CO0001": {
-      "stale": [],
-      "missing": [
-        {
-          "title": "Introduction to microcontrollers",
-          "file": "CO0001 – opening.png",
-          "expectedIn": "CO0001"
-        },
-        {
-          "title": "Equipment",
-          "file": "CO0002 – Equip.HTM",
-          "expectedIn": "CO0002"
-        }
-      ]
     }
   },
   "unusedMedia": {
     "CO0001": [
-      "CO0001 - opening.png",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
     ]
