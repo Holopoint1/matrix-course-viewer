@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-22T15:45:41.449Z",
+  "generatedAt": "2026-06-22T15:50:51.684Z",
   "summary": {
-    "courses": 7,
-    "screens": 134,
-    "displaying": 128,
-    "missing": 6,
-    "autofixed": 4
+    "courses": 9,
+    "screens": 199,
+    "displaying": 192,
+    "missing": 7,
+    "autofixed": 6
   },
   "courses": {
     "CO0002": {
@@ -98,6 +98,36 @@
           "title": "Equipment",
           "asked": "CO0002 – Equip.HTM",
           "used": "CO0002 - Equip.htm",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
+        }
+      ]
+    },
+    "CO0003": {
+      "title": "Digital Techniques for Aviation Technicians",
+      "stale": [],
+      "missing": [
+        {
+          "title": "Introduction to microcontrollers",
+          "asked": "CO0003 - opening.png",
+          "expectedIn": "CO0003",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0003 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        }
+      ],
+      "autofixed": [
+        {
+          "title": "Welcome",
+          "asked": "CO0003 - welcome.htm",
+          "used": "CO0003 – welcome.HTM",
+          "reasons": [
+            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
+        },
+        {
+          "title": "Learning objectives",
+          "asked": "CO0003 - LO.htm",
+          "used": "CO0003 – LO.HTM",
           "reasons": [
             "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
           ]
