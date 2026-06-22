@@ -55,8 +55,7 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002 scheme of work.xlsx",
           "path": "/CO0002 - Introduction to microcontrollers/CO0002 scheme of work.xlsx",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s6",
