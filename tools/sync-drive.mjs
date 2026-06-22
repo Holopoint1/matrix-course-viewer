@@ -255,7 +255,12 @@ function realName(folderCode, name) {
   }
   if (entry.names.has(name)) return name;                // already exact
   const hits = entry.byCanon.get(canon(name));
-  return (hits && hits.length === 1) ? hits[0] : null;   // unique typography twin only
+  if (!hits || !hits.length) return null;                // genuinely no such file
+  /* >1 hit can only be the SAME file stored under case/dash-variant names — canon()
+     collapses typography but never real words, digits, or the extension — so any is
+     correct. Every tracked twin exists on the case-sensitive server; just pick one
+     deterministically so the build is stable run-to-run. */
+  return [...hits].sort()[0];
 }
 
 function rowsToScreens(rows, code, driveFiles = {}) {
