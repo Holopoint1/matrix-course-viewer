@@ -405,23 +405,71 @@ function srcParts(src) {
   const m = String(src).match(/^content\/([^/]+)\/(.+)$/);
   return m ? { folderCode: m[1].toUpperCase(), name: m[2] } : null;
 }
+const baseOf = (s) => String(s || '').split(/[\\/]+/).filter(Boolean).pop() || '';
+
+/* Plain-English reasons the typed name didn't exactly match the real file — so the
+   admin log teaches the publisher WHY, not just that it happened. asked = what the
+   sheet typed; used = the real filename matched to it (both share one canon key). */
+function diffReasons(asked, used) {
+  const r = [];
+  const stripDash = (s) => s.replace(/[–—]/g, '-');
+  if ((/[–—]/.test(asked) !== /[–—]/.test(used)) && stripDash(asked).toLowerCase() === stripDash(used).toLowerCase())
+    r.push('Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen "-" for a longer en-dash you can’t tell apart by eye.');
+  const neutral = (s) => stripDash(s).replace(/\.[a-z0-9]+$/i, (m) => m.toLowerCase());
+  if (neutral(asked) !== neutral(used) && neutral(asked).toLowerCase() === neutral(used).toLowerCase())
+    r.push('Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files.');
+  const ext = (s) => (String(s).match(/\.[a-z0-9]+$/i) || [''])[0].toLowerCase();
+  if (ext(asked) !== ext(used))
+    r.push('Extension: the sheet says “' + ext(asked) + '” but the file is “' + ext(used) + '” — interchangeable web formats, matched automatically.');
+  if (!r.length) r.push('A small spelling/spacing difference, matched automatically.');
+  return r;
+}
+
 function writeAccuracyReport(db, driveFilesByCode) {
   const referencedByFolder = {}; // folderCode -> Set(name) used by any screen
   for (const c of db.courses) for (const s of (c.screens || [])) {
     const p = srcParts(s.src); if (!p) continue;
     (referencedByFolder[p.folderCode] = referencedByFolder[p.folderCode] || new Set()).add(p.name);
   }
+  /* Which folders a canon-equal filename actually lives in — lets a "missing" note
+     point out "but a file like it is in the CP4807 folder". */
+  const canonIndex = new Map();
+  for (const [code, set] of Object.entries(driveFilesByCode))
+    for (const n of set) { const k = canon(n); let g = canonIndex.get(k); if (!g) { g = new Set(); canonIndex.set(k, g); } g.add(code); }
+
+  const gExt = { document: '.docx', spreadsheet: '.xlsx', powerpoint: '.pptx' };
   const courses = {};
   for (const c of db.courses) {
     if (!c.screens || !c.screens.length) continue;
-    const stale = [], missing = [];
+    const stale = [], missing = [], autofixed = [];
     for (const s of c.screens) {
       const p = srcParts(s.src); if (!p) continue;
-      if (s.missing) { missing.push({ title: s.title, file: p.name, expectedIn: p.folderCode }); continue; }
+      /* what the publisher typed, with the Google-export extension added the same
+         way the resolver does, so a bare "Doc" → "Doc.docx" isn't seen as a diff. */
+      let asked = baseOf(s.path) || p.name;
+      const g = gExt[s.type];
+      if (g && !/\.[a-z0-9]{2,6}$/i.test(asked)) asked += g;
+      if (s.missing) {
+        let reason;
+        if (/\bdefinition\b/i.test(asked))
+          reason = 'The file name contains “definition”, which the sync never publishes (those are the control sheets). Rename it without that word.';
+        else {
+          const where = canonIndex.get(canon(asked));
+          const elsewhere = where && [...where].filter((x) => x !== p.folderCode);
+          reason = (elsewhere && elsewhere.length)
+            ? 'No file by this name in the ' + p.folderCode + ' folder — but a matching file is in the ' + elsewhere.join('/') + ' folder. Move it there, or point the row at the right folder.'
+            : 'No file with this name (or a hyphen/case/extension variant) is in the ' + p.folderCode + ' folder yet. Add it to that Drive folder, or correct the name in the definition.';
+        }
+        missing.push({ title: s.title, asked, expectedIn: p.folderCode, reason });
+        continue;
+      }
+      /* resolved, but the typed name differed from the real file → auto-fixed twin */
+      if (asked && asked !== p.name && canon(asked) === canon(p.name))
+        autofixed.push({ title: s.title, asked, used: p.name, reasons: diffReasons(asked, p.name) });
       const driveSet = driveFilesByCode[p.folderCode];
       if (driveSet && !driveSet.has(p.name)) stale.push({ title: s.title, showing: p.name, expectedIn: p.folderCode });
     }
-    if (stale.length || missing.length) courses[c.id] = { stale, missing };
+    if (stale.length || missing.length || autofixed.length) courses[c.id] = { title: c.title, stale, missing, autofixed };
   }
   const unusedMedia = {};
   for (const code of Object.keys(driveFilesByCode)) {
@@ -429,12 +477,18 @@ function writeAccuracyReport(db, driveFilesByCode) {
     const unused = [...driveFilesByCode[code]].filter((n) => !ref.has(n) && !/^_|\.tmp$/.test(n));
     if (unused.length) unusedMedia[code] = unused;
   }
-  const report = { generatedAt: new Date().toISOString(), courses, unusedMedia };
+  const totalScreens = db.courses.reduce((n, c) => n + ((c.screens || []).length), 0);
+  const totalMissing = db.courses.reduce((n, c) => n + ((c.screens || []).filter((s) => s.missing).length), 0);
+  const totalAutofixed = Object.values(courses).reduce((n, c) => n + c.autofixed.length, 0);
+  const report = {
+    generatedAt: new Date().toISOString(),
+    summary: { courses: db.courses.length, screens: totalScreens, displaying: totalScreens - totalMissing, missing: totalMissing, autofixed: totalAutofixed },
+    courses, unusedMedia,
+  };
   fs.writeFileSync(path.join(CONTENT_DIR, '_sync-report.json'), JSON.stringify(report, null, 2) + '\n');
   const staleCount = Object.values(courses).reduce((n, c) => n + c.stale.length, 0);
   const orphanCount = Object.values(unusedMedia).reduce((n, a) => n + a.length, 0);
-  console.log(`\nAccuracy report: ${staleCount} stale reference(s), ${orphanCount} unused Drive file(s). See content/_sync-report.json`);
-  for (const [id, c] of Object.entries(courses)) c.stale.forEach((s) => console.log(`  ⚠ ${id}: "${s.title}" shows stale '${s.showing}' (not in ${s.expectedIn} Drive folder)`));
+  console.log(`\nAccuracy report: ${totalMissing} missing, ${totalAutofixed} auto-fixed name(s), ${staleCount} stale, ${orphanCount} unused. See content/_sync-report.json`);
 }
 
 /* Build a DRAFT course straight from a folder's files when it has NO definition

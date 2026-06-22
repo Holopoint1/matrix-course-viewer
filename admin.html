@@ -407,6 +407,7 @@
             '<span class="am-tile-edited"></span></span></button>';
       }).join('');
       main.innerHTML =
+        '<div id="am-health"></div>' +
         '<div class="am-head"><div class="am-head-row"><div>' +
           '<span class="am-head-eyebrow">Content manager</span>' +
           '<h1>Courses</h1>' +
@@ -427,6 +428,89 @@
       /* Paint cached times now (if any), then refresh from Supabase. */
       repaintCatalogTimes();
       loadCourseEditTimes().then(repaintCatalogTimes);
+      paintHealthBanner();
+    }
+
+    /* ========== Sync health banner (top of the catalog) ==========
+       Reads the report the sync writes (content/_sync-report.json) and shows, in
+       plain English, what's missing or was auto-corrected and WHY — so a publisher
+       self-diagnoses the hyphen / case / extension traps without anyone debugging. */
+    function relTime(iso) {
+      var d = new Date(iso); if (isNaN(d.getTime())) return '';
+      var s = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000));
+      if (s < 60) return s + 's ago';
+      var m = Math.round(s / 60); if (m < 60) return m + ' min ago';
+      var h = Math.round(m / 60); if (h < 24) return h + ' hour' + (h === 1 ? '' : 's') + ' ago';
+      return Math.round(h / 24) + ' day(s) ago';
+    }
+    async function paintHealthBanner() {
+      var host = document.getElementById('am-health');
+      if (!host) return;
+      var rep = null;
+      try { rep = await fetch('content/_sync-report.json?t=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; }); } catch (e) {}
+      if (!rep) { host.innerHTML = ''; return; }
+      var sum = rep.summary || {};
+      var when = rep.generatedAt ? (fmtTime(rep.generatedAt) + ' · ' + relTime(rep.generatedAt)) : 'unknown';
+      var courseIds = Object.keys(rep.courses || {});
+      /* Prefer the summary, but fall back to counting (so an older-format report
+         from before the last sync can never show a false "all clean"). */
+      var cnt = function (key) { return courseIds.reduce(function (n, id) { return n + ((rep.courses[id][key] || []).length); }, 0); };
+      var nMissing = sum.missing != null ? sum.missing : cnt('missing');
+      var nFixed = sum.autofixed != null ? sum.autofixed : cnt('autofixed');
+
+      var css = '<style>' +
+        '#am-health{margin:0 0 8px}' +
+        '#am-health .hb{border-radius:12px;padding:14px 18px;margin:0 0 10px;font-size:14px;line-height:1.5}' +
+        '#am-health .hb-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}' +
+        '#am-health .hb-warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}' +
+        '#am-health h3{margin:0 0 6px;font-size:15px}' +
+        '#am-health .hb-row{margin:10px 0;padding:10px 12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;color:#0f172a}' +
+        '#am-health code{background:#1e293b;color:#e2e8f0;padding:1px 6px;border-radius:5px;font-size:12.5px;word-break:break-all}' +
+        '#am-health .hb-why{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:8px;padding:10px 14px;margin-top:10px}' +
+        '#am-health details{margin-top:8px}#am-health summary{cursor:pointer;font-weight:600}' +
+        '#am-health .tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;margin-right:6px}' +
+        '#am-health .tag-miss{background:#fee2e2;color:#991b1b}#am-health .tag-fix{background:#dcfce7;color:#166534}' +
+        '</style>';
+
+      if (!nMissing && !nFixed) {
+        host.innerHTML = css + '<div class="hb hb-ok">✓ All ' + (sum.courses || courseIds.length || '') +
+          ' courses synced cleanly — no missing files. <span style="opacity:.8">Last synced ' + esc(when) + '.</span></div>';
+        return;
+      }
+
+      var rows = '';
+      courseIds.forEach(function (id) {
+        var c = rep.courses[id], blocks = '';
+        (c.missing || []).forEach(function (m) {
+          blocks += '<div style="margin:6px 0"><span class="tag tag-miss">MISSING</span><strong>' + esc(m.title) +
+            '</strong> — wants <code>' + esc(m.asked || m.file) + '</code>' +
+            (m.reason ? '<br><span style="color:#475569">' + esc(m.reason) + '</span>' : '') + '</div>';
+        });
+        (c.autofixed || []).forEach(function (a) {
+          blocks += '<div style="margin:6px 0"><span class="tag tag-fix">AUTO-FIXED</span><strong>' + esc(a.title) +
+            '</strong> — sheet says <code>' + esc(a.asked) + '</code>, file is <code>' + esc(a.used) + '</code><br><span style="color:#475569">' +
+            (a.reasons || []).map(esc).join(' ') + '</span></div>';
+        });
+        if (blocks) rows += '<div class="hb-row"><h3>' + esc(id) + (c.title ? ' — ' + esc(c.title) : '') + '</h3>' + blocks + '</div>';
+      });
+
+      var why =
+        '<div class="hb-why"><strong>Why these happen</strong> — and how to fix them for good:' +
+        '<ul style="margin:6px 0 0;padding-left:20px">' +
+          '<li><strong>Hyphen vs en-dash “–”:</strong> Word/Google autocorrect turns a normal hyphen <code>-</code> into a longer en-dash <code>–</code> that looks identical. Auto-matched now, but retype the dash as a plain hyphen to keep names clean.</li>' +
+          '<li><strong>Capitalisation (<code>.HTM</code> vs <code>.htm</code>):</strong> the live site is case-sensitive. Forgiven now; safest to keep file names all lower-case.</li>' +
+          '<li><strong>Extension (<code>.htm</code> vs <code>.html</code>):</strong> treated as the same web page automatically.</li>' +
+          '<li><strong>“definition” in a file name:</strong> never published — those are control sheets. Rename to something else.</li>' +
+          '<li><strong>Truly missing / wrong folder:</strong> the file isn’t in that course’s Drive folder. Add it (or move it), keeping the name identical to the sheet.</li>' +
+        '</ul></div>';
+
+      host.innerHTML = css +
+        '<div class="hb hb-warn"><h3>🩺 ' + nMissing + ' missing file' + (nMissing === 1 ? '' : 's') +
+          (nFixed ? ' · ' + nFixed + ' name' + (nFixed === 1 ? '' : 's') + ' auto-corrected' : '') +
+          ' <span style="font-weight:400;opacity:.8">· last synced ' + esc(when) + '</span></h3>' +
+          '<div>Every screen needing attention is below. Missing files won’t show until added to Drive; auto-corrected ones already display but have an invisible name mismatch worth tidying.</div>' +
+          '<details open><summary>Show issue log &amp; why</summary>' + rows + why + '</details>' +
+        '</div>';
     }
 
     /* ========== Publisher guide (replaces the old in-app "New course" flow,
