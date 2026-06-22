@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: drive-sync
@@ -43,13 +44,27 @@ jobs:
         run: node tools/sync-drive.mjs
 
       - name: Commit any changes
+        id: commit
         run: |
           git config user.name "drive-sync[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add content data/courses.json
           if git diff --staged --quiet; then
             echo "No changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "Sync from Drive (content + courses.json)"
             git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # Commits pushed by the Actions token do NOT trigger the GitHub Pages build,
+      # so a sync-only change would never reach the live site. Request the Pages
+      # build explicitly (an API call isn't subject to that restriction). Best-effort.
+      - name: Trigger GitHub Pages rebuild
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds" || true
