@@ -232,17 +232,25 @@ function healFromPublished(src) {
   return (c && c.length === 1) ? c[0] : null;            // unique filename match only
 }
 
+/* Extensions that are the SAME format under different spellings — folding these
+   lets a sheet's "welcome.htm" find a real "welcome.html". Kept deliberately tiny:
+   only truly interchangeable pairs. Distinct formats (.docx/.pdf/.png/.svg/...) are
+   never folded, so a Word doc can never be served in place of a web page. */
+const EXT_FAMILY = { htm: 'htm', html: 'htm', jpg: 'jpg', jpeg: 'jpg', tif: 'tif', tiff: 'tif' };
+
 /* Canonicalise a filename down to the part that actually carries meaning, by
-   flattening the invisible typography Word/Drive autocorrect silently changes:
-   letter-case, en/em-dash vs hyphen, and repeated/trailing spaces. The extension
-   and every real word/digit are preserved, so "CO0001" can never look like
-   "CO0002", nor ".htm" like ".html". */
-const canon = (s) => String(s).toLowerCase().replace(/[–—]/g, '-').replace(/\s+/g, ' ').trim();
+   flattening what users can't see or didn't choose: letter-case, en/em-dash vs
+   hyphen, repeated/trailing spaces, and interchangeable extensions (.htm/.html).
+   Every real word and digit is preserved, so "CO0001" can never look like "CO0002"
+   and a .docx can never look like a .htm. */
+const canon = (s) => String(s).toLowerCase().replace(/[–—]/g, '-').replace(/\s+/g, ' ').trim()
+  .replace(/\.([a-z0-9]+)$/, (_, e) => '.' + (EXT_FAMILY[e] || e));
 
 /* Resolve the name the sheet asked for to the REAL file in its own content/<code>
-   folder. Exact hit wins; otherwise match by canon() — but only when exactly ONE
-   file matches (a unique typography twin). Never crosses folders, never changes the
-   extension, so one real file can never masquerade as a different one. */
+   folder. Exact hit wins; otherwise match by canon(), which forgives only invisible
+   typography (case, en/em-dash, spaces) and interchangeable extensions (.htm/.html).
+   Never crosses folders and never folds distinct formats, so a screen can only ever
+   resolve to the same content under a different spelling — never a different file. */
 const _dirCache = new Map();
 function realName(folderCode, name) {
   let entry = _dirCache.get(folderCode);
@@ -256,11 +264,14 @@ function realName(folderCode, name) {
   if (entry.names.has(name)) return name;                // already exact
   const hits = entry.byCanon.get(canon(name));
   if (!hits || !hits.length) return null;                // genuinely no such file
-  /* >1 hit can only be the SAME file stored under case/dash-variant names — canon()
-     collapses typography but never real words, digits, or the extension — so any is
-     correct. Every tracked twin exists on the case-sensitive server; just pick one
+  if (hits.length === 1) return hits[0];
+  /* >1 hit = the same screen content under interchangeable spellings (case, dash,
+     or an .htm/.html-style extension twin). All exist on the case-sensitive server,
+     so any displays; prefer the spelling closest to what the sheet asked, then sort
      deterministically so the build is stable run-to-run. */
-  return [...hits].sort()[0];
+  const wantExt = (String(name).match(/\.[a-z0-9]+$/i) || [''])[0].toLowerCase();
+  return [...hits].sort((a, b) =>
+    (b.toLowerCase().endsWith(wantExt) - a.toLowerCase().endsWith(wantExt)) || a.localeCompare(b))[0];
 }
 
 function rowsToScreens(rows, code, driveFiles = {}) {

@@ -111,9 +111,10 @@
 
         function renderCards() {
           root.innerHTML = '';
-          /* Only show top-level CO* courses in the main grid; CP* packs
-             render in their own section below. */
-          const allCourses = data.courses.filter((c) => c.kind !== 'pack' && !c.draft);
+          /* Show every course AND worksheet pack that the sync published from a
+             Drive definition (packs are tagged "Pack" by the card renderer). Only
+             drafts are withheld. */
+          const allCourses = data.courses.filter((c) => !c.draft);
           const visible = activeCategory
             ? allCourses.filter((c) => (c.categories || []).indexOf(activeCategory) >= 0)
             : allCourses;
@@ -191,8 +192,8 @@
 
         const streak = window.Gamify.getStreak();
         const totalTime = window.Gamify.getTotalSecondsAllCourses();
-        /* Hero counter shows full courses, not packs. */
-        stats.querySelector('[data-stat="courses"]').textContent = data.courses.filter((c) => c.kind !== 'pack' && !c.draft).length;
+        /* Hero counter matches the grid: every published course + pack. */
+        stats.querySelector('[data-stat="courses"]').textContent = data.courses.filter((c) => !c.draft).length;
         stats.querySelector('[data-stat="time"]').textContent = totalTime > 0 ? window.Gamify.formatDuration(totalTime) : '0m';
         stats.querySelector('[data-stat="streak"]').textContent = streak.days || 0;
         /* Missing-resources summary moved to the TOOLS screen — the catalog
