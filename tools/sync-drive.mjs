@@ -232,6 +232,32 @@ function healFromPublished(src) {
   return (c && c.length === 1) ? c[0] : null;            // unique filename match only
 }
 
+/* Canonicalise a filename down to the part that actually carries meaning, by
+   flattening the invisible typography Word/Drive autocorrect silently changes:
+   letter-case, en/em-dash vs hyphen, and repeated/trailing spaces. The extension
+   and every real word/digit are preserved, so "CO0001" can never look like
+   "CO0002", nor ".htm" like ".html". */
+const canon = (s) => String(s).toLowerCase().replace(/[–—]/g, '-').replace(/\s+/g, ' ').trim();
+
+/* Resolve the name the sheet asked for to the REAL file in its own content/<code>
+   folder. Exact hit wins; otherwise match by canon() — but only when exactly ONE
+   file matches (a unique typography twin). Never crosses folders, never changes the
+   extension, so one real file can never masquerade as a different one. */
+const _dirCache = new Map();
+function realName(folderCode, name) {
+  let entry = _dirCache.get(folderCode);
+  if (!entry) {
+    let names = []; try { names = fs.readdirSync(path.resolve('content', folderCode)); } catch (_) {}
+    const byCanon = new Map();
+    for (const n of names) { const k = canon(n); const arr = byCanon.get(k) || []; arr.push(n); byCanon.set(k, arr); }
+    entry = { names: new Set(names), byCanon };
+    _dirCache.set(folderCode, entry);
+  }
+  if (entry.names.has(name)) return name;                // already exact
+  const hits = entry.byCanon.get(canon(name));
+  return (hits && hits.length === 1) ? hits[0] : null;   // unique typography twin only
+}
+
 function rowsToScreens(rows, code, driveFiles = {}) {
   if (!rows.length) return { screens: [], missing: [] };
   const headerIdx = findHeaderRow(rows);
@@ -267,11 +293,14 @@ function rowsToScreens(rows, code, driveFiles = {}) {
          an Office file and no extension was given, fetch that exported file. */
       const gExt = { document: '.docx', spreadsheet: '.xlsx', powerpoint: '.pptx' }[type];
       if (gExt && !/\.[a-z0-9]{2,6}$/i.test(name)) name += gExt;
-      /* EXACT matching only — display precisely the file named in the definition.
-         No fuzzy / cross-folder substitution: if the exact name isn't present the
-         screen is reported missing (below), so the ASSET line can never lie. */
+      /* Match EXACTLY, forgiving only invisible typography (case, en/em-dash vs
+         hyphen, stray spaces). Same folder, same extension, unique match only — so
+         a screen shows the same file under the name it really has on disk, never a
+         different file. A genuine miss is still reported missing (below). */
+      const real = realName(folderCode, name);
+      if (real) name = real;
       src = 'content/' + folderCode + '/' + name;
-      drivePath = file.replace(/\\/g, '/');                 // real Drive path (forward slashes for display)
+      drivePath = file.replace(/\\/g, '/');                 // the Drive path as typed, for display
     }
     /* Bulletproofing: a new row with a File but a blank Title still becomes a
        properly named screen — derive a human title from the file/URL so rows
