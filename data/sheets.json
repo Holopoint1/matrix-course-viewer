@@ -28,6 +28,32 @@
       "url": "https://docs.google.com/spreadsheets/d/1NTi0DM_x17nw09179MHFQlH5uZkOV_NaA4ZhyFN6QnE/edit"
     },
     {
+      "code": "CO0003",
+      "title": "Digital Techniques for Aviation Technicians",
+      "kind": "course",
+      "description": "The full Flowcode + E-blocks 3 course for EASA Unit 5 Digital Techniques — videos, PowerPoints, worksheets, homework and assessments for aviation technician training.",
+      "certificate": true,
+      "certificateTemplate": "Digital Techniques for Aviation Technicians",
+      "categories": [
+        "Embedded",
+        "Curriculum"
+      ],
+      "url": "https://docs.google.com/spreadsheets/d/1CLMYhBwVIEfFZ0PoTvQywRvzuTH14VAZjJkjw1sEVec/edit"
+    },
+    {
+      "code": "CO0004",
+      "title": "Microcontrollers for T-Levels",
+      "kind": "course",
+      "description": "The full Flowcode + E-blocks 3 microcontroller course mapped to T-Level Engineering — videos, PowerPoints, worksheets, homework and assessments.",
+      "certificate": true,
+      "certificateTemplate": "Microcontrollers for T-Levels",
+      "categories": [
+        "Embedded",
+        "Curriculum"
+      ],
+      "url": "https://docs.google.com/spreadsheets/d/1P0oyxvSCoiLf_b9sswADRoqxHeAMadRio164e7hsUHc/edit"
+    },
+    {
       "code": "CP2563",
       "title": "Microcontrollers for T-Levels",
       "kind": "pack",
