@@ -26,7 +26,7 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 – welcome.HTM",
+          "src": "content/CO0002/CO0002 – welcome.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - welcome.htm",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -35,7 +35,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 – LO.HTM",
+          "src": "content/CO0002/CO0002 – LO.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - LO.htm",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -53,8 +53,8 @@
           "type": "sheet",
           "title": "Scheme of work",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 definition.xlsx",
-          "path": "/CO0002 - Introduction to microcontrollers/CO0002 definition.xlsx",
+          "src": "content/CO0002/CO0002 scheme of work.xlsx",
+          "path": "/CO0002 - Introduction to microcontrollers/CO0002 scheme of work.xlsx",
           "equipment": "Flowcode / E-blocks3",
           "missing": true
         },
@@ -1164,7 +1164,7 @@
           "type": "html",
           "title": "Equipment",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - Equip.HTM",
+          "src": "content/CO0002/CO0002 - Equip.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 – Equip.HTM",
           "equipment": "Flowcode / E-blocks3"
         },

@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-22T10:41:07.190Z",
+  "generatedAt": "2026-06-22T11:05:41.280Z",
   "courses": {
     "CO0002": {
       "stale": [],
       "missing": [
         {
           "title": "Scheme of work",
-          "file": "CO0002 definition.xlsx",
+          "file": "CO0002 scheme of work.xlsx",
           "expectedIn": "CO0002"
         }
       ]
