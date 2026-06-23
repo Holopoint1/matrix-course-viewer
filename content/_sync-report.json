@@ -1,16 +1,24 @@
 {
-  "generatedAt": "2026-06-23T15:45:55.723Z",
+  "generatedAt": "2026-06-23T15:57:36.085Z",
   "summary": {
     "courses": 9,
     "screens": 199,
     "displaying": 193,
     "missing": 6,
-    "autofixed": 6
+    "autofixed": 8,
+    "downloadFailed": 0,
+    "collisions": 0
   },
   "courses": {
     "CO0002": {
       "title": "Introduction to Microcontrollers",
-      "stale": [],
+      "stale": [
+        {
+          "title": "Floats and INTs",
+          "showing": "CP1972-6.docx",
+          "expectedIn": "CP1972"
+        }
+      ],
       "missing": [],
       "autofixed": [
         {
@@ -30,6 +38,70 @@
           ]
         }
       ]
+    },
+    "CP0507": {
+      "title": "Motors and Microcontrollers",
+      "stale": [
+        {
+          "title": "Preparation",
+          "showing": "CP0507-Prep.docx",
+          "expectedIn": "CP0507"
+        },
+        {
+          "title": "Contents",
+          "showing": "CP0507-Cont.docx",
+          "expectedIn": "CP0507"
+        }
+      ],
+      "missing": [],
+      "autofixed": []
+    },
+    "CP1972": {
+      "title": "Sensors and Microcontrollers",
+      "stale": [
+        {
+          "title": "Preparation",
+          "showing": "CP1972-Prep.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Contents",
+          "showing": "CP1972-Cont.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 6 — Floats and INTs",
+          "showing": "CP1972-6.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 7 — Thermocouples",
+          "showing": "CP1972-7.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 8 — Flow sensors",
+          "showing": "CP1972-8.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 9 — Compressive force sensors",
+          "showing": "CP1972-9.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 10 — Cantilever strain sensors",
+          "showing": "CP1972-10.docx",
+          "expectedIn": "CP1972"
+        },
+        {
+          "title": "Worksheet 11 — Pressure sensors",
+          "showing": "CP1972-11.docx",
+          "expectedIn": "CP1972"
+        }
+      ],
+      "missing": [],
+      "autofixed": []
     },
     "CP2563": {
       "title": "Microcontrollers for T-Levels",
@@ -83,7 +155,13 @@
     },
     "CO0001": {
       "title": "Flowcode and E-blocks 3 CPD Course",
-      "stale": [],
+      "stale": [
+        {
+          "title": "Now try the worksheets",
+          "showing": "Now try the worksheets.HTM",
+          "expectedIn": "CO0002"
+        }
+      ],
       "missing": [],
       "autofixed": [
         {
@@ -100,6 +178,22 @@
           "used": "CO0002 - Equip.htm",
           "reasons": [
             "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
+          ]
+        },
+        {
+          "title": "Learning objectives",
+          "asked": "CO0002 – LO.HTM",
+          "used": "CO0002 – LO.htm",
+          "reasons": [
+            "A small spelling/spacing difference, matched automatically."
+          ]
+        },
+        {
+          "title": "Other resources",
+          "asked": "Other resources.HTM",
+          "used": "Other resources.htm",
+          "reasons": [
+            "A small spelling/spacing difference, matched automatically."
           ]
         }
       ]
@@ -126,12 +220,853 @@
           ]
         }
       ]
+    },
+    "CO0004": {
+      "title": "Microcontrollers for T-Levels",
+      "stale": [
+        {
+          "title": "Introduction to microcontrollers",
+          "showing": "CO0004 - opening.jpg",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Welcome",
+          "showing": "CO0004 - welcome.html",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Learning objectives",
+          "showing": "CO0004 - LO.html",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Equipment",
+          "showing": "CO0004 - Equip.html",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Microcontroller basics 1",
+          "showing": "Microcontroller basics 1 24 02 26.pptx",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Microcontroller basics 2",
+          "showing": "Microcontroller basics 2 24 02 26.pptx",
+          "expectedIn": "CO0004"
+        },
+        {
+          "title": "Homework 1",
+          "showing": "CP4807-H1.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Homework 2",
+          "showing": "CP4807-H2.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Homework 3",
+          "showing": "CP4807-H3.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Assessment 1",
+          "showing": "CP4807-A1.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Assessment 2",
+          "showing": "CP4807-A2.htm",
+          "expectedIn": "CP4807"
+        },
+        {
+          "title": "Homework 6",
+          "showing": "CP4807-H6.htm",
+          "expectedIn": "CP4807"
+        }
+      ],
+      "missing": [],
+      "autofixed": []
     }
   },
   "unusedMedia": {
+    "ZZ9999": [
+      "complete.html",
+      "assessment.html",
+      "objectives.html",
+      "welcome.html",
+      "opening.svg"
+    ],
+    "CP2563": [
+      "CP2563_definition.xlsx",
+      "CP2563 - definition.docx",
+      "CP2563 - Content.docx"
+    ],
+    "CO0004": [
+      "opening.png"
+    ],
+    "CP4807": [
+      "CP4807-TN.docx",
+      "CO4807-4.docx",
+      "CP4807 - introduction to microcontrollers image test.docx",
+      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
+      "summary-report.txt",
+      "imsmanifest.xml",
+      "blocks-metadata.json",
+      "scorm-readiness.txt",
+      "CP4807-0.docx",
+      "CP4807-head.docx",
+      "CP4807-Cont.docx",
+      "CP4807 - Introduction to microcontrollers 15 07 25.docx"
+    ],
+    "CO0003": [
+      "opening.png"
+    ],
     "CO0001": [
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
+    ],
+    "CO0002": [
+      "CO0002 - Equip.docx",
+      "bits.docx",
+      "Now try the worksheets.docx",
+      "CO0002-H8.docx",
+      "CO0002-H9.htm",
+      "CO0002-marking scheme.htm",
+      "CO0002-A3.htm"
+    ],
+    "CP7244": [
+      "CP7244 - definition.docx",
+      "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
     ]
-  }
+  },
+  "failed": [],
+  "collisions": [],
+  "canonCollisions": [],
+  "orphans": [
+    {
+      "code": "CO0004",
+      "name": "CO0004 - Equip.html"
+    },
+    {
+      "code": "CO0004",
+      "name": "CO0004 - LO.html"
+    },
+    {
+      "code": "CO0004",
+      "name": "CO0004 - content.docx"
+    },
+    {
+      "code": "CO0004",
+      "name": "CO0004 - definition.docx"
+    },
+    {
+      "code": "CO0004",
+      "name": "CO0004 - opening.jpg"
+    },
+    {
+      "code": "CO0004",
+      "name": "CO0004 - welcome.html"
+    },
+    {
+      "code": "CO0004",
+      "name": "CO004_definition.xlsx"
+    },
+    {
+      "code": "CO0004",
+      "name": "Microcontroller basics 1 24 02 26.pptx"
+    },
+    {
+      "code": "CO0004",
+      "name": "Microcontroller basics 2 24 02 26.pptx"
+    },
+    {
+      "code": "CO0004",
+      "name": "opening.svg"
+    },
+    {
+      "code": "CP0507",
+      "name": "20250115_115215.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "20250409_164925.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "Actuators board.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "BL0055-75-3.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "BL0145 switch.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "BL0167 LED board.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "BL0169 display.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "CP0507 - motors and microcontrollers FIXED.docx"
+    },
+    {
+      "code": "CP0507",
+      "name": "CP0507-Cont.docx"
+    },
+    {
+      "code": "CP0507",
+      "name": "CP0507-Prep.docx"
+    },
+    {
+      "code": "CP0507",
+      "name": "Combo board.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "DC motors part 1 cover.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "DC motors part 1 cover.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "DC motors part 2 cover.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "DC motors part 2 cover.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "DC motors part 3 cover.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "DC motors part 3 cover.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "ESP32 board.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "Matrix_Logo.svg"
+    },
+    {
+      "code": "CP0507",
+      "name": "PIC board.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "PIC development centre.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "Servo motors cover.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "Servo motors cover.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "Stepper motors cover.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "Stepper motors cover.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "aeroplane.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "blocks-metadata.json"
+    },
+    {
+      "code": "CP0507",
+      "name": "cover.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "e-blocks upstream.jpg"
+    },
+    {
+      "code": "CP0507",
+      "name": "e-blocks3 logo.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "opening.svg"
+    },
+    {
+      "code": "CP0507",
+      "name": "quadrocopter.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "router.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "scorm-readiness.txt"
+    },
+    {
+      "code": "CP0507",
+      "name": "summary-report.txt"
+    },
+    {
+      "code": "CP0507",
+      "name": "wheelchair.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "ws1 dc motor.png"
+    },
+    {
+      "code": "CP0507",
+      "name": "youtube logo.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "B H M N.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "BLXXXX programming Arduino microcontrollers.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "Backup_of_proto board images.cdr"
+    },
+    {
+      "code": "CP4807",
+      "name": "CO0002 - opening.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "CO0004 - opening.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807 - introduction to microcontrollers 13 05 26.docx"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-A1.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-A2.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-A3.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-CPDcert.docx"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H1.docx"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H1.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H2.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H3.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H4.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H5.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H6.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H7.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H8.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-H9.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-P1.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-SOW.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-TN.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "CP4807-marking scheme.htm"
+    },
+    {
+      "code": "CP4807",
+      "name": "Digital inputs.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "Flowcode Embedded introduction.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "Introducing E-blocks 18 02 26.pptx"
+    },
+    {
+      "code": "CP4807",
+      "name": "Introducing E-blocks CP40807.pptx"
+    },
+    {
+      "code": "CP4807",
+      "name": "Macros.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "a-red-and-yellow-button-with-a-yellow-box-2025-03-14-19-12-07-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "binary.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "close-up-of-a-yellow-construction-sign-for-traffic-2025-02-03-16-16-23-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "colour touch screen.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "control panel.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "controlling-smart-devices-with-a-digital-tablet-at-2025-03-14-12-33-14-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "counter.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "e-blocks3 logo.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "electricity-hub-2025-03-05-05-12-40-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "electronics board.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "first program.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "flashing light.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "hand-holding-a-stopwatch-2025-02-10-06-05-41-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "hardware control.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "hardware tracker.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "heater control.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "holding-digital-tablet-in-cozy-living-room-with-fi-2025-01-08-11-37-09-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "intro to micros cover.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "making decisions.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "music panel.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "persons-hands-use-electric-scale-or-weighter-micr-2025-01-27-03-10-49-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "pin interrupts.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "project diagram.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "project diagram.svg"
+    },
+    {
+      "code": "CP4807",
+      "name": "proto board with parts.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "protoboard.svg"
+    },
+    {
+      "code": "CP4807",
+      "name": "prototype board.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "red-and-green-round-lamps-and-buttons-on-black-con-2024-12-17-00-11-57-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "sound-engineer-using-control-panel-2025-02-11-14-06-41-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "stop switch.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "stop watch.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "test.docx"
+    },
+    {
+      "code": "CP4807",
+      "name": "test.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "timer interrupts.png"
+    },
+    {
+      "code": "CP4807",
+      "name": "touch screen control.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "touch screen.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "traffic lights.cpt"
+    },
+    {
+      "code": "CP4807",
+      "name": "traffic lights.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "view-of-city-traffic-with-traffic-lights-in-the-f-2025-03-16-12-41-45-utc.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "web mirror candy.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "web mirror.jpg"
+    },
+    {
+      "code": "CP4807",
+      "name": "youtube logo.png"
+    },
+    {
+      "code": "CO0003",
+      "name": "CO0003 - content.docx"
+    },
+    {
+      "code": "CO0003",
+      "name": "CO0003 - definition.docx"
+    },
+    {
+      "code": "CO0003",
+      "name": "CO003_definition.xlsx"
+    },
+    {
+      "code": "CO0003",
+      "name": "Microcontroller basics 1 24 02 26.pptx"
+    },
+    {
+      "code": "CO0003",
+      "name": "Microcontroller basics 2 24 02 26.pptx"
+    },
+    {
+      "code": "CO0003",
+      "name": "opening.svg"
+    },
+    {
+      "code": "CO0003",
+      "name": "welcome.html"
+    },
+    {
+      "code": "CO0001",
+      "name": "BTEC unit 6.xlsx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 - LO.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – CPD objectives.HTM.jpg"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – LO.HTM.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "Microcontroller basics 2 24 02 26.pptx"
+    },
+    {
+      "code": "CO0001",
+      "name": "Untitled spreadsheet.xlsx"
+    },
+    {
+      "code": "CO0001",
+      "name": "jdtest.htm"
+    },
+    {
+      "code": "CO0001",
+      "name": "test.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "test.jpg"
+    },
+    {
+      "code": "CO0002",
+      "name": "CO0002 - content.docx"
+    },
+    {
+      "code": "CO0002",
+      "name": "Now try the worksheets.HTM"
+    },
+    {
+      "code": "CO0002",
+      "name": "Now try the worksheets.HTM.docx"
+    },
+    {
+      "code": "CO0002",
+      "name": "Now try the worksheets.htm.docx"
+    },
+    {
+      "code": "CO0002",
+      "name": "Untitled document.docx"
+    },
+    {
+      "code": "CO0002",
+      "name": "equipment.html"
+    },
+    {
+      "code": "CO0002",
+      "name": "learning-objectives.html"
+    },
+    {
+      "code": "CO0002",
+      "name": "opening.svg"
+    },
+    {
+      "code": "CO0002",
+      "name": "test.jpg"
+    },
+    {
+      "code": "CO0002",
+      "name": "welcome.html"
+    },
+    {
+      "code": "CP7244",
+      "name": "CP7244_definition.xlsx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972 - sensors and microcontrollers 07 05 26.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-10.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-11.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-6.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-7.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-8.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-9.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-Cont.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "CP1972-Prep.docx"
+    },
+    {
+      "code": "CP1972",
+      "name": "Matrix_Logo.svg"
+    },
+    {
+      "code": "CP1972",
+      "name": "Thermistor.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "analogue.png"
+    },
+    {
+      "code": "CP1972",
+      "name": "blocks-metadata.json"
+    },
+    {
+      "code": "CP1972",
+      "name": "bubble level.png"
+    },
+    {
+      "code": "CP1972",
+      "name": "cantilever.png"
+    },
+    {
+      "code": "CP1972",
+      "name": "compressive cell.png"
+    },
+    {
+      "code": "CP1972",
+      "name": "crane.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "e-blocks3 logo.png"
+    },
+    {
+      "code": "CP1972",
+      "name": "flow sensors.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "furnace.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "old radio.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "opening.svg"
+    },
+    {
+      "code": "CP1972",
+      "name": "pump.png"
+    },
+    {
+      "code": "CP1972",
+      "name": "scales.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "scorm-readiness.txt"
+    },
+    {
+      "code": "CP1972",
+      "name": "sensors adn microcontrollers.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "street light.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "summary-report.txt"
+    },
+    {
+      "code": "CP1972",
+      "name": "temperature sensor.cpt"
+    },
+    {
+      "code": "CP1972",
+      "name": "temperature sensor.png"
+    },
+    {
+      "code": "CP1972",
+      "name": "thermistor image.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "thermometer.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "tyre.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "weather station.jpg"
+    },
+    {
+      "code": "CP1972",
+      "name": "youtube logo.png"
+    }
+  ]
 }
