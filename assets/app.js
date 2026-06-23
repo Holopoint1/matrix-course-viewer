@@ -922,11 +922,23 @@
     stage.appendChild(wrap);
 
     const frame = wrap.querySelector('.stage-pdf-frame');
+    const iframeEl = wrap.querySelector('.stage-pdf-iframe');
     const fsBtn = wrap.querySelector('[data-action="fullscreen"]');
     if (fsBtn && frame) {
+      /* Element-fullscreen of a cross-origin (Office) iframe is unreliable on
+         mobile — iOS Safari has no element fullscreen, and Android often renders
+         the viewer blank in fullscreen (the "white screen" bug). So on touch /
+         unsupported devices, open the Office viewer full-page in a new tab. */
+      const noElementFs = !document.fullscreenEnabled ||
+        window.matchMedia('(max-width: 900px)').matches || ('ontouchstart' in window);
       fsBtn.addEventListener('click', () => {
+        if (noElementFs) { window.open(viewer, '_blank', 'noopener'); return; }
         if (document.fullscreenElement) { document.exitFullscreen(); return; }
-        if (frame.requestFullscreen) frame.requestFullscreen();
+        const target = iframeEl || frame;
+        try {
+          const p = target.requestFullscreen && target.requestFullscreen();
+          if (p && p.catch) p.catch(() => window.open(viewer, '_blank', 'noopener'));
+        } catch (_) { window.open(viewer, '_blank', 'noopener'); }
       });
     }
   }
