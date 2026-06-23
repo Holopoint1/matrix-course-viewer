@@ -116,6 +116,10 @@
     try {
       const res = await fetch('data/courses.json?t=' + Date.now());
       const data = await res.json();
+      /* Course content is Drive-only now. Ignore any stale admin/Supabase content
+         edit saved locally in a browser — those overrode the real file and could
+         show outdated text (e.g. an old worksheet). Always render the synced file. */
+      if (window.MatrixCMS) window.MatrixCMS.getHtmlOverride = function () { return null; };
       /* Include courses that live only in Supabase (added via Admin). */
       const courseList = (window.MatrixCMS && window.MatrixCMS.mergeCourses)
         ? window.MatrixCMS.mergeCourses(data.courses) : data.courses;
