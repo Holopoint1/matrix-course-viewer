@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-22T15:50:51.684Z",
+  "generatedAt": "2026-06-23T08:15:43.343Z",
   "summary": {
     "courses": 9,
     "screens": 199,
-    "displaying": 192,
-    "missing": 7,
+    "displaying": 193,
+    "missing": 6,
     "autofixed": 6
   },
   "courses": {
@@ -107,14 +107,7 @@
     "CO0003": {
       "title": "Digital Techniques for Aviation Technicians",
       "stale": [],
-      "missing": [
-        {
-          "title": "Introduction to microcontrollers",
-          "asked": "CO0003 - opening.png",
-          "expectedIn": "CO0003",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0003 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
+      "missing": [],
       "autofixed": [
         {
           "title": "Welcome",
