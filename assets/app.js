@@ -287,14 +287,14 @@
       const screen = documents[i];
       btn.querySelector('span').textContent = 'Preparing (' + (i + 1) + ' of ' + documents.length + ')…';
       try {
-        let html = docCache.get(screen.src);
+        let html = docCache.get(vsrc(screen));
         if (!html) {
-          const res = await fetch(screen.src);
+          const res = await fetch(vsrc(screen));
           if (!res.ok) throw new Error('HTTP ' + res.status);
           const buf = await res.arrayBuffer();
           const result = await window.mammoth.convertToHtml({ arrayBuffer: buf }, MAMMOTH_OPTS);
           html = enhanceWorksheetHtml(result.value || '');
-          docCache.set(screen.src, html);
+          docCache.set(vsrc(screen), html);
         }
         sheets.push({ index: i + 1, screen, html });
       } catch (err) {
@@ -494,6 +494,15 @@
     }
   }
 
+  /* Append the per-file content version the sync stamped on each screen, so a
+     same-name Drive edit produces a NEW url and is never served from a stale
+     browser / CDN / Office-viewer cache. URLs and version-less screens pass through. */
+  function vsrc(screen) {
+    const s = (screen && screen.src) || '';
+    if (/^https?:/i.test(s)) return s;
+    return (screen && screen.v) ? s + (s.indexOf('?') >= 0 ? '&' : '?') + 'v=' + encodeURIComponent(screen.v) : s;
+  }
+
   function renderImage(stage, screen) {
     const wrap = document.createElement('div');
     wrap.className = 'stage-image';
@@ -553,7 +562,7 @@
   function renderPdf(stage, screen) {
     const wrap = document.createElement('div');
     wrap.className = 'stage-pdf';
-    const safeSrc = escapeAttr(screen.src);
+    const safeSrc = escapeAttr(vsrc(screen));
     const fname = filename(screen.src) || 'document.pdf';
     wrap.innerHTML = `
       <div class="stage-pdf-toolbar">
@@ -703,7 +712,7 @@
       if (cmsOverride != null) {
         text = cmsOverride;
       } else {
-        const res = await fetch(screen.src);
+        const res = await fetch(vsrc(screen));
         if (!res.ok) throw new Error('HTTP ' + res.status);
         text = await res.text();
       }
@@ -873,10 +882,10 @@
      download card that explains it works on the published site. */
   function renderOffice(stage, screen) {
     const label = screen.type === 'powerpoint' ? 'PowerPoint' : 'Spreadsheet';
-    const safeSrc = escapeAttr(screen.src);
+    const safeSrc = escapeAttr(vsrc(screen));
     const fname = filename(screen.src) || screen.src;
     let absUrl = '';
-    try { absUrl = new URL(screen.src, location.href).href; } catch (_) {}
+    try { absUrl = new URL(vsrc(screen), location.href).href; } catch (_) {}
     const host = location.hostname;
     const isLocal = location.protocol === 'file:' ||
       /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[?::1\]?)$/i.test(host) ||
@@ -979,7 +988,7 @@
       }
 
       if (typeof window.docx === 'undefined' || !window.docx.renderAsync) await waitForDocx();
-      const res = await fetch(screen.src);
+      const res = await fetch(vsrc(screen));
       if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
       const buf = await res.arrayBuffer();
       inner.innerHTML = '';
