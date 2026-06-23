@@ -26,6 +26,12 @@ const CONTENT_DIR = path.resolve('content');
 const COURSES_JSON = path.resolve('data', 'courses.json');
 const SHEETS_JSON = path.resolve('data', 'sheets.json');
 const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
+
+/* Per-file content fingerprint ('content/<code>/<name>' -> short md5) so the
+   viewer can cache-bust each file by its bytes (a same-name Drive edit gets a new
+   ?v= and is never served stale). Plus sync issues surfaced to the admin report. */
+const CONTENT_VERSIONS = {};
+const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [] };
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
 /* Google-native docs can't be downloaded directly, but they CAN be exported to
    their Office equivalents — so a publisher can author a screen straight from a
@@ -36,7 +42,15 @@ const GOOGLE_EXPORT = {
   'application/vnd.google-apps.spreadsheet':  { mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',         ext: '.xlsx' },
   'application/vnd.google-apps.presentation': { mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', ext: '.pptx' },
 };
-const exportName = (f) => { const e = GOOGLE_EXPORT[f.mimeType]; return e && !f.name.toLowerCase().endsWith(e.ext) ? f.name + e.ext : f.name; };
+const exportName = (f) => {
+  const e = GOOGLE_EXPORT[f.mimeType];
+  if (!e) return f.name;
+  /* Drop a misleading pseudo-extension a Google-native title may carry (e.g.
+     "CO0001 – LO.HTM"), so it exports as the natural "CO0001 – LO.docx" the sheet
+     would type — not a doubled "…HTM.docx". */
+  const base = f.name.replace(/\.(html?|pdf|txt|rtf|odt|csv|pages)$/i, '');
+  return base.toLowerCase().endsWith(e.ext) ? base : base + e.ext;
+};
 
 function getAuth() {
   const raw = (process.env.DRIVE_SA_KEY || '').trim();
@@ -78,21 +92,54 @@ async function collectFiles(folderId, acc) {
   for (const c of await listChildren(folderId)) {
     if (c.mimeType === 'application/vnd.google-apps.folder') { await collectFiles(c.id, acc); continue; }
     if (GOOGLE_NATIVE.test(c.mimeType)) {
-      // Export Google Docs/Sheets/Slides; skip the definition sheets + other Google types (Forms etc.)
-      if (GOOGLE_EXPORT[c.mimeType] && !/\bdefinition\b/i.test(c.name)) acc.push(c);
+      /* Export Google Docs/Slides and content Sheets. Skip ONLY the course's
+         control "definition" Sheet (read via CSV elsewhere) — a Google DOC named
+         "...definition" is real content and still exports. Other Google types
+         (Forms etc.) have no Office export and are ignored. */
+      const isDefinitionSheet = c.mimeType === 'application/vnd.google-apps.spreadsheet' && /\bdefinition\b/i.test(c.name || '');
+      if (GOOGLE_EXPORT[c.mimeType] && !isDefinitionSheet) acc.push(c);
     } else acc.push(c);                                    // a real uploaded file
   }
 }
 
 const localMd5 = (p) => { try { return crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex'); } catch { return null; } };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const versionFromDisk = (p) => { const m = localMd5(p); return m ? m.slice(0, 10) : null; };
 
 async function download(file, dest) {
   const exp = GOOGLE_EXPORT[file.mimeType];
   const res = exp
     ? await drive.files.export({ fileId: file.id, mimeType: exp.mime }, { responseType: 'arraybuffer' })
     : await drive.files.get({ fileId: file.id, alt: 'media', supportsAllDrives: true }, { responseType: 'arraybuffer' });
+  const buf = Buffer.from(res.data);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.writeFileSync(dest, Buffer.from(res.data));
+  fs.writeFileSync(dest, buf);
+  return buf;
+}
+/* Retry transient Drive errors (5xx / rate limits) so a blip doesn't leave a
+   stale prior copy passing as fresh. */
+async function downloadWithRetry(file, dest, tries = 3) {
+  let last;
+  for (let i = 0; i < tries; i++) {
+    try { return await download(file, dest); }
+    catch (e) { last = e; if (i < tries - 1) await sleep(500 * (i + 1)); }
+  }
+  throw last;
+}
+
+/* Make content/<code> a TRUE MIRROR of the Drive folder: delete any file no longer
+   in Drive, so a renamed/replaced/retyped file can never linger as a stale "twin"
+   that canon-matching might snap onto. Only runs for codes synced this run; never
+   touches _-prefixed meta files. */
+function pruneFolder(code, keepSet) {
+  const dir = path.join(CONTENT_DIR, code);
+  let entries; try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+  for (const e of entries) {
+    if (e.isDirectory() || e.name.startsWith('_')) continue;
+    if (!keepSet.has(e.name)) {
+      try { fs.rmSync(path.join(dir, e.name)); console.log(`  ✗ pruned stale ${code}/${e.name}`); } catch (_) {}
+    }
+  }
 }
 
 const codeOf = (name) => { const m = String(name).match(/^([A-Za-z]{2}\d{4})/); return m ? m[1].toUpperCase() : null; };
@@ -109,18 +156,37 @@ async function downloadPhase() {
     if (ONLY_COURSE && code !== ONLY_COURSE) continue;
     const files = [];
     await collectFiles(folder.id, files);
-    driveFilesByCode[code] = new Set(files.map(exportName)); // names as they land in content/ (Google docs get an Office ext)
+    const keep = new Set(files.map(exportName)); // names as they land in content/ (Google docs get an Office ext)
+    driveFilesByCode[code] = keep;
+    /* Basename collision: two Drive files (e.g. root + a media/ subfolder) flatten
+       to the same content/<code>/<name>; only one survives, so warn. */
+    const counts = {};
+    for (const f of files) { const n = exportName(f); counts[n] = (counts[n] || 0) + 1; }
+    for (const [n, c] of Object.entries(counts)) {
+      if (c > 1) { SYNC_ISSUES.collisions.push({ code, name: n, count: c }); console.warn(`  ! collision: ${c} Drive files map to ${code}/${n} — only one survives`); }
+    }
     console.log(`\n${code} — ${files.length} file(s)`);
     for (const f of files) {
       const name = exportName(f);
       const dest = path.join(CONTENT_DIR, code, name);
+      const rel = 'content/' + code + '/' + name;
       // real files: md5-skip when unchanged. Google-native files have no md5, so always re-export (keeps edits fresh).
-      if (!GOOGLE_EXPORT[f.mimeType] && f.md5Checksum && f.md5Checksum === localMd5(dest)) { skipped++; continue; }
-      try { await download(f, dest); console.log(`  ✓ ${name}`); downloaded++; }
-      catch (e) { console.error(`  ✗ ${name}: ${e.message}`); failed++; }
+      if (!GOOGLE_EXPORT[f.mimeType] && f.md5Checksum && f.md5Checksum === localMd5(dest)) {
+        skipped++; CONTENT_VERSIONS[rel] = f.md5Checksum.slice(0, 10); continue;
+      }
+      try {
+        const buf = await downloadWithRetry(f, dest); console.log(`  ✓ ${name}`); downloaded++;
+        CONTENT_VERSIONS[rel] = f.md5Checksum ? f.md5Checksum.slice(0, 10) : crypto.createHash('md5').update(buf).digest('hex').slice(0, 10);
+      } catch (e) {
+        console.error(`  ✗ ${name}: ${e.message}`); failed++;
+        SYNC_ISSUES.failed.push({ code, name, error: e.message });
+        const dv = versionFromDisk(dest); if (dv) CONTENT_VERSIONS[rel] = dv; // tag whatever bytes are actually served
+      }
     }
+    // True-mirror: remove any content/<code> file no longer present in this Drive folder.
+    pruneFolder(code, keep);
   }
-  console.log(`\nDownload: ${downloaded} new/updated, ${skipped} unchanged, ${failed} failed.`);
+  console.log(`\nDownload: ${downloaded} new/updated, ${skipped} unchanged, ${failed} failed, ${SYNC_ISSUES.collisions.length} collision(s).`);
   return driveFilesByCode;
 }
 
@@ -265,13 +331,23 @@ function realName(folderCode, name) {
   const hits = entry.byCanon.get(canon(name));
   if (!hits || !hits.length) return null;                // genuinely no such file
   if (hits.length === 1) return hits[0];
-  /* >1 hit = the same screen content under interchangeable spellings (case, dash,
-     or an .htm/.html-style extension twin). All exist on the case-sensitive server,
-     so any displays; prefer the spelling closest to what the sheet asked, then sort
-     deterministically so the build is stable run-to-run. */
-  const wantExt = (String(name).match(/\.[a-z0-9]+$/i) || [''])[0].toLowerCase();
-  return [...hits].sort((a, b) =>
-    (b.toLowerCase().endsWith(wantExt) - a.toLowerCase().endsWith(wantExt)) || a.localeCompare(b))[0];
+  /* >1 file shares one canon key (e.g. a hyphen vs en-dash twin, or .htm vs .html)
+     — they may be byte-different siblings, so don't pick blindly. Rank by closeness
+     to the RAW spelling the sheet typed: same dash-style AND extension first, then
+     same extension, then deterministic. Record the collision for the report. */
+  const aDash = /[–—]/.test(name);
+  const aExt = (String(name).match(/\.[a-z0-9]+$/i) || [''])[0].toLowerCase();
+  const score = (h) => {
+    if (h === name) return 100;
+    let s = 0;
+    if (/[–—]/.test(h) === aDash) s += 2;
+    if (((h.match(/\.[a-z0-9]+$/i) || [''])[0].toLowerCase()) === aExt) s += 2;
+    if (h.toLowerCase() === String(name).toLowerCase()) s += 1;
+    return s;
+  };
+  const ranked = [...hits].sort((a, b) => score(b) - score(a) || a.localeCompare(b));
+  SYNC_ISSUES.canonCollisions.push({ folder: folderCode, asked: name, candidates: hits, chosen: ranked[0] });
+  return ranked[0];
 }
 
 function rowsToScreens(rows, code, driveFiles = {}) {
@@ -308,13 +384,15 @@ function rowsToScreens(rows, code, driveFiles = {}) {
          the sync exports it to .docx/.xlsx/.pptx, so when the Screen type implies
          an Office file and no extension was given, fetch that exported file. */
       const gExt = { document: '.docx', spreadsheet: '.xlsx', powerpoint: '.pptx' }[type];
-      if (gExt && !/\.[a-z0-9]{2,6}$/i.test(name)) name += gExt;
-      /* Match EXACTLY, forgiving only invisible typography (case, en/em-dash vs
-         hyphen, stray spaces). Same folder, same extension, unique match only — so
-         a screen shows the same file under the name it really has on disk, never a
-         different file. A genuine miss is still reported missing (below). */
-      const real = realName(folderCode, name);
-      if (real) name = real;
+      /* Resolve to the REAL on-disk file: exact name first, then typography-canon
+         (case / en-dash / .htm-.html). For a Google-native screen type whose name
+         has no Office extension, prefer the exported "<name>.docx" — even when the
+         bare name ends in a number/version that LOOKS like an extension (e.g.
+         "Q1.2024" → "Q1.2024.docx"). Same folder only, never a different file. */
+      let resolved = realName(folderCode, name);
+      if (!resolved && gExt) resolved = realName(folderCode, name + gExt);
+      if (resolved) name = resolved;
+      else if (gExt && !/\.(docx?|xlsx?|pptx?|pdf)$/i.test(name)) name += gExt;
       src = 'content/' + folderCode + '/' + name;
       drivePath = file.replace(/\\/g, '/');                 // the Drive path as typed, for display
     }
@@ -333,6 +411,7 @@ function rowsToScreens(rows, code, driveFiles = {}) {
     }
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
     if (drivePath) screen.path = drivePath;
+    const _v = CONTENT_VERSIONS[src]; if (_v) screen.v = _v;   // per-file content hash → viewer cache-bust
     if (equipment) screen.equipment = equipment;
     // flag local files that don't exist on disk (so we can see gaps) — but first
     // try to heal to an identically-named file already published elsewhere.
@@ -359,6 +438,7 @@ async function generatePhase(driveFilesByCode = {}) {
 
   for (const e of entries) {
     const code = String(e.code).toUpperCase();
+    if (ONLY_COURSE && code !== ONLY_COURSE) continue;       // scoped run: don't rebuild courses we didn't re-sync
     const sheetId = sheetIdFromUrl(e.url);
     if (!sheetId) { console.error(`  ! ${code}: cannot read sheet id from ${e.url}`); continue; }
     let csv;
@@ -482,8 +562,15 @@ function writeAccuracyReport(db, driveFilesByCode) {
   const totalAutofixed = Object.values(courses).reduce((n, c) => n + c.autofixed.length, 0);
   const report = {
     generatedAt: new Date().toISOString(),
-    summary: { courses: db.courses.length, screens: totalScreens, displaying: totalScreens - totalMissing, missing: totalMissing, autofixed: totalAutofixed },
+    summary: {
+      courses: db.courses.length, screens: totalScreens, displaying: totalScreens - totalMissing,
+      missing: totalMissing, autofixed: totalAutofixed,
+      downloadFailed: SYNC_ISSUES.failed.length, collisions: SYNC_ISSUES.collisions.length,
+    },
     courses, unusedMedia,
+    failed: SYNC_ISSUES.failed,
+    collisions: SYNC_ISSUES.collisions,
+    canonCollisions: SYNC_ISSUES.canonCollisions,
   };
   fs.writeFileSync(path.join(CONTENT_DIR, '_sync-report.json'), JSON.stringify(report, null, 2) + '\n');
   const staleCount = Object.values(courses).reduce((n, c) => n + c.stale.length, 0);

@@ -6,3 +6,7 @@ Thumbs.db
 .idea/
 # Vendored mammoth — fetched on first build, regenerable
 tools/scorm-template/mammoth.browser.min.js
+
+# Local working artifacts (not part of the published site)
+Corrected definitions/
+Definitions (bare filenames)/
