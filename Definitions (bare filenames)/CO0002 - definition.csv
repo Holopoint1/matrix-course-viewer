@@ -1,0 +1,42 @@
+Screen type,Hours,Equipment,Title,File
+Image,0,Flowcode / E-blocks3,Introduction to microcontrollers,CO0002 - opening.png
+HTML,0.1,Flowcode / E-blocks3,Welcome,CO0002 - welcome.html
+HTML,0.1,Flowcode / E-blocks3,Learning objectives,CO0002 - LO.html
+HTML,0.1,Flowcode / E-blocks3,Equipment,CO0002 - Equip.html
+YouTube,0.2,Flowcode / E-blocks3,Introducing E-blocks 3,https://youtu.be/KmpyVmv6J_Y?si=bzAVMntlAOE_-Rlv
+YouTube,0.2,Flowcode / E-blocks3,Introducing Flowcode,https://youtu.be/tDdptTbvDM0?si=19xqKAzPCOO3In5e
+PDF,0.2,Flowcode / E-blocks3,E-blocks datasheet,https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf
+Powerpoint,0.3,Flowcode / E-blocks3,Microcontroller basics 1,Microcontroller basics 1 24 02 26.pptx
+Powerpoint,0.3,Flowcode / E-blocks3,Microcontroller basics 2,Microcontroller basics 2 24 02 26.pptx
+HTML,1,Flowcode / E-blocks3,Getting started guide,https://www.flowcode.co.uk/wiki/index.php?title=Embedded_Getting_Started_Guide
+Document,1,Flowcode / E-blocks3,First program,CP4807-1.docx
+Document,1,Flowcode / E-blocks3,Performing calculations,CP4807-2.docx
+Document,2,Flowcode / E-blocks3,Connection points,CP4807-3.docx
+Document,2,Flowcode / E-blocks3,Digital inputs,CP4807-4.docx
+HTML,2,Flowcode / E-blocks3,Homework 1,CP4807-H1.htm
+Document,2,Flowcode / E-blocks3,Making decisions,CP4807-5.docx
+Document,2,Flowcode / E-blocks3,Macros / subroutines,CP4807-6.docx
+Document,2,Flowcode / E-blocks3,Using prototype boards,CP4807-7.docx
+Document,2,Flowcode / E-blocks3,Analogue inputs,CP1972-1.docx
+Document,2,Flowcode / E-blocks3,Colour graphical displays,CP4807-8.docx
+HTML,2,Flowcode / E-blocks3,Homework 2,CP4807-H2.htm
+Document,2,Flowcode / E-blocks3,Light sensor,CP1972-2.docx
+Document,2,Flowcode / E-blocks3,Analogue temperature sensor,CP1972-3.docx
+HTML,2,Flowcode / E-blocks3,Homework 3,CP4807-H3.htm
+HTML,2,Flowcode / E-blocks3,Assessment 1,CP4807-A1.htm
+Document,2,Flowcode / E-blocks3,Digital temperature sensor,CP1972-4.docx
+Document,2,Flowcode / E-blocks3,Digital accelerometer,CP1972-5.docx
+HTML,2,Flowcode / E-blocks3,Assessment 2,CP4807-A2.htm
+Document,2,Flowcode / E-blocks3,Basic DC motors,CP0507-1.docx
+Document,2,Flowcode / E-blocks3,Full bridge motor control,CP0507-2.docx
+Document,2,Flowcode / E-blocks3,Stepper motor control,CP0507-3.docx
+Document,2,Flowcode / E-blocks3,Servo motor control,CP0507-4.docx
+HTML,2,Flowcode / E-blocks3,Homework 6,CP4807-H6.htm
+Document,2,Flowcode / E-blocks3,Floats and INTs,CP1972-6.docx
+Document,2,Flowcode / E-blocks3,Pin interrupts,CP4807-9.docx
+Document,2,Flowcode / E-blocks3,Timer interrupts,CP4807-10.docx
+HTML,2,Flowcode / E-blocks3,Homework 7,CP4807-H7.htm
+Document,2,Flowcode / E-blocks3,Touch control systems,CP4807-11.docx
+HTML,2,Flowcode / E-blocks3,Homework 8,CP4807-H8.htm
+Document,2,Flowcode / E-blocks3,Web mirror,CP4807-12.docx
+HTML,24,Flowcode / E-blocks3,Homework 9,CP4807-H9.htm

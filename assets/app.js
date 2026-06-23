@@ -986,8 +986,12 @@
       await window.docx.renderAsync(buf, inner, inner, {
         className: 'docx',
         inWrapper: true,
-        ignoreWidth: false,
-        ignoreHeight: false,
+        /* Fill the viewer width instead of imposing the document's fixed page
+           width (which forced left/right scrolling on narrow screens and left
+           gaps on wide ones). Content stays verbatim — only the page width/height
+           become fluid. */
+        ignoreWidth: true,
+        ignoreHeight: true,
         breakPages: true,
         experimental: true,
         renderHeaders: true,
