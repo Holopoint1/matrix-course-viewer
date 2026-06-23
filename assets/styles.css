@@ -300,8 +300,17 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 /* Tighten card paddings + grid breakpoints across content sections
    so narrow viewports don't waste pixels on huge gutters. */
 @media (max-width: 720px) {
-  .stats-hero, .catalog-hero { padding: 2.2rem 1.1rem 3rem; }
-  .stats-hero h1, .catalog-hero h1 { font-size: 1.7rem; }
+  .stats-hero, .catalog-hero { padding: 2rem 1.1rem 2.4rem; }
+  .stats-hero h1, .catalog-hero h1 { font-size: 1.55rem; }
+  /* Compact the catalog hero + stat panel so the category filters and the first
+     course card aren't pushed below the fold on phones (the "filters look hidden"
+     problem). Stats become a full-width, slimmer strip. */
+  .catalog-hero .eyebrow { margin-bottom: 0.7rem; }
+  .catalog-hero p { font-size: 0.92rem; }
+  .hero-stats { margin-top: 1rem; width: 100%; padding: 0.3rem; }
+  .hero-stats .stat { flex: 1; padding: 0.5rem 0.35rem; }
+  .hero-stats .stat-num { font-size: 1.2rem; }
+  .hero-stats .stat-label { font-size: 0.56rem; letter-spacing: 0.8px; margin-top: 0.25rem; }
   .stats-section, .catalog-section, .mapping-section, .support-section, .compiler-section, .files-section {
     padding-left: 0.9rem;
     padding-right: 0.9rem;
@@ -3455,8 +3464,8 @@ body.pdf-overlay-open { overflow: hidden; }
   .screen-bar .actions #complete-btn { flex-basis: 100%; order: 3; }
 }
 @media (max-width: 600px) {
-  .catalog-hero { padding: 3rem 1.25rem 4.5rem; }
-  .catalog { margin-top: -2.5rem; }
+  .catalog-hero { padding: 1.6rem 1.1rem 2.4rem; }
+  .catalog { margin-top: -1rem; }
   .stage-doc { padding: 1rem; }
   .stage-doc-inner { padding: 1.5rem 1.4rem 2rem; }
   .cert { padding: 1.5rem; }
