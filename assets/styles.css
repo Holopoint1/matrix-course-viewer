@@ -74,11 +74,14 @@ a:hover { text-decoration: underline; }
 
 ::selection { background: var(--primary-100); color: var(--primary-dark); }
 
-/* Scrollbars */
-*::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-thumb { background: #cdd6ec; border-radius: 99px; border: 2px solid transparent; background-clip: content-box; }
-*::-webkit-scrollbar-thumb:hover { background: #aebcdb; background-clip: content-box; border: 2px solid transparent; }
-*::-webkit-scrollbar-track { background: transparent; }
+/* Scrollbars — wider + higher-contrast so they're clearly visible and easy to
+   grab (especially the in-course content + screen-list panes). */
+html { scrollbar-color: #7c83a3 rgba(148,163,184,0.18); scrollbar-width: auto; } /* Firefox */
+*::-webkit-scrollbar { width: 14px; height: 14px; }
+*::-webkit-scrollbar-thumb { background: #8b93b3; border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover { background: #5f6789; background-clip: content-box; border: 3px solid transparent; }
+*::-webkit-scrollbar-thumb:active { background: #4b5378; background-clip: content-box; border: 3px solid transparent; }
+*::-webkit-scrollbar-track { background: rgba(148,163,184,0.16); border-radius: 99px; }
 
 /* ---------- Header ---------- */
 .site-header {
