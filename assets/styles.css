@@ -292,25 +292,9 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   .site-header-sidebar-toggle { width: 32px; height: 32px; margin-right: 0.4rem; }
   .site-header-sidebar-toggle svg { width: 16px; height: 16px; }
 
-  /* Sidebar becomes a drawer: hidden by default, slides in from
-     the left when .app-shell has 'sidebar-mobile-open'. The grid
-     collapses so the main column gets 100% width. */
-  .app-body { grid-template-columns: 1fr !important; }
-  .app-body > .ms-sidebar {
-    position: fixed;
-    top: var(--header-h);
-    left: 0;
-    bottom: 0;
-    width: min(86vw, 320px);
-    z-index: 20;
-    transform: translateX(-110%);
-    transition: transform 0.25s ease;
-    box-shadow: 8px 0 28px rgba(0,0,0,0.25);
-    height: auto;
-  }
-  .app-shell.sidebar-collapsed .app-body > .ms-sidebar { transform: translateX(0); visibility: visible; pointer-events: auto; }
-  /* Inverted logic on mobile: 'sidebar-collapsed' (the default state)
-     means hidden; the toggle button opens the drawer. */
+  /* The mobile sidebar drawer itself is defined in the ≤900px block below
+     (keyed off .sidebar-mobile-open), so it's decoupled from the desktop
+     'sidebar-collapsed' state and can't be hidden by accident. */
 }
 
 /* Tighten card paddings + grid breakpoints across content sections
@@ -3451,8 +3435,24 @@ body.pdf-overlay-open { overflow: hidden; }
   .viewer-shell { grid-template-columns: 1fr; height: auto; }
   .viewer-sidebar { max-height: none; }
   .screen-bar { flex-wrap: wrap; }
-  .screen-bar .actions { margin-left: 0; width: 100%; }
-  .screen-bar .actions .btn { flex: 1; }
+  /* Prev + Next share the top row; "Mark complete & next" gets its own full
+     width below. min-width:0 lets the long button shrink instead of overflowing
+     the viewport (the cut-off-buttons bug). */
+  .screen-bar .actions {
+    margin-left: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .screen-bar .actions .btn {
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: 0.85rem;
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
+    white-space: nowrap;
+  }
+  .screen-bar .actions #complete-btn { flex-basis: 100%; order: 3; }
 }
 @media (max-width: 600px) {
   .catalog-hero { padding: 3rem 1.25rem 4.5rem; }
@@ -3997,7 +3997,30 @@ body.pdf-overlay-open { overflow: hidden; }
 
 @media (max-width: 900px) {
   .app-body { grid-template-columns: 1fr; }
-  .app-body > .ms-sidebar { display: none; }
+  /* The screen list can't stay docked on a narrow screen, so it becomes an
+     off-canvas drawer opened by the header's toggle button (see chrome.js). */
+  .app-body > .ms-sidebar {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    bottom: 0;
+    width: min(86vw, 340px);
+    height: auto;
+    z-index: 60;
+    transform: translateX(-110%);
+    transition: transform 0.25s ease;
+    box-shadow: 8px 0 28px rgba(0,0,0,0.28);
+  }
+  .app-shell.sidebar-mobile-open .app-body > .ms-sidebar { transform: translateX(0); visibility: visible; pointer-events: auto; }
+  .app-shell.sidebar-mobile-open .sidebar-backdrop { display: block; }
+}
+/* Off-canvas drawer backdrop — only ever shown on mobile via .sidebar-mobile-open. */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: var(--header-h) 0 0 0;
+  background: rgba(15, 23, 42, 0.5);
+  z-index: 55;
 }
 
 /* Legacy compat: old per-page wrappers are passthroughs now. */

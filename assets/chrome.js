@@ -178,17 +178,40 @@
     /* Apply persisted state + wire the toggles. */
     const SIDEBAR_KEY = 'matrix-lms:sidebar-collapsed';
     const shell = document.querySelector('.app-shell');
-    if (shell) {
+    const mqMobile = window.matchMedia('(max-width: 900px)');
+    /* 'sidebar-collapsed' is a DESKTOP concept (docked column hidden). On mobile
+       the sidebar is an off-canvas drawer (keyed off 'sidebar-mobile-open'), so
+       don't let a persisted desktop-collapse hide the drawer there. */
+    if (shell && !mqMobile.matches) {
       try {
         if (localStorage.getItem(SIDEBAR_KEY) === '1') shell.classList.add('sidebar-collapsed');
       } catch (_) {}
     }
     const toggle = document.getElementById('sidebar-toggle');
     if (toggle && shell) {
+      const closeDrawer = () => shell.classList.remove('sidebar-mobile-open');
       toggle.addEventListener('click', () => {
-        const collapsed = shell.classList.toggle('sidebar-collapsed');
-        try { localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0'); } catch (_) {}
+        if (mqMobile.matches) {
+          /* Mobile: open/close the drawer. Not persisted — it must default
+             closed on every load so content isn't covered. */
+          shell.classList.toggle('sidebar-mobile-open');
+        } else {
+          const collapsed = shell.classList.toggle('sidebar-collapsed');
+          try { localStorage.setItem(SIDEBAR_KEY, collapsed ? '1' : '0'); } catch (_) {}
+        }
       });
+      /* Tap-anywhere backdrop closes the mobile drawer. */
+      const backdrop = document.createElement('div');
+      backdrop.className = 'sidebar-backdrop';
+      backdrop.addEventListener('click', closeDrawer);
+      shell.appendChild(backdrop);
+      /* Picking a screen in the drawer closes it so the content shows. */
+      const sb = document.getElementById('sidebar');
+      if (sb) sb.addEventListener('click', (ev) => {
+        if (mqMobile.matches && ev.target.closest('a, .ms-ws-item, [data-screen]')) closeDrawer();
+      });
+      /* Growing past mobile width clears the drawer-open state. */
+      mqMobile.addEventListener('change', (e) => { if (!e.matches) closeDrawer(); });
     }
     /* Hamburger drives a body-level class so the nav slides down and any
        open page-shell content scrolls underneath. */
