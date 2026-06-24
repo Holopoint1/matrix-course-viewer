@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-24T12:15:59.093Z",
+  "generatedAt": "2026-06-24T12:17:46.419Z",
   "summary": {
     "courses": 9,
     "screens": 199,
-    "displaying": 193,
-    "missing": 6,
+    "displaying": 179,
+    "missing": 20,
     "autofixed": 8,
     "downloadFailed": 0,
     "collisions": 0
@@ -12,14 +12,15 @@
   "courses": {
     "CO0002": {
       "title": "Introduction to Microcontrollers",
-      "stale": [
+      "stale": [],
+      "missing": [
         {
           "title": "Floats and INTs",
-          "showing": "CP1972-6.docx",
-          "expectedIn": "CP1972"
+          "asked": "CP1972-6.docx",
+          "expectedIn": "CP1972",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP1972 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
       ],
-      "missing": [],
       "autofixed": [
         {
           "title": "Welcome",
@@ -155,14 +156,15 @@
     },
     "CO0001": {
       "title": "Flowcode and E-blocks 3 CPD Course",
-      "stale": [
+      "stale": [],
+      "missing": [
         {
           "title": "Now try the worksheets",
-          "showing": "Now try the worksheets.HTM",
-          "expectedIn": "CO0002"
+          "asked": "Now try the worksheets.HTM",
+          "expectedIn": "CO0002",
+          "reason": "No file by this name in the CO0002 folder — but a matching file is in the CO0001 folder. Move it there, or point the row at the right folder."
         }
       ],
-      "missing": [],
       "autofixed": [
         {
           "title": "Introduction to microcontrollers",
@@ -223,69 +225,81 @@
     },
     "CO0004": {
       "title": "Microcontrollers for T-Levels",
-      "stale": [
+      "stale": [],
+      "missing": [
         {
           "title": "Introduction to microcontrollers",
-          "showing": "CO0004 - opening.jpg",
-          "expectedIn": "CO0004"
+          "asked": "CO0004 - opening.jpg",
+          "expectedIn": "CO0004",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Welcome",
-          "showing": "CO0004 - welcome.html",
-          "expectedIn": "CO0004"
+          "asked": "CO0004 - welcome.html",
+          "expectedIn": "CO0004",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Learning objectives",
-          "showing": "CO0004 - LO.html",
-          "expectedIn": "CO0004"
+          "asked": "CO0004 - LO.html",
+          "expectedIn": "CO0004",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Equipment",
-          "showing": "CO0004 - Equip.html",
-          "expectedIn": "CO0004"
+          "asked": "CO0004 - Equip.html",
+          "expectedIn": "CO0004",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Microcontroller basics 1",
-          "showing": "Microcontroller basics 1 24 02 26.pptx",
-          "expectedIn": "CO0004"
+          "asked": "Microcontroller basics 1 24 02 26.pptx",
+          "expectedIn": "CO0004",
+          "reason": "No file by this name in the CO0004 folder — but a matching file is in the CO0002 folder. Move it there, or point the row at the right folder."
         },
         {
           "title": "Microcontroller basics 2",
-          "showing": "Microcontroller basics 2 24 02 26.pptx",
-          "expectedIn": "CO0004"
+          "asked": "Microcontroller basics 2 24 02 26.pptx",
+          "expectedIn": "CO0004",
+          "reason": "No file by this name in the CO0004 folder — but a matching file is in the CO0002 folder. Move it there, or point the row at the right folder."
         },
         {
           "title": "Homework 1",
-          "showing": "CP4807-H1.htm",
-          "expectedIn": "CP4807"
+          "asked": "CP4807-H1.htm",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Homework 2",
-          "showing": "CP4807-H2.htm",
-          "expectedIn": "CP4807"
+          "asked": "CP4807-H2.htm",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Homework 3",
-          "showing": "CP4807-H3.htm",
-          "expectedIn": "CP4807"
+          "asked": "CP4807-H3.htm",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Assessment 1",
-          "showing": "CP4807-A1.htm",
-          "expectedIn": "CP4807"
+          "asked": "CP4807-A1.htm",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Assessment 2",
-          "showing": "CP4807-A2.htm",
-          "expectedIn": "CP4807"
+          "asked": "CP4807-A2.htm",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Homework 6",
-          "showing": "CP4807-H6.htm",
-          "expectedIn": "CP4807"
+          "asked": "CP4807-H6.htm",
+          "expectedIn": "CP4807",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
       ],
-      "missing": [],
       "autofixed": []
     }
   },
@@ -343,7 +357,7 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "orphans": [
+  "removed": [
     {
       "code": "CO0004",
       "name": "CO0004 - Equip.html"

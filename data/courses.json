@@ -381,7 +381,8 @@
           "hours": 2,
           "src": "content/CP1972/CP1972-6.docx",
           "path": "/CP1972 - Sensors and microcontrollers/CP1972-6.docx",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0002-s39",
@@ -1305,7 +1306,8 @@
           "hours": 0.1,
           "src": "content/CO0002/Now try the worksheets.HTM",
           "path": "/CO0002 - Introduction to microcontrollers/media/Now try the worksheets.HTM",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s17",
@@ -1734,7 +1736,8 @@
           "hours": 0,
           "src": "content/CO0004/CO0004 - opening.jpg",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - opening.jpg",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s2",
@@ -1743,7 +1746,8 @@
           "hours": 0.1,
           "src": "content/CO0004/CO0004 - welcome.html",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - welcome.html",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s3",
@@ -1752,7 +1756,8 @@
           "hours": 0.1,
           "src": "content/CO0004/CO0004 - LO.html",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - LO.html",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s4",
@@ -1761,7 +1766,8 @@
           "hours": 0.1,
           "src": "content/CO0004/CO0004 - Equip.html",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/CO0004 - Equip.html",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s5",
@@ -1794,7 +1800,8 @@
           "hours": 0.3,
           "src": "content/CO0004/Microcontroller basics 1 24 02 26.pptx",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/Microcontroller basics 1 24 02 26.pptx",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s9",
@@ -1803,7 +1810,8 @@
           "hours": 0.3,
           "src": "content/CO0004/Microcontroller basics 2 24 02 26.pptx",
           "path": "LMS Project Assets/CO0004 - Microcontrollers for T levels/Microcontroller basics 2 24 02 26.pptx",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s10",
@@ -1860,7 +1868,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-H1.htm",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H1.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s16",
@@ -1919,7 +1928,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-H2.htm",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H2.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s22",
@@ -1948,7 +1958,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-H3.htm",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H3.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s25",
@@ -1957,7 +1968,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-A1.htm",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-A1.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s26",
@@ -1986,7 +1998,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-A2.htm",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-A2.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s29",
@@ -2035,7 +2048,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-H6.htm",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H6.htm",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         }
       ],
       "categories": [
