@@ -1304,10 +1304,10 @@
           "type": "html",
           "title": "Now try the worksheets",
           "hours": 0.1,
-          "src": "content/CO0002/Now try the worksheets.htm",
+          "src": "content/CO0002/Now try the worksheets.HTM",
           "path": "/CO0002 - Introduction to microcontrollers/media/Now try the worksheets.HTM",
-          "v": "18c9ba415a",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s17",

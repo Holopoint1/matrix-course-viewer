@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-24T12:34:39.633Z",
+  "generatedAt": "2026-06-24T12:35:55.403Z",
   "summary": {
     "courses": 9,
     "screens": 199,
-    "displaying": 180,
-    "missing": 19,
-    "autofixed": 9,
+    "displaying": 179,
+    "missing": 20,
+    "autofixed": 8,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -157,7 +157,14 @@
     "CO0001": {
       "title": "Flowcode and E-blocks 3 CPD Course",
       "stale": [],
-      "missing": [],
+      "missing": [
+        {
+          "title": "Now try the worksheets",
+          "asked": "Now try the worksheets.HTM",
+          "expectedIn": "CO0002",
+          "reason": "No file by this name in the CO0002 folder — but a matching file is in the CO0001 folder. Move it there, or point the row at the right folder."
+        }
+      ],
       "autofixed": [
         {
           "title": "Introduction to microcontrollers",
@@ -179,14 +186,6 @@
           "title": "Learning objectives",
           "asked": "CO0002 – LO.HTM",
           "used": "CO0002 – LO.htm",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        },
-        {
-          "title": "Now try the worksheets",
-          "asked": "Now try the worksheets.HTM",
-          "used": "Now try the worksheets.htm",
           "reasons": [
             "A small spelling/spacing difference, matched automatically."
           ]
@@ -342,6 +341,7 @@
       "CO0001 - content.docx"
     ],
     "CO0002": [
+      "Now try the worksheets.docx",
       "CO0002 - Equip.docx",
       "bits.docx",
       "CO0002-H8.docx",
@@ -360,7 +360,7 @@
   "removed": [
     {
       "code": "CO0002",
-      "name": "Now try the worksheets.docx"
+      "name": "Now try the worksheets.htm"
     }
   ]
 }
