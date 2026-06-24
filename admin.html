@@ -81,7 +81,6 @@
       var courses = data.courses.slice().sort(function (a, b) { return String(a.id||a.code||'').localeCompare(String(b.id||b.code||'')); });
 
       /* Index the report so each screen can be given a live status. */
-      var orphanSet = {}; (report.orphans || []).forEach(function (o) { orphanSet[o.code + '/' + o.name] = true; });
       var missingByCourse = {}, fixByCourse = {};
       Object.keys(report.courses || {}).forEach(function (id) {
         var c = report.courses[id];
@@ -94,13 +93,11 @@
         if (s.missing) return { k: 'miss', label: '❌ Missing', reason: (missingByCourse[courseId] || {})[s.title] || 'File not found in the Drive folder.' };
         var fx = (fixByCourse[courseId] || {})[s.title];
         if (fx) return { k: 'fix', label: '🔧 Auto-fixed', reason: (fx.reasons || []).join(' ') };
-        var p = parts(s.src);
-        if (p && orphanSet[p.folder + '/' + p.name]) return { k: 'orph', label: '📄 Not in Drive', reason: 'Served from a repo copy — add this file to the Drive folder for true backing.' };
         return { k: 'ok', label: '✅ Displays' };
       }
 
       /* ---- counts ---- */
-      var totalScreens = 0, displaying = 0, missing = 0, fixed = 0, orphans = (report.orphans || []).length;
+      var totalScreens = 0, displaying = 0, missing = 0, fixed = 0, removed = (report.removed || []).length;
       var failed = (report.failed || []).length, collisions = (report.collisions || []).length;
       courses.forEach(function (c) { (c.screens || []).forEach(function (s) { totalScreens++; if (s.missing) missing++; else displaying++; }); });
       Object.keys(report.courses || {}).forEach(function (id) { fixed += ((report.courses[id].autofixed) || []).length; });
@@ -133,16 +130,16 @@
         '<div class="stat good"><div class="n">' + displaying + '</div><div class="l">Screens display</div></div>' +
         '<div class="stat ' + (missing?'bad':'') + '"><div class="n">' + missing + '</div><div class="l">Missing</div></div>' +
         '<div class="stat ' + (fixed?'warn':'') + '"><div class="n">' + fixed + '</div><div class="l">Auto-fixed names</div></div>' +
-        '<div class="stat ' + (orphans?'warn':'') + '"><div class="n">' + orphans + '</div><div class="l">Not in Drive</div></div>' +
+        '<div class="stat"><div class="n">' + removed + '</div><div class="l">Cleaned (not in Drive)</div></div>' +
         '<div class="stat ' + (failed?'bad':'') + '"><div class="n">' + failed + '</div><div class="l">Download fails</div></div>' +
         '</div>';
 
       /* ---- per-course ---- */
       courses.forEach(function (c) {
-        var rows = '', cMiss = 0, cFix = 0, cOrph = 0, cOk = 0;
+        var rows = '', cMiss = 0, cFix = 0, cOk = 0;
         (c.screens || []).forEach(function (s, i) {
           var st = screenStatus(c.id, s);
-          if (st.k === 'miss') cMiss++; else if (st.k === 'fix') cFix++; else if (st.k === 'orph') cOrph++; else if (st.k === 'ok') cOk++;
+          if (st.k === 'miss') cMiss++; else if (st.k === 'fix') cFix++; else if (st.k === 'ok') cOk++;
           rows += '<tr>' +
             '<td>' + (i + 1) + '</td>' +
             '<td>' + esc(s.title || '(untitled)') + '</td>' +
@@ -152,7 +149,6 @@
         });
         var chips = '';
         if (cMiss) chips += '<span class="chip c-miss">' + cMiss + ' missing</span>';
-        if (cOrph) chips += '<span class="chip c-orph">' + cOrph + ' not in Drive</span>';
         if (cFix) chips += '<span class="chip c-fix">' + cFix + ' auto-fixed</span>';
         if (!cMiss) chips += '<span class="chip c-ok">' + cOk + '/' + (c.screens||[]).length + ' ok</span>';
         html += '<details class="course">' +
@@ -165,9 +161,9 @@
       /* ---- why / how-to ---- */
       html += '<div class="why"><strong>How this works &amp; how to fix issues</strong>' +
         '<ul style="margin:6px 0 0;padding-left:20px">' +
-          '<li><strong>❌ Missing</strong> — the file named in the course’s definition sheet isn’t in its Drive folder. Add it to Drive (exact name) and it appears on the next sync.</li>' +
-          '<li><strong>📄 Not in Drive</strong> — the screen displays from a leftover copy in the site, but that file isn’t in the Drive folder. Add it to Drive so Drive is the true source.</li>' +
+          '<li><strong>❌ Missing</strong> — the file named in the course’s definition sheet isn’t in its Drive folder. The site shows "missing" and never a leftover/cached copy. Add the file to that Drive folder (exact name) and it appears on the next sync.</li>' +
           '<li><strong>🔧 Auto-fixed</strong> — the sheet’s name differed only by case / hyphen-vs-en-dash / .htm-vs-.html; matched automatically. Tidy the name for cleanliness.</li>' +
+          '<li><strong>Only Drive content is shown</strong> — files not in a course’s Drive folder are removed from the site, so nothing stale or copied is ever displayed. "Cleaned" above counts files removed for that reason.</li>' +
           '<li>Everything is controlled in <strong>Google Drive</strong> (one folder per course + its definition sheet). Edit there, then <strong>Sync from Drive now</strong> (or wait ~5 min).</li>' +
         '</ul></div>';
 

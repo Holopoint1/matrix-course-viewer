@@ -31,7 +31,7 @@ const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
    viewer can cache-bust each file by its bytes (a same-name Drive edit gets a new
    ?v= and is never served stale). Plus sync issues surfaced to the admin report. */
 const CONTENT_VERSIONS = {};
-const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], orphans: [] };
+const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [] };
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
 /* Google-native docs can't be downloaded directly, but they CAN be exported to
    their Office equivalents — so a publisher can author a screen straight from a
@@ -134,20 +134,18 @@ async function downloadWithRetry(file, dest, tries = 3) {
 function pruneFolder(code, keepSet) {
   const dir = path.join(CONTENT_DIR, code);
   let entries; try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
-  const keepCanon = new Set([...keepSet].map(canon));
+  /* TRUE MIRROR — the live site shows ONLY what is in Drive. Any content file that
+     is NOT in the course's Drive folder is removed, so a leftover/old/cached copy can
+     never be served. A screen pointing at a now-absent file honestly shows "missing"
+     until the real file is added to Drive. (_-prefixed meta files are left alone.) */
   for (const e of entries) {
     if (e.isDirectory() || e.name.startsWith('_')) continue;
-    if (keepSet.has(e.name)) continue;                       // exact current Drive file — keep
-    if (keepCanon.has(canon(e.name))) {
-      /* A stale spelling-twin of a file that IS in Drive (old case/dash/extension
-         duplicate) — delete it so the resolver can never snap onto the outdated copy. */
-      try { fs.rmSync(path.join(dir, e.name)); console.log(`  ✗ pruned stale twin ${code}/${e.name}`); } catch (_) {}
-    } else {
-      /* No Drive counterpart at all — KEEP it (it may be the only copy a screen
-         references, and deleting it would break the screen) but flag it so the
-         publisher can add the real file to Drive for true backing. */
-      SYNC_ISSUES.orphans.push({ code, name: e.name });
-    }
+    if (keepSet.has(e.name)) continue;
+    try {
+      fs.rmSync(path.join(dir, e.name));
+      SYNC_ISSUES.removed.push({ code, name: e.name });
+      console.log(`  ✗ removed ${code}/${e.name} (not in Drive)`);
+    } catch (_) {}
   }
 }
 
@@ -580,7 +578,7 @@ function writeAccuracyReport(db, driveFilesByCode) {
     failed: SYNC_ISSUES.failed,
     collisions: SYNC_ISSUES.collisions,
     canonCollisions: SYNC_ISSUES.canonCollisions,
-    orphans: SYNC_ISSUES.orphans,   // content files with no Drive counterpart (kept, but not Drive-backed)
+    removed: SYNC_ISSUES.removed,   // content files deleted because they were not in Drive (their screen now shows missing)
   };
   fs.writeFileSync(path.join(CONTENT_DIR, '_sync-report.json'), JSON.stringify(report, null, 2) + '\n');
   const staleCount = Object.values(courses).reduce((n, c) => n + c.stale.length, 0);
