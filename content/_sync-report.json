@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-24T14:06:01.748Z",
+  "generatedAt": "2026-06-24T14:06:54.001Z",
   "summary": {
     "courses": 9,
     "screens": 199,
-    "displaying": 179,
-    "missing": 20,
+    "displaying": 180,
+    "missing": 19,
     "autofixed": 8,
     "downloadFailed": 0,
     "collisions": 0
@@ -157,14 +157,7 @@
     "CO0001": {
       "title": "Flowcode and E-blocks 3 CPD Course",
       "stale": [],
-      "missing": [
-        {
-          "title": "Now try the worksheets",
-          "asked": "Now try the worksheets.HTM",
-          "expectedIn": "CO0002",
-          "reason": "No file by this name in the CO0002 folder — but a matching file is in the CO0001 folder. Move it there, or point the row at the right folder."
-        }
-      ],
+      "missing": [],
       "autofixed": [
         {
           "title": "Introduction to microcontrollers",
@@ -341,7 +334,6 @@
       "CO0001 - content.docx"
     ],
     "CO0002": [
-      "Now try the worksheets.docx",
       "CO0002 - Equip.docx",
       "bits.docx",
       "CO0002-H8.docx",
