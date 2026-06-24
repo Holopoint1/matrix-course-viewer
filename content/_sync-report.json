@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T12:35:55.403Z",
+  "generatedAt": "2026-06-24T12:41:01.668Z",
   "summary": {
     "courses": 9,
     "screens": 199,
@@ -357,10 +357,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0002",
-      "name": "Now try the worksheets.htm"
-    }
-  ]
+  "removed": []
 }
