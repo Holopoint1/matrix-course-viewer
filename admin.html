@@ -33,7 +33,7 @@
     #dash table { width: 100%; border-collapse: collapse; font-size: 13px; }
     #dash thead th { text-align: left; background: #f8fafc; color: #475569; font-size: 0.7rem; letter-spacing: 0.4px; text-transform: uppercase; padding: 6px 10px; border-top: 1px solid #e2e8f0; }
     #dash td { padding: 7px 10px; border-top: 1px solid #f1f5f9; vertical-align: top; }
-    #dash code { background: #1e293b; color: #e2e8f0; padding: 1px 6px; border-radius: 5px; font-size: 12px; word-break: break-all; }
+    #dash code { background: #1e293b; color: #e2e8f0; padding: 1px 6px; border-radius: 5px; font-size: 12px; overflow-wrap: anywhere; }
     #dash .st { font-weight: 700; white-space: nowrap; }
     #dash .st-ok { color: #16a34a; } #dash .st-miss { color: #dc2626; } #dash .st-fix { color: #b45309; } #dash .st-orph { color: #4338ca; } #dash .st-link { color: #2563eb; }
     #dash .reason { color: #64748b; font-size: 12px; }
@@ -42,6 +42,26 @@
     #dash a.open { font-size: 0.78rem; color: #2563eb; text-decoration: none; }
     #dash .spin { display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#2563eb;border-radius:50%;animation:dspin .8s linear infinite;vertical-align:-2px;margin-right:5px; }
     @keyframes dspin { to { transform: rotate(360deg); } }
+    /* ---- Mobile: stack the per-screen table into readable cards ----
+       On a narrow screen the 4-column table forces the long file path to wrap
+       one character per line. Instead, drop the header, stack each row, and let
+       the path wrap across the full width. */
+    @media (max-width: 640px) {
+      #dash { padding: 1rem 0.7rem 3rem; }
+      #dash .dash-head h1 { font-size: 1.25rem; }
+      #dash .dash-actions { width: 100%; }
+      #dash .dash-actions .btn { flex: 1; }
+      #dash .stat { flex-basis: 44%; }
+      #dash .course > summary { padding: 0.7rem 0.8rem; }
+      #dash thead { display: none; }
+      #dash table, #dash tbody, #dash tr, #dash td { display: block; width: 100%; }
+      #dash tr { border-top: 1px solid #e2e8f0; padding: 9px 10px 11px; }
+      #dash td { border: 0; padding: 1px 0; }
+      #dash td:first-child { display: none; }                 /* the # column */
+      #dash td:nth-child(2) { font-weight: 700; font-size: 13.5px; color: #0f172a; } /* screen title */
+      #dash td code { display: block; white-space: normal; overflow-wrap: anywhere; word-break: break-word; font-size: 11px; margin-top: 3px; padding: 3px 7px; }
+      #dash .reason { font-size: 11.5px; margin-top: 1px; }
+    }
   </style>
 </head>
 <body data-no-sidebar>
