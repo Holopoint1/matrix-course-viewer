@@ -238,10 +238,10 @@
     const eyebrow = isCourseOpen
       ? (kindLabel + (isPack ? ' &middot; ' + escapeHtml(course.code || '') : ''))
       : ('CONTINUE &middot; ' + escapeHtml(course.code || ''));
-    const returnAttr = isCourseOpen ? '' : ' data-return-href="' + escapeHtml(continueHref) + '"';
+    const returnAttr = ' data-return-href="' + escapeHtml(continueHref) + '"';
     return `
       <div class="ms-section">
-        <div class="ms-course-group${expanded ? ' expanded' : ''}${isPack ? ' ms-course-group-pack' : ''}${isCourseOpen ? '' : ' ms-course-group-return'}" data-role="course-group">
+        <div class="ms-course-group expanded${isPack ? ' ms-course-group-pack' : ''}${isCourseOpen ? '' : ' ms-course-group-return'}" data-role="course-group">
           <button type="button" class="ms-course-head" id="ms-course-toggle"${returnAttr}>
             <img class="ms-course-thumb" src="${escapeHtml(thumb)}" alt="">
             <span class="ms-course-info">
@@ -249,7 +249,6 @@
               <span class="ms-course-info-title">${escapeHtml(course.title || '')}</span>
               <span class="ms-course-info-progress">${pct}% &middot; ${done}/${total}</span>
             </span>
-            ${ICONS.chevron}
           </button>
           <div class="ms-course-body">
             ${body}
@@ -287,23 +286,13 @@
   }
 
   function wireExpanderAndReset(root, courseId) {
+    /* The course head links to the course dashboard. The old chevron that
+       collapsed the whole screen list has been removed — the list is always shown. */
     const toggle = root.querySelector('#ms-course-toggle');
-    const group = root.querySelector('[data-role="course-group"]');
-    if (toggle && group) {
-      toggle.addEventListener('click', (ev) => {
-        /* If this is a "return to course" card (user is on a non-course page),
-           clicking the body of the head jumps back to the course dashboard.
-           Only the chevron toggles the worksheet list. */
+    if (toggle) {
+      toggle.addEventListener('click', () => {
         const returnHref = toggle.dataset.returnHref;
-        const chev = ev.target.closest('.course-nav-arrow');
-        if (returnHref && !chev) {
-          location.href = returnHref;
-          return;
-        }
-        const isOpen = group.classList.toggle('expanded');
-        const set = getExpanded();
-        if (isOpen) set.add(courseId); else set.delete(courseId);
-        setExpanded(set);
+        if (returnHref) location.href = returnHref;
       });
     }
     const resetBtn = root.querySelector('#ms-reset');
