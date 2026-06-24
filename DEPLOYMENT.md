@@ -1,5 +1,15 @@
 # Deployment
 
+> **Current model (2026-06-24): Google Drive → GitHub Action → GitHub Pages.** Authoritative
+> reference: **`README.md`**. Key facts: GitHub Pages deploys from `main`/root on every commit;
+> **`.nojekyll` is required** (without it Pages' Jekyll 404s `_`-prefixed files such as
+> `content/_sync-report.json` and lags/stalls deploys). The sync —
+> `.github/workflows/sync-from-drive.yml` → `tools/sync-drive.mjs` (secret `DRIVE_SA_KEY`) —
+> runs every ~5 min / on push / manually, mirrors Drive into `content/`, regenerates
+> `data/courses.json`, and (because Actions-token commits don't auto-trigger Pages) POSTs
+> `…/pages/builds` to publish. **Verify changes on the LIVE github.io URL, not just the repo.**
+> The local Node server below is only for offline preview.
+
 ## Local development
 
 The site is fully static. Run the bundled Node server:

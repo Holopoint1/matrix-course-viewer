@@ -1,5 +1,17 @@
 # Authoring guide
 
+> **Current model (2026-06-24): courses are authored in GOOGLE DRIVE, not in JSON.**
+> Authoritative reference: **`README.md`**. In short — each course is a Drive folder
+> `<CODE> - Title` under "LMS Project Assets" with a `<CODE> - definition` Google Sheet
+> (columns: *Screen type, Hours, Equipment, Title, File*) plus its content files (a `media/`
+> subfolder is fine). A sync mirrors Drive → the site every ~5 min. **The site shows only
+> what's in the course's Drive folder** — a file that isn't there makes its screen show
+> "missing" (never a stale/leftover copy). Names match exactly *except* invisible typography
+> (letter-case, hyphen↔en-dash, `.htm`↔`.html`). To publish: register the course in
+> `data/sheets.json`, or set `Active: yes` in its definition sheet (auto-discovery).
+> The schema sections below describe the `data/courses.json` the sync **generates** — that
+> file is generated output; **do not hand-edit it**.
+
 How to define courses, add screens, and drop in content files.
 
 ## The big picture
