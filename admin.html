@@ -5,1579 +5,196 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <title>Admin · Content Manager | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260617">
+  <title>Admin · Course health | Matrix Course Viewer</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20260624">
+  <style>
+    #dash { max-width: 1080px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; color: #0f172a; }
+    #dash .dash-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin-bottom: 0.4rem; }
+    #dash .dash-head h1 { font-size: 1.5rem; margin: 0; }
+    #dash .dash-sub { color: #64748b; font-size: 0.9rem; margin: 0 0 1rem; }
+    #dash .dash-actions { margin-left: auto; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    #dash .hb { border-radius: 12px; padding: 14px 18px; margin: 0 0 14px; font-size: 14px; line-height: 1.5; }
+    #dash .hb-ok { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    #dash .hb-warn { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+    #dash .stats { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1rem; }
+    #dash .stat { flex: 1 1 120px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.7rem 0.9rem; }
+    #dash .stat .n { font-size: 1.5rem; font-weight: 800; line-height: 1; }
+    #dash .stat .l { font-size: 0.68rem; letter-spacing: 0.6px; text-transform: uppercase; color: #64748b; margin-top: 0.3rem; font-weight: 700; }
+    #dash .stat.warn .n { color: #d97706; } #dash .stat.bad .n { color: #dc2626; } #dash .stat.good .n { color: #16a34a; }
+    #dash .course { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin: 0 0 0.7rem; overflow: hidden; }
+    #dash .course > summary { cursor: pointer; list-style: none; padding: 0.85rem 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+    #dash .course > summary::-webkit-details-marker { display: none; }
+    #dash .course .code { font-weight: 800; font-size: 0.8rem; color: #1e293b; }
+    #dash .course .title { font-weight: 600; }
+    #dash .course .chips { margin-left: auto; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    #dash .chip { font-size: 0.72rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; }
+    #dash .c-ok { background: #dcfce7; color: #166534; } #dash .c-miss { background: #fee2e2; color: #991b1b; }
+    #dash .c-fix { background: #fef9c3; color: #854d0e; } #dash .c-orph { background: #e0e7ff; color: #3730a3; }
+    #dash table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    #dash thead th { text-align: left; background: #f8fafc; color: #475569; font-size: 0.7rem; letter-spacing: 0.4px; text-transform: uppercase; padding: 6px 10px; border-top: 1px solid #e2e8f0; }
+    #dash td { padding: 7px 10px; border-top: 1px solid #f1f5f9; vertical-align: top; }
+    #dash code { background: #1e293b; color: #e2e8f0; padding: 1px 6px; border-radius: 5px; font-size: 12px; word-break: break-all; }
+    #dash .st { font-weight: 700; white-space: nowrap; }
+    #dash .st-ok { color: #16a34a; } #dash .st-miss { color: #dc2626; } #dash .st-fix { color: #b45309; } #dash .st-orph { color: #4338ca; } #dash .st-link { color: #2563eb; }
+    #dash .reason { color: #64748b; font-size: 12px; }
+    #dash .why { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 13px; }
+    #dash details.issues > summary { cursor: pointer; font-weight: 700; padding: 4px 0; }
+    #dash a.open { font-size: 0.78rem; color: #2563eb; text-decoration: none; }
+    #dash .spin { display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#2563eb;border-radius:50%;animation:dspin .8s linear infinite;vertical-align:-2px;margin-right:5px; }
+    @keyframes dspin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body data-no-sidebar>
   <header class="site-header" id="site-header"></header>
 
   <main class="am-wrap">
-    <section class="am-main" id="am-main">
-      <p class="stage-loading">Loading courses&hellip;</p>
-    </section>
+    <section class="am-main" id="dash"><p class="stage-loading">Loading live course health&hellip;</p></section>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="assets/chrome.js?v=20260617"></script>
+  <script src="assets/chrome.js?v=20260623"></script>
   <script src="assets/cms-overrides.js?v=20260623"></script>
-  <script src="assets/sheet-loader.js?v=20260617"></script>
   <script>
   (function () {
     'use strict';
-    var CMS = window.MatrixCMS;
-    try { CMS.unlock('matrix'); } catch (e) {}   /* Phase 1: open access */
-
-    var main = document.getElementById('am-main');
-    var courses = null;
-    var cur = { courseId: null, screenId: null };
-    var editTimes = {};                /* screen src -> ISO time of its last content edit */
-    var editTimesReady = Promise.resolve();
-    var courseEditTimes = {};          /* course id -> ISO time of latest edit anywhere in the course */
-
-    function esc(s) {
-      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
-    }
-    function safeName(s) { return String(s || 'untitled').replace(/[^\w .()-]+/g, '_').trim().slice(0, 70) || 'untitled'; }
-    function pad2(n) { return ('0' + n).slice(-2); }
-    function norm(s) { return String(s || '').replace(/\s+/g, ' ').trim().toLowerCase(); }
-    function wrapPage(bodyHtml) {
-      return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
-        '<link rel="stylesheet" href="../../assets/embedded.css"></head><body>' +
-        '<div class="page">' + bodyHtml + '</div></body></html>';
-    }
-    /* A full HTML document — the body Word converts inside the .docx. */
-    function fullHtmlDoc(bodyHtml, title) {
-      return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + esc(title || '') + '</title>' +
-        '<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.4;}' +
-        'h1{font-size:16pt;}h2{font-size:13pt;}h3{font-size:12pt;}' +
-        'table{border-collapse:collapse;}td,th{border:1px solid #999;padding:4px;}' +
-        'img{max-width:100%;height:auto;}</style></head><body>' +
-        String(bodyHtml || '') + '</body></html>';
-    }
-    /* Build a REAL .docx (OOXML) — a minimal Word package whose body is one
-       altChunk pointing at the embedded HTML. Word converts it to native
-       content on open AND saves it back as a clean .docx, so the
-       download → edit-in-Word → re-upload round trip works. (Ported from
-       the Tools-page Word builder.) */
-    function htmlToDocxBlob(html) {
-      var z = new JSZip();
-      z.file('[Content_Types].xml',
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
-        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
-        '<Default Extension="xml" ContentType="application/xml"/>' +
-        '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
-        '<Override PartName="/word/afchunk.html" ContentType="text/html"/>' +
-        '</Types>');
-      z.file('_rels/.rels',
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
-        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
-        '</Relationships>');
-      z.file('word/document.xml',
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-        '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ' +
-        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
-        '<w:body><w:altChunk r:id="htmlChunk"/>' +
-        '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
-        '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"/></w:sectPr>' +
-        '</w:body></w:document>');
-      z.file('word/_rels/document.xml.rels',
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
-        '<Relationship Id="htmlChunk" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk" Target="afchunk.html"/>' +
-        '</Relationships>');
-      z.file('word/afchunk.html', String(html || ''));
-      return z.generateAsync({
-        type: 'blob',
-        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      });
-    }
-    function download(blob, name) {
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a');
-      a.href = url; a.download = name;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-    }
-
-    var TYPES = {
-      document:   { cls: 'document', label: 'Worksheet', icon: '📄', word: true,  img: false },
-      html:       { cls: 'html',     label: 'Page',      icon: '📝', word: true,  img: false },
-      youtube:    { cls: 'youtube',  label: 'Video',     icon: '▶',  word: false, img: false },
-      pdf:        { cls: 'pdf',      label: 'PDF',       icon: '📕', word: false, img: false },
-      powerpoint: { cls: 'powerpoint', label: 'Slides',  icon: '📊', word: false, img: false },
-      image:      { cls: 'image',    label: 'Image',     icon: '🖼', word: false, img: true },
-      spreadsheet:{ cls: 'document', label: 'Sheet',     icon: '📈', word: false, img: false }
-    };
-    function typeOf(t) { return TYPES[t] || { cls: 'document', label: t || 'Screen', icon: '📄', word: false, img: false }; }
-
-    function getCourse(id) { return courses.find(function (c) { return c.id === id; }); }
-    function merged(id) {
-      var c = getCourse(id);
-      return (c && CMS.applyOverrides) ? CMS.applyOverrides(c) : c;
-    }
-    function isEdited(s) { return !!(s && s.src && CMS.getHtmlOverride(s.src)); }
-
-    function bodyOf(fullHtml) {
-      try {
-        var d = new DOMParser().parseFromString(fullHtml, 'text/html');
-        var page = d.querySelector('.page');
-        if (page) return page.innerHTML;
-        if (d.body) return d.body.innerHTML;
-      } catch (e) {}
-      return fullHtml;
-    }
-    function enhance(html) {
-      try {
-        var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
-        d.body.querySelectorAll('a').forEach(function (a) {
-          var m = (a.getAttribute('href') || '').match(/(?:youtu\.be\/|v=|embed\/)([\w-]{6,})/);
-          if (!m) return;
-          var w = d.createElement('div');
-          w.className = 'inline-youtube';
-          w.innerHTML = '<iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen loading="lazy"></iframe>';
-          a.replaceWith(w);
-        });
-        return d.body.innerHTML;
-      } catch (e) { return html; }
-    }
-
-    /* Current body HTML of a screen — admin edit wins, else the source file. */
-    async function getScreenBody(s) {
-      var ov = CMS.getHtmlOverride(s.src);
-      if (ov != null) {
-        if (/^data:image\//i.test(ov)) return '<p><img src="' + ov + '" alt="' + esc(s.title) + '"></p>';
-        return bodyOf(ov);
-      }
-      if (s.type === 'document') {
-        var buf = await fetch(s.src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); });
-        return (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value || '';
-      }
-      if (s.type === 'html') {
-        return bodyOf(await fetch(s.src).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }));
-      }
-      return '';
-    }
-
-    /* Read an uploaded file → body HTML. Sniffs the actual CONTENT, not
-       the extension — so a .docx works even if mis-named, and an old
-       binary .doc gets a clear, actionable error instead of garbage.
-       No AI: .docx is read verbatim by mammoth, HTML is parsed as-is. */
-    async function fileToHtml(file) {
-      var buf = await file.arrayBuffer();
-      var b = new Uint8Array(buf);
-      /* "PK" — a ZIP, i.e. a real .docx — read verbatim with mammoth. */
-      if (b[0] === 0x50 && b[1] === 0x4B) {
-        return (await window.mammoth.convertToHtml({ arrayBuffer: buf })).value || '';
-      }
-      /* OLE2 magic — an old binary .doc that mammoth cannot read. */
-      if (b[0] === 0xD0 && b[1] === 0xCF && b[2] === 0x11 && b[3] === 0xE0) {
-        throw new Error('That is an old-format Word .doc. In Word choose ' +
-          'File ▸ Save As and pick “Word Document (.docx)”, then upload that .docx.');
-      }
-      /* Otherwise treat it as HTML / text (our exports, .htm pages). */
-      return bodyOf(new TextDecoder('utf-8').decode(buf));
-    }
-
-    /* Strip the "Screen N:" prefix our course downloads put on each
-       screen heading, so a downloaded course re-uploads and matches. */
-    function stripScreenPrefix(title) {
-      return String(title || '').replace(/^\s*screen\s*\d+\s*[:.\-–—]\s*/i, '').trim();
-    }
-    /* The number from a "Screen N:" heading, or null. This is the most
-       reliable matcher — it survives the title text being renamed. */
-    function screenNumberOf(title) {
-      var m = String(title || '').match(/^\s*screen\s*(\d+)\s*[:.\-–—]/i);
-      return m ? parseInt(m[1], 10) : null;
-    }
-    /* First embedded picture (a data: URI) inside a chunk of HTML —
-       used to populate image screens from a section of an uploaded doc. */
-    function firstImageData(html) {
-      try {
-        var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
-        var img = d.body.querySelector('img');
-        var src = img && img.getAttribute('src');
-        return (src && /^data:image\//i.test(src)) ? src : null;
-      } catch (e) { return null; }
-    }
-    /* The image a screen currently shows — an admin override wins. */
-    function imageSrcOf(s) {
-      var ov = CMS.getHtmlOverride(s.src);
-      return (ov && /^data:image\//i.test(ov)) ? ov : s.src;
-    }
-    /* Fetch any URL and return it as a base64 data: URI, so a picture
-       can be embedded directly inside a downloaded Word document. */
-    async function toDataUri(url) {
-      try {
-        var blob = await fetch(url).then(function (r) { if (!r.ok) throw new Error('x'); return r.blob(); });
-        return await new Promise(function (res) {
-          var fr = new FileReader();
-          fr.onload = function () { res(String(fr.result)); };
-          fr.onerror = function () { res(null); };
-          fr.readAsDataURL(blob);
-        });
-      } catch (e) { return null; }
-    }
-
-    /* Give a screen's HTML exactly ONE title heading. If the content
-       already opens with a heading that just repeats the screen title,
-       that heading is REUSED (its text becomes headingText) — so the
-       title never appears twice. Otherwise headingText is added as a
-       new heading on top. */
-    function markScreen(html, headingText, title) {
-      try {
-        var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
-        var first = d.body.firstElementChild;
-        while (first && !(first.textContent || '').trim() && !first.querySelector('img')) {
-          first = first.nextElementSibling;
-        }
-        if (first && /^H[1-6]$/.test(first.tagName) && norm(first.textContent) === norm(title)) {
-          first.textContent = headingText;
-        } else {
-          var h = d.createElement('h1');
-          h.textContent = headingText;
-          d.body.insertBefore(h, d.body.firstChild);
-        }
-        return d.body.innerHTML;
-      } catch (e) {
-        return '<h1>' + esc(headingText) + '</h1>' + html;
-      }
-    }
-
-    /* ---- Edit-time tracking (file manager + per-screen info) ---- */
-    function fmtTime(iso) {
-      var d = new Date(iso);
-      if (isNaN(d.getTime())) return '';
-      var mon = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()];
-      return d.getDate() + ' ' + mon + ' ' + d.getFullYear() + ', ' +
-        ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
-    }
-    /* The pages table was seeded for every screen in one transaction,
-       so all original rows share the EXACT same updated_at = the seed
-       time. That isn't a real edit. Detect it (any timestamp shared by
-       3+ rows) and treat those as "Original — not yet edited" even
-       though a pages row exists. Real edits use now() per row, so
-       their timestamps are unique. */
-    function detectSeedTime(rows) {
-      var counts = {}, dominant = null;
-      (rows || []).forEach(function (r) {
-        if (r && r.updated_at) counts[r.updated_at] = (counts[r.updated_at] || 0) + 1;
-      });
-      Object.keys(counts).forEach(function (t) {
-        if (counts[t] >= 3 && (!dominant || counts[t] > counts[dominant])) dominant = t;
-      });
-      return dominant;
-    }
-    async function loadEditTimes(c) {
-      editTimes = {};
-      if (!CMS.supabaseClient || !c) return;
-      try {
-        var srcs = (c.screens || []).map(function (s) { return s.src; }).filter(Boolean);
-        if (!srcs.length) return;
-        /* Pull ALL pages rows to detect the global seed cluster, then
-           filter to this course's screens. */
-        var res = await CMS.supabaseClient.from('pages').select('path,updated_at');
-        var rows = res.data || [];
-        var seedTime = detectSeedTime(rows);
-        var wanted = {}; srcs.forEach(function (p) { wanted[p] = true; });
-        rows.forEach(function (r) {
-          if (!r || !r.path || !r.updated_at || !wanted[r.path]) return;
-          if (seedTime && r.updated_at === seedTime) return;
-          editTimes[r.path] = r.updated_at;
-        });
-      } catch (e) {}
-    }
-    function editTextPlain(s) {
-      var iso = s && editTimes[s.src];
-      if (iso) return fmtTime(iso);
-      if (isEdited(s)) return 'Edited';
-      return 'Original — not yet edited';
-    }
-    function hoursText(s) {
-      return (s && s.hours != null && s.hours !== '') ? String(s.hours) : '—';
-    }
-    /* Thumbnail for a course tile — admin upload (saved as a pages row
-       at the synthetic path cms-thumbnail/<courseId>) wins; otherwise
-       fall back to the legacy content/<id>/opening.svg image. */
-    function thumbnailFor(c) {
-      var ov = CMS.getHtmlOverride && CMS.getHtmlOverride('cms-thumbnail/' + c.id);
-      if (ov && /^data:image\//i.test(ov)) return ov;
-      return 'content/' + c.id + '/opening.svg';
-    }
-    /* When was THIS course last edited anywhere — its own row, any of
-       its screens' rows, or any of its pages' content rows. Aggregated
-       once on the catalog and painted onto each tile. */
-    async function loadCourseEditTimes() {
-      courseEditTimes = {};
-      if (!CMS.supabaseClient) return;
-      try {
-        /* ONLY use pages.updated_at — courses.updated_at and
-           screens.updated_at carry the seed time for every untouched
-           row, which would make every course look "edited just now"
-           even when nobody has touched it. The pages table only has
-           a row when content was actually edited, so it's the clean
-           signal. */
-        var res = await Promise.all([
-          CMS.supabaseClient.from('screens').select('course_id,src'),
-          CMS.supabaseClient.from('pages').select('path,updated_at')
-        ]);
-        var srcToCourse = {};
-        (res[0].data || []).forEach(function (r) { if (r && r.src) srcToCourse[r.src] = r.course_id; });
-        /* Exclude the seed-time cluster — those aren't real edits. */
-        var seedTime = detectSeedTime(res[1].data || []);
-        (res[1].data || []).forEach(function (r) {
-          if (!r || !r.path || !r.updated_at) return;
-          if (seedTime && r.updated_at === seedTime) return;
-          var cid = srcToCourse[r.path];
-          if (!cid) return;
-          if (!courseEditTimes[cid] || r.updated_at > courseEditTimes[cid]) courseEditTimes[cid] = r.updated_at;
-        });
-      } catch (e) {}
-    }
-    function repaintCatalogTimes() {
-      document.querySelectorAll('.am-tile[data-course]').forEach(function (b) {
-        var span = b.querySelector('.am-tile-edited');
-        if (!span) return;
-        var iso = courseEditTimes[b.dataset.course];
-        span.textContent = iso ? ('Last edited ' + fmtTime(iso)) : '';
-      });
-    }
-
-    /* ========== URL routing ==========
-       Each view has its own address, so a refresh, a bookmark or a
-       shared link reopens exactly where you were:
-         admin.html                          → catalog
-         admin.html?course=CO0001            → that course
-         admin.html?course=CO0001&screen=s3  → that screen
-       mode: 'push' = new history entry (Back works), 'replace' =
-       update in place, 'none' = don't touch history (popstate). */
-    function buildUrl(courseId, screenId) {
-      var u = location.pathname.split('/').pop() || 'admin.html';
-      if (courseId) {
-        u += '?course=' + encodeURIComponent(courseId);
-        if (screenId) u += '&screen=' + encodeURIComponent(screenId);
-      }
-      return u;
-    }
-    function setUrl(courseId, screenId, mode) {
-      if (mode === 'none') return;
-      var url = buildUrl(courseId, screenId);
-      var here = (location.pathname.split('/').pop() || 'admin.html') + location.search;
-      var st = { courseId: courseId || null, screenId: screenId || null };
-      try {
-        if (mode === 'push' && url !== here) history.pushState(st, '', url);
-        else history.replaceState(st, '', url);
-      } catch (e) {}
-    }
-    function routeFromUrl(mode) {
-      if (!courses) return;
-      var p = new URLSearchParams(location.search);
-      var courseId = p.get('course');
-      var screenId = p.get('screen');
-      if (courseId && getCourse(courseId)) openCourse(courseId, screenId || null, mode);
-      else renderCatalog(mode);
-    }
-
-    /* ========== View 1: catalog ========== */
-    function renderCatalog(mode) {
-      cur.courseId = null; cur.screenId = null;
-      document.documentElement.classList.remove('am-course-mode');
-      document.body.classList.remove('am-course-mode');
-      /* Filter out courses the editor has soft-deleted (local). */
-      var hidden = {};
-      (CMS.getDeletedCourses ? CMS.getDeletedCourses() : []).forEach(function (id) { hidden[id] = true; });
-      var visibleCourses = (courses || []).filter(function (c) { return !hidden[c.id]; });
-      var tiles = visibleCourses.map(function (c) {
-        var scr = c.screens || [];
-        var edited = scr.filter(function (s) { return isEdited(s); }).length;
-        return '<button type="button" class="am-tile" data-course="' + esc(c.id) + '">' +
-          '<span class="am-tile-thumb" style="background-image:url(\'' + esc(thumbnailFor(c)) + '\')">' +
-            '<span class="am-tile-code">' + esc(c.code || c.id) + '</span></span>' +
-          '<span class="am-tile-body"><strong>' + esc(c.title || c.id) + '</strong>' +
-            '<span class="am-tile-meta">' + scr.length + ' screens' +
-              (c.draft ? ' · <em style="color:#d97706">DRAFT — auto-built from files; add a definition sheet (Active: yes) to publish</em>' : '') +
-              (edited ? ' · <em>' + edited + ' edited</em>' : '') + '</span>' +
-            '<span class="am-tile-edited"></span></span></button>';
-      }).join('');
-      main.innerHTML =
-        '<div id="am-health"></div>' +
-        '<div class="am-head"><div class="am-head-row"><div>' +
-          '<span class="am-head-eyebrow">Content manager</span>' +
-          '<h1>Courses</h1>' +
-          '<p>Pick a course to edit. New courses are created in Google Drive — tap the guide.</p></div>' +
-          '<div class="am-head-actions">' +
-            '<button type="button" class="btn btn-primary" id="am-guide-btn">📖 How to add a course</button>' +
-            '<button type="button" class="btn btn-secondary" id="am-tpl-btn" title="Download a course template Word document">📄 Download template</button>' +
-          '</div></div></div>' +
-        '<div class="am-catalog">' + tiles + '</div>';
-      main.querySelectorAll('[data-course]').forEach(function (b) {
-        b.addEventListener('click', function () { openCourse(b.dataset.course); });
-      });
-      var gb = document.getElementById('am-guide-btn');
-      if (gb) gb.addEventListener('click', renderGuide);
-      var tb = document.getElementById('am-tpl-btn');
-      if (tb) tb.addEventListener('click', downloadCourseTemplate);
-      setUrl(null, null, mode || 'push');
-      /* Paint cached times now (if any), then refresh from Supabase. */
-      repaintCatalogTimes();
-      loadCourseEditTimes().then(repaintCatalogTimes);
-      paintHealthBanner();
-    }
-
-    /* ========== Sync health banner (top of the catalog) ==========
-       Reads the report the sync writes (content/_sync-report.json) and shows, in
-       plain English, what's missing or was auto-corrected and WHY — so a publisher
-       self-diagnoses the hyphen / case / extension traps without anyone debugging. */
-    function relTime(iso) {
-      var d = new Date(iso); if (isNaN(d.getTime())) return '';
-      var s = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000));
-      if (s < 60) return s + 's ago';
-      var m = Math.round(s / 60); if (m < 60) return m + ' min ago';
-      var h = Math.round(m / 60); if (h < 24) return h + ' hour' + (h === 1 ? '' : 's') + ' ago';
-      return Math.round(h / 24) + ' day(s) ago';
-    }
-    async function paintHealthBanner() {
-      var host = document.getElementById('am-health');
-      if (!host) return;
-      var rep = null;
-      try { rep = await fetch('content/_sync-report.json?t=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; }); } catch (e) {}
-      if (!rep) { host.innerHTML = ''; return; }
-      var sum = rep.summary || {};
-      var when = rep.generatedAt ? (fmtTime(rep.generatedAt) + ' · ' + relTime(rep.generatedAt)) : 'unknown';
-      var courseIds = Object.keys(rep.courses || {});
-      /* Prefer the summary, but fall back to counting (so an older-format report
-         from before the last sync can never show a false "all clean"). */
-      var cnt = function (key) { return courseIds.reduce(function (n, id) { return n + ((rep.courses[id][key] || []).length); }, 0); };
-      var nMissing = sum.missing != null ? sum.missing : cnt('missing');
-      var nFixed = sum.autofixed != null ? sum.autofixed : cnt('autofixed');
-
-      var css = '<style>' +
-        '#am-health{margin:0 0 8px}' +
-        '#am-health .hb{border-radius:12px;padding:14px 18px;margin:0 0 10px;font-size:14px;line-height:1.5}' +
-        '#am-health .hb-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}' +
-        '#am-health .hb-warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}' +
-        '#am-health h3{margin:0 0 6px;font-size:15px}' +
-        '#am-health .hb-row{margin:10px 0;padding:10px 12px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;color:#0f172a}' +
-        '#am-health code{background:#1e293b;color:#e2e8f0;padding:1px 6px;border-radius:5px;font-size:12.5px;word-break:break-all}' +
-        '#am-health .hb-why{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:8px;padding:10px 14px;margin-top:10px}' +
-        '#am-health details{margin-top:8px}#am-health summary{cursor:pointer;font-weight:600}' +
-        '#am-health .tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;margin-right:6px}' +
-        '#am-health .tag-miss{background:#fee2e2;color:#991b1b}#am-health .tag-fix{background:#dcfce7;color:#166534}' +
-        '</style>';
-
-      if (!nMissing && !nFixed) {
-        host.innerHTML = css + '<div class="hb hb-ok">✓ All ' + (sum.courses || courseIds.length || '') +
-          ' courses synced cleanly — no missing files. <span style="opacity:.8">Last synced ' + esc(when) + '.</span></div>';
-        return;
-      }
-
-      var rows = '';
-      courseIds.forEach(function (id) {
-        var c = rep.courses[id], blocks = '';
-        (c.missing || []).forEach(function (m) {
-          blocks += '<div style="margin:6px 0"><span class="tag tag-miss">MISSING</span><strong>' + esc(m.title) +
-            '</strong> — wants <code>' + esc(m.asked || m.file) + '</code>' +
-            (m.reason ? '<br><span style="color:#475569">' + esc(m.reason) + '</span>' : '') + '</div>';
-        });
-        (c.autofixed || []).forEach(function (a) {
-          blocks += '<div style="margin:6px 0"><span class="tag tag-fix">AUTO-FIXED</span><strong>' + esc(a.title) +
-            '</strong> — sheet says <code>' + esc(a.asked) + '</code>, file is <code>' + esc(a.used) + '</code><br><span style="color:#475569">' +
-            (a.reasons || []).map(esc).join(' ') + '</span></div>';
-        });
-        if (blocks) rows += '<div class="hb-row"><h3>' + esc(id) + (c.title ? ' — ' + esc(c.title) : '') + '</h3>' + blocks + '</div>';
-      });
-
-      var why =
-        '<div class="hb-why"><strong>Why these happen</strong> — and how to fix them for good:' +
-        '<ul style="margin:6px 0 0;padding-left:20px">' +
-          '<li><strong>Hyphen vs en-dash “–”:</strong> Word/Google autocorrect turns a normal hyphen <code>-</code> into a longer en-dash <code>–</code> that looks identical. Auto-matched now, but retype the dash as a plain hyphen to keep names clean.</li>' +
-          '<li><strong>Capitalisation (<code>.HTM</code> vs <code>.htm</code>):</strong> the live site is case-sensitive. Forgiven now; safest to keep file names all lower-case.</li>' +
-          '<li><strong>Extension (<code>.htm</code> vs <code>.html</code>):</strong> treated as the same web page automatically.</li>' +
-          '<li><strong>“definition” in a file name:</strong> never published — those are control sheets. Rename to something else.</li>' +
-          '<li><strong>Truly missing / wrong folder:</strong> the file isn’t in that course’s Drive folder. Add it (or move it), keeping the name identical to the sheet.</li>' +
-        '</ul></div>';
-
-      host.innerHTML = css +
-        '<div class="hb hb-warn"><h3>🩺 ' + nMissing + ' missing file' + (nMissing === 1 ? '' : 's') +
-          (nFixed ? ' · ' + nFixed + ' name' + (nFixed === 1 ? '' : 's') + ' auto-corrected' : '') +
-          ' <span style="font-weight:400;opacity:.8">· last synced ' + esc(when) + '</span></h3>' +
-          '<div>Every screen needing attention is below. Missing files won’t show until added to Drive; auto-corrected ones already display but have an invisible name mismatch worth tidying.</div>' +
-          '<details open><summary>Show issue log &amp; why</summary>' + rows + why + '</details>' +
-        '</div>';
-    }
-
-    /* ========== Publisher guide (replaces the old in-app "New course" flow,
-       which created Supabase-only courses. Courses now live in Google Drive and
-       are auto-discovered by the sync — see tools/sync-drive.mjs). ========== */
-    var DRIVE_ROOT_URL = 'https://drive.google.com/drive/folders/1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu';
-    function renderGuide() {
-      cur.courseId = null; cur.screenId = null;
-      document.documentElement.classList.remove('am-course-mode');
-      document.body.classList.remove('am-course-mode');
-      main.innerHTML =
-        '<div class="am-head"><div class="am-head-row"><div>' +
-          '<span class="am-head-eyebrow">Publisher guide</span>' +
-          '<h1>How to add &amp; edit courses</h1>' +
-          '<p>Everything you need — even if you have never touched this system before.</p></div>' +
-          '<div class="am-head-actions"><button type="button" class="btn btn-secondary" id="am-guide-back">‹ Back to courses</button></div>' +
-        '</div></div>' +
-        '<div class="am-guide">' + guideHtml() + '</div>';
-      document.getElementById('am-guide-back').addEventListener('click', function () { renderCatalog('push'); });
-      setUrl(null, null, 'replace');
-    }
-    function guideHtml() {
-      return `
-<style>
-  .am-guide{max-width:780px;line-height:1.6;color:#0f172a}
-  .am-guide h2{margin:30px 0 10px;font-size:21px;border-bottom:1px solid #e2e8f0;padding-bottom:6px}
-  .am-guide h3{margin:18px 0 6px;font-size:16px}
-  .am-guide .gcard{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin:14px 0}
-  .am-guide .gnote{background:#eff6ff;border-left:4px solid #3b82f6;border-radius:8px;padding:12px 14px;margin:16px 0;font-size:14px}
-  .am-guide .gwarn{background:#fff7ed;border-left:4px solid #f59e0b;border-radius:8px;padding:12px 14px;margin:16px 0;font-size:14px}
-  .am-guide code{background:#1e293b;color:#e2e8f0;padding:2px 6px;border-radius:5px;font-size:13px;white-space:nowrap}
-  .am-guide table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
-  .am-guide th,.am-guide td{border:1px solid #cbd5e1;padding:7px 9px;text-align:left;vertical-align:top}
-  .am-guide th{background:#f1f5f9}
-  .am-guide ol,.am-guide ul{padding-left:22px}
-  .am-guide li{margin:7px 0}
-  .am-guide a{color:#2563eb}
-</style>
-
-<div class="gnote"><strong>The one big idea:</strong> every course lives in <strong>Google Drive</strong>. This website is just a live mirror of your Drive. You make changes in Drive, press <strong>🚀 Publish to live</strong>, and a minute or two later the site matches Drive. You never touch any code.</div>
-
-<h2>1. Where everything lives</h2>
-<p>All courses sit in one Drive folder, <strong>“LMS Project Assets”</strong> (<a href="${DRIVE_ROOT_URL}" target="_blank" rel="noopener">open it ↗</a>). Inside, <strong>each course is one folder</strong>, named like this:</p>
-<div class="gcard"><code>CO0005 - Advanced Robotics</code><br><span style="color:#64748b;font-size:13px">↑ a 2-letter + 4-number code, a dash, then the course title</span></div>
-<p>Inside a course folder there are two things:</p>
-<ul>
-  <li>A <strong>“… - definition” Google Sheet</strong> — the list of screens. This is the one that matters.</li>
-  <li>The <strong>content files</strong> — Word docs, images, PDFs. You can tuck images into a <code>media</code> sub-folder to stay tidy; it makes no difference to the site.</li>
-</ul>
-
-<h2>2. The definition sheet (how a course is built)</h2>
-<p>It's a simple table — <strong>each row is one screen</strong> the learner sees, top to bottom. Two parts:</p>
-<h3>Part A — Settings (a few rows at the very top)</h3>
-<table>
-  <tr><td><code>Active</code></td><td><code>yes</code></td><td>Type <code>yes</code> to make it live. Anything else keeps it a hidden draft.</td></tr>
-  <tr><td><code>Certificate</code></td><td><code>yes</code></td><td>Give a certificate on completion? <em>(optional)</em></td></tr>
-  <tr><td><code>Categories</code></td><td>Robotics, T-Level</td><td>Filter tags on the catalogue <em>(optional)</em></td></tr>
-</table>
-<h3>Part B — The screens (after a blank row)</h3>
-<table>
-  <tr><th>Screen type</th><th>Hours</th><th>Equipment</th><th>Title</th><th>File</th></tr>
-  <tr><td>HTML</td><td>0.25</td><td></td><td>Welcome</td><td>welcome.html</td></tr>
-  <tr><td>YouTube</td><td>0.5</td><td></td><td>Intro video</td><td>https://youtu.be/…</td></tr>
-  <tr><td>Document</td><td>1</td><td></td><td>Worksheet 1</td><td>worksheet1.docx</td></tr>
-</table>
-<ul>
-  <li><strong>Screen type</strong> — one of <code>Image</code>, <code>HTML</code>, <code>YouTube</code>, <code>PDF</code>, <code>Document</code> (Word), <code>PowerPoint</code>, <code>Spreadsheet</code>.</li>
-  <li><strong>Title</strong> — the heading the learner sees.</li>
-  <li><strong>File</strong> — just type the <strong>file's name</strong> (e.g. <code>welcome.html</code>). The system finds it in your course folder automatically, even inside <code>media</code>. For videos or web PDFs, paste the full link instead.</li>
-  <li><strong>Hours</strong> — rough learning time (totals up). <strong>Equipment</strong> — an optional note.</li>
-</ul>
-
-<h2>3. Add a brand-new course</h2>
-<ol>
-  <li>In Drive, open the <strong>“TEMPLATE — New course”</strong> folder and its definition sheet → <strong>File → Make a copy</strong>.</li>
-  <li>Make a <strong>new folder</strong> in “LMS Project Assets” named with your code + title, e.g. <code>CO0005 - Advanced Robotics</code>.</li>
-  <li>Move your copied sheet into it and rename it <code>CO0005 - definition</code>. Add your files (optionally in a <code>media</code> sub-folder).</li>
-  <li>Fill in the sheet — one row per screen — and set <code>Active</code> to <code>yes</code>.</li>
-  <li>Come back here and press <strong>🚀 Publish to live</strong> (bottom-right). ~1–2 minutes later it's on the site.</li>
-</ol>
-<div class="gnote"><strong>Where did the “New course” button go?</strong> Courses are created in Drive now — one single home for everything, so nothing can fall out of sync. This guide <em>is</em> the button. 🙂</div>
-
-<h2>4. Edit an existing course</h2>
-<ol>
-  <li>Open that course's folder in Drive.</li>
-  <li>Edit the definition sheet (add / remove / reorder rows), or replace a file — keep the same file name and it simply swaps in.</li>
-  <li>Press <strong>🚀 Publish to live</strong>.</li>
-</ol>
-
-<h2>5. Publishing &amp; how long it takes</h2>
-<p>The <strong>🚀 Publish to live</strong> button (bottom-right of every admin screen) tells the site to re-read Drive. A progress bar walks through <em>Syncing → Deploying → Live</em>. It is <strong>not instant</strong> — expect <strong>about 1–2 minutes</strong>, then it offers a Refresh. (It also re-checks itself automatically every few minutes.)</p>
-
-<h2>6. Drafts &amp; safety</h2>
-<ul>
-  <li>A course only goes live when its sheet says <code>Active: yes</code>. Build it over days with <code>Active: no</code> and nobody sees it until you flip it.</li>
-  <li>A folder without the code-style name, or without a definition sheet, is ignored — so stray folders can't accidentally become courses.</li>
-  <li><strong>Removing a course:</strong> set <code>Active: no</code> and publish to hide it. To delete it for good, also remove its folder from Drive and ask whoever manages the system to tidy the published list.</li>
-</ul>
-<div class="gwarn"><strong>Golden rules:</strong> keep the folder name as <code>CODE - Title</code>; keep the definition sheet's name ending in <code>definition</code>; set <code>Active: yes</code> when it's ready; then Publish.</div>
-`;
-    }
-
-    /* ========== View 2: course open ========== */
-    function openCourse(courseId, screenId, mode) {
-      cur.courseId = courseId;
-      var c = merged(courseId);
-      if (!c) { renderCatalog('replace'); return; }
-      document.documentElement.classList.add('am-course-mode');
-      document.body.classList.add('am-course-mode');
-      main.innerHTML =
-        '<div class="am-course-shell">' +
-          '<aside class="am-side">' +
-            '<div class="am-side-head">' +
-              '<button type="button" class="am-back" data-back>‹ All courses</button>' +
-              '<div class="am-side-code">' + esc(c.code || c.id) + '</div>' +
-              '<div class="am-side-title">' + esc(c.title || '') + '</div>' +
-              '<div class="am-side-actions">' +
-                '<button type="button" class="am-side-act" id="am-fm-btn">📁 File manager</button>' +
-                '<button type="button" class="am-side-act" id="am-thumb-btn">🖼 Change course thumbnail</button>' +
-                '<input type="file" id="am-thumb-file" accept="image/*" hidden>' +
-                '<button type="button" class="am-side-act" id="am-dl-course">⤓ Download whole course</button>' +
-                '<button type="button" class="am-side-act" id="am-ul-course">⤴ Upload whole course</button>' +
-                '<input type="file" id="am-course-file" accept=".docx,.doc,.htm,.html" hidden>' +
-                '<button type="button" class="am-side-act" id="am-scorm-btn">🎓 SCORM viewer</button>' +
-                '<button type="button" class="am-side-act am-side-act-danger" id="am-del-course">🗑 Delete course</button>' +
-                '<div class="am-side-divider"></div>' +
-                '<button type="button" class="am-side-act am-side-act-primary" id="am-add-screen">＋ Add screen</button>' +
-              '</div>' +
-            '</div>' +
-            '<div class="ms-tier ms-tier-flat am-screenlist" id="am-screenlist"></div>' +
-          '</aside>' +
-          '<div class="am-content" id="am-content"></div>' +
-        '</div>';
-      main.querySelector('[data-back]').addEventListener('click', function () { renderCatalog('push'); });
-      document.getElementById('am-fm-btn').addEventListener('click', function () { showFileManager(courseId); });
-      var thumbFile = document.getElementById('am-thumb-file');
-      document.getElementById('am-thumb-btn').addEventListener('click', function () { thumbFile.click(); });
-      thumbFile.addEventListener('change', function () {
-        var f = thumbFile.files[0]; if (!f) return;
-        var fr = new FileReader();
-        fr.onload = function () {
-          CMS.setHtmlOverride('cms-thumbnail/' + courseId, String(fr.result));
-          alert('Thumbnail updated — it will appear on the catalog.');
-        };
-        fr.readAsDataURL(f); thumbFile.value = '';
-      });
-      document.getElementById('am-dl-course').addEventListener('click', function () { downloadCourse(courseId); });
-      var cf = document.getElementById('am-course-file');
-      document.getElementById('am-ul-course').addEventListener('click', function () { cf.click(); });
-      cf.addEventListener('change', function () { if (cf.files[0]) uploadCourse(cf.files[0], courseId); });
-      document.getElementById('am-add-screen').addEventListener('click', function () { addScreen(courseId); });
-      document.getElementById('am-scorm-btn').addEventListener('click', function () { openScormViewer(courseId); });
-      document.getElementById('am-del-course').addEventListener('click', function () { deleteCourse(courseId); });
-      editTimesReady = loadEditTimes(c);
-      renderScreenList(c);
-      if (screenId && (c.screens || []).some(function (x) { return x.id === screenId; })) {
-        openScreen(courseId, screenId, mode);
-      } else {
-        setUrl(courseId, null, mode || 'push');
-        document.getElementById('am-content').innerHTML =
-          '<div class="am-empty"><div class="am-empty-ico">👈</div><h1>Pick a screen</h1>' +
-          '<p>Choose a screen in the sidebar to preview it, edit it like a document, or replace it with a Word file. Or download / upload the whole course at once.</p></div>';
-      }
-    }
-
-    function renderScreenList(c) {
-      var list = document.getElementById('am-screenlist');
-      if (!list) return;
-      list.innerHTML = (c.screens || []).map(function (s, i) {
-        var t = typeOf(s.type);
-        return '<a class="ms-ws-item' + (s.id === cur.screenId ? ' active' : '') +
-          '" draggable="true" href="#" data-screen="' + esc(s.id) + '">' +
-          '<span class="ms-ws-num">' + (i + 1) + '</span>' +
-          '<span class="ms-ws-main"><span class="ms-ws-title">' + esc(s.title || '(untitled)') + '</span>' +
-            '<span class="ms-ws-type-badge ' + t.cls + '">' + esc(t.label) +
-              (isEdited(s) ? ' · edited' : '') + '</span></span></a>';
-      }).join('');
-      list.querySelectorAll('[data-screen]').forEach(function (a) {
-        a.addEventListener('click', function (e) {
-          e.preventDefault();
-          /* Suppress the synthetic click that follows a drag. */
-          if (_justDragged) return;
-          openScreen(cur.courseId, a.dataset.screen);
-        });
-        wireDragOnItem(a);
-      });
-    }
-
-    /* ---- Drag-to-reorder (PowerPoint-style) ---- */
-    var _dragSrc = null;
-    var _justDragged = false;
-    function wireDragOnItem(el) {
-      el.addEventListener('dragstart', function (e) {
-        _dragSrc = el.dataset.screen;
-        el.classList.add('ms-ws-dragging');
-        try {
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/plain', _dragSrc);
-        } catch (_) {}
-      });
-      el.addEventListener('dragend', function () {
-        el.classList.remove('ms-ws-dragging');
-        document.querySelectorAll('.ms-ws-dropping-before, .ms-ws-dropping-after').forEach(function (n) {
-          n.classList.remove('ms-ws-dropping-before', 'ms-ws-dropping-after');
-        });
-        _dragSrc = null;
-        _justDragged = true;
-        setTimeout(function () { _justDragged = false; }, 80);
-      });
-      el.addEventListener('dragover', function (e) {
-        if (!_dragSrc || el.dataset.screen === _dragSrc) return;
-        e.preventDefault();
-        var rect = el.getBoundingClientRect();
-        var after = e.clientY > rect.top + rect.height / 2;
-        el.classList.toggle('ms-ws-dropping-before', !after);
-        el.classList.toggle('ms-ws-dropping-after', after);
-      });
-      el.addEventListener('dragleave', function () {
-        el.classList.remove('ms-ws-dropping-before', 'ms-ws-dropping-after');
-      });
-      el.addEventListener('drop', function (e) {
-        e.preventDefault();
-        var rect = el.getBoundingClientRect();
-        var after = e.clientY > rect.top + rect.height / 2;
-        var src = _dragSrc;
-        el.classList.remove('ms-ws-dropping-before', 'ms-ws-dropping-after');
-        if (src && el.dataset.screen && src !== el.dataset.screen) {
-          reorderScreens(cur.courseId, src, el.dataset.screen, after);
-        }
-      });
-    }
-    function reorderScreens(courseId, sourceId, targetId, after) {
-      var c = merged(courseId);
-      var ids = (c.screens || []).map(function (s) { return s.id; });
-      var srcIdx = ids.indexOf(sourceId);
-      if (srcIdx < 0) return;
-      ids.splice(srcIdx, 1);
-      var dstIdx = ids.indexOf(targetId);
-      if (dstIdx < 0) return;
-      ids.splice(after ? dstIdx + 1 : dstIdx, 0, sourceId);
-      /* Write every screen's new position so applyOverrides sorts correctly. */
-      ids.forEach(function (id, i) { CMS.setScreenOverride(courseId, id, { position: i }); });
-      flash('Screen order updated.');
-      renderScreenList(merged(courseId));
-    }
-
-    /* ---- Delete a course from the catalogue (soft, local) ---- */
-    function deleteCourse(courseId) {
-      var c = getCourse(courseId);
-      if (!c) return;
-      if (!confirm('Are you sure you want to delete the course\n\n  ' + (c.title || courseId) + '\n\nIt will be hidden from the catalogue immediately. (Originals from the project files can be brought back by clearing your browser data.)')) return;
-      if (CMS.addDeletedCourse) CMS.addDeletedCourse(courseId);
-      /* Best-effort: also remove any Supabase rows (no-op if absent). */
-      try { if (CMS.supabaseClient) CMS.supabaseClient.from('courses').delete().eq('id', courseId); } catch (e) {}
-      try { if (CMS.supabaseClient) CMS.supabaseClient.from('screens').delete().eq('course_id', courseId); } catch (e) {}
-      /* Remove from the local discovery cache so it doesn't reappear. */
-      try {
-        var key = 'matrix-lms:db-courses';
-        var dbc = JSON.parse(localStorage.getItem(key) || '[]').filter(function (x) { return x && x.id !== courseId; });
-        localStorage.setItem(key, JSON.stringify(dbc));
-      } catch (e) {}
-      renderCatalog('replace');
-    }
-
-    /* ---- Course template (.docx) — a blank skeleton in the exact
-       structure the upload expects, so a publisher can download it,
-       edit it, and re-upload as a complete course. ---- */
-    async function downloadCourseTemplate() {
-      var sample = [
-        { type: 'Page',      title: 'Introduction',         body: 'Open the course with a short overview — what the learner will achieve.' },
-        { type: 'Worksheet', title: 'Activity one',         body: 'Step-by-step instructions for the first task. Use Word headings (Heading 2 / 3) and lists freely.' },
-        { type: 'Page',      title: 'Key ideas',            body: 'A reference page learners can revisit. Drop in pictures by pasting them straight into Word.' },
-        { type: 'Worksheet', title: 'Activity two',         body: 'A second task that builds on the first.' },
-        { type: 'Page',      title: 'Wrap-up and homework', body: 'Close the loop. Set any optional homework.' }
-      ];
-      var sumRows = sample.map(function (s, i) {
-        return '<tr><td>' + (i + 1) + '</td><td>' + esc(s.type) + '</td><td>' + esc(s.title) +
-          '</td><td>0.2</td><td>(filled in when uploaded)</td></tr>';
-      }).join('');
-      var summary =
-        '<h1>Course template — replace this with your course title</h1>' +
-        '<p><b>How to use this document</b></p>' +
-        '<ol>' +
-          '<li>Replace the title above with your real course title.</li>' +
-          '<li>Each screen begins with a <b>Screen&nbsp;N:&nbsp;Title</b> heading (Heading&nbsp;1).</li>' +
-          '<li>Everything <i>below</i> a Screen heading is that screen\'s content — text, images, lists, tables — until the next Screen heading.</li>' +
-          '<li>Keep the Screen&nbsp;N&nbsp;numbers in order; the upload uses them to place content.</li>' +
-          '<li>Upload the document in Admin &rsaquo; the course &rsaquo; <b>Upload whole course</b>.</li>' +
-        '</ol>' +
-        '<p><b>Course contents</b> — replace the sample rows with your own screens.</p>' +
-        '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse">' +
-        '<tr><th>#</th><th>Type</th><th>Title</th><th>Hours</th><th>Source file</th></tr>' +
-        sumRows + '</table><br style="page-break-before:always">';
-      var screens = sample.map(function (s, i) {
-        return '<h1>Screen ' + (i + 1) + ': ' + esc(s.title) + '</h1>' +
-          '<p>' + esc(s.body) + '</p>' +
-          '<p><i>Tip:</i> keep the “Screen ' + (i + 1) + ': …” heading as <b>Heading&nbsp;1</b>. ' +
-          'Use Heading&nbsp;2 / Heading&nbsp;3 for sub-titles inside this screen.</p>';
-      }).join('<br style="page-break-before:always">');
-      try {
-        flash('Building template…');
-        var blob = await htmlToDocxBlob(fullHtmlDoc(summary + screens, 'Course template'));
-        download(blob, 'Course-template.docx');
-        flash('✓ Template downloaded — edit it in Word, then use New course + Upload whole course.');
-      } catch (err) {
-        flash('Could not build the template: ' + esc(err.message || err), 'err');
-      }
-    }
-
-    /* ---- SCORM viewer — preview the course running in the player,
-       embedded inline (the same player a SCORM-conformant LMS hosts).
-       No export / download involved. */
-    function openScormViewer(courseId) {
-      cur.screenId = null;
-      markActiveScreen(null);
-      var pane = document.getElementById('am-content');
-      if (!pane) return;
-      var c = merged(courseId);
-      pane.innerHTML =
-        '<div class="am-head"><span class="am-head-eyebrow">SCORM viewer</span>' +
-          '<h1>' + esc(c.code || c.id) + ' &middot; ' + esc(c.title || '') + '</h1>' +
-          '<p>Live preview of the course running in the player — the same player a SCORM-conformant ' +
-          'LMS embeds. Navigate it just like a learner would.</p></div>' +
-        '<div class="am-scorm-viewer">' +
-          '<iframe class="am-scorm-frame" src="course.html?id=' + encodeURIComponent(courseId) + '"></iframe>' +
-        '</div>';
-      pane.scrollTop = 0;
-    }
-
-    /* ---- Add a new (blank) screen and open it for editing ---- */
-    function addScreen(courseId) {
-      var c = merged(courseId);
-      var newPos = (c.screens || []).length;
-      var newId = 'add-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
-      var newSrc = 'content/' + (c.code || c.id) + '/' + newId + '.html';
-      var newTitle = 'New screen';
-      CMS.setScreenOverride(courseId, newId, {
-        title: newTitle, type: 'html', src: newSrc, position: newPos
-      });
-      CMS.setHtmlOverride(newSrc, wrapPage('<h1>' + esc(newTitle) + '</h1><p>(edit me)</p>'));
-      editTimes[newSrc] = new Date().toISOString();
-      flash('✓ Added a new screen — rename it in the header, edit the content below.');
-      /* Open the course fresh (re-running renderScreenList with the new
-         screen included) then jump straight into the new screen. */
-      openCourse(courseId, newId, 'push');
-    }
-
-    /* ---- Delete a screen ---- */
-    function deleteScreen(courseId, s) {
-      if (!confirm('Delete the screen “' + (s.title || 'untitled') + '”?\n\nIt will be hidden from the course immediately.')) return;
-      var rawCourse = getCourse(courseId);
-      var isOriginal = !!(rawCourse && (rawCourse.screens || []).some(function (x) { return x.id === s.id; }));
-      if (isOriginal) {
-        /* Original screens live in the GitHub repo; soft-hide locally so
-           the next pull from Supabase can't bring them back. */
-        if (CMS.addDeletedScreen) CMS.addDeletedScreen(courseId, s.id);
-      } else {
-        /* Added screens were admin-created; remove their override rows. */
-        try {
-          var so = JSON.parse(localStorage.getItem('matrix-lms:cms:screens') || '{}');
-          if (so[courseId]) { delete so[courseId][s.id]; localStorage.setItem('matrix-lms:cms:screens', JSON.stringify(so)); }
-        } catch (e) {}
-        try {
-          var h = JSON.parse(localStorage.getItem('matrix-lms:cms:html') || '{}');
-          delete h[s.src];
-          localStorage.setItem('matrix-lms:cms:html', JSON.stringify(h));
-        } catch (e) {}
-        try { if (CMS.supabaseClient) CMS.supabaseClient.from('screens').delete().eq('id', s.id); } catch (e) {}
-        try { if (CMS.supabaseClient && s.src) CMS.supabaseClient.from('pages').delete().eq('path', s.src); } catch (e) {}
-      }
-      openCourse(courseId, null, 'replace');
-    }
-
-    /* Lightweight sidebar updates. The screen list is built ONCE per course
-       (renderScreenList). Clicking a screen must never rebuild it — that
-       resets the list's scroll position and makes the menu visibly jump.
-       Instead just toggle the active row, and refresh a single row's
-       title / badge when that screen's content actually changes. */
-    function markActiveScreen(screenId) {
-      var list = document.getElementById('am-screenlist');
-      if (!list) return;
-      list.querySelectorAll('[data-screen]').forEach(function (a) {
-        a.classList.toggle('active', a.dataset.screen === screenId);
-      });
-    }
-    function syncScreenListItem(courseId, screenId) {
-      var list = document.getElementById('am-screenlist');
-      if (!list) return;
-      var c = merged(courseId);
-      var s = (c.screens || []).find(function (x) { return x.id === screenId; });
-      if (!s) return;
-      var item = null;
-      list.querySelectorAll('[data-screen]').forEach(function (a) {
-        if (a.dataset.screen === screenId) item = a;
-      });
-      if (!item) return;
-      var t = typeOf(s.type);
-      var titleEl = item.querySelector('.ms-ws-title');
-      var badgeEl = item.querySelector('.ms-ws-type-badge');
-      if (titleEl) titleEl.textContent = s.title || '(untitled)';
-      if (badgeEl) {
-        badgeEl.className = 'ms-ws-type-badge ' + t.cls;
-        badgeEl.textContent = t.label + (isEdited(s) ? ' · edited' : '');
-      }
-    }
-
-    /* ========== File manager — every screen, type, hours, file ========== */
-    async function showFileManager(courseId) {
-      cur.screenId = null;
-      markActiveScreen(null);
-      var pane = document.getElementById('am-content');
-      if (!pane) return;
-      pane.innerHTML = '<p class="stage-loading">Loading file manager&hellip;</p>';
-      try { await editTimesReady; } catch (e) {}
-      var c = merged(courseId);
-      var rows = (c.screens || []).map(function (s, i) {
-        var t = typeOf(s.type), src = s.src || '';
-        var loc = /^https?:/i.test(src)
-          ? '<a href="' + esc(src) + '" target="_blank" rel="noopener">' + esc(src) + '</a>'
-          : '<code>' + esc(src || '—') + '</code>';
-        return '<tr data-screen="' + esc(s.id) + '">' +
-          '<td>' + (i + 1) + '</td>' +
-          '<td><span class="ms-ws-type-badge ' + t.cls + '">' + esc(t.label) + '</span></td>' +
-          '<td>' + esc(s.title || '(untitled)') + '</td>' +
-          '<td>' + esc(hoursText(s)) + '</td>' +
-          '<td class="am-fm-loc">' + loc + '</td>' +
-          '<td>' + esc(editTextPlain(s)) + '</td></tr>';
-      }).join('');
-      pane.innerHTML =
-        '<div class="am-head"><span class="am-head-eyebrow">File manager</span>' +
-          '<h1>' + esc(c.code || c.id) + ' &middot; ' + esc(c.title || '') + '</h1>' +
-          '<p>Every screen in this course — its type, title, hours, where the content comes from, ' +
-          'and when it was last edited. Originals live in the project files; edits are saved in the ' +
-          'database. Click any row to open that screen.</p>' +
-          '<button type="button" class="btn btn-primary" id="am-fm-add">＋ Add screen</button>' +
-        '</div>' +
-        '<table class="am-fm-table"><thead><tr>' +
-          '<th>#</th><th>Type</th><th>Title</th><th>Hours</th><th>Source file</th><th>Last edited</th>' +
-        '</tr></thead><tbody>' + rows + '</tbody></table>';
-      pane.querySelectorAll('[data-screen]').forEach(function (tr) {
-        tr.addEventListener('click', function () { openScreen(courseId, tr.dataset.screen); });
-      });
-      document.getElementById('am-fm-add').addEventListener('click', function () { addScreen(courseId); });
-      pane.scrollTop = 0;
-    }
-
-    /* ========== Screen content pane ========== */
-    function openScreen(courseId, screenId, mode) {
-      cur.screenId = screenId;
-      setUrl(courseId, screenId, mode || 'push');
-      var c = merged(courseId);
-      var idx = (c.screens || []).findIndex(function (s) { return s.id === screenId; });
-      var s = c.screens[idx];
-      var t = typeOf(s.type);
-      /* Don't rebuild the list — just move the active row and refresh this
-         row in case its content / title changed (import, edit). */
-      markActiveScreen(screenId);
-      syncScreenListItem(courseId, screenId);
-
-      var actions;
-      if (t.word) {
-        actions = '<div class="am-replace" id="am-zone">' +
-          '<div class="am-replace-info"><strong>⤓ Replace with a Word document</strong>' +
-          '<span>Drop a <code>.docx</code> here (or click) — its text copies in word-for-word and goes live immediately. Or edit it here like a document.</span></div>' +
-          '<input type="file" id="am-file" accept=".docx,.doc,.htm,.html" hidden>' +
-          '<div class="am-replace-actions">' +
-            '<button class="btn btn-primary" id="am-upload-btn" type="button">Upload Word file…</button>' +
-            '<button class="btn btn-secondary" id="am-edit-btn" type="button">✎ Edit like a document</button>' +
-            '<button class="btn btn-secondary" id="am-dl-btn" type="button">⤓ Download Word</button>' +
-          '</div></div>';
-      } else if (t.img) {
-        actions = '<div class="am-replace" id="am-zone">' +
-          '<div class="am-replace-info"><strong>🖼 Replace this image</strong>' +
-          '<span>Drop an image here (or click) — PNG, JPG, GIF, SVG, WebP. It appears on the course straight away.</span></div>' +
-          '<input type="file" id="am-imgfile" accept="image/*" hidden>' +
-          '<div class="am-replace-actions">' +
-            '<button class="btn btn-primary" id="am-img-btn" type="button">Upload image…</button>' +
-          '</div></div>';
-      } else {
-        actions = '<div class="am-replace am-replace-readonly"><div class="am-replace-info">' +
-          '<strong>' + t.icon + ' ' + esc(t.label) + ' screen</strong>' +
-          '<span>This is ' + (s.type === 'youtube' ? 'a video' : 'a ' + esc(t.label).toLowerCase()) +
-          ' — managed by its link / file path below.</span></div>' +
-          '<code class="am-src">' + esc(s.src || '') + '</code></div>';
-      }
-
-      var pane = document.getElementById('am-content');
-      pane.innerHTML =
-        '<div class="am-screen-head"><span class="am-screen-ico">' + t.icon + '</span>' +
-          '<div class="am-screen-headbody"><span class="am-screen-eyebrow">Screen ' + (idx + 1) + ' · ' + esc(t.label) + '</span>' +
-            '<input class="am-screen-title" id="am-title" value="' + esc(s.title || '') + '"></div>' +
-          '<a class="btn btn-secondary" href="course.html?id=' + esc(courseId) + '&screen=' + esc(s.id) + '" target="_blank" rel="noopener">↗ Open in course</a>' +
-          '<button class="btn btn-ghost am-delete-btn" id="am-delete-btn" type="button" title="Delete this screen">🗑 Delete screen</button>' +
-        '</div>' +
-        '<div class="am-screen-meta">' +
-          '<label class="am-meta-hours">Hours <input type="number" id="am-hours" min="0" step="0.1" value="' +
-            esc(s.hours != null ? s.hours : '') + '"></label>' +
-          '<span class="am-meta-item"><strong>Source file:</strong> ' +
-            (/^https?:/i.test(s.src || '')
-              ? '<a href="' + esc(s.src) + '" target="_blank" rel="noopener">' + esc(s.src) + '</a>'
-              : '<code>' + esc(s.src || '—') + '</code>') + '</span>' +
-          '<span class="am-meta-item" id="am-edited"><strong>Last edited:</strong> ' + esc(editTextPlain(s)) + '</span>' +
-        '</div>' + actions +
-        '<div class="am-status" id="am-status" hidden></div>' +
-        '<div id="am-editor-host"></div>' +
-        '<div class="am-preview-wrap"><div class="am-preview-label">' +
-          '<span>Preview — exactly as learners see it</span>' +
-          (t.word ? '<button class="btn btn-primary am-preview-save" id="am-preview-save" type="button" hidden>💾 Save</button>' : '') +
-          '</div>' +
-          '<div class="am-preview" id="am-preview"><p class="stage-loading">Rendering&hellip;</p></div></div>';
-      /* The content pane is a fixed height and scrolls internally, so the
-         page never resizes between screens. Just reset the pane to its
-         top so each newly-opened screen starts from the beginning. */
-      pane.scrollTop = 0;
-      /* Fill in the last-edited time once the Supabase lookup resolves. */
-      editTimesReady.then(function () {
-        var el = document.getElementById('am-edited');
-        if (el && cur.screenId === s.id) el.innerHTML = '<strong>Last edited:</strong> ' + esc(editTextPlain(s));
-      });
-
-      document.getElementById('am-title').addEventListener('change', function () {
-        CMS.setScreenOverride(courseId, s.id, { title: this.value.trim() });
-        flash('Title saved — live on the course.');
-        syncScreenListItem(courseId, s.id);
-      });
-      document.getElementById('am-hours').addEventListener('change', function () {
-        var h = parseFloat(this.value);
-        CMS.setScreenOverride(courseId, s.id, { hours: isNaN(h) ? null : h });
-        flash('Hours saved — live on the course.');
-      });
-      document.getElementById('am-delete-btn').addEventListener('click', function () { deleteScreen(courseId, s); });
-      /* Save button is hidden until the WYSIWYG editor opens.
-         Title and hours auto-save on change, and a course upload
-         already commits content — there's nothing to save otherwise. */
-
-      if (t.word) {
-        var fileInput = document.getElementById('am-file');
-        document.getElementById('am-upload-btn').addEventListener('click', function () { fileInput.click(); });
-        fileInput.addEventListener('change', function () { if (fileInput.files[0]) importScreen(fileInput.files[0], courseId, s); });
-        document.getElementById('am-edit-btn').addEventListener('click', function () { openEditor(courseId, s); });
-        document.getElementById('am-dl-btn').addEventListener('click', function () { downloadScreen(s, idx); });
-        wireDrop('am-zone', /\.(docx|doc|html?)$/i, function (f) { importScreen(f, courseId, s); });
-      } else if (t.img) {
-        var imgInput = document.getElementById('am-imgfile');
-        document.getElementById('am-img-btn').addEventListener('click', function () { imgInput.click(); });
-        imgInput.addEventListener('change', function () { if (imgInput.files[0]) uploadImage(imgInput.files[0], courseId, s); });
-        wireDrop('am-zone', /^image\//i, function (f) { uploadImage(f, courseId, s); }, true);
-      }
-      renderPreview(s, document.getElementById('am-preview'));
-    }
-
-    function wireDrop(id, accept, onFile, byMime) {
-      var dz = document.getElementById(id);
-      if (!dz) return;
-      ['dragenter', 'dragover'].forEach(function (ev) {
-        dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('drag'); });
-      });
-      ['dragleave', 'drop'].forEach(function (ev) {
-        dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('drag'); });
-      });
-      dz.addEventListener('drop', function (e) {
-        var f = e.dataTransfer && e.dataTransfer.files[0];
-        if (f && accept.test(byMime ? f.type : f.name)) onFile(f);
-        else if (f) flash('That file type is not accepted here.', 'err');
-      });
-    }
-
-    function flash(msg, kind) {
-      var el = document.getElementById('am-status');
-      if (!el) return;
-      el.hidden = false;
-      el.className = 'am-status' + (kind ? ' ' + kind : ' ok');
-      el.innerHTML = msg;
-      clearTimeout(el._t);
-      if (!kind || kind === 'ok') el._t = setTimeout(function () { el.hidden = true; }, 4000);
-    }
-
-    async function renderPreview(s, box) {
-      try {
-        var ov = CMS.getHtmlOverride(s.src);
-        if (s.type === 'document' || s.type === 'html') {
-          box.innerHTML = '<div class="stage-doc"><div class="stage-doc-inner">' + enhance(await getScreenBody(s)) + '</div></div>';
-        } else if (s.type === 'image') {
-          var src = (ov && /^data:image\//.test(ov)) ? ov : s.src;
-          box.innerHTML = '<div class="am-preview-img"><img src="' + esc(src) + '" alt="' + esc(s.title) + '"></div>';
-        } else if (s.type === 'youtube') {
-          var m = String(s.src || '').match(/(?:youtu\.be\/|v=|embed\/)([\w-]{6,})/);
-          box.innerHTML = m ? '<div class="inline-youtube"><iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen></iframe></div>'
-                            : '<p class="stage-loading">Video: ' + esc(s.src) + '</p>';
-        } else if (s.type === 'pdf') {
-          box.innerHTML = '<iframe class="am-preview-frame" src="' + esc(s.src) + '"></iframe>';
-        } else {
-          box.innerHTML = '<p class="stage-loading">' + esc(typeOf(s.type).label) + ' — <a href="' + esc(s.src) + '" target="_blank" rel="noopener">open / download</a></p>';
-        }
-      } catch (err) {
-        box.innerHTML = '<p class="stage-loading" style="color:var(--warn)">Could not render this screen: ' + esc(err.message) + '</p>';
-      }
-    }
-
-    /* ---------- Import one screen (.docx verbatim, or .doc/.htm) ---------- */
-    async function importScreen(file, courseId, s) {
-      flash('Reading “' + esc(file.name) + '” and copying the text in word-for-word…');
-      try {
-        var bodyHtml = await fileToHtml(file);
-        if (!bodyHtml.trim()) { flash('That file looks empty — nothing to import.', 'err'); return; }
-        CMS.setHtmlOverride(s.src, wrapPage(bodyHtml));
-        editTimes[s.src] = new Date().toISOString();
-        flash('✓ Saved from “' + esc(file.name) + '” — live on the course now.');
-        openScreen(courseId, s.id, 'replace');
-      } catch (err) {
-        flash('Could not import that file: ' + esc(err.message || err), 'err');
-      }
-    }
-
-    /* ---------- Per-screen download (real Word .docx) ---------- */
-    async function downloadScreen(s, idx) {
-      flash('Preparing the Word file…');
-      try {
-        var body = markScreen(await getScreenBody(s), s.title, s.title);
-        var blob = await htmlToDocxBlob(fullHtmlDoc(body, s.title));
-        download(blob, pad2(idx + 1) + ' - ' + safeName(s.title) + '.docx');
-        flash('✓ Downloaded as Word .docx — open it in Word, edit, then upload it back.');
-      } catch (err) {
-        flash('Could not build the Word file: ' + esc(err.message || err), 'err');
-      }
-    }
-
-    /* ---------- Full-course download — ONE Word .docx ---------- */
-    async function downloadCourse(courseId) {
-      var c = merged(courseId);
-      flash('Building the course download — rendering ' + c.screens.length + ' screens…');
-      try {
-        var parts = [];
-        for (var i = 0; i < c.screens.length; i++) {
-          var s = c.screens[i], t = typeOf(s.type);
-          var content;
-          if (t.word) {
-            content = await getScreenBody(s);
-          } else if (t.img) {
-            var isrc = imageSrcOf(s);
-            var durl = /^data:/i.test(isrc) ? isrc : (await toDataUri(isrc) || isrc);
-            content = '<p><img src="' + esc(durl) + '" style="max-width:100%"></p>';
-          } else {
-            content = '<p><em>[' + esc(t.label) + ' screen — link kept as-is: ' +
-              esc(s.src || '') + ']</em></p>';
-          }
-          /* Combined doc: exactly ONE heading per screen, "Screen N:
-             Title" — the obvious editing label AND the re-upload split
-             boundary. No more title-then-title repetition. */
-          parts.push(markScreen(content, 'Screen ' + (i + 1) + ': ' + s.title, s.title));
-        }
-        /* A "Course contents" summary table at the very top — screen
-           type, title, hours and source file for every screen. It sits
-           BEFORE the first "Screen N:" heading, so the re-upload
-           splitter ignores it (information only). */
-        var sumRows = c.screens.map(function (s, i) {
-          var t = typeOf(s.type);
-          return '<tr><td>' + (i + 1) + '</td><td>' + esc(t.label) + '</td><td>' +
-            esc(s.title || '') + '</td><td>' + esc(s.hours != null ? s.hours : '') +
-            '</td><td>' + esc(s.src || '') + '</td></tr>';
-        }).join('');
-        var summary =
-          '<h1>' + esc((c.code || c.id) + ' — ' + (c.title || '')) + '</h1>' +
-          '<p><b>Course contents</b> — ' + c.screens.length + ' screens. This table is a ' +
-          'summary only; edit each screen further down, under its “Screen N: Title” heading.</p>' +
-          '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse">' +
-          '<tr><th>#</th><th>Screen type</th><th>Title</th><th>Hours</th><th>Source file</th></tr>' +
-          sumRows + '</table><br style="page-break-before:always">';
-        /* The whole course as one real .docx — the contents table, then
-           each screen under a "Screen N:" heading you edit and re-upload. */
-        var combined = summary + parts.join('<br style="page-break-before:always">');
-        /* Name files with the CP/CO course code up front — several
-           courses share a title, so the code is what tells them apart. */
-        var codeName = safeName((c.code || c.id) + ' - ' + c.title);
-        var blob = await htmlToDocxBlob(fullHtmlDoc(combined, (c.code || c.id) + ' ' + c.title));
-        download(blob, codeName + '.docx');
-        flash('✓ Course downloaded as a single Word document.');
-      } catch (err) {
-        flash('Could not build the course download: ' + esc(err.message || err), 'err');
-      }
-    }
-
-    /* ---------- Full-course upload — split a Word doc into screens ---------- */
-    function splitOnHeadings(html) {
-      var d = new DOMParser().parseFromString('<!DOCTYPE html><body>' + html + '</body>', 'text/html');
-      var markerRe = /^\s*screen\s*\d+\s*[:.\-–—]/i;
-      var kids = Array.prototype.filter.call(d.body.childNodes, function (n) { return n.nodeType === 1; });
-      /* A screen boundary is any block whose text starts with
-         "Screen N:" — our download marker. Detected on ANY element,
-         because Word / Google Docs may re-import our <h1> as a heading
-         of a different level or even a styled paragraph. Only if the
-         document has no such markers at all (hand-made) do we fall
-         back to treating every Heading 1 as a boundary. */
-      var anyMarker = kids.some(function (n) { return markerRe.test((n.textContent || '').trim()); });
-      var sections = [], curSec = null;
-      kids.forEach(function (node) {
-        var isBoundary = anyMarker
-          ? markerRe.test((node.textContent || '').trim())
-          : (node.tagName === 'H1');
-        if (isBoundary) {
-          curSec = { title: (node.textContent || '').trim(), body: '' };
-          sections.push(curSec);
-        } else if (curSec) {
-          curSec.body += node.outerHTML || '';
-        }
-      });
-      return sections;
-    }
-    async function uploadCourse(file, courseId) {
-      var pane = document.getElementById('am-content');
-      pane.innerHTML = '<p class="stage-loading">Reading “' + esc(file.name) + '” and splitting it into screens…</p>';
-      try {
-        var html = await fileToHtml(file);
-        var sections = splitOnHeadings(html);
-        if (!sections.length) {
-          pane.innerHTML = '<div class="am-empty"><div class="am-empty-ico">⚠</div><h1>No screens found</h1>' +
-            '<p>Each screen must start with a <strong>Heading&nbsp;1</strong> line — ideally ' +
-            '“<strong>Screen&nbsp;N:&nbsp;Title</strong>”. Use “Download whole course” first to ' +
-            'get a document already in the right format, edit it, then upload it back.</p>' +
-            '<button class="btn btn-secondary" id="am-back2" type="button">Back</button></div>';
-          document.getElementById('am-back2').addEventListener('click', function () { openCourse(courseId); });
-          return;
-        }
-        /* THE DOCUMENT IS THE TRUTH.
-           Section ORDER = course order. TITLE = the screen's identity
-           (renaming in Word creates a new screen — rename via the
-           admin title input if you want to preserve a screen's id).
-           "Screen N:" numbers are display only and not used for
-           matching, so the editor can renumber freely. */
-        var c = merged(courseId);
-        var allScreens = c.screens || [];
-        var byTitle = {};
-        allScreens.forEach(function (s) { byTitle[norm(s.title)] = s; });
-
-        var updated = [], added = [], skipped = [], used = {};
-        sections.forEach(function (sec, idx) {
-          var newPos = idx;                       /* document order WINS */
-          var rawTitle = stripScreenPrefix(sec.title) || sec.title || '';
-          var s = byTitle[norm(rawTitle)] || byTitle[norm(sec.title)];
-          if (s && used[s.id]) s = null;          /* don't double-map */
-
-          if (s) {
-            used[s.id] = true;
-            var t = typeOf(s.type);
-            if (t.word) {
-              CMS.setHtmlOverride(s.src, wrapPage(sec.body));
-              CMS.setScreenOverride(courseId, s.id, { position: newPos });
-              updated.push(s.title);
-            } else if (t.img) {
-              var data = firstImageData(sec.body);
-              if (data) CMS.setHtmlOverride(s.src, data);
-              CMS.setScreenOverride(courseId, s.id, { position: newPos });
-              updated.push(s.title);
-            } else {
-              /* Video / PDF / slides: keep the link, just reorder. */
-              CMS.setScreenOverride(courseId, s.id, { position: newPos });
-              skipped.push(s.title + ' (' + t.label + ' — reordered; link not editable in Word)');
-            }
-            return;
-          }
-          /* No title match — create a new text screen at this position. */
-          var newTitle = rawTitle || ('Screen ' + (idx + 1));
-          var newId = 'add-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6) + idx;
-          var newSrc = 'content/' + (c.code || c.id) + '/' + newId + '.html';
-          CMS.setScreenOverride(courseId, newId, { title: newTitle, type: 'html', src: newSrc, position: newPos });
-          CMS.setHtmlOverride(newSrc, wrapPage(sec.body));
-          added.push(newTitle);
-        });
-        /* Existing screens NOT in the document keep their original
-           order, placed after the doc'd screens. (We don't auto-delete
-           — use the 🗑 button on a screen if you want it gone.) */
-        var tail = sections.length;
-        allScreens.forEach(function (s) {
-          if (used[s.id]) return;
-          CMS.setScreenOverride(courseId, s.id, { position: tail++ });
-        });
-
-        var allFailed = updated.length === 0 && added.length === 0;
-        pane.innerHTML =
-          '<div class="am-empty"><div class="am-empty-ico">' + (allFailed ? '⚠' : '✓') + '</div>' +
-          '<h1>' + (allFailed ? 'Nothing was updated' : 'Course updated') + '</h1>' +
-          '<p>The document order is now the course order. ' +
-            '<strong>' + updated.length + '</strong> screen(s) updated' +
-            (added.length ? ' · <strong>' + added.length + '</strong> new' : '') +
-            (skipped.length ? ' · <strong>' + skipped.length + '</strong> reordered (non-text)' : '') + '.</p>' +
-          (updated.length ? '<p style="font-size:0.82rem;color:var(--success)">Updated: ' +
-            esc(updated.join(', ')) + '</p>' : '') +
-          (added.length ? '<p style="font-size:0.82rem;color:var(--success)">Added as new screens: ' +
-            esc(added.join(', ')) + '</p>' : '') +
-          (skipped.length ? '<p style="font-size:0.82rem;color:var(--text-muted)">Reordered only — videos, ' +
-            'PDFs and slideshows are set by their link, not by document text: ' + esc(skipped.join('; ')) + '</p>' : '') +
-          '<p style="font-size:0.78rem;color:var(--text-subtle);margin-top:0.6rem">Note: matching is by ' +
-            '<b>title</b>. Renaming a title in Word creates a NEW screen rather than renaming the old one — ' +
-            'rename via the title input in admin if you want a single screen with a new name.</p>' +
-          '<button class="btn btn-primary" id="am-back2" type="button">Review screens</button></div>';
-        document.getElementById('am-back2').addEventListener('click', function () { openCourse(courseId); });
-      } catch (err) {
-        pane.innerHTML = '<div class="am-empty"><div class="am-empty-ico">⚠</div><h1>Could not import</h1>' +
-          '<p>' + esc(err.message || err) + '</p>' +
-          '<button class="btn btn-secondary" id="am-back2" type="button">Back</button></div>';
-        var b = document.getElementById('am-back2');
-        if (b) b.addEventListener('click', function () { openCourse(courseId); });
-      }
-    }
-
-    /* ---------- Image upload ---------- */
-    function uploadImage(file, courseId, s) {
-      if (!/^image\//i.test(file.type)) { flash('Please choose an image file.', 'err'); return; }
-      flash('Reading “' + esc(file.name) + '”…');
-      var fr = new FileReader();
-      fr.onload = function () {
-        CMS.setHtmlOverride(s.src, String(fr.result));
-        editTimes[s.src] = new Date().toISOString();
-        flash('✓ Image updated — live on the course now.');
-        openScreen(courseId, s.id, 'replace');
-      };
-      fr.onerror = function () { flash('Could not read that image.', 'err'); };
-      fr.readAsDataURL(file);
-    }
-
-    /* ---------- WYSIWYG editor ---------- */
-    var TOOLBAR = [
-      ['bold', '<b>B</b>', 'Bold'], ['italic', '<i>I</i>', 'Italic'], ['underline', '<u>U</u>', 'Underline'],
-      ['sep'], ['h2', 'H1', 'Big heading'], ['h3', 'H2', 'Sub-heading'], ['p', '¶', 'Normal text'],
-      ['sep'], ['ul', '• List', 'Bulleted list'], ['ol', '1. List', 'Numbered list'],
-      ['sep'], ['link', '🔗 Link', 'Insert a link'], ['image', '🖼 Image', 'Insert an image'],
-      ['sep'], ['clear', '✗ Clear', 'Clear formatting']
-    ];
-    async function openEditor(courseId, s) {
-      var host = document.getElementById('am-editor-host');
-      if (host.dataset.open === '1') {
-        host.dataset.open = '0'; host.innerHTML = '';
-        var ps = document.getElementById('am-preview-save');
-        if (ps) ps.hidden = true;
-        return;
-      }
-      host.dataset.open = '1';
-      host.innerHTML = '<div class="am-editor"><p class="stage-loading" style="padding:1rem">Loading…</p></div>';
-      var bodyHtml = '';
-      try { bodyHtml = await getScreenBody(s); } catch (e) { bodyHtml = '<p>(could not load current text)</p>'; }
-
-      var tb = TOOLBAR.map(function (b) {
-        if (b[0] === 'sep') return '<span class="am-tool-sep"></span>';
-        return '<button type="button" class="am-tool-btn" data-cmd="' + b[0] + '" title="' + b[2] + '">' + b[1] + '</button>';
-      }).join('');
-      host.innerHTML =
-        '<div class="am-editor"><div class="am-toolbar">' + tb + '</div>' +
-          '<div class="am-doc" id="am-doc" contenteditable="true"></div>' +
-          '<div class="am-editor-actions">' +
-            '<button class="btn btn-ghost" id="am-ed-close" type="button">Close</button>' +
-          '</div></div><input type="file" id="am-ed-img" accept="image/*" hidden>';
-      var doc = document.getElementById('am-doc');
-      doc.innerHTML = enhance(bodyHtml);
-      host.querySelectorAll('.am-tool-btn').forEach(function (btn) {
-        btn.addEventListener('mousedown', function (e) { e.preventDefault(); });
-        btn.addEventListener('click', function () {
-          doc.focus();
-          var cmd = btn.dataset.cmd;
-          if (cmd === 'bold' || cmd === 'italic' || cmd === 'underline') document.execCommand(cmd, false, null);
-          else if (cmd === 'h2') document.execCommand('formatBlock', false, 'h1');
-          else if (cmd === 'h3') document.execCommand('formatBlock', false, 'h2');
-          else if (cmd === 'p') document.execCommand('formatBlock', false, 'p');
-          else if (cmd === 'ul') document.execCommand('insertUnorderedList', false, null);
-          else if (cmd === 'ol') document.execCommand('insertOrderedList', false, null);
-          else if (cmd === 'clear') document.execCommand('removeFormat', false, null);
-          else if (cmd === 'link') { var u = prompt('Link address (https://…):', 'https://'); if (u) document.execCommand('createLink', false, u); }
-          else if (cmd === 'image') document.getElementById('am-ed-img').click();
-        });
-      });
-      document.getElementById('am-ed-img').addEventListener('change', function (e) {
-        var f = e.target.files[0]; if (!f) return;
-        var fr = new FileReader();
-        fr.onload = function () { doc.focus(); document.execCommand('insertImage', false, String(fr.result)); };
-        fr.readAsDataURL(f); e.target.value = '';
-      });
-      var topSave = document.getElementById('am-preview-save');
-      function closeEditor() {
-        host.dataset.open = '0'; host.innerHTML = '';
-        if (topSave) topSave.hidden = true;
-      }
-      function saveEditor() {
-        CMS.setHtmlOverride(s.src, wrapPage(doc.innerHTML));
-        editTimes[s.src] = new Date().toISOString();
-        flash('✓ Saved — live on the course now.');
-        closeEditor();
-        openScreen(courseId, s.id, 'replace');
-      }
-      document.getElementById('am-ed-close').addEventListener('click', closeEditor);
-      /* Reveal the Save on the Preview bar only while editing. */
-      if (topSave) { topSave.hidden = false; topSave.onclick = saveEditor; }
-    }
-
-    /* ---------- Boot ---------- */
-    /* Back / Forward re-render the matching view without touching history. */
-    window.addEventListener('popstate', function () { routeFromUrl('none'); });
-
-    fetch('data/courses.json').then(function (r) { return r.json(); }).then(async function (data) {
-      /* Wait for Google Sheets to load (max 5s) so sheet-controlled
-         courses fold in on the FIRST render. Without this the catalog
-         briefly shows the Supabase / static version with admin-added
-         extras before the sheet replaces it on a later reload. */
-      if (window.MatrixSheets && window.MatrixSheets.refresh) {
-        try {
-          await Promise.race([
-            window.MatrixSheets.refresh(),
-            new Promise(function (r) { setTimeout(r, 5000); })
-          ]);
-        } catch (_) {}
-      }
-      /* Fold in any courses that live only in Supabase (e.g. added here). */
-      courses = (window.MatrixCMS && window.MatrixCMS.mergeCourses)
-        ? window.MatrixCMS.mergeCourses(data.courses || []) : (data.courses || []);
-      /* Order by course code (CO0001 first) so the admin catalog matches the
-         public catalog and never drifts with merge/load order. */
-      courses.sort(function (a, b) {
-        return String(a.id || a.code || '').localeCompare(String(b.id || b.code || ''));
-      });
-      routeFromUrl('replace');
-    }).catch(function (err) {
-      main.innerHTML = '<p class="stage-loading">Could not load courses: ' + esc(err.message) + '</p>';
-    });
-  })();
-  </script>
-
-  <!-- ===== Publish to live: Worker dispatch + live progress tracking ===== -->
-  <script>
-  (function () {
-    'use strict';
-    // Endpoint + soft key. The KEY must match the Worker's PUBLISH_KEY secret
-    // (see worker/README.md). It's a gate, not a vault — the sync is harmless
-    // to re-run, so exposure on this public page only risks an extra sync.
+    var root = document.getElementById('dash');
     var PUBLISH_ENDPOINT = 'https://matrix-course-sync.ad5046.workers.dev/';
     var PUBLISH_KEY = 'mcv-publish-9f3a2c';
-    // Public read of the workflow's runs so we can show real progress. If the
-    // unauthenticated GitHub API rate-limits us, we fall back to a timer.
-    var RUNS_API = 'https://api.github.com/repos/Holopoint1/matrix-course-viewer/actions/workflows/sync-from-drive.yml/runs?per_page=5';
-    var POLL_MS = 5000;          // how often we check the run
-    var DEPLOY_WAIT_MS = 30000;  // rough GitHub Pages rebuild time after the sync commits
+    var REFRESH_MS = 60000;
+    var timer = null;
 
-    // ---------- UI ----------
-    var card = document.createElement('div');
-    card.style.cssText = ['position:fixed', 'right:20px', 'bottom:78px', 'z-index:9999',
-      'width:300px', 'padding:14px 16px', 'border-radius:12px', 'background:#0f172a', 'color:#fff',
-      'font:400 13px/1.45 Segoe UI,Arial,sans-serif', 'box-shadow:0 8px 24px rgba(0,0,0,.35)', 'display:none'].join(';');
-    card.innerHTML =
-      '<div id="pub-status" style="font-weight:600;margin-bottom:9px;display:flex;align-items:center;gap:8px">Starting…</div>' +
-      '<div style="height:8px;border-radius:6px;background:#1e293b;overflow:hidden">' +
-        '<div id="pub-bar" style="height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#3b82f6,#22d3ee)"></div>' +
-      '</div>' +
-      '<div id="pub-note" style="margin-top:9px;color:#94a3b8;font-size:12px"></div>' +
-      '<button id="pub-refresh" style="display:none;margin-top:11px;width:100%;padding:9px;border:0;border-radius:8px;cursor:pointer;font:600 13px Segoe UI,Arial,sans-serif;color:#fff;background:#16a34a">↻ Refresh to see changes</button>';
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function fmtTime(iso) { var d = new Date(iso); if (isNaN(d.getTime())) return 'unknown'; var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]; return d.getDate() + ' ' + m + ' ' + d.getFullYear() + ', ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2); }
+    function relTime(iso) { var d = new Date(iso); if (isNaN(d.getTime())) return ''; var s = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000)); if (s < 60) return s + 's ago'; var m = Math.round(s/60); if (m < 60) return m + ' min ago'; var h = Math.round(m/60); if (h < 24) return h + ' hour' + (h===1?'':'s') + ' ago'; return Math.round(h/24) + ' day(s) ago'; }
+    function parts(src) { var m = String(src||'').match(/^content\/([^/]+)\/(.+)$/); return m ? { folder: m[1], name: m[2] } : null; }
 
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = '🚀 Publish to live';
-    btn.style.cssText = ['position:fixed', 'right:20px', 'bottom:20px', 'z-index:9999',
-      'padding:12px 18px', 'border:0', 'border-radius:10px', 'cursor:pointer',
-      'font:600 15px/1 Segoe UI,Arial,sans-serif', 'color:#fff', 'background:#2563eb', 'box-shadow:0 6px 18px rgba(0,0,0,.28)'].join(';');
-
-    var elStatus, elBar, elNote, elRefresh;
-    var target = 0, visible = 0, ease = null;
-
-    function startEase() {
-      if (ease) return;
-      ease = setInterval(function () {
-        visible += (target - visible) * 0.08;
-        if (visible > 99) visible = 99;
-        elBar.style.width = visible.toFixed(1) + '%';
-      }, 180);
-    }
-    function stopEase() { if (ease) { clearInterval(ease); ease = null; } }
-    function setBar(pct) { target = pct; startEase(); }
-    function jumpBar(pct) { stopEase(); target = visible = pct; elBar.style.width = pct + '%'; }
-    function status(txt, spin) {
-      elStatus.innerHTML = (spin ? '<span style="display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:pubspin .8s linear infinite"></span>' : '') + txt;
-    }
-    function note(txt) { elNote.textContent = txt; }
-    function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-    function resetBtn() { btn.disabled = false; btn.textContent = '🚀 Publish to live'; btn.style.background = '#2563eb'; }
-
-    function latestRuns() {
-      return fetch(RUNS_API, { headers: { 'Accept': 'application/vnd.github+json' } })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (j) { return j && j.workflow_runs ? j.workflow_runs : null; })
-        .catch(function () { return null; }); // null = unreachable / rate-limited
+    function load() {
+      return Promise.all([
+        fetch('content/_sync-report.json?t=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+        fetch('data/courses.json?t=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+      ]).then(function (res) { render(res[0], res[1]); });
     }
 
-    function finishOK() {
-      jumpBar(100); elBar.style.background = '#16a34a';
-      status('✅ Published — it’s live', false);
-      note('Click refresh to load your changes.');
-      elRefresh.style.display = 'block'; resetBtn();
-    }
-    function finishErr(msg) {
-      stopEase(); elBar.style.background = '#dc2626';
-      status('⚠️ ' + msg, false); note('Nothing was lost — you can press Publish again.');
-      resetBtn();
-    }
+    function render(report, data) {
+      if (!data || !data.courses) { root.innerHTML = '<div class="hb hb-warn">Could not load <code>data/courses.json</code> from the live site.</div>'; return; }
+      report = report || {};
+      var sum = report.summary || {};
+      var courses = data.courses.slice().sort(function (a, b) { return String(a.id||a.code||'').localeCompare(String(b.id||b.code||'')); });
 
-    // Watch one run by id until it completes, then wait for the Pages deploy.
-    function trackRun(runId, t0) {
-      function poll() {
-        if (Date.now() - t0 > 4 * 60 * 1000) { // safety cap
-          status('Still working…', false);
-          note('Taking longer than usual — try refresh in a minute.');
-          elRefresh.style.display = 'block'; resetBtn(); return;
-        }
-        latestRuns().then(function (runs) {
-          if (runs === null) { setBar(95); return sleep(DEPLOY_WAIT_MS).then(finishOK); }
-          var run = null;
-          for (var i = 0; i < runs.length; i++) { if (runs[i].id === runId) { run = runs[i]; break; } }
-          if (!run) { setBar(20); return sleep(POLL_MS).then(poll); }
-          if (run.status === 'queued') { status('Queued at GitHub…', true); setBar(22); return sleep(POLL_MS).then(poll); }
-          if (run.status === 'in_progress') { status('Syncing from Google Drive…', true); setBar(72); return sleep(POLL_MS).then(poll); }
-          if (run.status === 'completed') {
-            if (run.conclusion === 'success') {
-              status('Deploying to the site…', true); jumpBar(90); setBar(98);
-              return sleep(DEPLOY_WAIT_MS).then(finishOK);
-            }
-            return finishErr('Sync failed (' + run.conclusion + '). Check the Actions tab.');
-          }
-          return sleep(POLL_MS).then(poll);
-        });
+      /* Index the report so each screen can be given a live status. */
+      var orphanSet = {}; (report.orphans || []).forEach(function (o) { orphanSet[o.code + '/' + o.name] = true; });
+      var missingByCourse = {}, fixByCourse = {};
+      Object.keys(report.courses || {}).forEach(function (id) {
+        var c = report.courses[id];
+        missingByCourse[id] = {}; (c.missing || []).forEach(function (m) { missingByCourse[id][m.title] = m.reason || ''; });
+        fixByCourse[id] = {}; (c.autofixed || []).forEach(function (a) { fixByCourse[id][a.title] = a; });
+      });
+
+      function screenStatus(courseId, s) {
+        if (/^https?:/i.test(s.src || '')) return { k: 'link', label: '🔗 Link' };
+        if (s.missing) return { k: 'miss', label: '❌ Missing', reason: (missingByCourse[courseId] || {})[s.title] || 'File not found in the Drive folder.' };
+        var fx = (fixByCourse[courseId] || {})[s.title];
+        if (fx) return { k: 'fix', label: '🔧 Auto-fixed', reason: (fx.reasons || []).join(' ') };
+        var p = parts(s.src);
+        if (p && orphanSet[p.folder + '/' + p.name]) return { k: 'orph', label: '📄 Not in Drive', reason: 'Served from a repo copy — add this file to the Drive folder for true backing.' };
+        return { k: 'ok', label: '✅ Displays' };
       }
-      poll();
+
+      /* ---- counts ---- */
+      var totalScreens = 0, displaying = 0, missing = 0, fixed = 0, orphans = (report.orphans || []).length;
+      var failed = (report.failed || []).length, collisions = (report.collisions || []).length;
+      courses.forEach(function (c) { (c.screens || []).forEach(function (s) { totalScreens++; if (s.missing) missing++; else displaying++; }); });
+      Object.keys(report.courses || {}).forEach(function (id) { fixed += ((report.courses[id].autofixed) || []).length; });
+
+      var when = report.generatedAt ? (fmtTime(report.generatedAt) + ' · ' + relTime(report.generatedAt)) : 'unknown (report not found)';
+      var clean = !missing && !failed && !collisions;
+
+      var html = '';
+      html += '<div class="dash-head"><div><h1>Course health</h1></div>' +
+        '<div class="dash-actions">' +
+          '<button class="btn btn-secondary" id="dash-refresh" type="button">↻ Refresh</button>' +
+          '<button class="btn btn-primary" id="dash-sync" type="button">🚀 Sync from Drive now</button>' +
+        '</div></div>' +
+        '<p class="dash-sub">Live from the last Drive sync — auto-refreshes every minute. Last synced: <strong>' + esc(when) + '</strong>.</p>';
+
+      html += '<div id="dash-syncmsg"></div>';
+
+      html += '<div class="' + (clean ? 'hb hb-ok' : 'hb hb-warn') + '">' +
+        (clean
+          ? '✓ All ' + courses.length + ' courses are healthy — every file resolves, no sync failures.'
+          : '🩺 ' + missing + ' screen' + (missing===1?'':'s') + ' missing a file' +
+            (failed ? ' · ' + failed + ' download failure' + (failed===1?'':'s') : '') +
+            (collisions ? ' · ' + collisions + ' name collision' + (collisions===1?'':'s') : '') +
+            '. Details below.') +
+        '</div>';
+
+      /* ---- stat strip ---- */
+      html += '<div class="stats">' +
+        '<div class="stat"><div class="n">' + courses.length + '</div><div class="l">Courses</div></div>' +
+        '<div class="stat good"><div class="n">' + displaying + '</div><div class="l">Screens display</div></div>' +
+        '<div class="stat ' + (missing?'bad':'') + '"><div class="n">' + missing + '</div><div class="l">Missing</div></div>' +
+        '<div class="stat ' + (fixed?'warn':'') + '"><div class="n">' + fixed + '</div><div class="l">Auto-fixed names</div></div>' +
+        '<div class="stat ' + (orphans?'warn':'') + '"><div class="n">' + orphans + '</div><div class="l">Not in Drive</div></div>' +
+        '<div class="stat ' + (failed?'bad':'') + '"><div class="n">' + failed + '</div><div class="l">Download fails</div></div>' +
+        '</div>';
+
+      /* ---- per-course ---- */
+      courses.forEach(function (c) {
+        var rows = '', cMiss = 0, cFix = 0, cOrph = 0, cOk = 0;
+        (c.screens || []).forEach(function (s, i) {
+          var st = screenStatus(c.id, s);
+          if (st.k === 'miss') cMiss++; else if (st.k === 'fix') cFix++; else if (st.k === 'orph') cOrph++; else if (st.k === 'ok') cOk++;
+          rows += '<tr>' +
+            '<td>' + (i + 1) + '</td>' +
+            '<td>' + esc(s.title || '(untitled)') + '</td>' +
+            '<td><span class="st st-' + st.k + '">' + st.label + '</span>' + (st.reason ? '<div class="reason">' + esc(st.reason) + '</div>' : '') + '</td>' +
+            '<td>' + (/^https?:/i.test(s.src||'') ? '<a class="open" href="' + esc(s.src) + '" target="_blank" rel="noopener">URL</a>' : '<code>' + esc(s.src || '—') + '</code>') + '</td>' +
+            '</tr>';
+        });
+        var chips = '';
+        if (cMiss) chips += '<span class="chip c-miss">' + cMiss + ' missing</span>';
+        if (cOrph) chips += '<span class="chip c-orph">' + cOrph + ' not in Drive</span>';
+        if (cFix) chips += '<span class="chip c-fix">' + cFix + ' auto-fixed</span>';
+        if (!cMiss) chips += '<span class="chip c-ok">' + cOk + '/' + (c.screens||[]).length + ' ok</span>';
+        html += '<details class="course">' +
+          '<summary><span class="code">' + esc(c.code || c.id) + '</span> <span class="title">' + esc(c.title || '') + '</span>' +
+            '<span class="chips">' + chips + ' <a class="open" href="course.html?id=' + esc(c.id) + '" target="_blank" rel="noopener">open ↗</a></span></summary>' +
+          '<table><thead><tr><th>#</th><th>Screen</th><th>Status</th><th>File</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+          '</details>';
+      });
+
+      /* ---- why / how-to ---- */
+      html += '<div class="why"><strong>How this works &amp; how to fix issues</strong>' +
+        '<ul style="margin:6px 0 0;padding-left:20px">' +
+          '<li><strong>❌ Missing</strong> — the file named in the course’s definition sheet isn’t in its Drive folder. Add it to Drive (exact name) and it appears on the next sync.</li>' +
+          '<li><strong>📄 Not in Drive</strong> — the screen displays from a leftover copy in the site, but that file isn’t in the Drive folder. Add it to Drive so Drive is the true source.</li>' +
+          '<li><strong>🔧 Auto-fixed</strong> — the sheet’s name differed only by case / hyphen-vs-en-dash / .htm-vs-.html; matched automatically. Tidy the name for cleanliness.</li>' +
+          '<li>Everything is controlled in <strong>Google Drive</strong> (one folder per course + its definition sheet). Edit there, then <strong>Sync from Drive now</strong> (or wait ~5 min).</li>' +
+        '</ul></div>';
+
+      root.innerHTML = html;
+      document.getElementById('dash-refresh').addEventListener('click', function () { this.innerHTML = '<span class="spin"></span>Refreshing'; load(); });
+      document.getElementById('dash-sync').addEventListener('click', syncNow);
     }
 
-    function publish() {
-      btn.disabled = true; btn.textContent = '⏳ Publishing…'; btn.style.background = '#64748b';
-      card.style.display = 'block'; elRefresh.style.display = 'none';
-      elBar.style.background = 'linear-gradient(90deg,#3b82f6,#22d3ee)';
-      jumpBar(6); status('Starting…', true);
-      note('This takes about 1–2 minutes. You can keep working — it runs in the background.');
-
-      latestRuns().then(function (before) {
-        var baseId = before && before[0] ? before[0].id : null;
-        return fetch(PUBLISH_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Publish-Key': PUBLISH_KEY } })
-          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (b) { return { status: r.status, body: b }; }); })
-          .then(function (res) {
-            if (res.status === 401) return finishErr('Publish key rejected.');
-            if (res.status !== 200 && res.status !== 429) return finishErr('Couldn’t start publish (' + res.status + ').');
-            // 200 = we triggered it; 429 = one is already running. Either way, find the run and track it.
-            status('Queued at GitHub…', true); setBar(18);
-            var t0 = Date.now();
-            (function find() {
-              if (Date.now() - t0 > 45000) { setBar(95); return sleep(DEPLOY_WAIT_MS).then(finishOK); }
-              latestRuns().then(function (runs) {
-                if (runs === null) { setBar(95); return sleep(DEPLOY_WAIT_MS).then(finishOK); }
-                var run = runs[0];
-                if (run && run.id !== baseId) return trackRun(run.id, t0);                                   // our fresh run
-                if (run && run.id === baseId && run.status !== 'completed') return trackRun(run.id, t0);      // 429: already running
-                return sleep(3000).then(find);
-              });
-            })();
-          });
-      }).catch(function () { finishErr('Could not reach the publish service.'); });
+    function syncNow() {
+      var btn = document.getElementById('dash-sync');
+      var msg = document.getElementById('dash-syncmsg');
+      btn.disabled = true; btn.textContent = '⏳ Requesting…';
+      msg.innerHTML = '<div class="hb hb-ok"><span class="spin"></span>Asking GitHub to sync from Drive… this takes ~1–2 minutes, then the page auto-refreshes.</div>';
+      fetch(PUBLISH_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Publish-Key': PUBLISH_KEY } })
+        .then(function (r) {
+          if (r.status === 401) { msg.innerHTML = '<div class="hb hb-warn">Publish key rejected.</div>'; }
+          else if (r.status === 200 || r.status === 429) {
+            msg.innerHTML = '<div class="hb hb-ok">✓ Sync requested' + (r.status === 429 ? ' (one was already running)' : '') + '. The dashboard will update automatically in a minute or two.</div>';
+            setTimeout(load, 90000);
+          } else { msg.innerHTML = '<div class="hb hb-warn">Couldn’t start the sync (HTTP ' + r.status + '). It also runs automatically every ~5 minutes.</div>'; }
+        })
+        .catch(function () { msg.innerHTML = '<div class="hb hb-warn">Couldn’t reach the sync service. It still runs automatically every ~5 minutes.</div>'; })
+        .then(function () { btn.disabled = false; btn.textContent = '🚀 Sync from Drive now'; });
     }
 
-    document.body.appendChild(card);
-    document.body.appendChild(btn);
-    elStatus = card.querySelector('#pub-status');
-    elBar = card.querySelector('#pub-bar');
-    elNote = card.querySelector('#pub-note');
-    elRefresh = card.querySelector('#pub-refresh');
-    elRefresh.addEventListener('click', function () { location.reload(); });
-    btn.addEventListener('click', publish);
-
-    var sx = document.createElement('style');
-    sx.textContent = '@keyframes pubspin{to{transform:rotate(360deg)}}';
-    document.head.appendChild(sx);
+    load();
+    timer = setInterval(load, REFRESH_MS);   /* live: re-pull the report + courses every minute */
   })();
   </script>
 </body>
