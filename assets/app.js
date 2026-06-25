@@ -23,6 +23,7 @@
   let course = null;
   let currentIndex = 0;
   const docCache = new Map();
+  let _docFit = null;   /* current docx scale-to-fit resize handler (replaced per render) */
 
   /* ---------- Time tracker ---------- */
   const timeTracker = (function () {
@@ -992,15 +993,17 @@
       if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
       const buf = await res.arrayBuffer();
       inner.innerHTML = '';
-      await window.docx.renderAsync(buf, inner, inner, {
+      const host = document.createElement('div');
+      host.className = 'docx-scalehost';
+      inner.appendChild(host);
+      await window.docx.renderAsync(buf, host, host, {
         className: 'docx',
         inWrapper: true,
-        /* Fill the viewer width instead of imposing the document's fixed page
-           width (which forced left/right scrolling on narrow screens and left
-           gaps on wide ones). Content stays verbatim — only the page width/height
-           become fluid. */
-        ignoreWidth: true,
-        ignoreHeight: true,
+        /* Render at the document's TRUE layout (real column widths etc.) so tables
+           match the source. A scale-to-fit step below shrinks the whole page to the
+           viewer width, so it stays faithful AND never scrolls sideways. */
+        ignoreWidth: false,
+        ignoreHeight: false,
         breakPages: true,
         experimental: true,
         renderHeaders: true,
@@ -1008,6 +1011,30 @@
         renderFootnotes: true,
         useBase64URL: true
       });
+      /* Scale the rendered page down to fit the viewer width — preserves the exact
+         layout (so a table looks like it does in the doc) while avoiding sideways
+         scrolling. Re-runs on resize. Degrades safely: if anything fails the doc
+         still shows at full size. */
+      const fitDoc = () => {
+        try {
+          if (!host.isConnected) return;
+          const dw = host.querySelector('.docx-wrapper');
+          if (!dw) return;
+          dw.style.transform = 'none'; host.style.height = ''; host.style.overflow = '';
+          const avail = host.clientWidth, natW = dw.offsetWidth;
+          if (natW > 0 && avail > 0 && natW > avail + 1) {
+            const s = avail / natW;
+            dw.style.transformOrigin = 'top left';
+            dw.style.transform = 'scale(' + s + ')';
+            host.style.height = Math.ceil(dw.offsetHeight * s) + 'px';
+            host.style.overflow = 'hidden';
+          }
+        } catch (_) {}
+      };
+      fitDoc();
+      if (_docFit) window.removeEventListener('resize', _docFit);
+      _docFit = fitDoc;
+      window.addEventListener('resize', _docFit);
     } catch (err) {
       inner.innerHTML = `<p style="color:var(--warn);">Could not render document: ${escapeHtml(err.message)}</p>`;
     }
