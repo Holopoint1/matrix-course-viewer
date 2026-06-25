@@ -2801,6 +2801,19 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 .stage-doc-inner .docx-wrapper table { max-width: 100% !important; }
 .stage-doc-inner .docx-wrapper td, .stage-doc-inner .docx-wrapper th { overflow-wrap: anywhere; word-break: break-word; }
 .stage-doc-inner .docx-wrapper img { max-width: 100%; height: auto; }
+/* Placeholder shown in place of a picture the browser can't load (an image that
+   was linked to the author's PC, or never embedded in the .docx). Keeps the slot
+   size so surrounding text stays in the document's layout, and reads as intentional
+   rather than a broken box. */
+.stage-doc-inner .docx-img-missing {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: .35rem;
+  box-sizing: border-box; max-width: 100%; min-width: 72px; min-height: 56px; padding: .75rem 1rem;
+  vertical-align: middle; text-align: center; line-height: 1.2;
+  background: repeating-linear-gradient(45deg, #f4f6fb, #f4f6fb 11px, #eef1f8 11px, #eef1f8 22px);
+  border: 1px dashed #c4cbe0; border-radius: 8px; color: #8a93b0; font-size: .78rem;
+}
+.stage-doc-inner .docx-img-missing-glyph { font-size: 1.6rem; opacity: .55; line-height: 1; }
+.stage-doc-inner .docx-img-missing-text { letter-spacing: .01em; }
 .stage-doc-inner h1 {
   font-family: var(--font-display);
   font-size: 1.85rem;

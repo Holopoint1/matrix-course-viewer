@@ -957,6 +957,134 @@
     }
   }
 
+  /* ---------------------------------------------------------------------------
+     Word-image failsafes.
+     A .docx can reference pictures the website can't show:
+       • "Link to File" images point at file:///C:\… on the author's PC
+       • some blips reference media that was never embedded (0 files in word/media)
+     docx-preview still emits an <img> for each — which the browser can't load,
+     leaving an ugly empty box. These helpers (1) try to RECOVER the real picture
+     from a file shipped alongside the doc in the course folder (re-embedding it so
+     it renders in the right place), and (2) replace anything still unavailable
+     with a clean placeholder so the page never shows a broken box.
+  --------------------------------------------------------------------------- */
+  function normalizeZipPath(p) {
+    const out = [];
+    String(p).split('/').forEach((s) => {
+      if (s === '..') out.pop();
+      else if (s && s !== '.') out.push(s);
+    });
+    return out.join('/');
+  }
+  function sanitizeMedia(name) {
+    return String(name).replace(/[^a-zA-Z0-9._-]+/g, '_').replace(/^_+/, '') || 'image';
+  }
+  /* Look for an image file shipped next to the document (or in a media/ subfolder).
+     Fires all candidate URLs at once and resolves with the first that exists, so
+     adding the picture to the course's Drive folder makes it appear automatically. */
+  function probeSibling(dir, base) {
+    return new Promise((resolve) => {
+      if (!dir || !base) return resolve(null);
+      const names = Array.from(new Set([base, base.toLowerCase()]));
+      const folders = [dir, dir + '/media', dir + '/Media'];
+      const urls = [];
+      folders.forEach((f) => names.forEach((n) => urls.push(f + '/' + encodeURIComponent(n))));
+      let pending = urls.length;
+      let done = false;
+      if (!pending) return resolve(null);
+      const finish = () => { if (!done && --pending <= 0) { done = true; resolve(null); } };
+      urls.forEach((url) => {
+        fetch(url, { cache: 'no-store' }).then((r) => {
+          if (done) return;
+          if (!r.ok) return finish();
+          r.arrayBuffer().then((b) => {
+            if (done) return;
+            if (b && b.byteLength > 0) { done = true; resolve({ bytes: b, url: url }); }
+            else finish();
+          }).catch(finish);
+        }).catch(finish);
+      });
+    });
+  }
+  /* Open the .docx, recover any linked/missing images we can find in the course
+     folder (embedding them so docx-preview renders them in place), and report the
+     ones we couldn't. Returns the (possibly rewritten) buffer. Never throws fatally
+     — the caller renders the original bytes if anything here fails. */
+  async function prepareDocImages(buf, screen) {
+    if (!window.JSZip) return { buf: buf, unresolved: [] };
+    const zip = await window.JSZip.loadAsync(buf);
+    const relsFiles = Object.keys(zip.files).filter((p) => /^word\/_rels\/.+\.rels$/i.test(p));
+    if (!relsFiles.length) return { buf: buf, unresolved: [] };
+    const dir = (screen.src || '').replace(/\/[^/]*$/, '');
+    let changed = false;
+    let recIdx = 0;
+    const unresolved = [];
+    for (const rp of relsFiles) {
+      const xml = await zip.file(rp).async('string');
+      const doc = new DOMParser().parseFromString(xml, 'application/xml');
+      const baseFolder = rp.replace(/_rels\/[^/]+\.rels$/i, '');   // e.g. "word/"
+      let relsChanged = false;
+      for (const rel of Array.from(doc.getElementsByTagName('Relationship'))) {
+        if (!/\/image$/i.test(rel.getAttribute('Type') || '')) continue;
+        const target = rel.getAttribute('Target') || '';
+        const mode = (rel.getAttribute('TargetMode') || '').toLowerCase();
+        const external = mode === 'external' || /^(file:|https?:|[a-z]:[\\/]|\\\\)/i.test(target);
+        /* Embedded and present in the zip → renders fine, leave it. */
+        if (!external && zip.file(normalizeZipPath(baseFolder + target))) continue;
+        const base = decodeURIComponent((target.split(/[\\/?#]/).pop() || '').split('?')[0]).trim();
+        const isImg = /\.(png|jpe?g|gif|bmp|webp|tiff?|svg)$/i.test(base);
+        if (external && isImg && base) {
+          const found = await probeSibling(dir, base);
+          if (found) {
+            const mediaName = 'media/_rec' + (recIdx++) + '_' + sanitizeMedia(base);
+            zip.file(baseFolder + mediaName, found.bytes);
+            rel.setAttribute('Target', mediaName);
+            rel.removeAttribute('TargetMode');
+            relsChanged = true;
+            changed = true;
+            continue;
+          }
+          unresolved.push(base);
+        }
+      }
+      if (relsChanged) zip.file(rp, new XMLSerializer().serializeToString(doc));
+    }
+    const outBuf = changed ? await zip.generateAsync({ type: 'arraybuffer' }) : buf;
+    return { buf: outBuf, unresolved: Array.from(new Set(unresolved)) };
+  }
+  /* Replace any <img> the browser couldn't load with a tidy placeholder box,
+     preserving the slot size so surrounding text keeps the document's layout. */
+  function installImagePlaceholders(host, refit) {
+    const imgs = Array.from(host.querySelectorAll('img'));
+    const isBroken = (img) => img.complete && img.naturalWidth === 0 && img.naturalHeight === 0;
+    const place = (img) => {
+      if (!img || img.dataset.phDone) return;
+      img.dataset.phDone = '1';
+      const ph = document.createElement('span');
+      ph.className = 'docx-img-missing';
+      const w = img.style.width || (img.getAttribute('width') ? img.getAttribute('width') + 'px' : '');
+      const h = img.style.height || (img.getAttribute('height') ? img.getAttribute('height') + 'px' : '');
+      if (w) ph.style.width = w;
+      if (h) ph.style.minHeight = h;
+      ph.title = 'This image isn’t embedded in the document';
+      ph.innerHTML = '<span class="docx-img-missing-glyph" aria-hidden="true">🖼</span>' +
+                     '<span class="docx-img-missing-text">image unavailable</span>';
+      if (img.parentNode) img.replaceWith(ph);
+    };
+    let any = false;
+    imgs.forEach((img) => {
+      if (isBroken(img)) { place(img); any = true; }
+      else img.addEventListener('error', () => { place(img); if (refit) refit(); }, { once: true });
+    });
+    if (any && refit) refit();
+    /* Late sweep — catch images that only finish (and fail) after first paint. */
+    setTimeout(() => {
+      let late = false;
+      imgs.forEach((img) => { if (img.isConnected && isBroken(img)) { place(img); late = true; } });
+      if (late && refit) refit();
+    }, 800);
+  }
+
   /* Render a .docx VERBATIM with docx-preview — it uses the document's own
      embedded styles (tables with borders/shading/column widths, fonts,
      spacing, numbering, headers/footers), so worksheets display exactly as
@@ -991,7 +1119,15 @@
       if (typeof window.docx === 'undefined' || !window.docx.renderAsync) await waitForDocx();
       const res = await fetch(vsrc(screen));
       if (!res.ok) throw new Error('Could not load file (HTTP ' + res.status + ')');
-      const buf = await res.arrayBuffer();
+      let buf = await res.arrayBuffer();
+      /* Image failsafe (pre-render): recover linked/missing pictures from the
+         course folder so the page mirrors the document. Never fatal — on any
+         error we render the original bytes and the post-render step tidies up. */
+      let docImages = null;
+      try {
+        docImages = await prepareDocImages(buf, screen);
+        if (docImages && docImages.buf) buf = docImages.buf;
+      } catch (_) {}
       inner.innerHTML = '';
       const host = document.createElement('div');
       host.className = 'docx-scalehost';
@@ -1037,6 +1173,14 @@
           }
         } catch (_) {}
       };
+      /* Post-render: swap any picture the browser couldn't load for a tidy
+         placeholder, then re-fit so scaling accounts for the swap. */
+      try { installImagePlaceholders(host, fitDoc); } catch (_) {}
+      if (docImages && docImages.unresolved && docImages.unresolved.length) {
+        console.info('[Matrix doc] images not embedded in ' + (screen.src || '') +
+          ' — re-insert them in the doc, or add these files to the course folder: ' +
+          docImages.unresolved.join(', '));
+      }
       fitDoc();
       setTimeout(fitDoc, 400);                                   // re-fit once images/fonts settle
       if (_docFit) window.removeEventListener('resize', _docFit);
