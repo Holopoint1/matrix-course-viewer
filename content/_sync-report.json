@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-25T12:46:04.366Z",
+  "generatedAt": "2026-06-25T12:50:58.500Z",
   "summary": {
     "courses": 9,
     "screens": 199,
@@ -7,7 +7,7 @@
     "missing": 19,
     "autofixed": 8,
     "downloadFailed": 0,
-    "collisions": 0
+    "collisions": 1
   },
   "courses": {
     "CO0002": {
@@ -348,7 +348,13 @@
     ]
   },
   "failed": [],
-  "collisions": [],
+  "collisions": [
+    {
+      "code": "CO0001",
+      "name": "CO0001 – CPD objectives.docx",
+      "count": 2
+    }
+  ],
   "canonCollisions": [],
   "removed": []
 }
