@@ -1020,18 +1020,18 @@
           if (!host.isConnected) return;
           const dw = host.querySelector('.docx-wrapper');
           if (!dw) return;
-          dw.style.transform = 'none'; host.style.height = ''; host.style.overflow = '';
-          const avail = host.clientWidth, natW = dw.offsetWidth;
+          dw.style.zoom = '';                                    // reset, then measure natural size
+          const avail = host.clientWidth;
+          const natW = Math.max(dw.scrollWidth, dw.offsetWidth); // include any wide-table overflow
           if (natW > 0 && avail > 0 && natW > avail + 1) {
-            const s = avail / natW;
-            dw.style.transformOrigin = 'top left';
-            dw.style.transform = 'scale(' + s + ')';
-            host.style.height = Math.ceil(dw.offsetHeight * s) + 'px';
-            host.style.overflow = 'hidden';
+            /* zoom shrinks the page AND its layout box, so the height collapses with
+               it — nothing is clipped, and there's no sideways scroll. */
+            dw.style.zoom = String(avail / natW);
           }
         } catch (_) {}
       };
       fitDoc();
+      setTimeout(fitDoc, 400);                                   // re-fit once images/fonts settle
       if (_docFit) window.removeEventListener('resize', _docFit);
       _docFit = fitDoc;
       window.addEventListener('resize', _docFit);
