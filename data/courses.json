@@ -1306,7 +1306,7 @@
           "hours": 0.1,
           "src": "content/CO0002/Now try the worksheets.docx",
           "path": "/CO0002 - Introduction to microcontrollers/media/Now try the worksheets.HTM",
-          "v": "ecf8a954f8",
+          "v": "4dce12d584",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1382,11 +1382,11 @@
         {
           "id": "CO0001-s24",
           "type": "document",
-          "title": "Making decisions",
+          "title": "TEST",
           "hours": 0.2,
           "src": "content/CO0001/test.docx",
           "path": "/CO0001 - Introduction to microcontrollers/media/test.docx",
-          "v": "567887445e",
+          "v": "eec996c317",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
