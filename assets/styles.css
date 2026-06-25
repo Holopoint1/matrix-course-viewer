@@ -2795,6 +2795,12 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
    so the page sits cleanly in the card. */
 .stage-doc-inner .docx-scalehost { width: 100%; }
 .stage-doc-inner .docx-wrapper { background: transparent !important; box-shadow: none !important; padding: 0 !important; }
+/* Keep tables/images within the page and wrap long cell text — like Word, where the
+   table fits the page. (Without this, docx-preview lets an unbreakable string expand
+   a column and the table runs off the page.) The page is then scaled to fit the screen. */
+.stage-doc-inner .docx-wrapper table { max-width: 100% !important; }
+.stage-doc-inner .docx-wrapper td, .stage-doc-inner .docx-wrapper th { overflow-wrap: anywhere; word-break: break-word; }
+.stage-doc-inner .docx-wrapper img { max-width: 100%; height: auto; }
 .stage-doc-inner h1 {
   font-family: var(--font-display);
   font-size: 1.85rem;

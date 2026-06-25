@@ -1022,7 +1022,14 @@
           if (!dw) return;
           dw.style.zoom = '';                                    // reset, then measure natural size
           const avail = host.clientWidth;
-          const natW = Math.max(dw.scrollWidth, dw.offsetWidth); // include any wide-table overflow
+          let natW = Math.max(dw.scrollWidth, dw.offsetWidth);
+          /* A table or image can be WIDER than the document's page (the page would
+             clip it). getBoundingClientRect reports its true width even when clipped,
+             so we zoom to fit the widest element — nothing runs off the screen. */
+          host.querySelectorAll('table, img, svg, pre').forEach((el) => {
+            const w = Math.ceil(el.getBoundingClientRect().width);
+            if (w > natW) natW = w;
+          });
           if (natW > 0 && avail > 0 && natW > avail + 1) {
             /* zoom shrinks the page AND its layout box, so the height collapses with
                it — nothing is clipped, and there's no sideways scroll. */
