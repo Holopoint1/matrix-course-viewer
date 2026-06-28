@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-28T15:40:47.975Z",
+  "generatedAt": "2026-06-28T15:45:54.859Z",
   "summary": {
     "courses": 9,
     "screens": 200,
-    "displaying": 181,
-    "missing": 19,
+    "displaying": 182,
+    "missing": 18,
     "autofixed": 8,
     "downloadFailed": 0,
     "collisions": 1
@@ -13,14 +13,7 @@
     "CO0002": {
       "title": "Introduction to Microcontrollers",
       "stale": [],
-      "missing": [
-        {
-          "title": "Floats and INTs",
-          "asked": "CP1972-6.docx",
-          "expectedIn": "CP1972",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP1972 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
+      "missing": [],
       "autofixed": [
         {
           "title": "Welcome",
@@ -68,26 +61,6 @@
         {
           "title": "Contents",
           "showing": "CP1972-Cont.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 6 — Floats and INTs",
-          "showing": "CP1972-6.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 9 — Compressive force sensors",
-          "showing": "CP1972-9.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 10 — Cantilever strain sensors",
-          "showing": "CP1972-10.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 11 — Pressure sensors",
-          "showing": "CP1972-11.docx",
           "expectedIn": "CP1972"
         }
       ],
