@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T15:38:22.175Z",
+  "generatedAt": "2026-06-28T15:40:47.975Z",
   "summary": {
     "courses": 9,
     "screens": 200,
@@ -73,16 +73,6 @@
         {
           "title": "Worksheet 6 — Floats and INTs",
           "showing": "CP1972-6.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 7 — Thermocouples",
-          "showing": "CP1972-7.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 8 — Flow sensors",
-          "showing": "CP1972-8.docx",
           "expectedIn": "CP1972"
         },
         {
