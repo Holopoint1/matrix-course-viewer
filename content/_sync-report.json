@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T10:40:56.911Z",
+  "generatedAt": "2026-06-29T10:46:05.200Z",
   "summary": {
     "courses": 9,
-    "screens": 207,
-    "displaying": 196,
-    "missing": 11,
-    "autofixed": 0,
+    "screens": 211,
+    "displaying": 205,
+    "missing": 6,
+    "autofixed": 1,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -62,26 +62,8 @@
       "stale": [],
       "missing": [
         {
-          "title": "Title page",
-          "asked": "CP2563-head.docx",
-          "expectedIn": "CP2563",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP2563 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Contents",
-          "asked": "CP2563-cont.docx",
-          "expectedIn": "CP2563",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP2563 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Teacher notes",
-          "asked": "TN-1.docx",
           "expectedIn": "CP4807",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
@@ -105,25 +87,22 @@
       "stale": [],
       "missing": [
         {
-          "title": "Cover page",
-          "asked": "CP7244-head.docx",
-          "expectedIn": "CP7244",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Contents",
-          "asked": "CP7244-cont.docx",
-          "expectedIn": "CP7244",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
           "expectedIn": "CP4807",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
       ],
-      "autofixed": []
+      "autofixed": [
+        {
+          "title": "Contents",
+          "asked": "CP7244-cont.docx",
+          "used": "CP7244-Cont.docx",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        }
+      ]
     },
     "CO0001": {
       "title": "Flowcode and E-blocks 3 CPD Course",
@@ -173,11 +152,6 @@
       "welcome.html",
       "opening.svg"
     ],
-    "CP2563": [
-      "CP2563_definition.xlsx",
-      "CP2563 - definition.docx",
-      "CP2563 - Content.docx"
-    ],
     "CP4807": [
       "CP4807 - definition.xlsx",
       "CO4807-4.docx",
@@ -221,5 +195,18 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CP2563",
+      "name": "CP2563 - Content.docx"
+    },
+    {
+      "code": "CP2563",
+      "name": "CP2563 - definition.docx"
+    },
+    {
+      "code": "CP2563",
+      "name": "CP2563_definition.xlsx"
+    }
+  ]
 }
