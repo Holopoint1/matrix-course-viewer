@@ -208,10 +208,12 @@
       }
     }
     if (els.downloadWorksheetsBtn) {
-      /* Compile every Word-doc worksheet into ONE .docx. Hidden when the course
-         has no document screens. */
-      const anyDocs = course.screens.some((s) => effectiveType(s) === 'document' && !s.missing && !/^https?:/i.test(s.src || ''));
-      if (!anyDocs) {
+      /* Compile the course's documents (.docx + .htm text screens) into ONE .docx.
+         Needs at least one Word file as the skeleton (a .docx screen, or a text
+         screen that has a matching Word version) — hidden otherwise. */
+      const hasSkeleton = course.screens.some((s) => !s.missing && !/^https?:/i.test(s.src || '') &&
+        (effectiveType(s) === 'document' || (effectiveType(s) === 'html' && s.wordUrl)));
+      if (!hasSkeleton) {
         els.downloadWorksheetsBtn.hidden = true;
       } else {
         els.downloadWorksheetsBtn.addEventListener('click', () => downloadAllWorksheets(course, els.downloadWorksheetsBtn));
@@ -1544,15 +1546,18 @@
     }
   }
 
-  /* ---------- Compile all worksheets into ONE .docx ----------
-     Merge every Word-doc screen in the course into a single document — page break
-     between each, original Word formatting/media/styles/numbering preserved. Done
-     in-house with the page's JSZip: each appended doc's list-numbering (body refs
-     AND definitions) is offset by a unique amount so lists never collide or dangle,
-     image/hyperlink relationships are remapped and media copied with unique names,
-     and abstractNum-before-num ordering is kept — so Word opens it cleanly. */
+  /* ---------- Compile the whole course into ONE .docx ----------
+     Every CONTENT screen of THIS course — the Word worksheets (.docx) AND the
+     text screens (.htm) — compiled into a single Word document, in screen order,
+     page break between each. .docx screens (and text screens that have a Word
+     version) are merged NATIVELY (full Word fidelity); text screens with no Word
+     version are converted to real OOXML (so the file opens cleanly in Word AND
+     Google Docs — no altChunk). Numbering is offset per-screen so lists never
+     collide; media + hyperlink relationships are remapped. */
   const PAGE_BREAK_XML = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
   const MEDIA_MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', bmp: 'image/bmp', tif: 'image/tiff', tiff: 'image/tiff', svg: 'image/svg+xml', emf: 'image/x-emf', wmf: 'image/x-wmf', webp: 'image/webp' };
+  const HTM_BULLET_NUMID = 990001, HTM_DECIMAL_NUMID = 990002;
+  const HTM_HEADING_SZ = { H1: 36, H2: 32, H3: 28, H4: 26, H5: 24, H6: 22 };
   function docBodyInner(doc) {
     const open = doc.match(/<w:body[^>]*>/);
     if (!open) return '';
@@ -1567,123 +1572,197 @@
     }
     return inner;
   }
-  function spliceDocBody(baseDoc, addXml) {
-    const close = baseDoc.lastIndexOf('</w:body>');
-    const sect = baseDoc.lastIndexOf('<w:sectPr', close);
-    const at = (sect !== -1 && sect < close) ? sect : close;
-    return baseDoc.slice(0, at) + addXml + baseDoc.slice(at);
-  }
   function offsetDocNumbering(xml, off) {
     return xml
       .replace(/(<w:abstractNum\s+w:abstractNumId=")(\d+)(")/g, (m, a, n, b) => a + (+n + off) + b)
       .replace(/(<w:num\s+w:numId=")(\d+)(")/g, (m, a, n, b) => a + (+n + off) + b)
       .replace(/(<w:abstractNumId\s+w:val=")(\d+)(")/g, (m, a, n, b) => a + (+n + off) + b);
   }
-  async function mergeWorksheetsDocx(buffers) {
+  /* ---- HTML → OOXML (text screens) ---- */
+  function htmlRunXml(text, fmt) {
+    if (!text) return '';
+    const rpr = [];
+    if (fmt.b) rpr.push('<w:b/>');
+    if (fmt.i) rpr.push('<w:i/>');
+    if (fmt.u || fmt.link) rpr.push('<w:u w:val="single"/>');
+    if (fmt.link) rpr.push('<w:color w:val="0563C1"/>');
+    if (fmt.sz) rpr.push('<w:sz w:val="' + fmt.sz + '"/>');
+    const pr = rpr.length ? '<w:rPr>' + rpr.join('') + '</w:rPr>' : '';
+    return '<w:r>' + pr + '<w:t xml:space="preserve">' + escapeHtml(text) + '</w:t></w:r>';
+  }
+  function htmlInlineRuns(node, fmt) {
+    let out = '';
+    for (const ch of Array.from(node.childNodes || [])) {
+      if (ch.nodeType === 3) { out += htmlRunXml(ch.textContent.replace(/\s+/g, ' '), fmt); continue; }
+      if (ch.nodeType !== 1) continue;
+      const t = ch.tagName;
+      if (t === 'BR') { out += '<w:r><w:br/></w:r>'; continue; }
+      const f = Object.assign({}, fmt);
+      if (t === 'B' || t === 'STRONG') f.b = true;
+      else if (t === 'I' || t === 'EM') f.i = true;
+      else if (t === 'U') f.u = true;
+      else if (t === 'A') f.link = true;
+      out += htmlInlineRuns(ch, f);
+    }
+    return out;
+  }
+  function htmlParaXml(runs, opts) {
+    opts = opts || {};
+    const props = [];
+    if (opts.numId) props.push('<w:numPr><w:ilvl w:val="0"/><w:numId w:val="' + opts.numId + '"/></w:numPr>');
+    if (opts.heading) props.push('<w:spacing w:before="200" w:after="80"/><w:keepNext/>');
+    const pPr = props.length ? '<w:pPr>' + props.join('') + '</w:pPr>' : '';
+    return '<w:p>' + pPr + (runs || '<w:r><w:t/></w:r>') + '</w:p>';
+  }
+  function htmlTableXml(node) {
+    let trs = '';
+    for (const tr of Array.from(node.querySelectorAll('tr'))) {
+      let tcs = '';
+      for (const td of Array.from(tr.querySelectorAll('td,th'))) {
+        tcs += '<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/></w:tcPr>' + htmlParaXml(htmlInlineRuns(td, td.tagName === 'TH' ? { b: true } : {})) + '</w:tc>';
+      }
+      if (tcs) trs += '<w:tr>' + tcs + '</w:tr>';
+    }
+    if (!trs) return '';
+    const b = '<w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tblBorders>';
+    return '<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/>' + b + '</w:tblPr>' + trs + '</w:tbl>';
+  }
+  function htmlBlockify(node, out, flags) {
+    let buf = '';
+    const flush = () => { if (buf.trim()) out.push(htmlParaXml(buf)); buf = ''; };
+    for (const ch of Array.from(node.childNodes || [])) {
+      if (ch.nodeType === 3) { if (ch.textContent.trim()) buf += htmlRunXml(ch.textContent.replace(/\s+/g, ' '), {}); continue; }
+      if (ch.nodeType !== 1) continue;
+      const t = ch.tagName;
+      if (t === 'P') { flush(); out.push(htmlParaXml(htmlInlineRuns(ch, {}))); }
+      else if (/^H[1-6]$/.test(t)) { flush(); out.push(htmlParaXml(htmlInlineRuns(ch, { b: true, sz: HTM_HEADING_SZ[t] || 28 }), { heading: true })); }
+      else if (t === 'UL' || t === 'OL') { flush(); const nid = t === 'OL' ? HTM_DECIMAL_NUMID : HTM_BULLET_NUMID; flags.lists = true; for (const li of Array.from(ch.children)) { if (li.tagName === 'LI') out.push(htmlParaXml(htmlInlineRuns(li, {}), { numId: nid })); } }
+      else if (t === 'TABLE') { flush(); const tb = htmlTableXml(ch); if (tb) out.push(tb); }
+      else if (t === 'BR') { buf += '<w:r><w:br/></w:r>'; }
+      else if (t === 'B' || t === 'STRONG' || t === 'I' || t === 'EM' || t === 'U' || t === 'A' || t === 'SPAN' || t === 'FONT') { buf += htmlInlineRuns(ch, {}); }
+      else if (t === 'IMG' || t === 'SCRIPT' || t === 'STYLE' || t === 'NOSCRIPT') { /* skip */ }
+      else { flush(); htmlBlockify(ch, out, flags); }
+    }
+    flush();
+  }
+  function htmlToBodyXml(html) {
+    const doc = new DOMParser().parseFromString(String(html || ''), 'text/html');
+    const out = [];
+    const flags = {};
+    htmlBlockify(doc.body || doc.documentElement, out, flags);
+    return { xml: out.join(''), usesLists: !!flags.lists };
+  }
+  async function compileCourseDocx(items) {
     const JSZip = window.JSZip;
-    const base = await JSZip.loadAsync(buffers[0]);
-    let baseDoc = await base.file('word/document.xml').async('string');
-    const numFile = base.file('word/numbering.xml');
-    let baseNum = numFile ? await numFile.async('string') : null;
-    let baseRels = await base.file('word/_rels/document.xml.rels').async('string');
-    let baseCT = await base.file('[Content_Types].xml').async('string');
-    let appendedBody = '', appendedAbstracts = '', appendedNums = '', relsToAdd = '';
-    const mediaAdds = [];
-    const ctExt = {};
-    let relCounter = 0;
-    for (let i = 1; i < buffers.length; i++) {
-      const zip = await JSZip.loadAsync(buffers[i]);
-      const docFile = zip.file('word/document.xml');
-      if (!docFile) continue;
-      const doc = await docFile.async('string');
-      const relsFile = zip.file('word/_rels/document.xml.rels');
-      const relsXml = relsFile ? await relsFile.async('string') : '';
-      const off = i * 100000;
-      let inner = docBodyInner(doc);
-      /* numId 0 is OOXML's "no numbering" sentinel (no definition) — leave it. */
-      inner = inner.replace(/(<w:numId\s+w:val=")(\d+)(")/g, (m, a, n, b) => a + (n === '0' ? '0' : (+n + off)) + b);
-      const refIds = new Set();
-      let mm; const re = /r:(?:embed|id)="([^"]+)"/g;
-      while ((mm = re.exec(inner))) refIds.add(mm[1]);
-      const relMap = {};
-      for (const oldId of refIds) {
-        const rx = new RegExp('<Relationship\\b[^>]*Id="' + oldId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"[^>]*/>');
-        const rel = (relsXml.match(rx) || [])[0];
-        if (!rel) continue;
-        const rtype = (rel.match(/Type="([^"]+)"/) || [])[1] || '';
-        const target = (rel.match(/Target="([^"]+)"/) || [])[1] || '';
-        const mode = (rel.match(/TargetMode="([^"]+)"/) || [])[1] || '';
-        const newId = 'rIdMrg' + i + '_' + (relCounter++);
-        relMap[oldId] = newId;
-        if (mode === 'External' || /^[a-z]+:\/\//i.test(target) || /^mailto:/i.test(target)) {
-          relsToAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + escapeAttr(target) + '" TargetMode="External"/>';
-        } else {
-          const srcPath = normalizeZipPath('word/' + target.replace(/^\/+/, ''));
-          const f = zip.file(srcPath);
-          if (!f) continue;
-          const ext = (srcPath.split('.').pop() || 'bin').toLowerCase();
-          const newName = 'media/mrg' + i + '_' + relCounter + '.' + ext;
-          mediaAdds.push({ path: 'word/' + newName, data: await f.async('uint8array') });
-          relsToAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + newName + '"/>';
-          if (MEDIA_MIME[ext]) ctExt[ext] = MEDIA_MIME[ext];
+    const skelIdx = items.findIndex((it) => it.type === 'docx');
+    if (skelIdx < 0) throw new Error('this course has no Word document to build from');
+    const skel = await JSZip.loadAsync(items[skelIdx].buf);
+    const numFile = skel.file('word/numbering.xml');
+    let numXml = numFile ? await numFile.async('string') : '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"></w:numbering>';
+    let relsXml = await skel.file('word/_rels/document.xml.rels').async('string');
+    let ctXml = await skel.file('[Content_Types].xml').async('string');
+    const skelDoc = await skel.file('word/document.xml').async('string');
+    let mergedBody = '', abstracts = '', nums = '', relsAdd = '';
+    const mediaAdds = []; const ctExt = {}; let relCounter = 0; let anyLists = false;
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (i > 0) mergedBody += PAGE_BREAK_XML;
+      if (it.type === 'docx') {
+        const zip = await JSZip.loadAsync(it.buf);
+        const docF = zip.file('word/document.xml'); if (!docF) continue;
+        const doc = await docF.async('string');
+        const relsF = zip.file('word/_rels/document.xml.rels');
+        const rXml = relsF ? await relsF.async('string') : '';
+        const off = (i + 1) * 100000;
+        let inner = docBodyInner(doc).replace(/(<w:numId\s+w:val=")(\d+)(")/g, (m, a, n, b) => a + (n === '0' ? '0' : (+n + off)) + b);
+        const refIds = new Set(); let mm; const re = /r:(?:embed|id)="([^"]+)"/g; while ((mm = re.exec(inner))) refIds.add(mm[1]);
+        const relMap = {};
+        for (const oldId of refIds) {
+          const rx = new RegExp('<Relationship\\b[^>]*Id="' + oldId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"[^>]*/>');
+          const rel = (rXml.match(rx) || [])[0]; if (!rel) continue;
+          const rtype = (rel.match(/Type="([^"]+)"/) || [])[1] || ''; const target = (rel.match(/Target="([^"]+)"/) || [])[1] || ''; const mode = (rel.match(/TargetMode="([^"]+)"/) || [])[1] || '';
+          const newId = 'rIdC' + i + '_' + (relCounter++); relMap[oldId] = newId;
+          if (mode === 'External' || /^[a-z]+:\/\//i.test(target) || /^mailto:/i.test(target)) relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + escapeAttr(target) + '" TargetMode="External"/>';
+          else { const sp = normalizeZipPath('word/' + target.replace(/^\/+/, '')); const f = zip.file(sp); if (!f) continue; const ext = (sp.split('.').pop() || 'bin').toLowerCase(); const nm = 'media/c' + i + '_' + relCounter + '.' + ext; mediaAdds.push({ path: 'word/' + nm, data: await f.async('uint8array') }); relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + nm + '"/>'; if (MEDIA_MIME[ext]) ctExt[ext] = MEDIA_MIME[ext]; }
         }
-      }
-      inner = inner.replace(/(r:(?:embed|id)=")([^"]+)(")/g, (m, a, id, b) => (relMap[id] ? a + relMap[id] + b : m));
-      appendedBody += PAGE_BREAK_XML + inner;
-      const nf = zip.file('word/numbering.xml');
-      if (nf) {
-        const numXml = await nf.async('string');
-        (numXml.match(/<w:abstractNum\b[\s\S]*?<\/w:abstractNum>/g) || []).forEach((blk) => { appendedAbstracts += offsetDocNumbering(blk, off); });
-        (numXml.match(/<w:num\b(?![a-zA-Z])[\s\S]*?<\/w:num>/g) || []).forEach((blk) => { appendedNums += offsetDocNumbering(blk, off); });
+        inner = inner.replace(/(r:(?:embed|id)=")([^"]+)(")/g, (m, a, id, b) => (relMap[id] ? a + relMap[id] + b : m));
+        mergedBody += inner;
+        const nf = zip.file('word/numbering.xml');
+        if (nf) { const nx = await nf.async('string'); (nx.match(/<w:abstractNum\b[\s\S]*?<\/w:abstractNum>/g) || []).forEach((bk) => abstracts += offsetDocNumbering(bk, off)); (nx.match(/<w:num\b(?![a-zA-Z])[\s\S]*?<\/w:num>/g) || []).forEach((bk) => nums += offsetDocNumbering(bk, off)); }
+      } else {
+        const conv = htmlToBodyXml(it.html);
+        if (conv.usesLists) anyLists = true;
+        mergedBody += (it.title ? htmlParaXml(htmlRunXml(it.title, { b: true, sz: 32 }), { heading: true }) : '') + conv.xml;
       }
     }
-    baseDoc = spliceDocBody(baseDoc, appendedBody);
-    if (baseNum && (appendedAbstracts || appendedNums)) {
-      const firstNum = baseNum.search(/<w:num\b(?![a-zA-Z])/);
-      if (appendedAbstracts) baseNum = (firstNum !== -1) ? baseNum.slice(0, firstNum) + appendedAbstracts + baseNum.slice(firstNum) : baseNum.replace('</w:numbering>', appendedAbstracts + '</w:numbering>');
-      if (appendedNums) baseNum = baseNum.replace('</w:numbering>', appendedNums + '</w:numbering>');
+    if (anyLists) {
+      abstracts += '<w:abstractNum w:abstractNumId="' + HTM_BULLET_NUMID + '"><w:lvl w:ilvl="0"><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum>'
+        + '<w:abstractNum w:abstractNumId="' + HTM_DECIMAL_NUMID + '"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum>';
+      nums += '<w:num w:numId="' + HTM_BULLET_NUMID + '"><w:abstractNumId w:val="' + HTM_BULLET_NUMID + '"/></w:num><w:num w:numId="' + HTM_DECIMAL_NUMID + '"><w:abstractNumId w:val="' + HTM_DECIMAL_NUMID + '"/></w:num>';
     }
-    if (relsToAdd) baseRels = baseRels.replace('</Relationships>', relsToAdd + '</Relationships>');
+    const numOpen = (numXml.match(/<w:numbering\b[^>]*>/) || ['<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'])[0];
+    numXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' + numOpen + abstracts + nums + '</w:numbering>';
+    const open = skelDoc.match(/<w:body[^>]*>/); const bStart = open.index + open[0].length; const bClose = skelDoc.lastIndexOf('</w:body>');
+    let tail = skelDoc.slice(bStart, bClose); let sect = ''; const ls = tail.lastIndexOf('<w:sectPr');
+    if (ls !== -1) { const e = tail.indexOf('</w:sectPr>', ls); if (e !== -1) sect = tail.slice(ls, e + 11); }
+    const newDoc = skelDoc.slice(0, bStart) + mergedBody + sect + skelDoc.slice(bClose);
+    if (relsAdd) relsXml = relsXml.replace('</Relationships>', relsAdd + '</Relationships>');
     let ctAdd = '';
-    for (const ext of Object.keys(ctExt)) { if (!new RegExp('<Default\\s+Extension="' + ext + '"', 'i').test(baseCT)) ctAdd += '<Default Extension="' + ext + '" ContentType="' + ctExt[ext] + '"/>'; }
-    if (ctAdd) baseCT = baseCT.replace('</Types>', ctAdd + '</Types>');
-    base.file('word/document.xml', baseDoc);
-    if (baseNum) base.file('word/numbering.xml', baseNum);
-    base.file('word/_rels/document.xml.rels', baseRels);
-    base.file('[Content_Types].xml', baseCT);
-    for (const mAdd of mediaAdds) base.file(mAdd.path, mAdd.data);
-    return base.generateAsync({ type: 'blob' });
+    for (const ext of Object.keys(ctExt)) if (!new RegExp('<Default\\s+Extension="' + ext + '"', 'i').test(ctXml)) ctAdd += '<Default Extension="' + ext + '" ContentType="' + ctExt[ext] + '"/>';
+    if (ctAdd) ctXml = ctXml.replace('</Types>', ctAdd + '</Types>');
+    skel.file('word/document.xml', newDoc);
+    skel.file('word/numbering.xml', numXml);
+    skel.file('word/_rels/document.xml.rels', relsXml);
+    skel.file('[Content_Types].xml', ctXml);
+    for (const m of mediaAdds) skel.file(m.path, m.data);
+    return skel.generateAsync({ type: 'blob' });
   }
   async function downloadAllWorksheets(course, btn) {
-    /* This course's Word-doc screens in order, de-duped by file; skip missing/external. */
+    /* THIS course's content screens in order — its .docx worksheets AND its .htm
+       text screens — de-duped by file; skip images/video/pdf/spreadsheet/missing. */
     const seen = new Set();
-    const docs = [];
+    const screens = [];
     for (const s of course.screens) {
-      if (effectiveType(s) !== 'document' || s.missing || /^https?:/i.test(s.src || '')) continue;
+      const t = effectiveType(s);
+      if ((t !== 'document' && t !== 'html') || s.missing || /^https?:/i.test(s.src || '')) continue;
       if (seen.has(s.src)) continue;
       seen.add(s.src);
-      docs.push(s);
+      screens.push(s);
     }
-    if (!docs.length) { alert('This course has no worksheet documents to compile.'); return; }
+    if (!screens.length) { alert('This course has no documents to compile.'); return; }
     const restore = btn ? btn.innerHTML : '';
-    if (btn) { btn.disabled = true; btn.innerHTML = '&#8987; Compiling ' + docs.length + ' worksheets…'; }
+    if (btn) { btn.disabled = true; btn.innerHTML = '&#8987; Compiling ' + screens.length + ' documents…'; }
     try {
       if (!window.JSZip) throw new Error('zip library not loaded');
-      const buffers = [];
-      for (const s of docs) {
-        const res = await fetch(vsrc(s));
-        if (!res.ok) throw new Error('couldn’t fetch ' + (filename(s.src) || s.src));
-        buffers.push(await res.arrayBuffer());
+      const items = [];
+      for (const s of screens) {
+        const t = effectiveType(s);
+        if (t === 'document') {
+          const res = await fetch(vsrc(s));
+          if (res.ok) items.push({ type: 'docx', buf: await res.arrayBuffer(), title: s.title });
+        } else {
+          /* text screen: prefer its matching Word file (full fidelity); else convert the HTML. */
+          let added = false;
+          if (s.wordUrl) {
+            try {
+              const dres = await fetch(encodeURI(s.src.replace(/\.html?$/i, '.docx')));
+              if (dres.ok) { items.push({ type: 'docx', buf: await dres.arrayBuffer(), title: s.title }); added = true; }
+            } catch (_) {}
+          }
+          if (!added) {
+            const res = await fetch(vsrc(s));
+            if (res.ok) items.push({ type: 'html', html: await res.text(), title: s.title });
+          }
+        }
       }
-      const blob = (buffers.length === 1)
-        ? new Blob([buffers[0]], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-        : await mergeWorksheetsDocx(buffers);
+      if (!items.length) throw new Error('no documents could be fetched');
+      const blob = await compileCourseDocx(items);
       const name = (course.code || course.id || 'course') + ' - worksheets.docx';
       const url = URL.createObjectURL(blob);
       triggerDownload(url, name);
       setTimeout(() => URL.revokeObjectURL(url), 8000);
     } catch (e) {
-      alert('Could not compile the worksheets: ' + ((e && e.message) || e));
+      alert('Could not compile the documents: ' + ((e && e.message) || e));
     } finally {
       if (btn) { btn.disabled = false; btn.innerHTML = restore; }
     }
