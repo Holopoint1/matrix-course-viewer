@@ -17,6 +17,9 @@
     screenStage: document.getElementById('screen-stage'),
     prevBtn: document.getElementById('prev-btn'),
     nextBtn: document.getElementById('next-btn'),
+    printBtn: document.getElementById('print-btn'),
+    downloadBtn: document.getElementById('download-btn'),
+    downloadCourseBtn: document.getElementById('download-course-btn'),
     completeBtn: document.getElementById('complete-btn')
   };
 
@@ -174,6 +177,31 @@
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       });
+    }
+
+    /* Header action bar — Print / Download (this file) / Download course (zip).
+       These act on whatever the current screen is, so every screen type gets the
+       same controls in one place (no more per-stage, type-specific buttons). */
+    if (els.printBtn) {
+      els.printBtn.addEventListener('click', () => printCurrentScreen());
+    }
+    if (els.downloadBtn) {
+      els.downloadBtn.addEventListener('click', () => {
+        const screen = course.screens[currentIndex];
+        if (screen && screen.src && !/^https?:/i.test(screen.src)) {
+          triggerDownload(vsrc(screen), filename(screen.src));
+        }
+      });
+    }
+    if (els.downloadCourseBtn) {
+      /* Hide the whole-course download when there's literally nothing local to zip
+         (e.g. a course made entirely of YouTube/external links). */
+      const anyLocal = course.screens.some((s) => s.src && !/^https?:/i.test(s.src) && !s.missing);
+      if (!anyLocal) {
+        els.downloadCourseBtn.hidden = true;
+      } else {
+        els.downloadCourseBtn.addEventListener('click', () => downloadCourseZip(course, els.downloadCourseBtn));
+      }
     }
     /* Keyboard slide navigation: ← previous screen, → next screen.
        Ignored while typing in a field, with modifier keys, or when focus
@@ -403,6 +431,7 @@
 
     els.screenTitle.textContent = screen.title;
     els.screenMeta.innerHTML = formatMeta(screen);
+    updateScreenActions(screen);
     els.prevBtn.disabled = idx === 0;
     const isLast = idx === course.screens.length - 1;
     if (els.nextBtn) els.nextBtn.disabled = isLast;
@@ -571,7 +600,6 @@
         <div class="stage-pdf-actions">
           <button type="button" class="btn btn-secondary" data-action="fullscreen">⛶ Fullscreen</button>
           <a class="btn btn-secondary" href="${safeSrc}" target="_blank" rel="noopener">↗ Open in new tab</a>
-          <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
         </div>
       </div>
       <div class="stage-pdf-frame">
@@ -697,16 +725,11 @@
     }
     const wrap = document.createElement('div');
     wrap.className = 'stage-doc';
-    wrap.innerHTML = `
-      <div class="stage-doc-toolbar">
-        <button type="button" class="btn btn-secondary" data-action="print">🖨 Print</button>
-      </div>
-      <div class="stage-doc-inner"><p class="stage-loading">Loading&hellip;</p></div>`;
+    /* No per-stage toolbar — Print/Download now live in the header action bar,
+       consistent across every screen type. */
+    wrap.innerHTML = `<div class="stage-doc-inner"><p class="stage-loading">Loading&hellip;</p></div>`;
     stage.appendChild(wrap);
     const inner = wrap.querySelector('.stage-doc-inner');
-    wrap.querySelector('[data-action="print"]').addEventListener('click', () => {
-      printWorksheet(screen, inner);
-    });
     try {
       let text;
       const cmsOverride = window.MatrixCMS ? window.MatrixCMS.getHtmlOverride(screen.src) : null;
@@ -901,7 +924,6 @@
           <span class="stage-pdf-name" title="${safeSrc}">${escapeHtml(fname)}</span>
           <div class="stage-pdf-actions">
             <a class="btn btn-secondary" href="${safeSrc}" target="_blank" rel="noopener">↗ Open</a>
-            <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
           </div>
         </div>
         <div class="stage-pdf-frame">
@@ -927,7 +949,6 @@
         <div class="stage-pdf-actions">
           <button type="button" class="btn btn-secondary" data-action="fullscreen">⛶ Fullscreen</button>
           <a class="btn btn-secondary" href="${escapeAttr(viewer)}" target="_blank" rel="noopener">↗ Open viewer</a>
-          <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
         </div>
       </div>
       <div class="stage-pdf-frame">
@@ -1093,17 +1114,11 @@
   async function renderDocument(stage, screen) {
     const wrap = document.createElement('div');
     wrap.className = 'stage-doc';
-    wrap.innerHTML = `
-      <div class="stage-doc-toolbar">
-        <button type="button" class="btn btn-secondary" data-action="print">🖨 Print</button>
-        <a class="btn btn-secondary" href="${escapeAttr(screen.src)}" download>Download Word</a>
-      </div>
-      <div class="stage-doc-inner"><p class="stage-loading">Rendering document&hellip;</p></div>`;
+    /* No per-stage toolbar — Print/Download now live in the header action bar,
+       consistent across every screen type. */
+    wrap.innerHTML = `<div class="stage-doc-inner"><p class="stage-loading">Rendering document&hellip;</p></div>`;
     stage.appendChild(wrap);
     const inner = wrap.querySelector('.stage-doc-inner');
-    wrap.querySelector('[data-action="print"]').addEventListener('click', () => {
-      printWorksheet(screen, inner);
-    });
 
     try {
       /* Admin CMS edit wins over the source .docx — shown verbatim (no
@@ -1366,6 +1381,142 @@
     }[c]));
   }
   function escapeAttr(s) { return escapeHtml(s); }
+
+  /* ---------- Header action bar (Print / Download / Download course) ----------
+     Enable/disable the header buttons for the screen being shown, so every screen
+     type carries the SAME controls in one place. Worksheets (document/html) print
+     their rendered content; image/PDF/Office open the file in a window the browser
+     or native viewer can print from; YouTube and external links can't be
+     printed/downloaded, so those buttons go disabled (never hidden — the bar stays
+     consistent from screen to screen). */
+  const PRINTABLE_TYPES = ['document', 'html', 'image', 'pdf', 'powerpoint', 'spreadsheet'];
+  function updateScreenActions(screen) {
+    const isUrl = /^https?:/i.test(screen.src || '');
+    const t = effectiveType(screen);
+    const canDownload = !!screen.src && !isUrl && !screen.missing;
+    const canPrint = !screen.missing && !isUrl && PRINTABLE_TYPES.indexOf(t) >= 0;
+    if (els.downloadBtn) {
+      els.downloadBtn.disabled = !canDownload;
+      els.downloadBtn.title = canDownload
+        ? 'Download this file'
+        : (isUrl ? 'This screen is an external link — nothing to download' : 'Nothing to download for this screen');
+    }
+    if (els.printBtn) {
+      els.printBtn.disabled = !canPrint;
+      els.printBtn.title = canPrint ? 'Print this screen' : 'This screen can’t be printed';
+    }
+  }
+
+  function printCurrentScreen() {
+    const screen = course.screens[currentIndex];
+    if (!screen) return;
+    const t = effectiveType(screen);
+    /* Worksheets are already rendered to HTML on the stage — print that, so the
+       printout matches exactly what the learner sees. */
+    if (t === 'document' || t === 'html') {
+      const inner = els.screenStage.querySelector('.stage-doc-inner');
+      if (inner) { printWorksheet(screen, inner); return; }
+    }
+    if (t === 'image') { printImage(screen); return; }
+    /* PDF / PowerPoint / Spreadsheet: open the file in a new tab — the browser's
+       PDF viewer / Office Online viewer / native app each provide their own Print. */
+    const w = window.open(vsrc(screen), '_blank');
+    if (!w) alert('Pop-up blocked. Allow pop-ups for this site to print this file.');
+  }
+
+  function printImage(screen) {
+    const w = window.open('', '_blank', 'width=900,height=1000');
+    if (!w) { alert('Pop-up blocked. Allow pop-ups for this site to print.'); return; }
+    w.document.open();
+    w.document.write(
+      '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + escapeHtml(screen.title || 'Image') + '</title>' +
+      '<style>html,body{margin:0;height:100%}body{display:flex;align-items:center;justify-content:center;padding:14px}' +
+      'img{max-width:100%;max-height:100%}@media print{body{padding:0}}</style></head><body>' +
+      '<img src="' + escapeAttr(vsrc(screen)) + '" alt="' + escapeAttr(screen.title || '') + '">' +
+      '<scr' + 'ipt>window.onload=function(){setTimeout(function(){window.print();},150);};</scr' + 'ipt>' +
+      '</body></html>'
+    );
+    w.document.close();
+  }
+
+  /* Programmatic download via a throwaway anchor — works for the per-file Download
+     (same-origin content/ paths honour the `download` attribute) and the ZIP blob. */
+  function triggerDownload(href, name) {
+    const a = document.createElement('a');
+    a.href = href;
+    if (name) a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  /* ---------- Whole-course download ----------
+     Zip every file in the course into a single download so a learner can take the
+     entire course offline in one click. De-dupes files reused across screens,
+     disambiguates same-named files, and lists any external (YouTube/web) links in
+     an external-links.txt so nothing is silently dropped. */
+  async function downloadCourseZip(course, btn) {
+    if (!window.JSZip) { alert('The ZIP library is still loading — please try again in a moment.'); return; }
+    const label = btn.querySelector('span');
+    const orig = label ? label.textContent : '';
+    const setLbl = (t) => { if (label) label.textContent = t; };
+    btn.disabled = true;
+    try {
+      const zip = new window.JSZip();
+      const seen = new Set();   // unique screen.src already added
+      const used = new Set();   // names already used inside the zip
+      const files = [], links = [];
+      const uniqueName = (name) => {
+        if (!used.has(name)) { used.add(name); return name; }
+        const dot = name.lastIndexOf('.');
+        const stem = dot > 0 ? name.slice(0, dot) : name;
+        const ext = dot > 0 ? name.slice(dot) : '';
+        let i = 2, n;
+        do { n = stem + ' (' + i + ')' + ext; i++; } while (used.has(n));
+        used.add(n); return n;
+      };
+      course.screens.forEach((s) => {
+        const src = s.src || '';
+        if (/^https?:/i.test(src)) { links.push((s.title || 'Link') + ' — ' + src); return; }
+        if (s.missing || !src || seen.has(src)) return;
+        seen.add(src);
+        files.push(s);
+      });
+      if (!files.length && !links.length) { alert('This course has no downloadable files.'); return; }
+
+      let done = 0, failed = 0;
+      for (const s of files) {
+        done++;
+        setLbl('Zipping (' + done + '/' + files.length + ')…');
+        try {
+          const res = await fetch(vsrc(s));
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const buf = await res.arrayBuffer();
+          zip.file(uniqueName(filename(s.src) || (s.title || 'file')), buf);
+        } catch (err) {
+          failed++;
+          console.warn('[course zip] skipped ' + s.src + ': ' + err.message);
+        }
+      }
+      if (links.length) zip.file('external-links.txt', links.join('\n') + '\n');
+
+      setLbl('Building ZIP…');
+      const blob = await zip.generateAsync(
+        { type: 'blob' },
+        (meta) => setLbl('Building ZIP ' + Math.round(meta.percent) + '%')
+      );
+      const url = URL.createObjectURL(blob);
+      const safeTitle = String(course.title || '').replace(/[\\/:*?"<>|]+/g, ' ').trim();
+      triggerDownload(url, ((course.code || 'course') + (safeTitle ? ' - ' + safeTitle : '')) + '.zip');
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      if (failed) alert(failed + ' file(s) could not be fetched and were left out of the ZIP. See the console for details.');
+    } catch (err) {
+      alert('Could not build the course download: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      setLbl(orig);
+    }
+  }
 
   /* ---------- Worksheet print ----------
      Opens a new window with just the worksheet content + minimal print

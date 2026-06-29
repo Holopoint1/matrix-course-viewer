@@ -2691,6 +2691,16 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   display: flex;
   gap: 0.55rem;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.screen-bar .actions .btn { white-space: nowrap; }
+.screen-bar .actions-sep {
+  width: 1px;
+  align-self: stretch;
+  min-height: 1.5rem;
+  background: var(--border-strong);
+  margin: 0 0.1rem;
 }
 
 /* Screen stage */
