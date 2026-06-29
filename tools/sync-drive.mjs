@@ -797,6 +797,27 @@ async function buildCourseStructure() {
   };
   fs.writeFileSync(COURSE_STRUCTURE_JSON, JSON.stringify(payload, null, 2) + '\n');
   console.log('\nCourse structure: ' + Object.keys(out).length + ' course(s) -> data/course-structure.json' + (sheet ? '' : ' (sheet missing — kept existing keywords)'));
+
+  /* Fold the sheet's fields straight INTO courses.json, so every page that reads
+     courses.json — the per-course dashboard/viewer, the catalogue, the account —
+     is populated by the Course_structure sheet exactly the way the per-course
+     definition sheets populate screens. A blank cell never overwrites (out[] has
+     already applied the per-row fallback). Guarded: a problem here leaves
+     courses.json untouched and never fails the sync. */
+  try {
+    const db = JSON.parse(fs.readFileSync(COURSES_JSON, 'utf8'));
+    let merged = 0;
+    for (const c of (db.courses || [])) {
+      const m = out[String(c.id || c.code || '').toUpperCase()];
+      if (!m) continue;
+      if (m.description) c.shortDescription = m.description;     // course-page hero text
+      if (Array.isArray(m.keywords) && m.keywords.length) c.keywords = m.keywords;
+      if (m.type) c.courseType = m.type;
+      merged++;
+    }
+    fs.writeFileSync(COURSES_JSON, JSON.stringify(db, null, 2) + '\n');
+    console.log('Course structure: merged into ' + merged + ' course(s) in courses.json');
+  } catch (e) { console.warn('  ! Could not merge structure into courses.json — ' + e.message); }
 }
 
 async function main() {
