@@ -1149,7 +1149,7 @@
       "kind": "course",
       "title": "Flowcode and E-blocks 3 CPD Course",
       "shortDescription": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
-      "estimatedHours": 4.9,
+      "estimatedHours": 5.4,
       "certificate": {
         "enabled": true,
         "templateName": "Flowcode & E-blocks 3 CPD Course"
@@ -1168,25 +1168,35 @@
         {
           "id": "CO0001-s2",
           "type": "html",
-          "title": "Welcome",
-          "hours": 0.2,
+          "title": "CPD objectives",
+          "hours": 0.1,
           "src": "content/CO0001/CO0001 – CPD objectives.HTM",
           "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – CPD objectives.HTM",
-          "v": "87b2ab89fe",
+          "v": "bad4158d1a",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s3",
           "type": "html",
-          "title": "Delivering BTEC Unit 6 on microcontrollers",
-          "hours": 0.2,
-          "src": "content/CO0001/CO0001 – BTEC.HTM",
-          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – BTEC.HTM",
-          "v": "499b0e11cc",
+          "title": "Syllabuses",
+          "hours": 0.1,
+          "src": "content/CO0001/CO0001 – syllabuses.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – syllabuses.HTM",
+          "v": "cbdfbd31ea",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s4",
+          "type": "html",
+          "title": "Delivering BTEC Unit 6 on microcontrollers",
+          "hours": 0.2,
+          "src": "content/CO0001/CO0001 – BTEC.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – BTEC.HTM",
+          "v": "fa9451401b",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0001-s5",
           "type": "sheet",
           "title": "BTEC syllabus mapping spreadsheet",
           "hours": 0.2,
@@ -1196,7 +1206,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s5",
+          "id": "CO0001-s6",
           "type": "html",
           "title": "Delivering T levels",
           "hours": 0.2,
@@ -1206,7 +1216,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s6",
+          "id": "CO0001-s7",
           "type": "sheet",
           "title": "T levels mapping spreadsheet",
           "hours": 0.2,
@@ -1216,7 +1226,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s7",
+          "id": "CO0001-s8",
           "type": "html",
           "title": "Delivering EASA Digital Techniques",
           "hours": 0.2,
@@ -1226,7 +1236,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s8",
+          "id": "CO0001-s9",
           "type": "sheet",
           "title": "Digital Techniques mapping spreadsheet",
           "hours": 0.2,
@@ -1236,7 +1246,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s9",
+          "id": "CO0001-s10",
           "type": "html",
           "title": "Equipment",
           "hours": 0.1,
@@ -1246,7 +1256,17 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s10",
+          "id": "CO0001-s11",
+          "type": "html",
+          "title": "Introduction videos",
+          "hours": 0.1,
+          "src": "content/CO0001/CO0001 – videos.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – videos.HTM",
+          "v": "0f4817c457",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0001-s12",
           "type": "youtube",
           "title": "Introducing E-blocks 3",
           "hours": 0.2,
@@ -1254,7 +1274,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s11",
+          "id": "CO0001-s13",
           "type": "youtube",
           "title": "Introducing Flowcode",
           "hours": 0.2,
@@ -1262,15 +1282,35 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s12",
-          "type": "pdf",
-          "title": "E-blocks datasheet",
-          "hours": 0.2,
-          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf",
+          "id": "CO0001-s14",
+          "type": "html",
+          "title": "Datasheet",
+          "hours": 0.1,
+          "src": "content/CO0001/CO0001 – Datasheet.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – Datasheet.HTM",
+          "v": "1ce39c748e",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s13",
+          "id": "CO0001-s15",
+          "type": "pdf",
+          "title": "E-blocks datasheet",
+          "hours": 0.2,
+          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/06/CP9645-Eblocks-3-Datasheet.pdf",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0001-s16",
+          "type": "html",
+          "title": "Presentations",
+          "hours": 0.1,
+          "src": "content/CO0001/CO0001 – Presentations.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – Presentations.HTM",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CO0001-s17",
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
@@ -1280,7 +1320,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s14",
+          "id": "CO0001-s18",
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
@@ -1290,17 +1330,37 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s15",
+          "id": "CO0001-s19",
           "type": "html",
-          "title": "Now try the worksheets",
+          "title": "How to deliver this course",
           "hours": 0.1,
-          "src": "content/CO0002/Now try the worksheets.docx",
-          "path": "/CO0002 - Introduction to microcontrollers/media/Now try the worksheets.HTM",
-          "v": "5e781fba6f",
+          "src": "content/CO0001/CO0001 – How to deliver this course.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – How to deliver this course.HTM",
+          "v": "db22d05ad3",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s16",
+          "id": "CO0001-s20",
+          "type": "html",
+          "title": "Using Flowcode at home",
+          "hours": 0.1,
+          "src": "content/CO0001/CO0001 – Flowcode at home.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – Flowcode at home.HTM",
+          "v": "1f9bb1511a",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0001-s21",
+          "type": "html",
+          "title": "Over to you",
+          "hours": 0.1,
+          "src": "content/CO0001/CO0001 – Over to you.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – Over to you.HTM",
+          "v": "eca2937472",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0001-s22",
           "type": "html",
           "title": "Other resources",
           "hours": 0.1,
@@ -1310,7 +1370,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s17",
+          "id": "CO0001-s23",
           "type": "document",
           "title": "First program",
           "hours": 1,
@@ -1320,7 +1380,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s18",
+          "id": "CO0001-s24",
           "type": "document",
           "title": "Performing calculations",
           "hours": 0.2,
@@ -1330,7 +1390,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s19",
+          "id": "CO0001-s25",
           "type": "document",
           "title": "Connection points",
           "hours": 0.2,
@@ -1340,7 +1400,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s20",
+          "id": "CO0001-s26",
           "type": "document",
           "title": "Digital inputs",
           "hours": 0.2,
@@ -1350,7 +1410,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s21",
+          "id": "CO0001-s27",
           "type": "html",
           "title": "Homework 1",
           "hours": 0.2,
@@ -1360,7 +1420,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0001-s22",
+          "id": "CO0001-s28",
           "type": "document",
           "title": "Making decisions",
           "hours": 0.2,
