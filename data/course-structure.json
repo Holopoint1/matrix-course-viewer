@@ -1,69 +1,166 @@
 {
-  "_note": "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. Rebuilt on each sync; a blank cell keeps the existing value. Powers the catalogue search, course type, and the card description. Edit the sheet to change it.",
-  "generatedAt": "2026-06-29",
+  "_note": "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. Rebuilt on each sync; a blank Keywords cell keeps the existing value. Powers the catalogue search + course type. Edit the sheet to change it.",
+  "generatedAt": "2026-06-29T14:03:50.854Z",
   "source": "Course_structure",
   "courses": {
     "CO0001": {
       "type": "Course",
       "sheets": 28,
       "hours": 5.4,
-      "keywords": ["Flowcode", "E-blocks 3", "E-blocks", "CPD", "continuing professional development", "teacher training", "embedded systems", "microcontrollers", "getting started", "introduction", "flowchart programming"],
+      "keywords": [
+        "Flowcode",
+        "E-blocks 3",
+        "E-blocks",
+        "CPD",
+        "continuing professional development",
+        "teacher training",
+        "embedded systems",
+        "microcontrollers",
+        "getting started",
+        "introduction",
+        "flowchart programming"
+      ],
       "description": "A continuing professional development course that brings teachers and trainers up to speed with Flowcode and the E-blocks 3 hardware. Work through flowchart-based programming and hands-on embedded exercises ready to take straight back into the classroom."
     },
     "CO0002": {
       "type": "Course",
       "sheets": 45,
       "hours": 99.7,
-      "keywords": ["microcontrollers", "introduction", "embedded systems", "PIC", "programming", "Flowcode", "electronics", "beginner", "fundamentals", "curriculum"],
+      "keywords": [
+        "microcontrollers",
+        "introduction",
+        "embedded systems",
+        "PIC",
+        "programming",
+        "Flowcode",
+        "electronics",
+        "beginner",
+        "fundamentals",
+        "curriculum"
+      ],
       "description": "A comprehensive introduction to microcontrollers and embedded systems using Flowcode. Builds from first principles through inputs, outputs and programming to complete working projects."
     },
     "CO0003": {
       "type": "Course",
       "sheets": 32,
       "hours": 44.5,
-      "keywords": ["aviation", "aircraft", "digital techniques", "avionics", "EASA", "Part-66", "digital electronics", "logic", "technicians", "maintenance", "embedded systems"],
+      "keywords": [
+        "aviation",
+        "aircraft",
+        "digital techniques",
+        "avionics",
+        "EASA",
+        "Part-66",
+        "digital electronics",
+        "logic",
+        "technicians",
+        "maintenance",
+        "embedded systems"
+      ],
       "description": "Covers the digital electronics and microcontroller techniques aviation technicians need, mapped to EASA Part-66 module requirements. Combines logic fundamentals with practical, avionics-focused exercises."
     },
     "CO0004": {
       "type": "Course",
       "sheets": 32,
       "hours": 44.5,
-      "keywords": ["T-Levels", "T Levels", "microcontrollers", "embedded systems", "qualification", "college", "engineering", "electronics", "curriculum"],
+      "keywords": [
+        "T-Levels",
+        "T Levels",
+        "microcontrollers",
+        "embedded systems",
+        "qualification",
+        "college",
+        "engineering",
+        "electronics",
+        "curriculum"
+      ],
       "description": "A full microcontrollers and embedded systems course aligned to T-Level engineering qualifications, taking students from the basics through to applied programming projects."
     },
     "CP0507": {
       "type": "Worksheet pack",
       "sheets": 7,
       "hours": 10.6,
-      "keywords": ["motors", "DC motors", "stepper motor", "servo", "motor control", "actuators", "microcontrollers", "mechatronics", "worksheets", "pack"],
+      "keywords": [
+        "motors",
+        "DC motors",
+        "stepper motor",
+        "servo",
+        "motor control",
+        "actuators",
+        "microcontrollers",
+        "mechatronics",
+        "worksheets",
+        "pack"
+      ],
       "description": "A worksheet pack on driving and controlling motors with microcontrollers — DC, stepper and servo motors, motor-control circuits and actuator projects."
     },
     "CP1972": {
       "type": "Worksheet pack",
       "sheets": 13,
       "hours": 22.6,
-      "keywords": ["sensors", "analog sensors", "digital sensors", "temperature", "light", "input", "data acquisition", "microcontrollers", "worksheets", "pack"],
+      "keywords": [
+        "sensors",
+        "analog sensors",
+        "digital sensors",
+        "temperature",
+        "light",
+        "input",
+        "data acquisition",
+        "microcontrollers",
+        "worksheets",
+        "pack"
+      ],
       "description": "A worksheet pack exploring how microcontrollers read the world through sensors — analog and digital inputs, temperature and light sensing, and data acquisition."
     },
     "CP2563": {
       "type": "Worksheet pack",
       "sheets": 21,
       "hours": 39,
-      "keywords": ["T-Levels", "T Levels", "microcontrollers", "curriculum pack", "embedded systems", "qualification", "college", "engineering", "worksheets"],
+      "keywords": [
+        "T-Levels",
+        "T Levels",
+        "microcontrollers",
+        "curriculum pack",
+        "embedded systems",
+        "qualification",
+        "college",
+        "engineering",
+        "worksheets"
+      ],
       "description": "A curriculum worksheet pack supporting the T-Level microcontrollers units, with ready-to-use embedded systems exercises for the classroom."
     },
     "CP4807": {
       "type": "Worksheet pack",
       "sheets": 12,
       "hours": 17,
-      "keywords": ["introduction", "microcontrollers", "curriculum pack", "embedded systems", "beginner", "fundamentals", "worksheets", "pack"],
+      "keywords": [
+        "introduction",
+        "microcontrollers",
+        "curriculum pack",
+        "embedded systems",
+        "beginner",
+        "fundamentals",
+        "worksheets",
+        "pack"
+      ],
       "description": "A curriculum worksheet pack introducing microcontrollers and embedded systems from the ground up — beginner-friendly exercises covering the core fundamentals."
     },
     "CP7244": {
       "type": "Worksheet pack",
       "sheets": 20,
       "hours": 38,
-      "keywords": ["aviation", "aircraft", "digital techniques", "avionics", "EASA", "Part-66", "technicians", "maintenance", "curriculum pack", "worksheets"],
+      "keywords": [
+        "aviation",
+        "aircraft",
+        "digital techniques",
+        "avionics",
+        "EASA",
+        "Part-66",
+        "technicians",
+        "maintenance",
+        "curriculum pack",
+        "worksheets"
+      ],
       "description": "A curriculum worksheet pack covering digital techniques for aviation technicians, with avionics-focused exercises aligned to EASA Part-66 study."
     }
   }
