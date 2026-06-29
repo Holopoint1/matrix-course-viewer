@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T10:11:10.422Z",
+  "generatedAt": "2026-06-29T10:16:00.141Z",
   "summary": {
     "courses": 9,
     "screens": 203,
@@ -310,42 +310,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CP4807",
-      "name": "CP4807 - Introduction to microcontrollers 15 07 25.docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807 - introduction to microcontrollers image test.docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807-0.docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807-2.docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807-3 (1).docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807-3 (2).docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807-3.docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807-4.docx"
-    },
-    {
-      "code": "CP4807",
-      "name": "CP4807-Cont.docx"
-    }
-  ]
+  "removed": []
 }
