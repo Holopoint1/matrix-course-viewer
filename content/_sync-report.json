@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-06-29T08:31:04.959Z",
+  "generatedAt": "2026-06-29T08:33:22.193Z",
   "summary": {
     "courses": 9,
     "screens": 204,
     "displaying": 186,
     "missing": 18,
-    "autofixed": 6,
+    "autofixed": 5,
     "downloadFailed": 0,
-    "collisions": 1
+    "collisions": 0
   },
   "courses": {
     "CO0002": {
@@ -122,14 +122,6 @@
       "stale": [],
       "missing": [],
       "autofixed": [
-        {
-          "title": "CPD objectives",
-          "asked": "CO0001 - CPD objectives.HTM",
-          "used": "CO0001 – CPD objectives.HTM",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
         {
           "title": "Equipment",
           "asked": "CO0002 - Equip.HTM",
@@ -281,7 +273,6 @@
     "CO0001": [
       "CO0001 – First lessons.HTM",
       "test.docx",
-      "CO0001 – CPD objectives.docx",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
     ],
@@ -301,13 +292,16 @@
     ]
   },
   "failed": [],
-  "collisions": [
+  "collisions": [],
+  "canonCollisions": [],
+  "removed": [
     {
       "code": "CO0001",
-      "name": "CO0001 – CPD objectives.docx",
-      "count": 2
+      "name": "CO0001 – CPD objectives.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – CPD objectives.docx"
     }
-  ],
-  "canonCollisions": [],
-  "removed": []
+  ]
 }
