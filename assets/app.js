@@ -192,7 +192,7 @@
       els.downloadBtn.addEventListener('click', () => {
         const screen = course.screens[currentIndex];
         if (screen && screen.src && !/^https?:/i.test(screen.src)) {
-          triggerDownload(vsrc(screen), filename(screen.src));
+          downloadScreenFile(screen);
         }
       });
     }
@@ -1502,6 +1502,25 @@
     document.body.appendChild(a);
     a.click();
     a.remove();
+  }
+  /* Download the current screen's file. Browsers OPEN some types inline (notably
+     PDFs) even with a download attribute, so fetch the bytes to a blob first —
+     that reliably SAVES the file from anywhere the button lives (header Options,
+     fallback cards, etc.). Falls back to a plain anchor if the fetch is blocked. */
+  async function downloadScreenFile(screen) {
+    if (!screen || !screen.src || /^https?:/i.test(screen.src)) return;
+    const name = filename(screen.src) || 'download';
+    const url = vsrc(screen);
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const blob = await res.blob();
+      const burl = URL.createObjectURL(blob);
+      triggerDownload(burl, name);
+      setTimeout(() => URL.revokeObjectURL(burl), 8000);
+    } catch (_) {
+      triggerDownload(url, name);                              // best-effort direct link
+    }
   }
 
   /* ---------- Whole-course download ----------

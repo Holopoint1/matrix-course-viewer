@@ -487,6 +487,19 @@ async function generatePhase(driveFilesByCode = {}) {
 
   await autoDiscoverPhase(db, byId, registered, driveFilesByCode);
 
+  /* Final pass — stamp EVERY screen (sheet-driven, auto-discovered AND packs)
+     with its Drive link + content version straight from the maps, keyed by src.
+     Worksheet packs are built on a path that doesn't apply these, so without this
+     a pack worksheet would miss its "Open in Google Docs/Sheets" button and its
+     per-file cache-bust. Keyed by src, so it's correct for every course type. */
+  for (const c of (db.courses || [])) {
+    for (const s of (c.screens || [])) {
+      if (!s || !s.src || /^https?:/i.test(s.src)) continue;
+      if (DRIVE_LINKS[s.src]) s.webUrl = DRIVE_LINKS[s.src];
+      if (CONTENT_VERSIONS[s.src] && !s.v) s.v = CONTENT_VERSIONS[s.src];
+    }
+  }
+
   writeAccuracyReport(db, driveFilesByCode);
 
   fs.writeFileSync(COURSES_JSON, JSON.stringify(db, null, 2) + '\n');
