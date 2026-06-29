@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T10:20:58.592Z",
+  "generatedAt": "2026-06-29T10:25:59.636Z",
   "summary": {
     "courses": 9,
     "screens": 203,
@@ -189,6 +189,7 @@
       "CP4807-TN.docx",
       "CP4807-prep.docx",
       "CP4807-head.docx",
+      "CP4807-2 (1).docx",
       "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
       "summary-report.txt",
       "imsmanifest.xml",
@@ -227,10 +228,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CP4807",
-      "name": "CP4807-2 (1).docx"
-    }
-  ]
+  "removed": []
 }
