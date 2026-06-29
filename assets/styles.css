@@ -842,6 +842,22 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   box-shadow: var(--shadow-md);
   border-color: var(--border-strong);
 }
+
+/* Text-only catalogue cards — cover images removed. A thin top accent keeps the
+   card from looking bare now that the 16:9 banner is gone, and the Pack/
+   Certificate tags moved into the card body. */
+.course-card-textonly { border-top: 3px solid var(--primary); }
+.catalog-packs .course-card-pack.course-card-textonly { border-top-color: #b45309; }
+.course-card .card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.55rem; }
+.course-card .card-tag {
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 0.18rem 0.5rem; border-radius: 999px;
+  background: var(--primary-50); color: var(--primary-dark); border: 1px solid var(--primary-100);
+}
+.course-card .card-tag-pack { background: #fff7ed; color: #b45309; border-color: #fed7aa; }
+.course-card .card-title-link { color: inherit; text-decoration: none; }
+.course-card .card-title-link:hover { color: var(--primary); text-decoration: underline; }
+
 .course-card .thumb {
   position: relative;
   display: block;
@@ -4180,6 +4196,9 @@ body.pdf-overlay-open { overflow: hidden; }
   box-shadow: var(--shadow-xs);
   transition: box-shadow 150ms ease, border-color 150ms ease;
 }
+/* Text-only account rows (course thumbnail removed) — drop the 88px image
+   column so the body + actions fill the row. */
+.account-course-row-textonly { grid-template-columns: 1fr auto; }
 .account-course-row:hover { box-shadow: var(--shadow-sm); border-color: var(--border-strong); }
 .account-course-row .stats-course-row-thumb {
   width: 88px;

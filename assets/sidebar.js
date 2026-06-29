@@ -81,15 +81,6 @@
     reset:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>'
   };
 
-  function thumbForCourse(course) {
-    /* Mirrors the catalog's thumbnail picker so the rail matches the cards. */
-    const firstImage = (course.screens || []).find((s) => s.type === 'image');
-    if (firstImage && (firstImage.thumbnail || (!firstImage.missing && firstImage.src))) {
-      return firstImage.thumbnail || firstImage.src;
-    }
-    return 'content/' + course.id + '/opening.svg';
-  }
-
   function buildTopNav(/* currentPage */) {
     /* Intentionally empty: the old sidebar "Dashboard / All Courses" block
        was redundant — Courses is in the top header nav, and the course card
@@ -162,7 +153,6 @@
     const progress = getProgress(course.id);
     const done = allScreens.filter((s) => progress[s.id]).length;
     const pct = total ? Math.round((done / total) * 100) : 0;
-    const thumb = thumbForCourse(course);
 
     /* Type-dot CSS class — colours match .screen-type-dot in styles.css */
     function typeClass(t) {
@@ -242,8 +232,7 @@
     return `
       <div class="ms-section">
         <div class="ms-course-group expanded${isPack ? ' ms-course-group-pack' : ''}${isCourseOpen ? '' : ' ms-course-group-return'}" data-role="course-group">
-          <button type="button" class="ms-course-head" id="ms-course-toggle"${returnAttr}>
-            <img class="ms-course-thumb" src="${escapeHtml(thumb)}" alt="">
+          <button type="button" class="ms-course-head ms-course-head-textonly" id="ms-course-toggle"${returnAttr}>
             <span class="ms-course-info">
               <span class="ms-course-info-code">${eyebrow}</span>
               <span class="ms-course-info-title">${escapeHtml(course.title || '')}</span>
