@@ -1414,25 +1414,24 @@
      printed/downloaded, so those buttons go disabled (never hidden — the bar stays
      consistent from screen to screen). */
   const PRINTABLE_TYPES = ['document', 'html', 'image', 'pdf', 'powerpoint', 'spreadsheet'];
-  /* Build an "open the original externally" target for a screen:
-       • YouTube → the video on youtube.com
-       • Office files (with a Drive link) → the matching Google editor (Sheets /
-         Docs / Slides) — faithful, and editable when the Drive file allows it.
-     Returns null when there's nothing sensible to open externally. */
+  /* Build an "open the original externally" target for a screen, opened in a new
+     tab. YouTube → the video on youtube.com. Otherwise follow the Drive link the
+     sync stamped on the screen (screen.webUrl): native Google files open in the
+     matching editor (Docs / Sheets / Slides); anything else — e.g. an HTML/text
+     screen, whose source is an .htm file — opens in Google Drive (from which it
+     can be opened with Google Docs). Null when there's nothing to open. */
   function externalOpen(screen) {
     if (!screen || screen.missing) return null;
-    const t = effectiveType(screen);
-    if (t === 'youtube') {
+    if (effectiveType(screen) === 'youtube') {
       const yid = extractYoutubeId(screen.src);
       return yid ? { url: 'https://www.youtube.com/watch?v=' + yid, label: 'Open in YouTube' } : null;
     }
     const wu = screen.webUrl || '';
     if (!wu) return null;
-    const id = (wu.match(/\/d\/([^/?#]+)/) || [])[1];
-    if (id && t === 'spreadsheet') return { url: 'https://docs.google.com/spreadsheets/d/' + id + '/edit', label: 'Open in Google Sheets' };
-    if (id && t === 'document') return { url: 'https://docs.google.com/document/d/' + id + '/edit', label: 'Open in Google Docs' };
-    if (id && t === 'powerpoint') return { url: 'https://docs.google.com/presentation/d/' + id + '/edit', label: 'Open in Google Slides' };
-    return null;
+    if (/\/document\/d\//.test(wu))     return { url: wu, label: 'Open in Google Docs' };
+    if (/\/spreadsheets\/d\//.test(wu)) return { url: wu, label: 'Open in Google Sheets' };
+    if (/\/presentation\/d\//.test(wu)) return { url: wu, label: 'Open in Google Slides' };
+    return { url: wu, label: 'Open in Drive' };
   }
   function updateScreenActions(screen) {
     const isUrl = /^https?:/i.test(screen.src || '');
