@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T08:56:04.388Z",
+  "generatedAt": "2026-06-29T09:01:01.116Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 186,
-    "missing": 18,
-    "autofixed": 2,
+    "displaying": 184,
+    "missing": 20,
+    "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -97,25 +97,21 @@
     "CO0003": {
       "title": "Digital Techniques for Aviation Technicians",
       "stale": [],
-      "missing": [],
-      "autofixed": [
+      "missing": [
         {
           "title": "Welcome",
-          "asked": "CO0003 - welcome.htm",
-          "used": "CO0003 – welcome.HTM",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
+          "asked": "CO0003-welcome.htm",
+          "expectedIn": "CO0003",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0003 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Learning objectives",
-          "asked": "CO0003 - LO.htm",
-          "used": "CO0003 – LO.HTM",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
+          "asked": "CO0003-LO.htm",
+          "expectedIn": "CO0003",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0003 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
-      ]
+      ],
+      "autofixed": []
     },
     "CO0004": {
       "title": "Microcontrollers for T-Levels",
@@ -230,6 +226,8 @@
       "CP4807 - Introduction to microcontrollers 15 07 25.docx"
     ],
     "CO0003": [
+      "CO0003 – LO.HTM",
+      "CO0003 – welcome.HTM",
       "opening.png"
     ],
     "CO0001": [
@@ -251,6 +249,7 @@
       "CO0002-H1.docx",
       "Now try the worksheets.docx",
       "CO0002 - Equip.docx",
+      "CO0002 - Equip.htm",
       "bits.docx",
       "CO0002 - SOW.htm",
       "CO0002-H8.docx"
