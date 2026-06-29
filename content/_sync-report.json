@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T08:33:22.193Z",
+  "generatedAt": "2026-06-29T08:35:57.948Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 186,
-    "missing": 18,
-    "autofixed": 5,
+    "displaying": 184,
+    "missing": 20,
+    "autofixed": 3,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -13,25 +13,21 @@
     "CO0002": {
       "title": "Introduction to Microcontrollers",
       "stale": [],
-      "missing": [],
-      "autofixed": [
+      "missing": [
         {
           "title": "Welcome",
           "asked": "CO0002 - welcome.htm",
-          "used": "CO0002 – welcome.htm",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
+          "expectedIn": "CO0002",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0002 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "title": "Learning objectives",
           "asked": "CO0002 - LO.htm",
-          "used": "CO0002 – LO.htm",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
+          "expectedIn": "CO0002",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0002 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
-      ]
+      ],
+      "autofixed": []
     },
     "CP0507": {
       "title": "Motors and Microcontrollers",
@@ -277,6 +273,12 @@
       "CO0001 - content.docx"
     ],
     "CO0002": [
+      "CO0002-Equip.htm",
+      "CO0002-welcome.HTM",
+      "CO0002-LO.HTM",
+      "Now try the worksheets.HTM",
+      "Other resources.HTM",
+      "CO0002-SOW.htm",
       "CO0002-H1.docx",
       "Now try the worksheets.docx",
       "CO0002 - Equip.docx",
@@ -296,12 +298,12 @@
   "canonCollisions": [],
   "removed": [
     {
-      "code": "CO0001",
-      "name": "CO0001 – CPD objectives.HTM"
+      "code": "CO0002",
+      "name": "CO0002 – LO.htm"
     },
     {
-      "code": "CO0001",
-      "name": "CO0001 – CPD objectives.docx"
+      "code": "CO0002",
+      "name": "CO0002 – welcome.htm"
     }
   ]
 }
