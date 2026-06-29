@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T12:31:03.639Z",
+  "generatedAt": "2026-06-29T12:36:27.123Z",
   "summary": {
     "courses": 9,
     "screens": 210,
@@ -7,7 +7,7 @@
     "missing": 0,
     "autofixed": 0,
     "downloadFailed": 0,
-    "collisions": 0
+    "collisions": 1
   },
   "courses": {},
   "unusedMedia": {
@@ -55,7 +55,13 @@
     ]
   },
   "failed": [],
-  "collisions": [],
+  "collisions": [
+    {
+      "code": "CO0002",
+      "name": "CO0002-LO.docx",
+      "count": 2
+    }
+  ],
   "canonCollisions": [],
   "removed": []
 }
