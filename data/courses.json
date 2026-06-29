@@ -1447,8 +1447,8 @@
       "id": "CO0001",
       "code": "CO0001",
       "kind": "course",
-      "title": "Flowcode and E-blocks 3 CPD Course00",
-      "shortDescription": "testA continuing professional development course that brings teachers and trainers up to speed with Flowcode and the E-blocks 3 hardware. Work through flowchart-based programming and hands-on embedded exercises ready to take straight back into the classroom.",
+      "title": "Flowcode and E-blocks 3 CPD Course",
+      "shortDescription": "A continuing professional development course that brings teachers and trainers up to speed with Flowcode and the E-blocks 3 hardware. Work through flowchart-based programming and hands-on embedded exercises ready to take straight back into the classroom.",
       "estimatedHours": 5.4,
       "certificate": {
         "enabled": true,
@@ -1776,11 +1776,10 @@
         "microcontrollers",
         "getting started",
         "introduction",
-        "flowchart programming",
-        "test"
+        "flowchart programming"
       ],
       "courseType": "Course",
-      "structureHours": 5.41111
+      "structureHours": 5.4
     },
     {
       "id": "CO0003",
