@@ -1,13 +1,16 @@
 {
-  "generatedAt": "2026-06-29T14:41:30.577Z",
+  "generatedAt": "2026-06-29T14:51:32.459Z",
   "summary": {
     "courses": 9,
     "screens": 210,
     "displaying": 210,
     "missing": 0,
     "autofixed": 0,
+    "stale": 0,
+    "unused": 30,
     "downloadFailed": 0,
-    "collisions": 1
+    "collisions": 1,
+    "collisionsAffecting": 0
   },
   "courses": {},
   "unusedMedia": {
@@ -16,12 +19,7 @@
     ],
     "CP4807": [
       "CP4807-head.docx",
-      "CP4807 - definition.xlsx",
-      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
-      "summary-report.txt",
-      "imsmanifest.xml",
-      "blocks-metadata.json",
-      "scorm-readiness.txt"
+      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx"
     ],
     "CO0001": [
       "CO0001 – How to deliver this course.docx",
@@ -54,7 +52,6 @@
       "CO0002-H8.docx"
     ],
     "CP1972": [
-      "CP1972 - definition.xlsx",
       "CP1972-Head.docx"
     ]
   },
@@ -63,7 +60,8 @@
     {
       "code": "CO0002",
       "name": "CO0002-LO.docx",
-      "count": 2
+      "count": 2,
+      "used": false
     }
   ],
   "canonCollisions": [],
