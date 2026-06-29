@@ -1,28 +1,15 @@
 {
-  "generatedAt": "2026-06-29T10:49:25.010Z",
+  "generatedAt": "2026-06-29T10:50:59.286Z",
   "summary": {
     "courses": 9,
     "screens": 211,
-    "displaying": 205,
-    "missing": 6,
+    "displaying": 211,
+    "missing": 0,
     "autofixed": 1,
     "downloadFailed": 0,
     "collisions": 0
   },
   "courses": {
-    "CO0002": {
-      "title": "Introduction to Microcontrollers",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Digital inputs",
-          "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    },
     "CP0507": {
       "title": "Motors and Microcontrollers",
       "stale": [
@@ -57,42 +44,10 @@
       "missing": [],
       "autofixed": []
     },
-    "CP2563": {
-      "title": "Microcontrollers for T-Levels",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Digital inputs",
-          "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    },
-    "CP4807": {
-      "title": "Introduction to Microcontrollers",
-      "stale": [
-        {
-          "title": "Digital inputs",
-          "showing": "CP4807-4.docx",
-          "expectedIn": "CP4807"
-        }
-      ],
-      "missing": [],
-      "autofixed": []
-    },
     "CP7244": {
       "title": "Digital Techniques for Aviation Technicians",
       "stale": [],
-      "missing": [
-        {
-          "title": "Digital inputs",
-          "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
+      "missing": [],
       "autofixed": [
         {
           "title": "Contents",
@@ -103,51 +58,11 @@
           ]
         }
       ]
-    },
-    "CO0001": {
-      "title": "Flowcode and E-blocks 3 CPD Course",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Digital inputs",
-          "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    },
-    "CO0003": {
-      "title": "Digital Techniques for Aviation Technicians",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Digital inputs",
-          "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    },
-    "CO0004": {
-      "title": "Microcontrollers for T-Levels",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Digital inputs",
-          "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
     }
   },
   "unusedMedia": {
     "CP4807": [
       "CP4807 - definition.xlsx",
-      "CO4807-4.docx",
       "CP4807-head.docx",
       "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
       "summary-report.txt",
@@ -186,15 +101,7 @@
   "removed": [
     {
       "code": "CP4807",
-      "name": "CP4807-2 (1).docx"
-    },
-    {
-      "code": "CP7244",
-      "name": "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
-    },
-    {
-      "code": "CP7244",
-      "name": "CP7244 - definition.docx"
+      "name": "CO4807-4.docx"
     }
   ]
 }
