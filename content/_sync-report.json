@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T08:25:59.883Z",
+  "generatedAt": "2026-06-29T08:26:48.528Z",
   "summary": {
     "courses": 9,
     "screens": 204,
     "displaying": 186,
     "missing": 18,
-    "autofixed": 7,
+    "autofixed": 6,
     "downloadFailed": 0,
     "collisions": 1
   },
@@ -123,25 +123,17 @@
       "missing": [],
       "autofixed": [
         {
-          "title": "Introduction to microcontrollers",
-          "asked": "CO0001 – opening.png",
-          "used": "CO0001 - opening.png",
+          "title": "CPD objectives",
+          "asked": "CO0001 - CPD objectives.HTM",
+          "used": "CO0001 – CPD objectives.HTM",
           "reasons": [
             "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
           ]
         },
         {
           "title": "Equipment",
-          "asked": "CO0002 – Equip.HTM",
+          "asked": "CO0002 - Equip.HTM",
           "used": "CO0002 - Equip.htm",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
-        {
-          "title": "Other resources",
-          "asked": "Other resources.HTM",
-          "used": "Other resources.htm",
           "reasons": [
             "A small spelling/spacing difference, matched automatically."
           ]

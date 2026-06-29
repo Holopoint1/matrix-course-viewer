@@ -1161,7 +1161,7 @@
           "title": "Introduction to microcontrollers",
           "hours": 0,
           "src": "content/CO0001/CO0001 - opening.png",
-          "path": "/CO0001 - Introduction to microcontrollers/media/CO0001 – opening.png",
+          "path": "/CO0001 - Introduction to microcontrollers/media/CO0001 - opening.png",
           "v": "53b7b83f05",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1171,7 +1171,7 @@
           "title": "CPD objectives",
           "hours": 0.1,
           "src": "content/CO0001/CO0001 – CPD objectives.HTM",
-          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – CPD objectives.HTM",
+          "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 - CPD objectives.HTM",
           "v": "bad4158d1a",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1251,7 +1251,7 @@
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0002/CO0002 - Equip.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 – Equip.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - Equip.HTM",
           "v": "fcaca9b56c",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1365,7 +1365,7 @@
           "title": "Other resources",
           "hours": 0.1,
           "src": "content/CO0002/Other resources.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/Other resources.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/Other resources.htm",
           "v": "18c9ba415a",
           "equipment": "Flowcode / E-blocks3"
         },
