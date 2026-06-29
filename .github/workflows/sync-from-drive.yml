@@ -28,7 +28,15 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      # Check out (and later push) using a Personal Access Token when one is
+      # configured. GitHub deliberately does NOT rebuild Pages for commits made
+      # with the built-in GITHUB_TOKEN, so a bot-only sync never reached the live
+      # site. A push authenticated with a real PAT triggers the Pages build like a
+      # normal commit. Falls back to GITHUB_TOKEN if DEPLOY_PAT isn't set, so this
+      # is safe to merge before the secret exists (it just keeps the old behaviour).
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DEPLOY_PAT || secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
