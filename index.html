@@ -80,6 +80,8 @@
           const meta = structure[c.id] || structure[c.code] || {};
           c.keywords = Array.isArray(meta.keywords) ? meta.keywords : [];
           c.structureType = meta.type || (c.kind === 'pack' ? 'Worksheet pack' : 'Course');
+          /* The sheet's Description, when set, becomes the card's description. */
+          if (meta.description) c.shortDescription = meta.description;
           /* Pre-build a lowercase search haystack so filtering is a cheap
              substring test: code, title, description, categories, keywords, type. */
           c._search = [

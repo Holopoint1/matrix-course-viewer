@@ -758,7 +758,7 @@ async function buildCourseStructure() {
       if (hi < 0) hi = 0;
       const header = (rows[hi] || []).map((h) => String(h || '').trim().toLowerCase());
       const col = (name) => header.indexOf(name);
-      const ci = { code: col('course code'), type: col('course type'), sheets: col('number of sheets'), hours: col('hours of learning'), keywords: col('keywords') };
+      const ci = { code: col('course code'), type: col('course type'), sheets: col('number of sheets'), hours: col('hours of learning'), keywords: col('keywords'), description: col('description') };
       for (const r of rows.slice(hi + 1)) {
         const code = ci.code >= 0 ? String(r[ci.code] || '').trim().toUpperCase() : '';
         if (!/^[A-Za-z]{2}\d{4}$/.test(code)) continue;
@@ -767,6 +767,7 @@ async function buildCourseStructure() {
           sheets: ci.sheets >= 0 ? String(r[ci.sheets] || '').trim() : '',
           hours: ci.hours >= 0 ? String(r[ci.hours] || '').trim() : '',
           keywords: ci.keywords >= 0 ? parseKeywords(r[ci.keywords]) : [],
+          description: ci.description >= 0 ? String(r[ci.description] || '').trim() : '',
         };
       }
     } catch (e) { console.warn('  ! Course_structure: could not read the sheet — ' + e.message + ' (keeping existing file)'); }
@@ -779,12 +780,13 @@ async function buildCourseStructure() {
   for (const code of [...codes].sort()) {
     const s = fromSheet[code] || {}, e = existing[code] || {}, comp = byCode[code] || {};
     const keywords = (s.keywords && s.keywords.length) ? s.keywords : (Array.isArray(e.keywords) ? e.keywords : []);
+    const description = s.description || e.description || '';
     const type = s.type || e.type || (comp.kind === 'pack' ? 'Worksheet pack' : 'Course');
     const sheets = (s.sheets && !isNaN(parseFloat(s.sheets))) ? parseInt(s.sheets, 10)
       : (comp.sheets != null ? comp.sheets : (e.sheets != null ? e.sheets : null));
     const hours = (s.hours && !isNaN(parseFloat(s.hours))) ? parseFloat(s.hours)
       : (comp.hours != null ? comp.hours : (e.hours != null ? e.hours : null));
-    out[code] = { type, sheets, hours, keywords };
+    out[code] = { type, sheets, hours, keywords, description };
   }
 
   const payload = {
