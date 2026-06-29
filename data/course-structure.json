@@ -1,13 +1,13 @@
 {
   "_note": "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. Rebuilt on each sync; a blank Keywords cell keeps the existing value. Powers the catalogue search + course type. Edit the sheet to change it.",
-  "generatedAt": "2026-06-29T15:21:29.561Z",
+  "generatedAt": "2026-06-29T15:26:30.644Z",
   "source": "Course_structure",
   "courses": {
     "CO0001": {
-      "title": "Flowcode and E-blocks 3 CPD Course00",
+      "title": "Flowcode and E-blocks 3 CPD Course",
       "type": "Course",
-      "sheets": 2800,
-      "hours": 5.41111,
+      "sheets": 28,
+      "hours": 5.4,
       "keywords": [
         "Flowcode",
         "E-blocks 3",
@@ -19,10 +19,9 @@
         "microcontrollers",
         "getting started",
         "introduction",
-        "flowchart programming",
-        "test"
+        "flowchart programming"
       ],
-      "description": "testA continuing professional development course that brings teachers and trainers up to speed with Flowcode and the E-blocks 3 hardware. Work through flowchart-based programming and hands-on embedded exercises ready to take straight back into the classroom."
+      "description": "A continuing professional development course that brings teachers and trainers up to speed with Flowcode and the E-blocks 3 hardware. Work through flowchart-based programming and hands-on embedded exercises ready to take straight back into the classroom."
     },
     "CO0002": {
       "title": "Introduction to Microcontrollers",
