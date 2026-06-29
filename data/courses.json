@@ -1002,7 +1002,7 @@
       "kind": "pack",
       "title": "Digital Techniques for Aviation Technicians",
       "shortDescription": "EASA Unit 5 Digital Techniques worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
-      "estimatedHours": 39,
+      "estimatedHours": 38,
       "certificate": {
         "enabled": false
       },
@@ -1030,16 +1030,6 @@
         {
           "id": "CP7244-s3",
           "type": "document",
-          "title": "Preparation",
-          "hours": 1,
-          "src": "content/CP4807/CP4807-prep.docx",
-          "path": "/CP4807 - Introduction to microcontrollers/CP4807-Prep.docx",
-          "v": "20534a54b1",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CP7244-s4",
-          "type": "document",
           "title": "First program",
           "hours": 1,
           "src": "content/CP4807/CP4807-1.docx",
@@ -1048,7 +1038,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s5",
+          "id": "CP7244-s4",
           "type": "document",
           "title": "Performing calculations",
           "hours": 1,
@@ -1058,7 +1048,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s6",
+          "id": "CP7244-s5",
           "type": "document",
           "title": "Connection points",
           "hours": 2,
@@ -1068,7 +1058,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s7",
+          "id": "CP7244-s6",
           "type": "document",
           "title": "Digital inputs",
           "hours": 2,
@@ -1078,7 +1068,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s8",
+          "id": "CP7244-s7",
           "type": "document",
           "title": "Making decisions",
           "hours": 2,
@@ -1088,7 +1078,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s9",
+          "id": "CP7244-s8",
           "type": "document",
           "title": "Macros / subroutines",
           "hours": 2,
@@ -1098,7 +1088,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s10",
+          "id": "CP7244-s9",
           "type": "document",
           "title": "Using prototype boards",
           "hours": 2,
@@ -1108,7 +1098,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s11",
+          "id": "CP7244-s10",
           "type": "document",
           "title": "Analogue inputs",
           "hours": 2,
@@ -1118,7 +1108,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s12",
+          "id": "CP7244-s11",
           "type": "document",
           "title": "Colour graphical displays",
           "hours": 2,
@@ -1128,7 +1118,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s13",
+          "id": "CP7244-s12",
           "type": "document",
           "title": "Light sensor",
           "hours": 2,
@@ -1138,7 +1128,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s14",
+          "id": "CP7244-s13",
           "type": "document",
           "title": "Analogue temperature sensor",
           "hours": 2,
@@ -1148,7 +1138,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s15",
+          "id": "CP7244-s14",
           "type": "document",
           "title": "Digital temperature sensor",
           "hours": 2,
@@ -1158,7 +1148,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s16",
+          "id": "CP7244-s15",
           "type": "document",
           "title": "Digital accelerometer",
           "hours": 2,
@@ -1168,7 +1158,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s17",
+          "id": "CP7244-s16",
           "type": "document",
           "title": "Basic DC motors",
           "hours": 2,
@@ -1178,7 +1168,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s18",
+          "id": "CP7244-s17",
           "type": "document",
           "title": "Full bridge motor control",
           "hours": 2,
@@ -1188,7 +1178,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s19",
+          "id": "CP7244-s18",
           "type": "document",
           "title": "Stepper motor control",
           "hours": 2,
@@ -1198,7 +1188,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s20",
+          "id": "CP7244-s19",
           "type": "document",
           "title": "Servo motor control",
           "hours": 2,
@@ -1208,7 +1198,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CP7244-s21",
+          "id": "CP7244-s20",
           "type": "document",
           "title": "Teacher's notes",
           "hours": 4,
