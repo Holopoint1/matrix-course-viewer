@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T09:10:48.865Z",
+  "generatedAt": "2026-06-29T09:14:24.796Z",
   "summary": {
     "courses": 9,
     "screens": 204,
     "displaying": 186,
     "missing": 18,
-    "autofixed": 2,
+    "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -93,29 +93,6 @@
         }
       ],
       "autofixed": []
-    },
-    "CO0003": {
-      "title": "Digital Techniques for Aviation Technicians",
-      "stale": [],
-      "missing": [],
-      "autofixed": [
-        {
-          "title": "Welcome",
-          "asked": "CO0003-welcome.htm",
-          "used": "CO0003-welcome.HTM",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0003-LO.htm",
-          "used": "CO0003-LO.HTM",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        }
-      ]
     },
     "CO0004": {
       "title": "Microcontrollers for T-Levels",
@@ -229,9 +206,6 @@
       "CP4807-Cont.docx",
       "CP4807 - Introduction to microcontrollers 15 07 25.docx"
     ],
-    "CO0003": [
-      "opening.png"
-    ],
     "CO0001": [
       "CO002-SOW.xlsx",
       "CO0001 – First lessons.HTM",
@@ -267,11 +241,15 @@
   "removed": [
     {
       "code": "CO0003",
-      "name": "CO0003 – LO.HTM"
+      "name": "CO0003-LO.HTM"
     },
     {
       "code": "CO0003",
-      "name": "CO0003 – welcome.HTM"
+      "name": "CO0003-welcome.HTM"
+    },
+    {
+      "code": "CO0003",
+      "name": "opening.png"
     }
   ]
 }

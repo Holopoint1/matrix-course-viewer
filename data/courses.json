@@ -1463,7 +1463,7 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0003/CO0003-welcome.HTM",
+          "src": "content/CO0003/CO0003-welcome.htm",
           "path": "/CO0003 - Introduction to microcontrollers/media/CO0003-welcome.htm",
           "v": "a4b777bab6",
           "equipment": "Flowcode / E-blocks3"
@@ -1473,7 +1473,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0003/CO0003-LO.HTM",
+          "src": "content/CO0003/CO0003-LO.htm",
           "path": "/CO0003 - Introduction to microcontrollers/media/CO0003-LO.htm",
           "v": "4f988ed800",
           "equipment": "Flowcode / E-blocks3"
