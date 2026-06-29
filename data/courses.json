@@ -520,7 +520,9 @@
           "title": "Preparation",
           "hours": 0.5,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-Prep.docx"
+          "src": "content/CP0507/CP0507-Prep.docx",
+          "webUrl": "https://docs.google.com/document/d/12UtQ0Y3ujMB91wMju-0IxvNzIQJArVhN/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "5d3379a0e4"
         },
         {
           "id": "cp0507-s02",
@@ -528,7 +530,9 @@
           "title": "Contents",
           "hours": 0.1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-Cont.docx"
+          "src": "content/CP0507/CP0507-Cont.docx",
+          "webUrl": "https://docs.google.com/document/d/1PzN0Mowz1O0ULCb4_yr6qWvI6GIQOsIw/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "3d0b8111fa"
         },
         {
           "id": "cp0507-s03",
@@ -536,7 +540,9 @@
           "title": "Worksheet 1 — Basic DC motor control",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-1.docx"
+          "src": "content/CP0507/CP0507-1.docx",
+          "webUrl": "https://docs.google.com/document/d/1z294nnSDGiQfeaGHtdes7epL8A_ZIQr4/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "27a5b6c2ed"
         },
         {
           "id": "cp0507-s04",
@@ -544,7 +550,9 @@
           "title": "Worksheet 2 — Full bridge motor control",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-2.docx"
+          "src": "content/CP0507/CP0507-2.docx",
+          "webUrl": "https://docs.google.com/document/d/1YbWM8EtqhpYCmmXKCYCy-JpGo_qFBC2R/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "7ab20c4412"
         },
         {
           "id": "cp0507-s05",
@@ -552,7 +560,9 @@
           "title": "Worksheet 3 — Stepper motor control",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-3.docx"
+          "src": "content/CP0507/CP0507-3.docx",
+          "webUrl": "https://docs.google.com/document/d/1TO9L5U9qL-GipJFZfsr3UKRH8JMRguOp/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "5726cfb197"
         },
         {
           "id": "cp0507-s06",
@@ -560,7 +570,9 @@
           "title": "Worksheet 4 — Servo motor control",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-4.docx"
+          "src": "content/CP0507/CP0507-4.docx",
+          "webUrl": "https://docs.google.com/document/d/1ojd_U0UOrhDauia_dzXCuTVnyb8kFG90/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "b2a906bf52"
         },
         {
           "id": "cp0507-s07",
@@ -568,7 +580,9 @@
           "title": "Worksheet 5 — DC motor speed control",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP0507/CP0507-5.docx"
+          "src": "content/CP0507/CP0507-5.docx",
+          "webUrl": "https://docs.google.com/document/d/1e9OINFidhROZnVJs6Hn1pfLyA8z3CN8d/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "e7b0457285"
         }
       ],
       "categories": [
@@ -594,7 +608,9 @@
           "title": "Preparation",
           "hours": 0.5,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-Prep.docx"
+          "src": "content/CP1972/CP1972-Prep.docx",
+          "webUrl": "https://docs.google.com/document/d/184DNCDclT_IBtL0Mmrxn8JRpf9wFruGi/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "18c29a79fd"
         },
         {
           "id": "cp1972-s02",
@@ -602,7 +618,9 @@
           "title": "Contents",
           "hours": 0.1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-Cont.docx"
+          "src": "content/CP1972/CP1972-Cont.docx",
+          "webUrl": "https://docs.google.com/document/d/1ayAJ-NgeoG1E__Jasl-K18OK73FlhVef/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "c9e2d290aa"
         },
         {
           "id": "cp1972-s03",
@@ -610,7 +628,9 @@
           "title": "Worksheet 1 — Analogue inputs",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-1.docx"
+          "src": "content/CP1972/CP1972-1.docx",
+          "webUrl": "https://docs.google.com/document/d/1x44YaQKln15Sc62YN6SrF6r3kVM89WgO/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "4ab88441c0"
         },
         {
           "id": "cp1972-s04",
@@ -618,7 +638,9 @@
           "title": "Worksheet 2 — Light sensor",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-2.docx"
+          "src": "content/CP1972/CP1972-2.docx",
+          "webUrl": "https://docs.google.com/document/d/1msO7iVrO_UvtnGY9YvxgfOgGctVcyzuj/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "1aa2d68aa8"
         },
         {
           "id": "cp1972-s05",
@@ -626,7 +648,9 @@
           "title": "Worksheet 3 — Analogue temperature sensor",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-3.docx"
+          "src": "content/CP1972/CP1972-3.docx",
+          "webUrl": "https://docs.google.com/document/d/1zRaGyZM54M3vPZfjMNvUYRbcGzmi17QA/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "88abb78f5a"
         },
         {
           "id": "cp1972-s06",
@@ -634,7 +658,9 @@
           "title": "Worksheet 4 — Digital temperature sensor",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-4.docx"
+          "src": "content/CP1972/CP1972-4.docx",
+          "webUrl": "https://docs.google.com/document/d/1JGopebcC8B8biD4RHlwjHIO9A3bOEpXX/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "7eb606513f"
         },
         {
           "id": "cp1972-s07",
@@ -642,7 +668,9 @@
           "title": "Worksheet 5 — Digital accelerometer",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-5.docx"
+          "src": "content/CP1972/CP1972-5.docx",
+          "webUrl": "https://docs.google.com/document/d/1GRLgpi51Aioix0UXOWW7qz8L4SlFbLMR/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "d76f6673b2"
         },
         {
           "id": "cp1972-s08",
@@ -650,7 +678,9 @@
           "title": "Worksheet 6 — Floats and INTs",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-6.docx"
+          "src": "content/CP1972/CP1972-6.docx",
+          "webUrl": "https://docs.google.com/document/d/1UXMVRNqvm15atfvBI6ZM73jUsuJrQw8O/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "08521a8284"
         },
         {
           "id": "cp1972-s09",
@@ -658,7 +688,9 @@
           "title": "Worksheet 7 — Thermocouples",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-7.docx"
+          "src": "content/CP1972/CP1972-7.docx",
+          "webUrl": "https://docs.google.com/document/d/1xEMW7jZmrCRAnChuRpqVtdKQlPnGHjgY/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "979554f176"
         },
         {
           "id": "cp1972-s10",
@@ -666,7 +698,9 @@
           "title": "Worksheet 8 — Flow sensors",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-8.docx"
+          "src": "content/CP1972/CP1972-8.docx",
+          "webUrl": "https://docs.google.com/document/d/1AqqetdPCHqlDyAFznBGN5P4tOv3bAZm9/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "2a466d179d"
         },
         {
           "id": "cp1972-s11",
@@ -674,7 +708,9 @@
           "title": "Worksheet 9 — Compressive force sensors",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-9.docx"
+          "src": "content/CP1972/CP1972-9.docx",
+          "webUrl": "https://docs.google.com/document/d/14syz6L2PcGUiBlqDCHxYcjuBMKjv3pYw/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "be7204a49b"
         },
         {
           "id": "cp1972-s12",
@@ -682,7 +718,9 @@
           "title": "Worksheet 10 — Cantilever strain sensors",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-10.docx"
+          "src": "content/CP1972/CP1972-10.docx",
+          "webUrl": "https://docs.google.com/document/d/1JkSbGcRHPc1mJXmd_U71eoQjvt8iRycZ/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "b6c7c8a308"
         },
         {
           "id": "cp1972-s13",
@@ -690,7 +728,9 @@
           "title": "Worksheet 11 — Pressure sensors",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-11.docx"
+          "src": "content/CP1972/CP1972-11.docx",
+          "webUrl": "https://docs.google.com/document/d/1vZLi7ngGYkw9k1izh7aNc1jyoUwH9fjY/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "ad72d55f81"
         }
       ],
       "categories": [
@@ -963,7 +1003,9 @@
           "title": "First program",
           "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-1.docx"
+          "src": "content/CP4807/CP4807-1.docx",
+          "webUrl": "https://docs.google.com/document/d/1p950pHqBimFA2W9pNC29z7qhnOku-qUB/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "2bdc461b87"
         },
         {
           "id": "cp4807-s02",
@@ -971,7 +1013,9 @@
           "title": "Performing calculations",
           "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-2.docx"
+          "src": "content/CP4807/CP4807-2.docx",
+          "webUrl": "https://docs.google.com/document/d/1GvE3kYb8i6NLXEPm90ieurU719MiiFx8/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "edcf063caf"
         },
         {
           "id": "cp4807-s03",
@@ -979,7 +1023,9 @@
           "title": "Connection points",
           "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-3.docx"
+          "src": "content/CP4807/CP4807-3.docx",
+          "webUrl": "https://docs.google.com/document/d/1Zop9EDIyXxYBmIOeqqER_C9O1CyVwCQy/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "c08bfcc235"
         },
         {
           "id": "cp4807-s04",
@@ -987,7 +1033,9 @@
           "title": "Digital inputs",
           "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-4.docx"
+          "src": "content/CP4807/CP4807-4.docx",
+          "webUrl": "https://docs.google.com/document/d/1W9viJVSBTT2oarHTnWtr8qsvN4-HC5ek/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "62abf5df19"
         },
         {
           "id": "cp4807-s05",
@@ -995,7 +1043,9 @@
           "title": "Making decisions",
           "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-5.docx"
+          "src": "content/CP4807/CP4807-5.docx",
+          "webUrl": "https://docs.google.com/document/d/1pI0mUUnDCBRqucyx9vUIeCYf05jIru2Q/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "36277fbcd6"
         },
         {
           "id": "cp4807-s06",
@@ -1003,7 +1053,9 @@
           "title": "Macros / subroutines",
           "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-6.docx"
+          "src": "content/CP4807/CP4807-6.docx",
+          "webUrl": "https://docs.google.com/document/d/1LlyTgTdQPSWriTRcSdb1XFiOGRSaDwW_/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "d8ceaad90b"
         },
         {
           "id": "cp4807-s07",
@@ -1011,7 +1063,9 @@
           "title": "Using prototype boards",
           "hours": 1,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-7.docx"
+          "src": "content/CP4807/CP4807-7.docx",
+          "webUrl": "https://docs.google.com/document/d/1NBJaRW8NrZglM_0FOCdqdNAnHF68qpy1/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "792edb073d"
         },
         {
           "id": "cp4807-s08",
@@ -1019,7 +1073,9 @@
           "title": "Colour graphical displays",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-8.docx"
+          "src": "content/CP4807/CP4807-8.docx",
+          "webUrl": "https://docs.google.com/document/d/18YTSNkboADpSObr8zP-wSgWjNEy4ZYMx/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "f0e99ed51a"
         },
         {
           "id": "cp4807-s09",
@@ -1027,7 +1083,9 @@
           "title": "Pin interrupts",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-9.docx"
+          "src": "content/CP4807/CP4807-9.docx",
+          "webUrl": "https://docs.google.com/document/d/1yPxOdbQ5WuqoKNuzNGEm2FPvD08n42nJ/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "5b0066cc48"
         },
         {
           "id": "cp4807-s10",
@@ -1035,7 +1093,9 @@
           "title": "Timer interrupts",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-10.docx"
+          "src": "content/CP4807/CP4807-10.docx",
+          "webUrl": "https://docs.google.com/document/d/1zP0Uq8hQpw7LxHfERDe8tCgl8pKdqlHU/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "778bd53f25"
         },
         {
           "id": "cp4807-s11",
@@ -1043,7 +1103,9 @@
           "title": "Touch control systems",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-11.docx"
+          "src": "content/CP4807/CP4807-11.docx",
+          "webUrl": "https://docs.google.com/document/d/1JzfYX1xGnFelCgxN7094mtSi2kzh715G/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "9c83e9b8c0"
         },
         {
           "id": "cp4807-s12",
@@ -1051,7 +1113,9 @@
           "title": "Web mirror",
           "hours": 2,
           "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP4807/CP4807-12.docx"
+          "src": "content/CP4807/CP4807-12.docx",
+          "webUrl": "https://docs.google.com/document/d/1RQJF_g0Tl7lG7fM0i6RvCJ6qRDcN1YjK/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "183203f43f"
         }
       ],
       "categories": [

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T13:41:33.594Z",
+  "generatedAt": "2026-06-29T13:44:51.152Z",
   "summary": {
     "courses": 9,
     "screens": 210,
@@ -24,6 +24,9 @@
       "scorm-readiness.txt"
     ],
     "CO0001": [
+      "CO0001 – How to deliver this course.docx",
+      "CO0001 – syllabuses.docx",
+      "CO0001 - CPD objectives.docx",
       "CO002-SOW.xlsx",
       "CO0001 – First lessons.HTM",
       "test.docx",
