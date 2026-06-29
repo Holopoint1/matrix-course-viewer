@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T08:39:05.296Z",
+  "generatedAt": "2026-06-29T08:40:28.125Z",
   "summary": {
     "courses": 9,
     "screens": 204,
@@ -131,8 +131,8 @@
       "autofixed": [
         {
           "title": "Equipment",
-          "asked": "CO0002 - Equip.HTM",
-          "used": "CO0002 - Equip.htm",
+          "asked": "CO0002-Equip.HTM",
+          "used": "CO0002-Equip.htm",
           "reasons": [
             "A small spelling/spacing difference, matched automatically."
           ]
@@ -288,7 +288,6 @@
       "CO0002-A3.htm",
       "CO0002-H9.htm",
       "CO0002-marking scheme.htm",
-      "CO0002-Equip.htm",
       "Now try the worksheets.HTM",
       "Other resources.HTM",
       "CO0002-H1.docx",
