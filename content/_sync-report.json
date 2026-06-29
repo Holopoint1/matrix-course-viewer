@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-29T10:35:58.409Z",
+  "generatedAt": "2026-06-29T10:40:56.911Z",
   "summary": {
     "courses": 9,
-    "screens": 203,
-    "displaying": 191,
-    "missing": 12,
+    "screens": 207,
+    "displaying": 196,
+    "missing": 11,
     "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 0
@@ -105,7 +105,7 @@
       "stale": [],
       "missing": [
         {
-          "title": "Title page",
+          "title": "Cover page",
           "asked": "CP7244-head.docx",
           "expectedIn": "CP7244",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
@@ -119,12 +119,6 @@
         {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Teacher notes",
-          "asked": "TN-1.docx",
           "expectedIn": "CP4807",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
@@ -187,8 +181,6 @@
     "CP4807": [
       "CP4807 - definition.xlsx",
       "CO4807-4.docx",
-      "CP4807-TN.docx",
-      "CP4807-prep.docx",
       "CP4807-head.docx",
       "CP4807-2 (1).docx",
       "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
