@@ -1773,7 +1773,7 @@
       "kind": "course",
       "title": "Microcontrollers for T-Levels",
       "shortDescription": "The full Flowcode + E-blocks 3 microcontroller course mapped to T-Level Engineering — videos, PowerPoints, worksheets, homework and assessments.",
-      "estimatedHours": 46.5,
+      "estimatedHours": 44.5,
       "certificate": {
         "enabled": true,
         "templateName": "Microcontrollers for T-Levels"
@@ -2090,16 +2090,6 @@
           "path": "/CP0507 - Motors and microcontrollers/CP0507-4.docx",
           "v": "a26b43989c",
           "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0004-s33",
-          "type": "html",
-          "title": "Homework 6",
-          "hours": 2,
-          "src": "content/CP4807/CP4807-H6.htm",
-          "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-H6.htm",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
         }
       ],
       "categories": [

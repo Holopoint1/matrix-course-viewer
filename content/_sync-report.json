@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-29T09:24:36.003Z",
+  "generatedAt": "2026-06-29T09:25:19.073Z",
   "summary": {
     "courses": 9,
-    "screens": 204,
+    "screens": 203,
     "displaying": 197,
-    "missing": 7,
+    "missing": 6,
     "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 0
@@ -93,19 +93,6 @@
         }
       ],
       "autofixed": []
-    },
-    "CO0004": {
-      "title": "Microcontrollers for T-Levels",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Homework 6",
-          "asked": "CP4807-H6.htm",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
     }
   },
   "unusedMedia": {
@@ -169,10 +156,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0004",
-      "name": "opening.png"
-    }
-  ]
+  "removed": []
 }
