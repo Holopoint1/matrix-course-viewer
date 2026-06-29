@@ -1306,8 +1306,8 @@
           "hours": 0.1,
           "src": "content/CO0001/CO0001 – Presentations.HTM",
           "path": "/CO0001 - FC E-blocks CPD course/media/CO0001 – Presentations.HTM",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "v": "8a8b5c35ff",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0001-s17",

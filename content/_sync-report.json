@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-29T08:21:01.377Z",
+  "generatedAt": "2026-06-29T08:23:40.789Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 185,
-    "missing": 19,
+    "displaying": 186,
+    "missing": 18,
     "autofixed": 7,
     "downloadFailed": 0,
     "collisions": 1
@@ -120,14 +120,7 @@
     "CO0001": {
       "title": "Flowcode and E-blocks 3 CPD Course",
       "stale": [],
-      "missing": [
-        {
-          "title": "Presentations",
-          "asked": "CO0001 – Presentations.HTM",
-          "expectedIn": "CO0001",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0001 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
+      "missing": [],
       "autofixed": [
         {
           "title": "Introduction to microcontrollers",
