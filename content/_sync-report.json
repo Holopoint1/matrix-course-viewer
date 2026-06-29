@@ -1,38 +1,15 @@
 {
-  "generatedAt": "2026-06-29T08:51:02.935Z",
+  "generatedAt": "2026-06-29T08:52:36.184Z",
   "summary": {
     "courses": 9,
     "screens": 204,
     "displaying": 186,
     "missing": 18,
-    "autofixed": 4,
+    "autofixed": 2,
     "downloadFailed": 0,
     "collisions": 0
   },
   "courses": {
-    "CO0002": {
-      "title": "Introduction to Microcontrollers",
-      "stale": [],
-      "missing": [],
-      "autofixed": [
-        {
-          "title": "Welcome",
-          "asked": "CO0002-welcome.htm",
-          "used": "CO0002-welcome.HTM",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0002-LO.htm",
-          "used": "CO0002-LO.HTM",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        }
-      ]
-    },
     "CP0507": {
       "title": "Motors and Microcontrollers",
       "stale": [
@@ -266,6 +243,9 @@
       "CO0002-A3.htm",
       "CO0002-H9.htm",
       "CO0002-marking scheme.htm",
+      "Now try the worksheets.htm",
+      "CO0002-welcome.HTM",
+      "CO0002-LO.HTM",
       "Now try the worksheets.HTM",
       "Other resources.HTM",
       "CO0002-H1.docx",
@@ -283,10 +263,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0002",
-      "name": "CO0002 scheme of work.xlsx"
-    }
-  ]
+  "removed": []
 }

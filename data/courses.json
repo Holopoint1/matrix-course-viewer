@@ -27,7 +27,7 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002-welcome.HTM",
+          "src": "content/CO0002/CO0002-welcome.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-welcome.htm",
           "v": "9acb0aae7d",
           "equipment": "Flowcode / E-blocks3"
@@ -37,7 +37,7 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002-LO.HTM",
+          "src": "content/CO0002/CO0002-LO.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-LO.htm",
           "v": "8a0fef16eb",
           "equipment": "Flowcode / E-blocks3"
@@ -49,7 +49,7 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002-SOW.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-SOW.htm",
-          "v": "dcfe2f5d36",
+          "v": "bd7aee58ca",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -59,7 +59,7 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002-SOW.htm",
           "path": "/CO0002 - Introduction to microcontrollers/CO0002-SOW.xlsx",
-          "v": "dcfe2f5d36",
+          "v": "bd7aee58ca",
           "equipment": "Flowcode / E-blocks3"
         },
         {
