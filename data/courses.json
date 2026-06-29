@@ -141,8 +141,8 @@
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
-          "v": "808733a07b",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0002-s15",
@@ -151,8 +151,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
-          "v": "9a2af1f1fd",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0002-s16",
@@ -161,8 +161,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
-          "v": "3fe22162ea",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0002-s17",
@@ -181,7 +181,7 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
-          "v": "39a131bc30",
+          "v": "36277fbcd6",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -705,8 +705,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-2.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
-          "v": "808733a07b",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CP2563-s5",
@@ -715,8 +715,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
-          "v": "9a2af1f1fd",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CP2563-s6",
@@ -725,8 +725,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
-          "v": "3fe22162ea",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CP2563-s7",
@@ -735,7 +735,7 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
-          "v": "39a131bc30",
+          "v": "36277fbcd6",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1004,8 +1004,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-2.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
-          "v": "808733a07b",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CP7244-s5",
@@ -1014,8 +1014,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
-          "v": "9a2af1f1fd",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CP7244-s6",
@@ -1024,8 +1024,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
-          "v": "3fe22162ea",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CP7244-s7",
@@ -1034,7 +1034,7 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
           "path": "LMS Project Assets/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
-          "v": "39a131bc30",
+          "v": "36277fbcd6",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1386,8 +1386,8 @@
           "hours": 0.2,
           "src": "content/CP4807/CP4807-2.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
-          "v": "808733a07b",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s25",
@@ -1396,8 +1396,8 @@
           "hours": 0.2,
           "src": "content/CP4807/CP4807-3.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
-          "v": "9a2af1f1fd",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s26",
@@ -1406,8 +1406,8 @@
           "hours": 0.2,
           "src": "content/CP4807/CP4807-4.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
-          "v": "3fe22162ea",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0001-s27",
@@ -1426,7 +1426,7 @@
           "hours": 0.2,
           "src": "content/CP4807/CP4807-5.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
-          "v": "39a131bc30",
+          "v": "36277fbcd6",
           "equipment": "Flowcode / E-blocks3"
         }
       ],
@@ -1557,8 +1557,8 @@
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
-          "v": "808733a07b",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0003-s13",
@@ -1567,8 +1567,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
-          "v": "9a2af1f1fd",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0003-s14",
@@ -1577,8 +1577,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
-          "v": "3fe22162ea",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0003-s15",
@@ -1597,7 +1597,7 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
-          "v": "39a131bc30",
+          "v": "36277fbcd6",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1888,8 +1888,8 @@
           "hours": 1,
           "src": "content/CP4807/CP4807-2.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
-          "v": "808733a07b",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s13",
@@ -1898,8 +1898,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
-          "v": "9a2af1f1fd",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s14",
@@ -1908,8 +1908,8 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
-          "v": "3fe22162ea",
-          "equipment": "Flowcode / E-blocks3"
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0004-s15",
@@ -1928,7 +1928,7 @@
           "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
           "path": "/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
-          "v": "39a131bc30",
+          "v": "36277fbcd6",
           "equipment": "Flowcode / E-blocks3"
         },
         {
