@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T11:20:56.067Z",
+  "generatedAt": "2026-06-29T11:25:43.925Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -10,23 +10,6 @@
     "collisions": 0
   },
   "courses": {
-    "CP0507": {
-      "title": "Motors and Microcontrollers",
-      "stale": [
-        {
-          "title": "Preparation",
-          "showing": "CP0507-Prep.docx",
-          "expectedIn": "CP0507"
-        },
-        {
-          "title": "Contents",
-          "showing": "CP0507-Cont.docx",
-          "expectedIn": "CP0507"
-        }
-      ],
-      "missing": [],
-      "autofixed": []
-    },
     "CP1972": {
       "title": "Sensors and Microcontrollers",
       "stale": [
@@ -62,9 +45,7 @@
   },
   "unusedMedia": {
     "CP0507": [
-      "CP0507-prep.docx",
-      "CP0507-cont.docx",
-      "CP0507-head.docx"
+      "CP0507-Head.docx"
     ],
     "CP4807": [
       "CP4807-head.docx",
@@ -106,5 +87,18 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CP0507",
+      "name": "CP0507-cont.docx"
+    },
+    {
+      "code": "CP0507",
+      "name": "CP0507-head.docx"
+    },
+    {
+      "code": "CP0507",
+      "name": "CP0507-prep.docx"
+    }
+  ]
 }
