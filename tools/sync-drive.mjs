@@ -497,6 +497,14 @@ async function generatePhase(driveFilesByCode = {}) {
       if (!s || !s.src || /^https?:/i.test(s.src)) continue;
       if (DRIVE_LINKS[s.src]) s.webUrl = DRIVE_LINKS[s.src];
       if (CONTENT_VERSIONS[s.src] && !s.v) s.v = CONTENT_VERSIONS[s.src];
+      /* A text/HTML screen whose content was also authored as a Word doc: expose
+         the matching Word file's link (same base name, .docx/.doc synced alongside)
+         so the viewer offers "Open in Word" — never the raw .htm. Customer-facing. */
+      if (/\.html?$/i.test(s.src)) {
+        const base = s.src.replace(/\.html?$/i, '');
+        const wl = DRIVE_LINKS[base + '.docx'] || DRIVE_LINKS[base + '.doc'];
+        if (wl) s.wordUrl = wl;
+      }
     }
   }
 

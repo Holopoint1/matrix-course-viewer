@@ -1437,12 +1437,17 @@
       const yid = extractYoutubeId(screen.src);
       return yid ? { url: 'https://www.youtube.com/watch?v=' + yid, label: 'Open in YouTube' } : null;
     }
-    const wu = screen.webUrl || '';
+    /* Prefer an explicit Word-document link: the sync sets screen.wordUrl on a
+       text/HTML screen that also has a Word version, so we open the WORD file in
+       Google Docs — never the raw .htm. Office screens fall back to their own
+       Drive link. A screen with only a plain file link gets no open option (we
+       never surface a raw HTML/Drive file to customers). */
+    const wu = screen.wordUrl || screen.webUrl || '';
     if (!wu) return null;
-    if (/\/document\/d\//.test(wu))     return { url: wu, label: 'Open in Google Docs' };
+    if (/\/document\/d\//.test(wu))     return { url: wu, label: 'Open in Word' };
     if (/\/spreadsheets\/d\//.test(wu)) return { url: wu, label: 'Open in Google Sheets' };
     if (/\/presentation\/d\//.test(wu)) return { url: wu, label: 'Open in Google Slides' };
-    return { url: wu, label: 'Open in Drive' };
+    return null;
   }
   function updateScreenActions(screen) {
     const isUrl = /^https?:/i.test(screen.src || '');

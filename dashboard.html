@@ -145,11 +145,10 @@
       if (!course) { location.replace('index.html'); return; }
       course = window.MatrixCMS ? window.MatrixCMS.applyOverrides(course) : course;
 
-      /* Skip the dashboard intermediate page and go straight to the
-         first non-image screen — per editor feedback that the course
-         was "opening at Preparation" (the dashboard's before-you-start
-         panel) instead of actually starting. */
-      const _first = (course.screens || []).find((s) => !s.missing && s.type !== 'image') || (course.screens || [])[0];
+      /* Skip the dashboard intermediate page and go straight into the course
+         at its FIRST screen (whatever its type — including an opening image),
+         so opening a course always starts at screen 1. */
+      const _first = (course.screens || [])[0];
       if (_first) {
         location.replace('course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(_first.id));
         return;
@@ -170,7 +169,7 @@
       document.getElementById('dash-desc').textContent = course.shortDescription || '';
 
       const worksheets = course.screens.filter((s) => s.type === 'document');
-      const firstScreen = course.screens.find((s) => !s.missing && s.type !== 'image') || course.screens[0];
+      const firstScreen = course.screens[0];
       const startUrl = 'course.html?id=' + course.id + (firstScreen ? '&screen=' + firstScreen.id : '');
       document.getElementById('dash-start-btn').href = startUrl;
       document.getElementById('dash-start-btn-2').href = startUrl;
