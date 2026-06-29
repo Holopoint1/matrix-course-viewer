@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T09:14:24.796Z",
+  "generatedAt": "2026-06-29T09:15:57.794Z",
   "summary": {
     "courses": 9,
     "screens": 204,
@@ -238,18 +238,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0003",
-      "name": "CO0003-LO.HTM"
-    },
-    {
-      "code": "CO0003",
-      "name": "CO0003-welcome.HTM"
-    },
-    {
-      "code": "CO0003",
-      "name": "opening.png"
-    }
-  ]
+  "removed": []
 }
