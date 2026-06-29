@@ -514,7 +514,10 @@
         renderHtmlContent(stage, screen);
         return;
       case 'document':
-        renderDocument(stage, screen);
+        /* Word docs render with Microsoft's Office viewer (same engine as the
+           Excel/PowerPoint screens) so fonts, spacing and gaps match Word
+           exactly — closer than the in-browser docx-preview approximation. */
+        renderOffice(stage, screen);
         return;
       case 'powerpoint':
       case 'spreadsheet':
@@ -906,7 +909,8 @@
      (Office's servers can't reach a local preview) we fall back to a
      download card that explains it works on the published site. */
   function renderOffice(stage, screen) {
-    const label = screen.type === 'powerpoint' ? 'PowerPoint' : 'Spreadsheet';
+    const _et = effectiveType(screen);
+    const label = _et === 'document' ? 'Word document' : _et === 'powerpoint' ? 'PowerPoint' : 'Spreadsheet';
     const safeSrc = escapeAttr(vsrc(screen));
     const fname = filename(screen.src) || screen.src;
     let absUrl = '';
@@ -931,7 +935,7 @@
           <div class="stage-pdf-fallback">
             <div class="stage-pdf-fallback-icon">📑</div>
             <h2>${escapeHtml(screen.title)}</h2>
-            <p>The inline ${label} viewer uses Microsoft's Office viewer, which can't reach a local preview. On the published site this renders the slides inline. For now, open or download it:</p>
+            <p>The inline ${label} viewer uses Microsoft's Office viewer, which can't reach a local preview. On the published site this renders inline. For now, open or download it:</p>
             <div class="stage-pdf-fallback-actions">
               <a class="btn btn-primary" href="${safeSrc}" target="_blank" rel="noopener">Open ${label}</a>
               <a class="btn btn-secondary" href="${safeSrc}" download>Download</a>
@@ -1107,11 +1111,14 @@
     }, 800);
   }
 
-  /* Render a .docx VERBATIM with docx-preview — it uses the document's own
+  /* SUPERSEDED (kept for reference / quick revert): documents now render via the
+     Microsoft Office viewer (see renderOffice + the 'document' case) for exact
+     Word fidelity. This in-browser docx-preview renderer only approximated fonts
+     and spacing, so it's no longer wired into renderStage.
+     Render a .docx VERBATIM with docx-preview — it uses the document's own
      embedded styles (tables with borders/shading/column widths, fonts,
-     spacing, numbering, headers/footers), so worksheets display exactly as
-     authored in Word. No mammoth, no styleMap, no enhanceWorksheetHtml — i.e.
-     no restructuring of the source. */
+     spacing, numbering, headers/footers). No mammoth, no styleMap, no
+     enhanceWorksheetHtml — i.e. no restructuring of the source. */
   async function renderDocument(stage, screen) {
     const wrap = document.createElement('div');
     wrap.className = 'stage-doc';
@@ -1440,15 +1447,16 @@
     const screen = course.screens[currentIndex];
     if (!screen) return;
     const t = effectiveType(screen);
-    /* Worksheets are already rendered to HTML on the stage — print that, so the
+    /* HTML worksheets are rendered to HTML on the stage — print that, so the
        printout matches exactly what the learner sees. */
-    if (t === 'document' || t === 'html') {
+    if (t === 'html') {
       const inner = els.screenStage.querySelector('.stage-doc-inner');
       if (inner) { printWorksheet(screen, inner); return; }
     }
     if (t === 'image') { printImage(screen); return; }
-    /* PDF / PowerPoint / Spreadsheet: open the file in a new tab — the browser's
-       PDF viewer / Office Online viewer / native app each provide their own Print. */
+    /* PDF / Word / PowerPoint / Spreadsheet: open the file in a new tab — the
+       browser's PDF viewer / Office Online viewer / native app each provide
+       their own Print. */
     const w = window.open(vsrc(screen), '_blank');
     if (!w) alert('Pop-up blocked. Allow pop-ups for this site to print this file.');
   }
