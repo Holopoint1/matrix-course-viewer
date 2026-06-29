@@ -2770,6 +2770,47 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   background: var(--border-strong);
   margin: 0 0.1rem;
 }
+/* "Options" dropdown — gathers the secondary screen actions into one menu. */
+.screen-bar .actions .options-menu { position: relative; display: inline-flex; }
+.options-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 210px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  z-index: 60;
+}
+.options-dropdown[hidden] { display: none; }
+.options-dropdown .opt-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: 0;
+  background: transparent;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text);
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.options-dropdown .opt-item:hover:not(:disabled),
+.options-dropdown .opt-item:focus-visible { background: var(--primary-50); color: var(--primary-dark); outline: none; }
+.options-dropdown .opt-item:disabled { opacity: 0.4; cursor: not-allowed; }
+.options-dropdown .opt-item[hidden] { display: none; }
 
 /* Screen stage */
 .screen-stage {
@@ -3578,6 +3619,10 @@ body.pdf-overlay-open { overflow: hidden; }
     padding-right: 0.55rem;
     white-space: nowrap;
   }
+  /* Options sits on the top row alongside Prev/Next (equal thirds); the dropdown
+     stays absolutely positioned so it overlays the stage. */
+  .screen-bar .actions .options-menu { flex: 1 1 0; min-width: 0; }
+  .screen-bar .actions .options-menu #options-btn { width: 100%; }
   .screen-bar .actions #complete-btn { flex-basis: 100%; order: 3; }
 }
 @media (max-width: 600px) {
