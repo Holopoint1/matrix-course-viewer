@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T07:06:01.944Z",
+  "generatedAt": "2026-06-29T07:10:59.375Z",
   "summary": {
     "courses": 9,
-    "screens": 200,
-    "displaying": 182,
+    "screens": 198,
+    "displaying": 180,
     "missing": 18,
-    "autofixed": 8,
+    "autofixed": 7,
     "downloadFailed": 0,
     "collisions": 1
   },
@@ -136,14 +136,6 @@
           "used": "CO0002 - Equip.htm",
           "reasons": [
             "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0002 – LO.HTM",
-          "used": "CO0002 – LO.htm",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
@@ -295,6 +287,7 @@
       "opening.png"
     ],
     "CO0001": [
+      "test.docx",
       "CO0001 – CPD objectives.docx",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
