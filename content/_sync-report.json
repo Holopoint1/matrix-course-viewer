@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-29T09:22:08.129Z",
+  "generatedAt": "2026-06-29T09:23:31.050Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 194,
-    "missing": 10,
+    "displaying": 196,
+    "missing": 8,
     "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 0
@@ -101,18 +101,6 @@
         {
           "title": "Introduction to microcontrollers",
           "asked": "CO0004 - opening.png",
-          "expectedIn": "CO0004",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Welcome",
-          "asked": "CO0004-welcome.htm",
-          "expectedIn": "CO0004",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0004-LO.htm",
           "expectedIn": "CO0004",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },

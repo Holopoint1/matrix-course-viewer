@@ -1796,8 +1796,8 @@
           "hours": 0.1,
           "src": "content/CO0004/CO0004-welcome.htm",
           "path": "/CO0004 - Introduction to microcontrollers/media/CO0004-welcome.htm",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "v": "c5770059df",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0004-s3",
@@ -1806,8 +1806,8 @@
           "hours": 0.1,
           "src": "content/CO0004/CO0004-LO.htm",
           "path": "/CO0004 - Introduction to microcontrollers/media/CO0004-LO.htm",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "v": "9dfc8dc9db",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0004-s4",
