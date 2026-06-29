@@ -124,7 +124,6 @@
         <a class="ms-header-link" href="${dashHref}" title="Back to the ${escapeHtml(course.code || 'course')} dashboard">
           <span class="ms-course-code">${escapeHtml(course.code || '')}</span>
           <span class="ms-course-title">${escapeHtml(course.title || '')}</span>
-          <span class="ms-header-dash">⌂ Course dashboard</span>
         </a>
       </div>
     `;
