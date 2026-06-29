@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T11:05:59.234Z",
+  "generatedAt": "2026-06-29T11:11:01.321Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -61,6 +61,11 @@
     }
   },
   "unusedMedia": {
+    "CP0507": [
+      "CP0507-prep.docx",
+      "CP0507-cont.docx",
+      "CP0507-head.docx"
+    ],
     "CP4807": [
       "CP4807-head.docx",
       "CP4807 - definition.xlsx",
@@ -93,6 +98,9 @@
       "bits.docx",
       "CO0002 - SOW.htm",
       "CO0002-H8.docx"
+    ],
+    "CP1972": [
+      "CP1972 - definition.xlsx"
     ]
   },
   "failed": [],
