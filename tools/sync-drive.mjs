@@ -582,36 +582,57 @@ function writeAccuracyReport(db, driveFilesByCode) {
             ? 'No file by this name in the ' + p.folderCode + ' folder — but a matching file is in the ' + elsewhere.join('/') + ' folder. Move it there, or point the row at the right folder.'
             : 'No file with this name (or a hyphen/case/extension variant) is in the ' + p.folderCode + ' folder yet. Add it to that Drive folder, or correct the name in the definition.';
         }
-        missing.push({ title: s.title, asked, expectedIn: p.folderCode, reason });
+        missing.push({ id: s.id, title: s.title, asked, expectedIn: p.folderCode, reason });
         continue;
       }
       /* resolved, but the typed name differed from the real file → auto-fixed twin */
       if (asked && asked !== p.name && canon(asked) === canon(p.name))
-        autofixed.push({ title: s.title, asked, used: p.name, reasons: diffReasons(asked, p.name) });
+        autofixed.push({ id: s.id, title: s.title, asked, used: p.name, reasons: diffReasons(asked, p.name) });
       const driveSet = driveFilesByCode[p.folderCode];
-      if (driveSet && !driveSet.has(p.name)) stale.push({ title: s.title, showing: p.name, expectedIn: p.folderCode });
+      if (driveSet && !driveSet.has(p.name)) stale.push({ id: s.id, title: s.title, showing: p.name, expectedIn: p.folderCode });
     }
     if (stale.length || missing.length || autofixed.length) courses[c.id] = { title: c.title, stale, missing, autofixed };
   }
+  /* "Unused" should mean genuinely-orphaned COURSE CONTENT — not the control and
+     build files that legitimately live in a course folder. Excluding these stops
+     the report flagging e.g. "CP4807 - definition.xlsx" or SCORM export artifacts
+     as if a screen were missing them. */
+  const NON_CONTENT = (n) =>
+    /^_/.test(n) || /\.tmp$/i.test(n) ||
+    /\bdefinition\b/i.test(n) ||                 // the course's control sheet (Drive-native or uploaded .xlsx)
+    /^imsmanifest\.xml$/i.test(n) ||             // SCORM package manifest
+    /-metadata\.json$/i.test(n) ||               // e.g. blocks-metadata.json
+    /-readiness\.txt$/i.test(n) ||               // e.g. scorm-readiness.txt
+    /^summary-report\.txt$/i.test(n);            // SCORM export summary
   const unusedMedia = {};
   for (const code of Object.keys(driveFilesByCode)) {
     const ref = referencedByFolder[code] || new Set();
-    const unused = [...driveFilesByCode[code]].filter((n) => !ref.has(n) && !/^_|\.tmp$/.test(n));
+    const unused = [...driveFilesByCode[code]].filter((n) => !ref.has(n) && !NON_CONTENT(n));
     if (unused.length) unusedMedia[code] = unused;
   }
+  /* Tag each name collision with whether the colliding file is actually USED by a
+     screen — an unused-file collision is harmless noise, a used one means a screen
+     may be served the wrong copy and is the only kind worth a health warning. */
+  const collisions = SYNC_ISSUES.collisions.map((c) => ({
+    ...c, used: (referencedByFolder[c.code] || new Set()).has(c.name),
+  }));
+  const collisionsAffecting = collisions.filter((c) => c.used).length;
   const totalScreens = db.courses.reduce((n, c) => n + ((c.screens || []).length), 0);
   const totalMissing = db.courses.reduce((n, c) => n + ((c.screens || []).filter((s) => s.missing).length), 0);
   const totalAutofixed = Object.values(courses).reduce((n, c) => n + c.autofixed.length, 0);
+  const totalStale = Object.values(courses).reduce((n, c) => n + c.stale.length, 0);
+  const totalUnused = Object.values(unusedMedia).reduce((n, a) => n + a.length, 0);
   const report = {
     generatedAt: new Date().toISOString(),
     summary: {
       courses: db.courses.length, screens: totalScreens, displaying: totalScreens - totalMissing,
-      missing: totalMissing, autofixed: totalAutofixed,
-      downloadFailed: SYNC_ISSUES.failed.length, collisions: SYNC_ISSUES.collisions.length,
+      missing: totalMissing, autofixed: totalAutofixed, stale: totalStale, unused: totalUnused,
+      downloadFailed: SYNC_ISSUES.failed.length,
+      collisions: collisions.length, collisionsAffecting,
     },
     courses, unusedMedia,
     failed: SYNC_ISSUES.failed,
-    collisions: SYNC_ISSUES.collisions,
+    collisions,
     canonCollisions: SYNC_ISSUES.canonCollisions,
     removed: SYNC_ISSUES.removed,   // content files deleted because they were not in Drive (their screen now shows missing)
   };

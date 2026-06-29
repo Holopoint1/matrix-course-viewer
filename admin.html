@@ -37,6 +37,17 @@
     #dash .st { font-weight: 700; white-space: nowrap; }
     #dash .st-ok { color: #16a34a; } #dash .st-miss { color: #dc2626; } #dash .st-fix { color: #b45309; } #dash .st-orph { color: #4338ca; } #dash .st-link { color: #2563eb; }
     #dash .reason { color: #64748b; font-size: 12px; }
+    #dash .hb .hb-note { font-weight: 400; opacity: 0.85; }
+    #dash .course-err { border-color: #fecaca; box-shadow: 0 0 0 1px #fecaca inset; }
+    #dash .course-err > summary { background: #fef2f2; }
+    #dash .advisories { margin: 1.2rem 0 0.5rem; }
+    #dash .adv-title { font-size: 1.05rem; margin: 0 0 0.2rem; }
+    #dash .adv-note, #dash .adv-sub { font-weight: 400; color: #64748b; font-size: 0.8rem; }
+    #dash .adv-h { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.4px; color: #475569; margin: 0.9rem 0 0.3rem; }
+    #dash .adv-list { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; color: #334155; }
+    #dash .adv-list code { background: #1e293b; color: #e2e8f0; padding: 1px 6px; border-radius: 5px; font-size: 12px; overflow-wrap: anywhere; }
+    #dash .adv-tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 99px; background: #e2e8f0; color: #475569; }
+    #dash .adv-tag.warn { background: #fee2e2; color: #991b1b; }
     #dash .why { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 13px; }
     #dash details.issues > summary { cursor: pointer; font-weight: 700; padding: 4px 0; }
     #dash a.open { font-size: 0.78rem; color: #2563eb; text-decoration: none; }
@@ -101,29 +112,54 @@
       var courses = data.courses.slice().sort(function (a, b) { return String(a.id||a.code||'').localeCompare(String(b.id||b.code||'')); });
 
       /* Index the report so each screen can be given a live status. */
+      /* Index the report's per-screen notes by a STABLE key — the screen id when
+         the report carries it, falling back to the title for older reports. Keying
+         by id (unique) avoids the title-collision mismatches the old title-only
+         join produced when two screens shared a name. */
       var missingByCourse = {}, fixByCourse = {};
+      function noteKey(o) { return o && (o.id != null ? 'id:' + o.id : 't:' + (o.title || '')); }
+      function screenKey(s) { return s.id != null ? 'id:' + s.id : 't:' + (s.title || ''); }
       Object.keys(report.courses || {}).forEach(function (id) {
         var c = report.courses[id];
-        missingByCourse[id] = {}; (c.missing || []).forEach(function (m) { missingByCourse[id][m.title] = m.reason || ''; });
-        fixByCourse[id] = {}; (c.autofixed || []).forEach(function (a) { fixByCourse[id][a.title] = a; });
+        missingByCourse[id] = {}; (c.missing || []).forEach(function (m) { missingByCourse[id][noteKey(m)] = m.reason || ''; });
+        fixByCourse[id] = {}; (c.autofixed || []).forEach(function (a) { fixByCourse[id][noteKey(a)] = a; });
       });
 
       function screenStatus(courseId, s) {
         if (/^https?:/i.test(s.src || '')) return { k: 'link', label: '🔗 Link' };
-        if (s.missing) return { k: 'miss', label: '❌ Missing', reason: (missingByCourse[courseId] || {})[s.title] || 'File not found in the Drive folder.' };
-        var fx = (fixByCourse[courseId] || {})[s.title];
+        if (s.missing) return { k: 'miss', label: '❌ Missing', reason: (missingByCourse[courseId] || {})[screenKey(s)] || 'File not found in the Drive folder.' };
+        var fx = (fixByCourse[courseId] || {})[screenKey(s)];
         if (fx) return { k: 'fix', label: '🔧 Auto-fixed', reason: (fx.reasons || []).join(' ') };
         return { k: 'ok', label: '✅ Displays' };
       }
 
-      /* ---- counts ---- */
-      var totalScreens = 0, displaying = 0, missing = 0, fixed = 0, removed = (report.removed || []).length;
-      var failed = (report.failed || []).length, collisions = (report.collisions || []).length;
-      courses.forEach(function (c) { (c.screens || []).forEach(function (s) { totalScreens++; if (s.missing) missing++; else displaying++; }); });
-      Object.keys(report.courses || {}).forEach(function (id) { fixed += ((report.courses[id].autofixed) || []).length; });
+      /* ---- counts ----
+         Count screens from courses.json (the file the live site actually serves),
+         so "displaying/missing" always matches what a learner sees. The report adds
+         the WHY for each, plus the advisory lists. */
+      var collisionList = report.collisions || [];
+      var totalScreens = 0, displaying = 0, missing = 0, links = 0, fixed = 0;
+      var removed = (report.removed || []).length;
+      var failed = (report.failed || []).length;
+      var collisionsAffecting = collisionList.filter(function (c) { return c.used; }).length;
+      courses.forEach(function (c) {
+        (c.screens || []).forEach(function (s) {
+          totalScreens++;
+          if (/^https?:/i.test(s.src || '')) { links++; displaying++; }
+          else if (s.missing) missing++;
+          else { displaying++; if ((fixByCourse[c.id] || {})[screenKey(s)]) fixed++; }
+        });
+      });
+      var staleTotal = Object.keys(report.courses || {}).reduce(function (n, id) { return n + ((report.courses[id].stale || []).length); }, 0);
+      var unusedTotal = Object.keys(report.unusedMedia || {}).reduce(function (n, k) { return n + report.unusedMedia[k].length; }, 0);
 
       var when = report.generatedAt ? (fmtTime(report.generatedAt) + ' · ' + relTime(report.generatedAt)) : 'unknown (report not found)';
-      var clean = !missing && !failed && !collisions;
+      /* A course is only UNHEALTHY when something a learner would see is broken:
+         a screen with no file, a download failure, or a collision on a file a screen
+         actually uses. Auto-fixed names, unused files and unused-file collisions are
+         cleanup advisories — they never make the site "sick". */
+      var errors = missing + failed + collisionsAffecting;
+      var advisories = fixed + staleTotal + unusedTotal + (collisionList.length - collisionsAffecting);
 
       var html = '';
       html += '<div class="dash-head"><div><h1>Course health</h1></div>' +
@@ -135,23 +171,27 @@
 
       html += '<div id="dash-syncmsg"></div>';
 
-      html += '<div class="' + (clean ? 'hb hb-ok' : 'hb hb-warn') + '">' +
-        (clean
-          ? '✓ All ' + courses.length + ' courses are healthy — every file resolves, no sync failures.'
-          : '🩺 ' + missing + ' screen' + (missing===1?'':'s') + ' missing a file' +
-            (failed ? ' · ' + failed + ' download failure' + (failed===1?'':'s') : '') +
-            (collisions ? ' · ' + collisions + ' name collision' + (collisions===1?'':'s') : '') +
-            '. Details below.') +
-        '</div>';
+      if (errors === 0) {
+        html += '<div class="hb hb-ok">✓ All ' + courses.length + ' courses are healthy — every one of the ' +
+          displaying + ' screen' + (displaying === 1 ? '' : 's') + ' displays.' +
+          (advisories ? ' <span class="hb-note">' + advisories + ' cleanup ' + (advisories === 1 ? 'suggestion' : 'suggestions') + ' below — nothing learners see is affected.</span>' : '') +
+          '</div>';
+      } else {
+        var bits = [];
+        if (missing) bits.push(missing + ' screen' + (missing === 1 ? '' : 's') + ' missing a file');
+        if (failed) bits.push(failed + ' download failure' + (failed === 1 ? '' : 's'));
+        if (collisionsAffecting) bits.push(collisionsAffecting + ' name collision' + (collisionsAffecting === 1 ? '' : 's') + ' on a live screen');
+        html += '<div class="hb hb-warn">🩺 ' + bits.join(' · ') + '. See the highlighted courses below.</div>';
+      }
 
       /* ---- stat strip ---- */
       html += '<div class="stats">' +
         '<div class="stat"><div class="n">' + courses.length + '</div><div class="l">Courses</div></div>' +
         '<div class="stat good"><div class="n">' + displaying + '</div><div class="l">Screens display</div></div>' +
         '<div class="stat ' + (missing?'bad':'') + '"><div class="n">' + missing + '</div><div class="l">Missing</div></div>' +
-        '<div class="stat ' + (fixed?'warn':'') + '"><div class="n">' + fixed + '</div><div class="l">Auto-fixed names</div></div>' +
-        '<div class="stat"><div class="n">' + removed + '</div><div class="l">Cleaned (not in Drive)</div></div>' +
         '<div class="stat ' + (failed?'bad':'') + '"><div class="n">' + failed + '</div><div class="l">Download fails</div></div>' +
+        '<div class="stat ' + (fixed?'warn':'') + '"><div class="n">' + fixed + '</div><div class="l">Auto-fixed names</div></div>' +
+        '<div class="stat ' + (unusedTotal?'warn':'') + '"><div class="n">' + unusedTotal + '</div><div class="l">Unused files</div></div>' +
         '</div>';
 
       /* ---- per-course ---- */
@@ -167,16 +207,54 @@
             '<td>' + (/^https?:/i.test(s.src||'') ? '<a class="open" href="' + esc(s.src) + '" target="_blank" rel="noopener">URL</a>' : '<code>' + esc(s.src || '—') + '</code>') + '</td>' +
             '</tr>';
         });
+        var cUnused = (report.unusedMedia && report.unusedMedia[c.id] || []).length;
         var chips = '';
         if (cMiss) chips += '<span class="chip c-miss">' + cMiss + ' missing</span>';
         if (cFix) chips += '<span class="chip c-fix">' + cFix + ' auto-fixed</span>';
+        if (cUnused) chips += '<span class="chip c-orph">' + cUnused + ' unused</span>';
         if (!cMiss) chips += '<span class="chip c-ok">' + cOk + '/' + (c.screens||[]).length + ' ok</span>';
-        html += '<details class="course">' +
+        /* Open + flag only courses with a real error (a missing screen), so the eye
+           goes straight to what needs fixing. */
+        html += '<details class="course' + (cMiss ? ' course-err' : '') + '"' + (cMiss ? ' open' : '') + '>' +
           '<summary><span class="code">' + esc(c.code || c.id) + '</span> <span class="title">' + esc(c.title || '') + '</span>' +
             '<span class="chips">' + chips + ' <a class="open" href="course.html?id=' + esc(c.id) + '" target="_blank" rel="noopener">open ↗</a></span></summary>' +
           '<table><thead><tr><th>#</th><th>Screen</th><th>Status</th><th>File</th></tr></thead><tbody>' + rows + '</tbody></table>' +
           '</details>';
       });
+
+      /* ---- advisories: real, itemised detail for the non-error findings, so the
+         numbers above are never just an unexplained count ---- */
+      var titleOf = {};
+      courses.forEach(function (c) { titleOf[c.id] = (c.code || c.id) + ' · ' + (c.title || ''); });
+      var adv = '';
+      if (collisionList.length) {
+        adv += '<h3 class="adv-h">Name collisions <span class="adv-sub">two Drive files map to the same name; only one is published</span></h3><ul class="adv-list">';
+        collisionList.forEach(function (k) {
+          adv += '<li>' + (k.used ? '<span class="adv-tag warn">affects a live screen</span>' : '<span class="adv-tag">unused — harmless</span>') +
+            ' <code>' + esc((k.code || '') + '/' + (k.name || '')) + '</code> — ' + (k.count || 2) + ' files map here.' +
+            (k.used ? ' A screen uses this name, so it may be served the wrong copy — give the files distinct names in Drive.' : '') + '</li>';
+        });
+        adv += '</ul>';
+      }
+      var staleCourses = Object.keys(report.courses || {}).filter(function (id) { return (report.courses[id].stale || []).length; });
+      if (staleCourses.length) {
+        adv += '<h3 class="adv-h">Stale references <span class="adv-sub">a screen points at a file no longer in its Drive folder</span></h3><ul class="adv-list">';
+        staleCourses.forEach(function (id) {
+          (report.courses[id].stale || []).forEach(function (s) {
+            adv += '<li><code>' + esc(id) + '</code> · ' + esc(s.title || '') + ' → <code>' + esc(s.showing || '') + '</code></li>';
+          });
+        });
+        adv += '</ul>';
+      }
+      var unusedCourses = Object.keys(report.unusedMedia || {});
+      if (unusedCourses.length) {
+        adv += '<h3 class="adv-h">Unused files <span class="adv-sub">in a course folder but not referenced by any screen — definition sheets &amp; SCORM build files are already excluded</span></h3><ul class="adv-list">';
+        unusedCourses.forEach(function (id) {
+          adv += '<li><code>' + esc(id) + '</code> — ' + (report.unusedMedia[id] || []).map(function (n) { return '<code>' + esc(n) + '</code>'; }).join(', ') + '</li>';
+        });
+        adv += '</ul>';
+      }
+      if (adv) html += '<div class="advisories"><h2 class="adv-title">Cleanup advisories <span class="adv-note">none of these affect what learners see</span></h2>' + adv + '</div>';
 
       /* ---- why / how-to ---- */
       html += '<div class="why"><strong>How this works &amp; how to fix issues</strong>' +
