@@ -1,61 +1,158 @@
 {
-  "_note": "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. The sync rebuilds this from the sheet on each run (per-row: a blank Keywords cell keeps the value already here). Powers the catalogue search + the course type/keyword chips. Edit the sheet to change it; this file is the published copy.",
-  "generatedAt": "2026-06-29",
+  "_note": "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. Rebuilt on each sync; a blank Keywords cell keeps the existing value. Powers the catalogue search + course type. Edit the sheet to change it.",
+  "generatedAt": "2026-06-29T13:26:28.680Z",
   "source": "Course_structure",
   "courses": {
     "CO0001": {
       "type": "Course",
       "sheets": 28,
       "hours": 5.4,
-      "keywords": ["Flowcode", "E-blocks 3", "E-blocks", "CPD", "continuing professional development", "teacher training", "embedded systems", "microcontrollers", "getting started", "introduction", "flowchart programming"]
+      "keywords": [
+        "Flowcode",
+        "E-blocks 3",
+        "E-blocks",
+        "CPD",
+        "continuing professional development",
+        "teacher training",
+        "embedded systems",
+        "microcontrollers",
+        "getting started",
+        "introduction",
+        "flowchart programming"
+      ]
     },
     "CO0002": {
       "type": "Course",
       "sheets": 45,
       "hours": 99.7,
-      "keywords": ["microcontrollers", "introduction", "embedded systems", "PIC", "programming", "Flowcode", "electronics", "beginner", "fundamentals", "curriculum"]
+      "keywords": [
+        "microcontrollers",
+        "introduction",
+        "embedded systems",
+        "PIC",
+        "programming",
+        "Flowcode",
+        "electronics",
+        "beginner",
+        "fundamentals",
+        "curriculum"
+      ]
     },
     "CO0003": {
       "type": "Course",
       "sheets": 32,
       "hours": 44.5,
-      "keywords": ["aviation", "aircraft", "digital techniques", "avionics", "EASA", "Part-66", "digital electronics", "logic", "technicians", "maintenance", "embedded systems"]
+      "keywords": [
+        "aviation",
+        "aircraft",
+        "digital techniques",
+        "avionics",
+        "EASA",
+        "Part-66",
+        "digital electronics",
+        "logic",
+        "technicians",
+        "maintenance",
+        "embedded systems"
+      ]
     },
     "CO0004": {
       "type": "Course",
       "sheets": 32,
       "hours": 44.5,
-      "keywords": ["T-Levels", "T Levels", "microcontrollers", "embedded systems", "qualification", "college", "engineering", "electronics", "curriculum"]
+      "keywords": [
+        "T-Levels",
+        "T Levels",
+        "microcontrollers",
+        "embedded systems",
+        "qualification",
+        "college",
+        "engineering",
+        "electronics",
+        "curriculum"
+      ]
     },
     "CP0507": {
       "type": "Worksheet pack",
       "sheets": 7,
       "hours": 10.6,
-      "keywords": ["motors", "DC motors", "stepper motor", "servo", "motor control", "actuators", "microcontrollers", "mechatronics", "worksheets", "pack"]
+      "keywords": [
+        "motors",
+        "DC motors",
+        "stepper motor",
+        "servo",
+        "motor control",
+        "actuators",
+        "microcontrollers",
+        "mechatronics",
+        "worksheets",
+        "pack"
+      ]
     },
     "CP1972": {
       "type": "Worksheet pack",
       "sheets": 13,
       "hours": 22.6,
-      "keywords": ["sensors", "analog sensors", "digital sensors", "temperature", "light", "input", "data acquisition", "microcontrollers", "worksheets", "pack"]
+      "keywords": [
+        "sensors",
+        "analog sensors",
+        "digital sensors",
+        "temperature",
+        "light",
+        "input",
+        "data acquisition",
+        "microcontrollers",
+        "worksheets",
+        "pack"
+      ]
     },
     "CP2563": {
       "type": "Worksheet pack",
       "sheets": 21,
       "hours": 39,
-      "keywords": ["T-Levels", "T Levels", "microcontrollers", "curriculum pack", "embedded systems", "qualification", "college", "engineering", "worksheets"]
+      "keywords": [
+        "T-Levels",
+        "T Levels",
+        "microcontrollers",
+        "curriculum pack",
+        "embedded systems",
+        "qualification",
+        "college",
+        "engineering",
+        "worksheets"
+      ]
     },
     "CP4807": {
       "type": "Worksheet pack",
       "sheets": 12,
       "hours": 17,
-      "keywords": ["introduction", "microcontrollers", "curriculum pack", "embedded systems", "beginner", "fundamentals", "worksheets", "pack"]
+      "keywords": [
+        "introduction",
+        "microcontrollers",
+        "curriculum pack",
+        "embedded systems",
+        "beginner",
+        "fundamentals",
+        "worksheets",
+        "pack"
+      ]
     },
     "CP7244": {
       "type": "Worksheet pack",
       "sheets": 20,
       "hours": 38,
-      "keywords": ["aviation", "aircraft", "digital techniques", "avionics", "EASA", "Part-66", "technicians", "maintenance", "curriculum pack", "worksheets"]
+      "keywords": [
+        "aviation",
+        "aircraft",
+        "digital techniques",
+        "avionics",
+        "EASA",
+        "Part-66",
+        "technicians",
+        "maintenance",
+        "curriculum pack",
+        "worksheets"
+      ]
     }
   }
 }
