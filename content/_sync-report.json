@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T10:46:05.200Z",
+  "generatedAt": "2026-06-29T10:49:25.010Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -145,18 +145,10 @@
     }
   },
   "unusedMedia": {
-    "ZZ9999": [
-      "complete.html",
-      "assessment.html",
-      "objectives.html",
-      "welcome.html",
-      "opening.svg"
-    ],
     "CP4807": [
       "CP4807 - definition.xlsx",
       "CO4807-4.docx",
       "CP4807-head.docx",
-      "CP4807-2 (1).docx",
       "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
       "summary-report.txt",
       "imsmanifest.xml",
@@ -186,10 +178,6 @@
       "bits.docx",
       "CO0002 - SOW.htm",
       "CO0002-H8.docx"
-    ],
-    "CP7244": [
-      "CP7244 - definition.docx",
-      "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
     ]
   },
   "failed": [],
@@ -197,16 +185,16 @@
   "canonCollisions": [],
   "removed": [
     {
-      "code": "CP2563",
-      "name": "CP2563 - Content.docx"
+      "code": "CP4807",
+      "name": "CP4807-2 (1).docx"
     },
     {
-      "code": "CP2563",
-      "name": "CP2563 - definition.docx"
+      "code": "CP7244",
+      "name": "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
     },
     {
-      "code": "CP2563",
-      "name": "CP2563_definition.xlsx"
+      "code": "CP7244",
+      "name": "CP7244 - definition.docx"
     }
   ]
 }
