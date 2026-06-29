@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T11:25:43.925Z",
+  "generatedAt": "2026-06-29T11:27:10.725Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -87,18 +87,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CP0507",
-      "name": "CP0507-cont.docx"
-    },
-    {
-      "code": "CP0507",
-      "name": "CP0507-head.docx"
-    },
-    {
-      "code": "CP0507",
-      "name": "CP0507-prep.docx"
-    }
-  ]
+  "removed": []
 }
