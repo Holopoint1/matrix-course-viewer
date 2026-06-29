@@ -1581,12 +1581,12 @@
   /* ---- HTML → OOXML (text screens) ---- */
   function htmlRunXml(text, fmt) {
     if (!text) return '';
-    const rpr = [];
+    const rpr = [];   // CT_RPr schema order: b, i, color, sz, u
     if (fmt.b) rpr.push('<w:b/>');
     if (fmt.i) rpr.push('<w:i/>');
-    if (fmt.u || fmt.link) rpr.push('<w:u w:val="single"/>');
     if (fmt.link) rpr.push('<w:color w:val="0563C1"/>');
     if (fmt.sz) rpr.push('<w:sz w:val="' + fmt.sz + '"/>');
+    if (fmt.u || fmt.link) rpr.push('<w:u w:val="single"/>');
     const pr = rpr.length ? '<w:rPr>' + rpr.join('') + '</w:rPr>' : '';
     return '<w:r>' + pr + '<w:t xml:space="preserve">' + escapeHtml(text) + '</w:t></w:r>';
   }
@@ -1608,24 +1608,27 @@
   }
   function htmlParaXml(runs, opts) {
     opts = opts || {};
-    const props = [];
+    const props = [];   // CT_PPr schema order: keepNext, numPr, spacing
+    if (opts.heading) props.push('<w:keepNext/>');
     if (opts.numId) props.push('<w:numPr><w:ilvl w:val="0"/><w:numId w:val="' + opts.numId + '"/></w:numPr>');
-    if (opts.heading) props.push('<w:spacing w:before="200" w:after="80"/><w:keepNext/>');
+    if (opts.heading) props.push('<w:spacing w:before="200" w:after="80"/>');
     const pPr = props.length ? '<w:pPr>' + props.join('') + '</w:pPr>' : '';
     return '<w:p>' + pPr + (runs || '<w:r><w:t/></w:r>') + '</w:p>';
   }
   function htmlTableXml(node) {
-    let trs = '';
+    let trs = ''; let maxCols = 0;
     for (const tr of Array.from(node.querySelectorAll('tr'))) {
-      let tcs = '';
-      for (const td of Array.from(tr.querySelectorAll('td,th'))) {
+      let tcs = ''; const cells = Array.from(tr.querySelectorAll('td,th'));
+      if (cells.length > maxCols) maxCols = cells.length;
+      for (const td of cells) {
         tcs += '<w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/></w:tcPr>' + htmlParaXml(htmlInlineRuns(td, td.tagName === 'TH' ? { b: true } : {})) + '</w:tc>';
       }
       if (tcs) trs += '<w:tr>' + tcs + '</w:tr>';
     }
     if (!trs) return '';
     const b = '<w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tblBorders>';
-    return '<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/>' + b + '</w:tblPr>' + trs + '</w:tbl>';
+    const grid = '<w:tblGrid>' + '<w:gridCol/>'.repeat(maxCols || 1) + '</w:tblGrid>';   // w:tblGrid is required by the schema
+    return '<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/>' + b + '</w:tblPr>' + grid + trs + '</w:tbl>';
   }
   function htmlBlockify(node, out, flags) {
     let buf = '';
@@ -1696,8 +1699,8 @@
       }
     }
     if (anyLists) {
-      abstracts += '<w:abstractNum w:abstractNumId="' + HTM_BULLET_NUMID + '"><w:lvl w:ilvl="0"><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum>'
-        + '<w:abstractNum w:abstractNumId="' + HTM_DECIMAL_NUMID + '"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum>';
+      abstracts += '<w:abstractNum w:abstractNumId="' + HTM_BULLET_NUMID + '"><w:multiLevelType w:val="singleLevel"/><w:lvl w:ilvl="0"><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum>'
+        + '<w:abstractNum w:abstractNumId="' + HTM_DECIMAL_NUMID + '"><w:multiLevelType w:val="singleLevel"/><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum>';
       nums += '<w:num w:numId="' + HTM_BULLET_NUMID + '"><w:abstractNumId w:val="' + HTM_BULLET_NUMID + '"/></w:num><w:num w:numId="' + HTM_DECIMAL_NUMID + '"><w:abstractNumId w:val="' + HTM_DECIMAL_NUMID + '"/></w:num>';
     }
     const numOpen = (numXml.match(/<w:numbering\b[^>]*>/) || ['<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'])[0];
