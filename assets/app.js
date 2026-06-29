@@ -1678,7 +1678,7 @@
         const rXml = relsF ? await relsF.async('string') : '';
         const off = (i + 1) * 100000;
         let inner = docBodyInner(doc).replace(/(<w:numId\s+w:val=")(\d+)(")/g, (m, a, n, b) => a + (n === '0' ? '0' : (+n + off)) + b);
-        const refIds = new Set(); let mm; const re = /r:(?:embed|id)="([^"]+)"/g; while ((mm = re.exec(inner))) refIds.add(mm[1]);
+        const refIds = new Set(); let mm; const re = /r:(?:embed|id|link)="([^"]+)"/g; while ((mm = re.exec(inner))) refIds.add(mm[1]);
         const relMap = {};
         for (const oldId of refIds) {
           const rx = new RegExp('<Relationship\\b[^>]*Id="' + oldId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"[^>]*/>');
@@ -1688,7 +1688,7 @@
           if (mode === 'External' || /^[a-z]+:\/\//i.test(target) || /^mailto:/i.test(target)) relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + escapeAttr(target) + '" TargetMode="External"/>';
           else { const sp = normalizeZipPath('word/' + target.replace(/^\/+/, '')); const f = zip.file(sp); if (!f) continue; const ext = (sp.split('.').pop() || 'bin').toLowerCase(); const nm = 'media/c' + i + '_' + relCounter + '.' + ext; mediaAdds.push({ path: 'word/' + nm, data: await f.async('uint8array') }); relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + nm + '"/>'; if (MEDIA_MIME[ext]) ctExt[ext] = MEDIA_MIME[ext]; }
         }
-        inner = inner.replace(/(r:(?:embed|id)=")([^"]+)(")/g, (m, a, id, b) => (relMap[id] ? a + relMap[id] + b : m));
+        inner = inner.replace(/(r:(?:embed|id|link)=")([^"]+)(")/g, (m, a, id, b) => (relMap[id] ? a + relMap[id] + b : m));
         mergedBody += inner;
         const nf = zip.file('word/numbering.xml');
         if (nf) { const nx = await nf.async('string'); (nx.match(/<w:abstractNum\b[\s\S]*?<\/w:abstractNum>/g) || []).forEach((bk) => abstracts += offsetDocNumbering(bk, off)); (nx.match(/<w:num\b(?![a-zA-Z])[\s\S]*?<\/w:num>/g) || []).forEach((bk) => nums += offsetDocNumbering(bk, off)); }
