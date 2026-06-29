@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T11:28:33.091Z",
+  "generatedAt": "2026-06-29T11:30:34.122Z",
   "summary": {
     "courses": 9,
     "screens": 210,
@@ -9,25 +9,7 @@
     "downloadFailed": 0,
     "collisions": 0
   },
-  "courses": {
-    "CP1972": {
-      "title": "Sensors and Microcontrollers",
-      "stale": [
-        {
-          "title": "Preparation",
-          "showing": "CP1972-Prep.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Contents",
-          "showing": "CP1972-Cont.docx",
-          "expectedIn": "CP1972"
-        }
-      ],
-      "missing": [],
-      "autofixed": []
-    }
-  },
+  "courses": {},
   "unusedMedia": {
     "CP0507": [
       "CP0507-Head.docx"
@@ -66,7 +48,8 @@
       "CO0002-H8.docx"
     ],
     "CP1972": [
-      "CP1972 - definition.xlsx"
+      "CP1972 - definition.xlsx",
+      "CP1972-Head.docx"
     ]
   },
   "failed": [],
