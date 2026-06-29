@@ -758,11 +758,12 @@ async function buildCourseStructure() {
       if (hi < 0) hi = 0;
       const header = (rows[hi] || []).map((h) => String(h || '').trim().toLowerCase());
       const col = (name) => header.indexOf(name);
-      const ci = { code: col('course code'), type: col('course type'), sheets: col('number of sheets'), hours: col('hours of learning'), keywords: col('keywords'), description: col('description') };
+      const ci = { code: col('course code'), title: col('course title'), type: col('course type'), sheets: col('number of sheets'), hours: col('hours of learning'), keywords: col('keywords'), description: col('description') };
       for (const r of rows.slice(hi + 1)) {
         const code = ci.code >= 0 ? String(r[ci.code] || '').trim().toUpperCase() : '';
         if (!/^[A-Za-z]{2}\d{4}$/.test(code)) continue;
         fromSheet[code] = {
+          title: ci.title >= 0 ? String(r[ci.title] || '').trim() : '',
           type: ci.type >= 0 ? String(r[ci.type] || '').trim() : '',
           sheets: ci.sheets >= 0 ? String(r[ci.sheets] || '').trim() : '',
           hours: ci.hours >= 0 ? String(r[ci.hours] || '').trim() : '',
@@ -779,6 +780,7 @@ async function buildCourseStructure() {
   const out = {};
   for (const code of [...codes].sort()) {
     const s = fromSheet[code] || {}, e = existing[code] || {}, comp = byCode[code] || {};
+    const title = s.title || e.title || '';
     const keywords = (s.keywords && s.keywords.length) ? s.keywords : (Array.isArray(e.keywords) ? e.keywords : []);
     const description = s.description || e.description || '';
     const type = s.type || e.type || (comp.kind === 'pack' ? 'Worksheet pack' : 'Course');
@@ -786,7 +788,7 @@ async function buildCourseStructure() {
       : (comp.sheets != null ? comp.sheets : (e.sheets != null ? e.sheets : null));
     const hours = (s.hours && !isNaN(parseFloat(s.hours))) ? parseFloat(s.hours)
       : (comp.hours != null ? comp.hours : (e.hours != null ? e.hours : null));
-    out[code] = { type, sheets, hours, keywords, description };
+    out[code] = { title, type, sheets, hours, keywords, description };
   }
 
   const payload = {
@@ -810,9 +812,11 @@ async function buildCourseStructure() {
     for (const c of (db.courses || [])) {
       const m = out[String(c.id || c.code || '').toUpperCase()];
       if (!m) continue;
+      if (m.title) c.title = m.title;                           // card / hero title
       if (m.description) c.shortDescription = m.description;     // course-page hero text
       if (Array.isArray(m.keywords) && m.keywords.length) c.keywords = m.keywords;
       if (m.type) c.courseType = m.type;
+      if (m.hours != null) c.structureHours = m.hours;          // catalogue hours chip
       merged++;
     }
     fs.writeFileSync(COURSES_JSON, JSON.stringify(db, null, 2) + '\n');

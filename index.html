@@ -80,8 +80,12 @@
           const meta = structure[c.id] || structure[c.code] || {};
           c.keywords = Array.isArray(meta.keywords) ? meta.keywords : [];
           c.structureType = meta.type || (c.kind === 'pack' ? 'Worksheet pack' : 'Course');
-          /* The sheet's Description, when set, becomes the card's description. */
+          /* The sheet drives the card: Title, Description and Hours when set.
+             (Type/keywords above; the sync also folds these into courses.json so
+             the dashboard/viewer get them too.) */
+          if (meta.title) c.title = meta.title;
           if (meta.description) c.shortDescription = meta.description;
+          c.structureHours = (meta.hours != null && meta.hours !== '') ? Number(meta.hours) : null;
           /* Pre-build a lowercase search haystack so filtering is a cheap
              substring test: code, title, description, categories, keywords, type. */
           c._search = [
@@ -194,7 +198,10 @@
           opts = opts || {};
           const isPack = course.kind === 'pack';
           const screenCount = course.screens.length;
-          const courseHours = course.screens.reduce((sum, s) => sum + (Number(s.hours) || 0), 0);
+          /* Hours: the sheet's "Hours of learning" wins when set, else the sum
+             computed from the actual screens. */
+          const computedHours = course.screens.reduce((sum, s) => sum + (Number(s.hours) || 0), 0);
+          const courseHours = (course.structureHours != null) ? course.structureHours : computedHours;
           const missing = course.screens.filter((s) => s.missing).length;
           const ready = screenCount - missing;
           const progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + course.id) || '{}');
@@ -216,7 +223,7 @@
 
           card.innerHTML = `
             <div class="body">
-              ${(isPack || hasCert) ? `<div class="card-tags">${isPack ? '<span class="card-tag card-tag-pack">Pack</span>' : ''}${hasCert ? '<span class="card-tag card-tag-cert" title="Includes certificate of completion">★ Certificate</span>' : ''}</div>` : ''}
+              <div class="card-tags"><span class="card-tag${isPack ? ' card-tag-pack' : ''}">${escapeHtml(course.structureType || (isPack ? 'Worksheet pack' : 'Course'))}</span>${hasCert ? '<span class="card-tag card-tag-cert" title="Includes certificate of completion">★ Certificate</span>' : ''}</div>
               <span class="code">${escapeHtml(course.code)}</span>
               <h3><a class="card-title-link" href="dashboard.html?id=${course.id}">${escapeHtml(course.title)}</a></h3>
               <p>${escapeHtml(course.shortDescription)}</p>
