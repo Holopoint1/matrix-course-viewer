@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>My Account | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260617">
+  <link rel="stylesheet" href="assets/styles.css?v=20260629a">
 </head>
 <body>
   <section class="stats-hero account-hero">
@@ -96,6 +96,10 @@
       if (window.MatrixCMS) {
         data.courses = data.courses.map((c) => window.MatrixCMS.applyOverrides(c));
       }
+      /* Admin-uploaded covers live in the sync worker (non-fatal if unreachable). */
+      const COVER_BASE = 'https://matrix-course-sync.ad5046.workers.dev';
+      let coverManifest = {};
+      try { const cr = await fetch(COVER_BASE + '/covers'); if (cr.ok) { const cj = await cr.json(); coverManifest = (cj && cj.covers) || {}; } } catch (_) {}
       const stats = window.Gamify.getStats();
       const streak = window.Gamify.getStreak();
       const fmt = window.Gamify.formatDuration;
@@ -147,10 +151,16 @@
         const status = isComplete ? 'Completed' : (cs.completed > 0 ? 'In progress' : 'Not started');
         const statusCls = isComplete ? 'status-pill done' : (cs.completed > 0 ? 'status-pill todo' : 'status-pill missing');
 
+        const firstImage = course.screens.find((s) => s.type === 'image');
+        const cv = coverManifest[course.id];
+        let coverUrl = null;
+        if (cv) coverUrl = COVER_BASE + '/cover/' + encodeURIComponent(course.id) + '?v=' + (cv.v || '');
+        else if (firstImage && (firstImage.thumbnail || (!firstImage.missing && firstImage.src))) coverUrl = firstImage.thumbnail || firstImage.src;
+
         const row = document.createElement('div');
         row.className = 'account-course-row';
         row.innerHTML = `
-          <a class="stats-course-row-thumb" href="dashboard.html?id=${encodeURIComponent(course.id)}" style="background-image:url('content/${course.id}/opening.svg')"></a>
+          <a class="stats-course-row-thumb" href="dashboard.html?id=${encodeURIComponent(course.id)}"${coverUrl ? ` style="background-image:url('${coverUrl}')"` : ''}></a>
           <div class="stats-course-row-body">
             <div class="stats-course-row-head">
               <span class="code">${escapeHtml(course.code)}</span>

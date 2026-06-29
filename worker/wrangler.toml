@@ -10,6 +10,12 @@ account_id = "49264a52040e6ced3fd501fd9260477c"
 [triggers]
 crons = ["*/5 * * * *"]
 
+# Stores course cover images uploaded from the admin panel. Served back by the
+# Worker (GET /cover/<id>) and listed via GET /covers — see src/index.js.
+[[kv_namespaces]]
+binding = "COVERS"
+id = "523e1a8580d04302b57e7ba15427e1b7"
+
 [vars]
 GH_OWNER = "Holopoint1"
 GH_REPO = "matrix-course-viewer"

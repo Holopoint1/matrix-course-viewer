@@ -846,13 +846,22 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   position: relative;
   display: block;
   aspect-ratio: 16/9;
-  background: var(--primary-dark);
+  background-color: var(--primary-dark);
+  /* Default to a branded gradient. A course WITH a cover sets background-image
+     inline (overriding this); a course without keeps the gradient — so a card
+     is never a flat blank colour. */
+  background-image: linear-gradient(135deg, var(--primary), var(--primary-dark));
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid var(--border);
   overflow: hidden;
   text-decoration: none;
 }
+/* Cover-less courses: show the course code on the gradient instead of nothing. */
+.course-card .thumb-placeholder { display: flex; align-items: center; justify-content: center; text-align: center; }
+.course-card .thumb-ph { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 0.75rem; }
+.course-card .thumb-ph-eyebrow { font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700; }
+.course-card .thumb-ph-code { font-size: clamp(1.1rem, 3.5vw, 1.9rem); font-weight: 800; letter-spacing: 1.5px; color: rgba(255,255,255,0.95); }
 .course-card .thumb::after {
   content: "";
   position: absolute; inset: 0;
@@ -1377,6 +1386,8 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   background-position: center;
   border-radius: var(--r-sm);
   background-color: var(--primary-dark);
+  /* Gradient default so a course with no cover shows a branded tile, not blank. */
+  background-image: linear-gradient(135deg, var(--primary), var(--primary-dark));
 }
 .stats-course-row-head { display: flex; align-items: baseline; gap: 0.55rem; margin-bottom: 0.4rem; }
 .stats-course-row-head .code { font-size: 0.7rem; letter-spacing: 1.5px; color: var(--text-subtle); font-weight: 700; }

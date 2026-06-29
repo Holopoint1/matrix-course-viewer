@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <title>Matrix Course Viewer</title>
   <meta name="description" content="Matrix TSL Course Viewer - browser-based courses for engineering education.">
-  <link rel="stylesheet" href="assets/styles.css?v=20260623b">
+  <link rel="stylesheet" href="assets/styles.css?v=20260629a">
 </head>
 <body data-no-sidebar>
   <section class="catalog-hero">
@@ -55,6 +55,15 @@
         await window.Gamify.init();
         const res = await fetch('data/courses.json?t=' + Date.now());
         const data = await res.json();
+        /* Cover images uploaded via the admin panel live in the sync worker's
+           KV store. Non-fatal: if it's unreachable, cards fall back to a
+           placeholder. */
+        const COVER_BASE = 'https://matrix-course-sync.ad5046.workers.dev';
+        let coverManifest = {};
+        try {
+          const cr = await fetch(COVER_BASE + '/covers');
+          if (cr.ok) { const cj = await cr.json(); coverManifest = (cj && cj.covers) || {}; }
+        } catch (_) {}
         /* Include Supabase-only courses (added via Admin), then apply overrides. */
         if (window.MatrixCMS) {
           if (window.MatrixCMS.mergeCourses) data.courses = window.MatrixCMS.mergeCourses(data.courses);
@@ -149,7 +158,13 @@
           const card = document.createElement('article');
           card.className = 'course-card' + (isPack ? ' course-card-pack' : '');
           const firstImage = course.screens.find((s) => s.type === 'image');
-          const thumbSrc = (firstImage && (firstImage.thumbnail || (!firstImage.missing && firstImage.src))) || ('content/' + course.id + '/opening.svg');
+          /* Cover priority: admin-uploaded cover (worker) → first image screen →
+             none (branded placeholder). The old opening.svg guess often 404'd to
+             a blank box, so it's gone. */
+          const cv = coverManifest[course.id];
+          let coverUrl = null;
+          if (cv) coverUrl = COVER_BASE + '/cover/' + encodeURIComponent(course.id) + '?v=' + (cv.v || '');
+          else if (firstImage && (firstImage.thumbnail || (!firstImage.missing && firstImage.src))) coverUrl = firstImage.thumbnail || firstImage.src;
           /* SCORM filename: courses use SC* prefix, packs use their own CP* id */
           const scormName = isPack
             ? course.id + '-' + course.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
@@ -160,8 +175,9 @@
             : (completed ? 'Continue course' : 'Start course');
 
           card.innerHTML = `
-            <a class="thumb" href="dashboard.html?id=${course.id}" style="background-image:url('${thumbSrc}')" aria-label="Open ${escapeHtml(course.title)}">
+            <a class="thumb${coverUrl ? '' : ' thumb-placeholder'}" href="dashboard.html?id=${course.id}"${coverUrl ? ` style="background-image:url('${coverUrl}')"` : ''} aria-label="Open ${escapeHtml(course.title)}">
               ${isPack ? '<span class="thumb-tag thumb-tag-pack">Pack</span>' : (hasCert ? '<span class="thumb-tag" title="Includes certificate of completion">★ Certificate</span>' : '')}
+              ${coverUrl ? '' : `<span class="thumb-ph"><span class="thumb-ph-eyebrow">Matrix Learning</span><span class="thumb-ph-code">${escapeHtml(course.code || course.id)}</span></span>`}
             </a>
             <div class="body">
               <span class="code">${escapeHtml(course.code)}</span>
