@@ -413,6 +413,31 @@
     root.classList.add('ms-sidebar');
 
     wireExpanderAndReset(root, showCourseCard ? course.id : null);
+    keepNavScroll(root, course);
+  }
+
+  /* The sidebar's screen list (.ms-nav) scrolls independently, and clicking a
+     screen does a full page navigation that rebuilds the sidebar — which would
+     otherwise dump the learner back at the top of a long course. Remember the
+     scroll position per course (sessionStorage, so it's per tab/session) and put
+     it back after each render, so the menu stays put as they move through screens. */
+  function keepNavScroll(root, course) {
+    const nav = root.querySelector('.ms-nav');
+    if (!nav || !course) return;
+    const key = 'matrix-lms:navscroll:' + course.id;
+    try {
+      const saved = sessionStorage.getItem(key);
+      if (saved != null) nav.scrollTop = parseInt(saved, 10) || 0;
+    } catch (_) {}
+    let ticking = false;
+    nav.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        try { sessionStorage.setItem(key, String(nav.scrollTop)); } catch (_) {}
+        ticking = false;
+      });
+    });
   }
 
   async function renderCatalog(root) {
