@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-29T10:16:00.141Z",
+  "generatedAt": "2026-06-29T10:20:58.592Z",
   "summary": {
     "courses": 9,
     "screens": 203,
-    "displaying": 179,
-    "missing": 24,
+    "displaying": 191,
+    "missing": 12,
     "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 0
@@ -14,18 +14,6 @@
       "title": "Introduction to Microcontrollers",
       "stale": [],
       "missing": [
-        {
-          "title": "Performing calculations",
-          "asked": "CP4807-2.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Connection points",
-          "asked": "CP4807-3.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
         {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
@@ -86,18 +74,6 @@
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP2563 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
-          "title": "Performing calculations",
-          "asked": "CP4807-2.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Connection points",
-          "asked": "CP4807-3.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
           "expectedIn": "CP4807",
@@ -115,16 +91,6 @@
     "CP4807": {
       "title": "Introduction to Microcontrollers",
       "stale": [
-        {
-          "title": "Performing calculations",
-          "showing": "CP4807-2.docx",
-          "expectedIn": "CP4807"
-        },
-        {
-          "title": "Connection points",
-          "showing": "CP4807-3.docx",
-          "expectedIn": "CP4807"
-        },
         {
           "title": "Digital inputs",
           "showing": "CP4807-4.docx",
@@ -151,18 +117,6 @@
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
-          "title": "Performing calculations",
-          "asked": "CP4807-2.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Connection points",
-          "asked": "CP4807-3.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
           "expectedIn": "CP4807",
@@ -182,18 +136,6 @@
       "stale": [],
       "missing": [
         {
-          "title": "Performing calculations",
-          "asked": "CP4807-2.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Connection points",
-          "asked": "CP4807-3.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
           "expectedIn": "CP4807",
@@ -207,18 +149,6 @@
       "stale": [],
       "missing": [
         {
-          "title": "Performing calculations",
-          "asked": "CP4807-2.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Connection points",
-          "asked": "CP4807-3.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
           "expectedIn": "CP4807",
@@ -231,18 +161,6 @@
       "title": "Microcontrollers for T-Levels",
       "stale": [],
       "missing": [
-        {
-          "title": "Performing calculations",
-          "asked": "CP4807-2.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Connection points",
-          "asked": "CP4807-3.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
         {
           "title": "Digital inputs",
           "asked": "CP4807-4.docx",
@@ -271,7 +189,6 @@
       "CP4807-TN.docx",
       "CP4807-prep.docx",
       "CP4807-head.docx",
-      "CP4807-2 (1).docx",
       "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
       "summary-report.txt",
       "imsmanifest.xml",
@@ -310,5 +227,10 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CP4807",
+      "name": "CP4807-2 (1).docx"
+    }
+  ]
 }
