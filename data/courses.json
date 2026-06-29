@@ -4,7 +4,7 @@
       "id": "CO0002",
       "code": "CO0002",
       "kind": "course",
-      "title": "Introduction to Microcontrollers",
+      "title": "Introduction to microcontrollers",
       "shortDescription": "A comprehensive introduction to microcontrollers and embedded systems using Flowcode. Builds from first principles through inputs, outputs and programming to complete working projects.",
       "estimatedHours": 99.7,
       "certificate": {
@@ -513,13 +513,14 @@
         "fundamentals",
         "curriculum"
       ],
-      "courseType": "Course"
+      "courseType": "Course",
+      "structureHours": 99.7
     },
     {
       "id": "CP0507",
       "code": "CP0507",
       "kind": "pack",
-      "title": "Motors and Microcontrollers",
+      "title": "Motors and microcontrollers",
       "shortDescription": "A worksheet pack on driving and controlling motors with microcontrollers — DC, stepper and servo motors, motor-control circuits and actuator projects.",
       "estimatedHours": 11,
       "certificate": {
@@ -614,13 +615,14 @@
         "worksheets",
         "pack"
       ],
-      "courseType": "Worksheet pack"
+      "courseType": "Worksheet pack",
+      "structureHours": 10.6
     },
     {
       "id": "CP1972",
       "code": "CP1972",
       "kind": "pack",
-      "title": "Sensors and Microcontrollers",
+      "title": "Sensors and microcontrollers",
       "shortDescription": "A worksheet pack exploring how microcontrollers read the world through sensors — analog and digital inputs, temperature and light sensing, and data acquisition.",
       "estimatedHours": 22,
       "certificate": {
@@ -775,13 +777,14 @@
         "worksheets",
         "pack"
       ],
-      "courseType": "Worksheet pack"
+      "courseType": "Worksheet pack",
+      "structureHours": 22.6
     },
     {
       "id": "CP2563",
       "code": "CP2563",
       "kind": "pack",
-      "title": "Microcontrollers for T-Levels",
+      "title": "Microcontrollers for T levels",
       "shortDescription": "A curriculum worksheet pack supporting the T-Level microcontrollers units, with ready-to-use embedded systems exercises for the classroom.",
       "estimatedHours": 39,
       "certificate": {
@@ -1035,13 +1038,14 @@
         "engineering",
         "worksheets"
       ],
-      "courseType": "Worksheet pack"
+      "courseType": "Worksheet pack",
+      "structureHours": 39
     },
     {
       "id": "CP4807",
       "code": "CP4807",
       "kind": "pack",
-      "title": "Introduction to Microcontrollers",
+      "title": "Introduction to microcontrollers",
       "shortDescription": "A curriculum worksheet pack introducing microcontrollers and embedded systems from the ground up — beginner-friendly exercises covering the core fundamentals.",
       "estimatedHours": 17,
       "certificate": {
@@ -1182,7 +1186,8 @@
         "worksheets",
         "pack"
       ],
-      "courseType": "Worksheet pack"
+      "courseType": "Worksheet pack",
+      "structureHours": 17
     },
     {
       "id": "CP7244",
@@ -1432,13 +1437,14 @@
         "curriculum pack",
         "worksheets"
       ],
-      "courseType": "Worksheet pack"
+      "courseType": "Worksheet pack",
+      "structureHours": 38
     },
     {
       "id": "CO0001",
       "code": "CO0001",
       "kind": "course",
-      "title": "Flowcode and E-blocks 3 CPD Course",
+      "title": "FC E-blocks CPD course",
       "shortDescription": "A continuing professional development course that brings teachers and trainers up to speed with Flowcode and the E-blocks 3 hardware. Work through flowchart-based programming and hands-on embedded exercises ready to take straight back into the classroom.",
       "estimatedHours": 5.4,
       "certificate": {
@@ -1764,7 +1770,8 @@
         "introduction",
         "flowchart programming"
       ],
-      "courseType": "Course"
+      "courseType": "Course",
+      "structureHours": 5.4
     },
     {
       "id": "CO0003",
@@ -2137,13 +2144,14 @@
         "maintenance",
         "embedded systems"
       ],
-      "courseType": "Course"
+      "courseType": "Course",
+      "structureHours": 44.5
     },
     {
       "id": "CO0004",
       "code": "CO0004",
       "kind": "course",
-      "title": "Microcontrollers for T-Levels",
+      "title": "Microcontrollers for T levels",
       "shortDescription": "A full microcontrollers and embedded systems course aligned to T-Level engineering qualifications, taking students from the basics through to applied programming projects.",
       "estimatedHours": 44.5,
       "certificate": {
@@ -2508,7 +2516,8 @@
         "electronics",
         "curriculum"
       ],
-      "courseType": "Course"
+      "courseType": "Course",
+      "structureHours": 44.5
     }
   ]
 }
