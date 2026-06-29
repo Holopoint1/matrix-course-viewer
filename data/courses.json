@@ -1251,7 +1251,7 @@
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0002/CO0002-Equip.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-Equip.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-Equip.htm",
           "v": "b0855aca1c",
           "equipment": "Flowcode / E-blocks3"
         },

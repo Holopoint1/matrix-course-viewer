@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T08:40:28.125Z",
+  "generatedAt": "2026-06-29T08:44:29.358Z",
   "summary": {
     "courses": 9,
     "screens": 204,
     "displaying": 185,
     "missing": 19,
-    "autofixed": 5,
+    "autofixed": 4,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -123,21 +123,6 @@
         }
       ],
       "autofixed": []
-    },
-    "CO0001": {
-      "title": "Flowcode and E-blocks 3 CPD Course",
-      "stale": [],
-      "missing": [],
-      "autofixed": [
-        {
-          "title": "Equipment",
-          "asked": "CO0002-Equip.HTM",
-          "used": "CO0002-Equip.htm",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        }
-      ]
     },
     "CO0003": {
       "title": "Digital Techniques for Aviation Technicians",
