@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T08:35:57.948Z",
+  "generatedAt": "2026-06-29T08:39:05.296Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 184,
-    "missing": 20,
-    "autofixed": 3,
+    "displaying": 185,
+    "missing": 19,
+    "autofixed": 5,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -15,19 +15,30 @@
       "stale": [],
       "missing": [
         {
-          "title": "Welcome",
-          "asked": "CO0002 - welcome.htm",
+          "title": "Scheme of work",
+          "asked": "CO0002 definition.xlsx",
           "expectedIn": "CO0002",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0002 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "reason": "The file name contains “definition”, which the sync never publishes (those are the control sheets). Rename it without that word."
+        }
+      ],
+      "autofixed": [
+        {
+          "title": "Welcome",
+          "asked": "CO0002-welcome.htm",
+          "used": "CO0002-welcome.HTM",
+          "reasons": [
+            "A small spelling/spacing difference, matched automatically."
+          ]
         },
         {
           "title": "Learning objectives",
-          "asked": "CO0002 - LO.htm",
-          "expectedIn": "CO0002",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0002 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "asked": "CO0002-LO.htm",
+          "used": "CO0002-LO.HTM",
+          "reasons": [
+            "A small spelling/spacing difference, matched automatically."
+          ]
         }
-      ],
-      "autofixed": []
+      ]
     },
     "CP0507": {
       "title": "Motors and Microcontrollers",
@@ -273,20 +284,19 @@
       "CO0001 - content.docx"
     ],
     "CO0002": [
+      "CO0002 scheme of work.xlsx",
+      "CO0002-A3.htm",
+      "CO0002-H9.htm",
+      "CO0002-marking scheme.htm",
       "CO0002-Equip.htm",
-      "CO0002-welcome.HTM",
-      "CO0002-LO.HTM",
       "Now try the worksheets.HTM",
       "Other resources.HTM",
-      "CO0002-SOW.htm",
       "CO0002-H1.docx",
       "Now try the worksheets.docx",
       "CO0002 - Equip.docx",
       "bits.docx",
-      "CO0002-H8.docx",
-      "CO0002-H9.htm",
-      "CO0002-marking scheme.htm",
-      "CO0002-A3.htm"
+      "CO0002 - SOW.htm",
+      "CO0002-H8.docx"
     ],
     "CP7244": [
       "CP7244 - definition.docx",
@@ -296,14 +306,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0002",
-      "name": "CO0002 – LO.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002 – welcome.htm"
-    }
-  ]
+  "removed": []
 }

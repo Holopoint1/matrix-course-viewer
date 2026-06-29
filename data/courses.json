@@ -27,29 +27,29 @@
           "type": "html",
           "title": "Welcome",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - welcome.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - welcome.htm",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0002/CO0002-welcome.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-welcome.htm",
+          "v": "9acb0aae7d",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s3",
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - LO.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - LO.htm",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0002/CO0002-LO.HTM",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-LO.htm",
+          "v": "8a0fef16eb",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s4",
           "type": "html",
           "title": "Scheme of work",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 - SOW.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - SOW.htm",
-          "v": "7af253b2a0",
+          "src": "content/CO0002/CO0002-SOW.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-SOW.htm",
+          "v": "dcfe2f5d36",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -57,10 +57,10 @@
           "type": "sheet",
           "title": "Scheme of work",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 scheme of work.xlsx",
-          "path": "/CO0002 - Introduction to microcontrollers/CO0002 scheme of work.xlsx",
-          "v": "3a7fe0413d",
-          "equipment": "Flowcode / E-blocks3"
+          "src": "content/CO0002/CO0002 definition.xlsx",
+          "path": "/CO0002 - Introduction to microcontrollers/CO0002 definition.xlsx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
         },
         {
           "id": "CO0002-s6",
@@ -171,7 +171,7 @@
           "hours": 2,
           "src": "content/CO0002/CO0002-H1.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H1.htm",
-          "v": "9151f1369c",
+          "v": "ca50336e79",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1416,7 +1416,7 @@
           "hours": 0.2,
           "src": "content/CO0002/CO0002-H1.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H1.htm",
-          "v": "9151f1369c",
+          "v": "ca50336e79",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1587,7 +1587,7 @@
           "hours": 2,
           "src": "content/CO0002/CO0002-H1.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-H1.htm",
-          "v": "9151f1369c",
+          "v": "ca50336e79",
           "equipment": "Flowcode / E-blocks3"
         },
         {
