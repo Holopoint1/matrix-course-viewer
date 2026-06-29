@@ -20,6 +20,7 @@
     printBtn: document.getElementById('print-btn'),
     downloadBtn: document.getElementById('download-btn'),
     openGoogleBtn: document.getElementById('open-google-btn'),
+    downloadWorksheetsBtn: document.getElementById('download-worksheets-btn'),
     downloadCourseBtn: document.getElementById('download-course-btn'),
     optionsBtn: document.getElementById('options-btn'),
     optionsDropdown: document.getElementById('options-dropdown'),
@@ -204,6 +205,16 @@
         els.downloadCourseBtn.hidden = true;
       } else {
         els.downloadCourseBtn.addEventListener('click', () => downloadCourseZip(course, els.downloadCourseBtn));
+      }
+    }
+    if (els.downloadWorksheetsBtn) {
+      /* Compile every Word-doc worksheet into ONE .docx. Hidden when the course
+         has no document screens. */
+      const anyDocs = course.screens.some((s) => effectiveType(s) === 'document' && !s.missing && !/^https?:/i.test(s.src || ''));
+      if (!anyDocs) {
+        els.downloadWorksheetsBtn.hidden = true;
+      } else {
+        els.downloadWorksheetsBtn.addEventListener('click', () => downloadAllWorksheets(course, els.downloadWorksheetsBtn));
       }
     }
     /* "Options" dropdown — collapses the secondary actions (open in viewer,
@@ -1525,6 +1536,60 @@
       setTimeout(() => URL.revokeObjectURL(burl), 8000);
     } catch (_) {
       triggerDownload(url, name);                              // best-effort direct link
+    }
+  }
+
+  /* ---------- Compile all worksheets into ONE .docx ----------
+     Merge every Word-doc screen in the course into a single document (page break
+     between each), preserving the original Word formatting, media, styles and
+     numbering. Uses docx-merger (lazy-loaded; it bundles its own JSZip, so it
+     never clashes with the page's JSZip). */
+  let _docxMergerPromise = null;
+  function loadDocxMerger() {
+    if (window.DocxMerger) return Promise.resolve(window.DocxMerger);
+    if (_docxMergerPromise) return _docxMergerPromise;
+    _docxMergerPromise = new Promise((resolve, reject) => {
+      const sc = document.createElement('script');
+      sc.src = 'https://cdn.jsdelivr.net/npm/docx-merger@1.2.2/dist/docx-merger.js';
+      sc.onload = () => (window.DocxMerger ? resolve(window.DocxMerger) : reject(new Error('merge library unavailable')));
+      sc.onerror = () => { _docxMergerPromise = null; reject(new Error('could not load the merge library')); };
+      document.head.appendChild(sc);
+    });
+    return _docxMergerPromise;
+  }
+  async function downloadAllWorksheets(course, btn) {
+    /* Word-doc screens in course order, de-duped by file (a doc reused across
+       screens is included once); skip missing/external. */
+    const seen = new Set();
+    const docs = [];
+    for (const s of course.screens) {
+      if (effectiveType(s) !== 'document' || s.missing || /^https?:/i.test(s.src || '')) continue;
+      if (seen.has(s.src)) continue;
+      seen.add(s.src);
+      docs.push(s);
+    }
+    if (!docs.length) { alert('This course has no worksheet documents to compile.'); return; }
+    const restore = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.innerHTML = '&#8987; Compiling ' + docs.length + ' worksheets…'; }
+    try {
+      const DocxMerger = await loadDocxMerger();
+      const buffers = [];
+      for (const s of docs) {
+        const res = await fetch(vsrc(s));
+        if (!res.ok) throw new Error('couldn’t fetch ' + (filename(s.src) || s.src));
+        buffers.push(await res.arrayBuffer());
+      }
+      const merged = new DocxMerger({ pageBreak: true }, buffers);
+      merged.save('blob', (blob) => {
+        const name = (course.code || course.id || 'course') + ' - worksheets.docx';
+        const url = URL.createObjectURL(blob);
+        triggerDownload(url, name);
+        setTimeout(() => URL.revokeObjectURL(url), 8000);
+        if (btn) { btn.disabled = false; btn.innerHTML = restore; }
+      });
+    } catch (e) {
+      if (btn) { btn.disabled = false; btn.innerHTML = restore; }
+      alert('Could not compile the worksheets: ' + ((e && e.message) || e));
     }
   }
 
