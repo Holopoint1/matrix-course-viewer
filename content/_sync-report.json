@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T11:19:27.515Z",
+  "generatedAt": "2026-06-29T11:20:56.067Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -106,10 +106,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CP7244",
-      "name": "CP7244-head.docx"
-    }
-  ]
+  "removed": []
 }
