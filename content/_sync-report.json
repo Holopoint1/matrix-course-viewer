@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-29T09:06:05.525Z",
+  "generatedAt": "2026-06-29T09:10:48.865Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 184,
-    "missing": 20,
-    "autofixed": 0,
+    "displaying": 186,
+    "missing": 18,
+    "autofixed": 2,
     "downloadFailed": 0,
     "collisions": 0
   },
@@ -97,21 +97,25 @@
     "CO0003": {
       "title": "Digital Techniques for Aviation Technicians",
       "stale": [],
-      "missing": [
+      "missing": [],
+      "autofixed": [
         {
           "title": "Welcome",
           "asked": "CO0003-welcome.htm",
-          "expectedIn": "CO0003",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0003 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "used": "CO0003-welcome.HTM",
+          "reasons": [
+            "A small spelling/spacing difference, matched automatically."
+          ]
         },
         {
           "title": "Learning objectives",
           "asked": "CO0003-LO.htm",
-          "expectedIn": "CO0003",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0003 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "used": "CO0003-LO.HTM",
+          "reasons": [
+            "A small spelling/spacing difference, matched automatically."
+          ]
         }
-      ],
-      "autofixed": []
+      ]
     },
     "CO0004": {
       "title": "Microcontrollers for T-Levels",
@@ -226,8 +230,6 @@
       "CP4807 - Introduction to microcontrollers 15 07 25.docx"
     ],
     "CO0003": [
-      "CO0003 – LO.HTM",
-      "CO0003 – welcome.HTM",
       "opening.png"
     ],
     "CO0001": [
@@ -262,5 +264,14 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CO0003",
+      "name": "CO0003 – LO.HTM"
+    },
+    {
+      "code": "CO0003",
+      "name": "CO0003 – welcome.HTM"
+    }
+  ]
 }
