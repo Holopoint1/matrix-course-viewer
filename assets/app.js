@@ -19,6 +19,7 @@
     nextBtn: document.getElementById('next-btn'),
     printBtn: document.getElementById('print-btn'),
     downloadBtn: document.getElementById('download-btn'),
+    openGoogleBtn: document.getElementById('open-google-btn'),
     downloadCourseBtn: document.getElementById('download-course-btn'),
     completeBtn: document.getElementById('complete-btn')
   };
@@ -1390,11 +1391,39 @@
      printed/downloaded, so those buttons go disabled (never hidden — the bar stays
      consistent from screen to screen). */
   const PRINTABLE_TYPES = ['document', 'html', 'image', 'pdf', 'powerpoint', 'spreadsheet'];
+  /* Build an "open the exact original in Google" target from the Drive link the
+     sync stamped on the screen (screen.webUrl). Office files open in the matching
+     Google editor (faithful render, and editable when the Drive file allows it);
+     returns null when there's no Drive link or the type isn't a Google-app type. */
+  function googleOpen(screen) {
+    const wu = (screen && screen.webUrl) || '';
+    if (!wu || screen.missing) return null;
+    const id = (wu.match(/\/d\/([^/?#]+)/) || [])[1];
+    const t = effectiveType(screen);
+    if (id && t === 'spreadsheet') return { url: 'https://docs.google.com/spreadsheets/d/' + id + '/edit', label: 'Open in Google Sheets' };
+    if (id && t === 'document') return { url: 'https://docs.google.com/document/d/' + id + '/edit', label: 'Open in Google Docs' };
+    if (id && t === 'powerpoint') return { url: 'https://docs.google.com/presentation/d/' + id + '/edit', label: 'Open in Google Slides' };
+    return null;
+  }
   function updateScreenActions(screen) {
     const isUrl = /^https?:/i.test(screen.src || '');
     const t = effectiveType(screen);
     const canDownload = !!screen.src && !isUrl && !screen.missing;
     const canPrint = !screen.missing && !isUrl && PRINTABLE_TYPES.indexOf(t) >= 0;
+    /* Open-in-Google: only for office screens that carry a Drive link. It's an
+       extra capability (not a core control), so it's hidden when not applicable. */
+    if (els.openGoogleBtn) {
+      const g = googleOpen(screen);
+      if (g) {
+        els.openGoogleBtn.href = g.url;
+        els.openGoogleBtn.innerHTML = '&#8599; ' + g.label;
+        els.openGoogleBtn.title = g.label + ' (new tab)';
+        els.openGoogleBtn.hidden = false;
+      } else {
+        els.openGoogleBtn.hidden = true;
+        els.openGoogleBtn.removeAttribute('href');
+      }
+    }
     if (els.downloadBtn) {
       els.downloadBtn.disabled = !canDownload;
       els.downloadBtn.title = canDownload

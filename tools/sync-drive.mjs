@@ -31,6 +31,7 @@ const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
    viewer can cache-bust each file by its bytes (a same-name Drive edit gets a new
    ?v= and is never served stale). Plus sync issues surfaced to the admin report. */
 const CONTENT_VERSIONS = {};
+const DRIVE_LINKS = {};   // content/<code>/<name> -> Drive webViewLink (for "Open in Google …")
 const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [] };
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
 /* Google-native docs can't be downloaded directly, but they CAN be exported to
@@ -78,7 +79,7 @@ async function listChildren(folderId) {
   do {
     const res = await drive.files.list({
       q: `'${folderId}' in parents and trashed=false`,
-      fields: 'nextPageToken, files(id,name,mimeType,md5Checksum)',
+      fields: 'nextPageToken, files(id,name,mimeType,md5Checksum,webViewLink)',
       pageSize: 1000, pageToken,
       supportsAllDrives: true, includeItemsFromAllDrives: true,
     });
@@ -177,6 +178,7 @@ async function downloadPhase() {
       const name = exportName(f);
       const dest = path.join(CONTENT_DIR, code, name);
       const rel = 'content/' + code + '/' + name;
+      if (f.webViewLink) DRIVE_LINKS[rel] = f.webViewLink;   // exact "Open in Google …" target
       // real files: md5-skip when unchanged. Google-native files have no md5, so always re-export (keeps edits fresh).
       if (!GOOGLE_EXPORT[f.mimeType] && f.md5Checksum && f.md5Checksum === localMd5(dest)) {
         skipped++; CONTENT_VERSIONS[rel] = f.md5Checksum.slice(0, 10); continue;
@@ -429,6 +431,7 @@ function rowsToScreens(rows, code, driveFiles = {}) {
     const screen = { id: `${code}-s${i + 1}`, type, title, hours, src };
     if (drivePath) screen.path = drivePath;
     const _v = CONTENT_VERSIONS[src]; if (_v) screen.v = _v;   // per-file content hash → viewer cache-bust
+    const _wu = DRIVE_LINKS[src]; if (_wu) screen.webUrl = _wu;   // Drive link → "Open in Google Docs/Sheets"
     if (equipment) screen.equipment = equipment;
     // flag local files that don't exist on disk (so we can see gaps) — but first
     // try to heal to an identically-named file already published elsewhere.
@@ -618,7 +621,12 @@ async function buildDraftFromFiles(folder, code, db, byId) {
   if (!opening && images.length && images.length <= 3) opening = images.slice().sort((a, b) => a.name.localeCompare(b.name))[0];
   const ordered = (opening ? [opening] : []).concat(content);
   if (!ordered.length) return false;                            // nothing screen-worthy → not a course
-  const screens = ordered.map((f, i) => ({ id: `${code}-s${i + 1}`, type: f.type, title: titleFromFile(f.name, code), hours: 0, src: `content/${code}/${f.name}` }));
+  const screens = ordered.map((f, i) => {
+    const src = `content/${code}/${f.name}`;
+    const s = { id: `${code}-s${i + 1}`, type: f.type, title: titleFromFile(f.name, code), hours: 0, src };
+    if (DRIVE_LINKS[src]) s.webUrl = DRIVE_LINKS[src];
+    return s;
+  });
   const title = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim() || code;
   const course = { id: code, code, kind: 'course', title, shortDescription: '', estimatedHours: 0, certificate: { enabled: false }, screens, categories: [], draft: true, _source: 'auto-files' };
   if (byId[code] != null) db.courses[byId[code]] = course; else { byId[code] = db.courses.length; db.courses.push(course); }
