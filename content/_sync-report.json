@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T10:50:59.286Z",
+  "generatedAt": "2026-06-29T10:55:57.014Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -98,10 +98,5 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CP4807",
-      "name": "CO4807-4.docx"
-    }
-  ]
+  "removed": []
 }
