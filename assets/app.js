@@ -589,7 +589,6 @@
           referrerpolicy="strict-origin-when-cross-origin"></iframe>
       </div>
       <div class="stage-youtube-actions">
-        <a class="btn btn-secondary" href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">↗ Open on YouTube</a>
         <button type="button" class="btn btn-secondary" data-action="fullscreen">⛶ Fullscreen</button>
       </div>
     `;
@@ -1415,15 +1414,21 @@
      printed/downloaded, so those buttons go disabled (never hidden — the bar stays
      consistent from screen to screen). */
   const PRINTABLE_TYPES = ['document', 'html', 'image', 'pdf', 'powerpoint', 'spreadsheet'];
-  /* Build an "open the exact original in Google" target from the Drive link the
-     sync stamped on the screen (screen.webUrl). Office files open in the matching
-     Google editor (faithful render, and editable when the Drive file allows it);
-     returns null when there's no Drive link or the type isn't a Google-app type. */
-  function googleOpen(screen) {
-    const wu = (screen && screen.webUrl) || '';
-    if (!wu || screen.missing) return null;
-    const id = (wu.match(/\/d\/([^/?#]+)/) || [])[1];
+  /* Build an "open the original externally" target for a screen:
+       • YouTube → the video on youtube.com
+       • Office files (with a Drive link) → the matching Google editor (Sheets /
+         Docs / Slides) — faithful, and editable when the Drive file allows it.
+     Returns null when there's nothing sensible to open externally. */
+  function externalOpen(screen) {
+    if (!screen || screen.missing) return null;
     const t = effectiveType(screen);
+    if (t === 'youtube') {
+      const yid = extractYoutubeId(screen.src);
+      return yid ? { url: 'https://www.youtube.com/watch?v=' + yid, label: 'Open in YouTube' } : null;
+    }
+    const wu = screen.webUrl || '';
+    if (!wu) return null;
+    const id = (wu.match(/\/d\/([^/?#]+)/) || [])[1];
     if (id && t === 'spreadsheet') return { url: 'https://docs.google.com/spreadsheets/d/' + id + '/edit', label: 'Open in Google Sheets' };
     if (id && t === 'document') return { url: 'https://docs.google.com/document/d/' + id + '/edit', label: 'Open in Google Docs' };
     if (id && t === 'powerpoint') return { url: 'https://docs.google.com/presentation/d/' + id + '/edit', label: 'Open in Google Slides' };
@@ -1434,10 +1439,11 @@
     const t = effectiveType(screen);
     const canDownload = !!screen.src && !isUrl && !screen.missing;
     const canPrint = !screen.missing && !isUrl && PRINTABLE_TYPES.indexOf(t) >= 0;
-    /* Open-in-Google: only for office screens that carry a Drive link. It's an
-       extra capability (not a core control), so it's hidden when not applicable. */
+    /* "Open in …" — opens the original externally: YouTube videos on youtube.com,
+       Office files in the matching Google editor. An extra capability (not a core
+       control), so it's hidden when not applicable. */
     if (els.openGoogleBtn) {
-      const g = googleOpen(screen);
+      const g = externalOpen(screen);
       if (g) {
         els.openGoogleBtn.href = g.url;
         els.openGoogleBtn.innerHTML = '&#8599; ' + g.label;
