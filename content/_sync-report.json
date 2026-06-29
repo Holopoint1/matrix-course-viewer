@@ -1,357 +1,64 @@
 {
-  "generatedAt": "2026-06-25T14:36:06.404Z",
+  "generatedAt": "2026-06-29T12:41:31.495Z",
   "summary": {
     "courses": 9,
-    "screens": 200,
-    "displaying": 181,
-    "missing": 19,
-    "autofixed": 8,
+    "screens": 210,
+    "displaying": 210,
+    "missing": 0,
+    "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 1
   },
-  "courses": {
-    "CO0002": {
-      "title": "Introduction to Microcontrollers",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Floats and INTs",
-          "asked": "CP1972-6.docx",
-          "expectedIn": "CP1972",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP1972 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": [
-        {
-          "title": "Welcome",
-          "asked": "CO0002 - welcome.htm",
-          "used": "CO0002 – welcome.htm",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0002 - LO.htm",
-          "used": "CO0002 – LO.htm",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        }
-      ]
-    },
-    "CP0507": {
-      "title": "Motors and Microcontrollers",
-      "stale": [
-        {
-          "title": "Preparation",
-          "showing": "CP0507-Prep.docx",
-          "expectedIn": "CP0507"
-        },
-        {
-          "title": "Contents",
-          "showing": "CP0507-Cont.docx",
-          "expectedIn": "CP0507"
-        }
-      ],
-      "missing": [],
-      "autofixed": []
-    },
-    "CP1972": {
-      "title": "Sensors and Microcontrollers",
-      "stale": [
-        {
-          "title": "Preparation",
-          "showing": "CP1972-Prep.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Contents",
-          "showing": "CP1972-Cont.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 6 — Floats and INTs",
-          "showing": "CP1972-6.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 7 — Thermocouples",
-          "showing": "CP1972-7.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 8 — Flow sensors",
-          "showing": "CP1972-8.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 9 — Compressive force sensors",
-          "showing": "CP1972-9.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 10 — Cantilever strain sensors",
-          "showing": "CP1972-10.docx",
-          "expectedIn": "CP1972"
-        },
-        {
-          "title": "Worksheet 11 — Pressure sensors",
-          "showing": "CP1972-11.docx",
-          "expectedIn": "CP1972"
-        }
-      ],
-      "missing": [],
-      "autofixed": []
-    },
-    "CP2563": {
-      "title": "Microcontrollers for T-Levels",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Title page",
-          "asked": "CP2563-head.docx",
-          "expectedIn": "CP2563",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP2563 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Contents",
-          "asked": "CP2563-cont.docx",
-          "expectedIn": "CP2563",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP2563 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Teacher notes",
-          "asked": "TN-1.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    },
-    "CP7244": {
-      "title": "Digital Techniques for Aviation Technicians",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Title page",
-          "asked": "CP7244-head.docx",
-          "expectedIn": "CP7244",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Contents",
-          "asked": "CP7244-cont.docx",
-          "expectedIn": "CP7244",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP7244 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Teacher notes",
-          "asked": "TN-1.docx",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    },
-    "CO0001": {
-      "title": "Flowcode and E-blocks 3 CPD Course",
-      "stale": [],
-      "missing": [],
-      "autofixed": [
-        {
-          "title": "Introduction to microcontrollers",
-          "asked": "CO0001 – opening.png",
-          "used": "CO0001 - opening.png",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
-        {
-          "title": "Equipment",
-          "asked": "CO0002 – Equip.HTM",
-          "used": "CO0002 - Equip.htm",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0002 – LO.HTM",
-          "used": "CO0002 – LO.htm",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        },
-        {
-          "title": "Other resources",
-          "asked": "Other resources.HTM",
-          "used": "Other resources.htm",
-          "reasons": [
-            "A small spelling/spacing difference, matched automatically."
-          ]
-        }
-      ]
-    },
-    "CO0003": {
-      "title": "Digital Techniques for Aviation Technicians",
-      "stale": [],
-      "missing": [],
-      "autofixed": [
-        {
-          "title": "Welcome",
-          "asked": "CO0003 - welcome.htm",
-          "used": "CO0003 – welcome.HTM",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0003 - LO.htm",
-          "used": "CO0003 – LO.HTM",
-          "reasons": [
-            "Hyphen vs en-dash “–”: Word/Drive autocorrect quietly swaps a normal hyphen \"-\" for a longer en-dash you can’t tell apart by eye."
-          ]
-        }
-      ]
-    },
-    "CO0004": {
-      "title": "Microcontrollers for T-Levels",
-      "stale": [],
-      "missing": [
-        {
-          "title": "Introduction to microcontrollers",
-          "asked": "CO0004 - opening.jpg",
-          "expectedIn": "CO0004",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Welcome",
-          "asked": "CO0004 - welcome.html",
-          "expectedIn": "CO0004",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Learning objectives",
-          "asked": "CO0004 - LO.html",
-          "expectedIn": "CO0004",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Equipment",
-          "asked": "CO0004 - Equip.html",
-          "expectedIn": "CO0004",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Microcontroller basics 1",
-          "asked": "Microcontroller basics 1 24 02 26.pptx",
-          "expectedIn": "CO0004",
-          "reason": "No file by this name in the CO0004 folder — but a matching file is in the CO0002 folder. Move it there, or point the row at the right folder."
-        },
-        {
-          "title": "Microcontroller basics 2",
-          "asked": "Microcontroller basics 2 24 02 26.pptx",
-          "expectedIn": "CO0004",
-          "reason": "No file by this name in the CO0004 folder — but a matching file is in the CO0002 folder. Move it there, or point the row at the right folder."
-        },
-        {
-          "title": "Homework 1",
-          "asked": "CP4807-H1.htm",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Homework 2",
-          "asked": "CP4807-H2.htm",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Homework 3",
-          "asked": "CP4807-H3.htm",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Assessment 1",
-          "asked": "CP4807-A1.htm",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Assessment 2",
-          "asked": "CP4807-A2.htm",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "title": "Homework 6",
-          "asked": "CP4807-H6.htm",
-          "expectedIn": "CP4807",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP4807 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    }
-  },
+  "courses": {},
   "unusedMedia": {
-    "ZZ9999": [
-      "complete.html",
-      "assessment.html",
-      "objectives.html",
-      "welcome.html",
-      "opening.svg"
-    ],
-    "CP2563": [
-      "CP2563_definition.xlsx",
-      "CP2563 - definition.docx",
-      "CP2563 - Content.docx"
-    ],
-    "CO0004": [
-      "opening.png"
+    "CP0507": [
+      "CP0507-Head.docx"
     ],
     "CP4807": [
-      "CP4807-TN.docx",
-      "CO4807-4.docx",
-      "CP4807 - introduction to microcontrollers image test.docx",
+      "CP4807-head.docx",
+      "CP4807 - definition.xlsx",
       "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx",
       "summary-report.txt",
       "imsmanifest.xml",
       "blocks-metadata.json",
-      "scorm-readiness.txt",
-      "CP4807-0.docx",
-      "CP4807-head.docx",
-      "CP4807-Cont.docx",
-      "CP4807 - Introduction to microcontrollers 15 07 25.docx"
-    ],
-    "CO0003": [
-      "opening.png"
+      "scorm-readiness.txt"
     ],
     "CO0001": [
-      "CO0001 – CPD objectives.docx",
+      "CO002-SOW.xlsx",
+      "CO0001 – First lessons.HTM",
+      "test.docx",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
     ],
     "CO0002": [
-      "CO0002 - Equip.docx",
-      "bits.docx",
-      "CO0002-H8.docx",
+      "CO0002-LO.docx",
+      "CO0002-A3.htm",
       "CO0002-H9.htm",
       "CO0002-marking scheme.htm",
-      "CO0002-A3.htm"
+      "Now try the worksheets.htm",
+      "CO002-SOW.xlsx",
+      "CO0002-welcome.HTM",
+      "CO0002-LO.HTM",
+      "Now try the worksheets.HTM",
+      "Other resources.HTM",
+      "CO0002-H1.docx",
+      "Now try the worksheets.docx",
+      "CO0002 - Equip.docx",
+      "CO0002 - Equip.htm",
+      "bits.docx",
+      "CO0002 - SOW.htm",
+      "CO0002-H8.docx"
     ],
-    "CP7244": [
-      "CP7244 - definition.docx",
-      "CP7244 - Digital Techniques for Aviation 13 05 26.docx"
+    "CP1972": [
+      "CP1972 - definition.xlsx",
+      "CP1972-Head.docx"
     ]
   },
   "failed": [],
   "collisions": [
     {
-      "code": "CO0001",
-      "name": "CO0001 – CPD objectives.docx",
+      "code": "CO0002",
+      "name": "CO0002-LO.docx",
       "count": 2
     }
   ],
