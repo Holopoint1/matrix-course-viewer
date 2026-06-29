@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-29T08:45:57.226Z",
+  "generatedAt": "2026-06-29T08:51:02.935Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 185,
-    "missing": 19,
+    "displaying": 186,
+    "missing": 18,
     "autofixed": 4,
     "downloadFailed": 0,
     "collisions": 0
@@ -13,14 +13,7 @@
     "CO0002": {
       "title": "Introduction to Microcontrollers",
       "stale": [],
-      "missing": [
-        {
-          "title": "Scheme of work",
-          "asked": "CO0002 definition.xlsx",
-          "expectedIn": "CO0002",
-          "reason": "The file name contains “definition”, which the sync never publishes (those are the control sheets). Rename it without that word."
-        }
-      ],
+      "missing": [],
       "autofixed": [
         {
           "title": "Welcome",
@@ -263,13 +256,13 @@
       "opening.png"
     ],
     "CO0001": [
+      "CO002-SOW.xlsx",
       "CO0001 – First lessons.HTM",
       "test.docx",
       "Now try the worksheets.HTM",
       "CO0001 - content.docx"
     ],
     "CO0002": [
-      "CO0002 scheme of work.xlsx",
       "CO0002-A3.htm",
       "CO0002-H9.htm",
       "CO0002-marking scheme.htm",
@@ -290,5 +283,10 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CO0002",
+      "name": "CO0002 scheme of work.xlsx"
+    }
+  ]
 }

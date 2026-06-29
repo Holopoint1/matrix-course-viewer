@@ -57,10 +57,10 @@
           "type": "sheet",
           "title": "Scheme of work",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002 definition.xlsx",
-          "path": "/CO0002 - Introduction to microcontrollers/CO0002 definition.xlsx",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "src": "content/CO0002/CO0002-SOW.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/CO0002-SOW.xlsx",
+          "v": "dcfe2f5d36",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s6",
