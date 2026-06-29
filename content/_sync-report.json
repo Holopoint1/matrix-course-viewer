@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T09:51:07.428Z",
+  "generatedAt": "2026-06-29T09:55:55.133Z",
   "summary": {
     "courses": 9,
     "screens": 203,
@@ -7,7 +7,7 @@
     "missing": 6,
     "autofixed": 0,
     "downloadFailed": 0,
-    "collisions": 1
+    "collisions": 0
   },
   "courses": {
     "CP0507": {
@@ -155,13 +155,7 @@
     ]
   },
   "failed": [],
-  "collisions": [
-    {
-      "code": "CP1972",
-      "name": "CP1972-9.docx",
-      "count": 2
-    }
-  ],
+  "collisions": [],
   "canonCollisions": [],
   "removed": []
 }
