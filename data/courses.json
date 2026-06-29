@@ -5,7 +5,7 @@
       "code": "CO0002",
       "kind": "course",
       "title": "Introduction to Microcontrollers",
-      "shortDescription": "The full Flowcode + E-blocks 3 introduction to microcontroller programming. 12 bronze/silver/gold worksheets plus sensor, motor, and assessment screens spanning analogue I/O, interrupts, displays, and web mirror projects.",
+      "shortDescription": "A comprehensive introduction to microcontrollers and embedded systems using Flowcode. Builds from first principles through inputs, outputs and programming to complete working projects.",
       "estimatedHours": 99.7,
       "certificate": {
         "enabled": true,
@@ -500,14 +500,27 @@
         "Embedded",
         "Curriculum"
       ],
-      "_source": "sheet"
+      "_source": "sheet",
+      "keywords": [
+        "microcontrollers",
+        "introduction",
+        "embedded systems",
+        "PIC",
+        "programming",
+        "Flowcode",
+        "electronics",
+        "beginner",
+        "fundamentals",
+        "curriculum"
+      ],
+      "courseType": "Course"
     },
     {
       "id": "CP0507",
       "code": "CP0507",
       "kind": "pack",
       "title": "Motors and Microcontrollers",
-      "shortDescription": "Five worksheets on motor control with Flowcode and E-blocks 3 — basic DC motors, full bridge control, stepper and servo motors, plus closed-loop speed control.",
+      "shortDescription": "A worksheet pack on driving and controlling motors with microcontrollers — DC, stepper and servo motors, motor-control circuits and actuator projects.",
       "estimatedHours": 11,
       "certificate": {
         "enabled": true,
@@ -588,14 +601,27 @@
       "categories": [
         "Motors",
         "Microcontrollers"
-      ]
+      ],
+      "keywords": [
+        "motors",
+        "DC motors",
+        "stepper motor",
+        "servo",
+        "motor control",
+        "actuators",
+        "microcontrollers",
+        "mechatronics",
+        "worksheets",
+        "pack"
+      ],
+      "courseType": "Worksheet pack"
     },
     {
       "id": "CP1972",
       "code": "CP1972",
       "kind": "pack",
       "title": "Sensors and Microcontrollers",
-      "shortDescription": "Eleven worksheets covering analogue and digital sensors with Flowcode and E-blocks 3 — from light and temperature sensors to accelerometers, flow rate, force, strain and pressure.",
+      "shortDescription": "A worksheet pack exploring how microcontrollers read the world through sensors — analog and digital inputs, temperature and light sensing, and data acquisition.",
       "estimatedHours": 22,
       "certificate": {
         "enabled": true,
@@ -736,14 +762,27 @@
       "categories": [
         "Sensors",
         "Microcontrollers"
-      ]
+      ],
+      "keywords": [
+        "sensors",
+        "analog sensors",
+        "digital sensors",
+        "temperature",
+        "light",
+        "input",
+        "data acquisition",
+        "microcontrollers",
+        "worksheets",
+        "pack"
+      ],
+      "courseType": "Worksheet pack"
     },
     {
       "id": "CP2563",
       "code": "CP2563",
       "kind": "pack",
       "title": "Microcontrollers for T-Levels",
-      "shortDescription": "T-Level Engineering microcontroller worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
+      "shortDescription": "A curriculum worksheet pack supporting the T-Level microcontrollers units, with ready-to-use embedded systems exercises for the classroom.",
       "estimatedHours": 39,
       "certificate": {
         "enabled": false
@@ -984,14 +1023,26 @@
       "categories": [
         "Curriculum pack"
       ],
-      "_source": "sheet"
+      "_source": "sheet",
+      "keywords": [
+        "T-Levels",
+        "T Levels",
+        "microcontrollers",
+        "curriculum pack",
+        "embedded systems",
+        "qualification",
+        "college",
+        "engineering",
+        "worksheets"
+      ],
+      "courseType": "Worksheet pack"
     },
     {
       "id": "CP4807",
       "code": "CP4807",
       "kind": "pack",
       "title": "Introduction to Microcontrollers",
-      "shortDescription": "The 12-worksheet master pack underpinning CO0001, CO0002, CO0003 and CO0004. Bronze, Silver and Gold tiered worksheets from first program through web mirror projects.",
+      "shortDescription": "A curriculum worksheet pack introducing microcontrollers and embedded systems from the ground up — beginner-friendly exercises covering the core fundamentals.",
       "estimatedHours": 17,
       "certificate": {
         "enabled": false
@@ -1120,14 +1171,25 @@
       ],
       "categories": [
         "Curriculum pack"
-      ]
+      ],
+      "keywords": [
+        "introduction",
+        "microcontrollers",
+        "curriculum pack",
+        "embedded systems",
+        "beginner",
+        "fundamentals",
+        "worksheets",
+        "pack"
+      ],
+      "courseType": "Worksheet pack"
     },
     {
       "id": "CP7244",
       "code": "CP7244",
       "kind": "pack",
       "title": "Digital Techniques for Aviation Technicians",
-      "shortDescription": "EASA Unit 5 Digital Techniques worksheet pack — Flowcode + E-blocks 3, compiled from the CP4807 / CP1972 / CP0507 worksheet base.",
+      "shortDescription": "A curriculum worksheet pack covering digital techniques for aviation technicians, with avionics-focused exercises aligned to EASA Part-66 study.",
       "estimatedHours": 38,
       "certificate": {
         "enabled": false
@@ -1357,14 +1419,27 @@
       "categories": [
         "Curriculum pack"
       ],
-      "_source": "sheet"
+      "_source": "sheet",
+      "keywords": [
+        "aviation",
+        "aircraft",
+        "digital techniques",
+        "avionics",
+        "EASA",
+        "Part-66",
+        "technicians",
+        "maintenance",
+        "curriculum pack",
+        "worksheets"
+      ],
+      "courseType": "Worksheet pack"
     },
     {
       "id": "CO0001",
       "code": "CO0001",
       "kind": "course",
       "title": "Flowcode and E-blocks 3 CPD Course",
-      "shortDescription": "A short CPD course for instructors covering how Flowcode and E-blocks 3 help students learn modern digital electronics. Videos, PowerPoints, key worksheets, and a printable CPD certificate.",
+      "shortDescription": "A continuing professional development course that brings teachers and trainers up to speed with Flowcode and the E-blocks 3 hardware. Work through flowchart-based programming and hands-on embedded exercises ready to take straight back into the classroom.",
       "estimatedHours": 5.4,
       "certificate": {
         "enabled": true,
@@ -1675,14 +1750,28 @@
         "CPD",
         "Embedded"
       ],
-      "_source": "sheet"
+      "_source": "sheet",
+      "keywords": [
+        "Flowcode",
+        "E-blocks 3",
+        "E-blocks",
+        "CPD",
+        "continuing professional development",
+        "teacher training",
+        "embedded systems",
+        "microcontrollers",
+        "getting started",
+        "introduction",
+        "flowchart programming"
+      ],
+      "courseType": "Course"
     },
     {
       "id": "CO0003",
       "code": "CO0003",
       "kind": "course",
       "title": "Digital Techniques for Aviation Technicians",
-      "shortDescription": "The full Flowcode + E-blocks 3 course for EASA Unit 5 Digital Techniques — videos, PowerPoints, worksheets, homework and assessments for aviation technician training.",
+      "shortDescription": "Covers the digital electronics and microcontroller techniques aviation technicians need, mapped to EASA Part-66 module requirements. Combines logic fundamentals with practical, avionics-focused exercises.",
       "estimatedHours": 44.5,
       "certificate": {
         "enabled": true,
@@ -2034,14 +2123,28 @@
         "Embedded",
         "Curriculum"
       ],
-      "_source": "sheet"
+      "_source": "sheet",
+      "keywords": [
+        "aviation",
+        "aircraft",
+        "digital techniques",
+        "avionics",
+        "EASA",
+        "Part-66",
+        "digital electronics",
+        "logic",
+        "technicians",
+        "maintenance",
+        "embedded systems"
+      ],
+      "courseType": "Course"
     },
     {
       "id": "CO0004",
       "code": "CO0004",
       "kind": "course",
       "title": "Microcontrollers for T-Levels",
-      "shortDescription": "The full Flowcode + E-blocks 3 microcontroller course mapped to T-Level Engineering — videos, PowerPoints, worksheets, homework and assessments.",
+      "shortDescription": "A full microcontrollers and embedded systems course aligned to T-Level engineering qualifications, taking students from the basics through to applied programming projects.",
       "estimatedHours": 44.5,
       "certificate": {
         "enabled": true,
@@ -2393,7 +2496,19 @@
         "Embedded",
         "Curriculum"
       ],
-      "_source": "sheet"
+      "_source": "sheet",
+      "keywords": [
+        "T-Levels",
+        "T Levels",
+        "microcontrollers",
+        "embedded systems",
+        "qualification",
+        "college",
+        "engineering",
+        "electronics",
+        "curriculum"
+      ],
+      "courseType": "Course"
     }
   ]
 }
