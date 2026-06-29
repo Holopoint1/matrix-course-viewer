@@ -1012,8 +1012,8 @@
           "type": "document",
           "title": "Cover page",
           "hours": 1,
-          "src": "content/CP7244/CP7244-head.docx",
-          "path": "/CP7244 - Introduction to microcontrollers/CP7244-head.docx",
+          "src": "content/CP7244/CP7244-Head.docx",
+          "path": "/CP7244 - Introduction to microcontrollers/CP7244-Head.docx",
           "v": "d079977a06",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1023,7 +1023,7 @@
           "title": "Contents",
           "hours": 1,
           "src": "content/CP7244/CP7244-Cont.docx",
-          "path": "/CP7244 - Introduction to microcontrollers/CP7244-cont.docx",
+          "path": "/CP7244 - Introduction to microcontrollers/CP7244-Cont.docx",
           "v": "4d5fa89fbe",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1033,7 +1033,7 @@
           "title": "Preparation",
           "hours": 1,
           "src": "content/CP4807/CP4807-prep.docx",
-          "path": "/CP4807 - Introduction to microcontrollers/CP4807-prep.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-Prep.docx",
           "v": "20534a54b1",
           "equipment": "Flowcode / E-blocks3"
         },

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T11:16:54.228Z",
+  "generatedAt": "2026-06-29T11:19:27.515Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -50,9 +50,9 @@
       "missing": [],
       "autofixed": [
         {
-          "title": "Contents",
-          "asked": "CP7244-cont.docx",
-          "used": "CP7244-Cont.docx",
+          "title": "Preparation",
+          "asked": "CP4807-Prep.docx",
+          "used": "CP4807-prep.docx",
           "reasons": [
             "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
           ]
@@ -106,5 +106,10 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CP7244",
+      "name": "CP7244-head.docx"
+    }
+  ]
 }
