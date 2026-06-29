@@ -145,12 +145,17 @@
       if (!course) { location.replace('index.html'); return; }
       course = window.MatrixCMS ? window.MatrixCMS.applyOverrides(course) : course;
 
-      /* Skip the dashboard intermediate page and go straight into the course
-         at its FIRST screen (whatever its type — including an opening image),
-         so opening a course always starts at screen 1. */
-      const _first = (course.screens || [])[0];
-      if (_first) {
-        location.replace('course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(_first.id));
+      /* Skip the dashboard intermediate page and go straight into the course.
+         First visit (nothing ticked yet) → the FIRST screen, including an opening
+         image. Partway through → the NEXT INCOMPLETE screen, so a returning learner
+         resumes where they left off rather than restarting. All done → the first
+         screen (free to review). */
+      const _screens = course.screens || [];
+      if (_screens.length) {
+        const _progress = JSON.parse(localStorage.getItem('matrix-lms:progress:' + course.id) || '{}');
+        const _anyDone = _screens.some((s) => _progress[s.id]);
+        const _start = _anyDone ? (_screens.find((s) => !_progress[s.id]) || _screens[0]) : _screens[0];
+        location.replace('course.html?id=' + encodeURIComponent(course.id) + '&screen=' + encodeURIComponent(_start.id));
         return;
       }
 

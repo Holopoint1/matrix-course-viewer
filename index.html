@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <title>Matrix Course Viewer</title>
   <meta name="description" content="Matrix TSL Course Viewer - browser-based courses for engineering education.">
-  <link rel="stylesheet" href="assets/styles.css?v=20260629c">
+  <link rel="stylesheet" href="assets/styles.css?v=20260629d">
 </head>
 <body data-no-sidebar>
   <section class="catalog-hero">
@@ -28,12 +28,20 @@
       <h2>Courses</h2>
       <p>Browse the Flowcode &amp; E-blocks 3 curriculum.</p>
     </div>
-    <div class="catalog-search">
-      <span class="catalog-search-icon" aria-hidden="true">&#128269;</span>
-      <input type="search" id="catalog-search" class="catalog-search-input"
-             placeholder="Search by code, title, keyword or topic&hellip;" aria-label="Search courses"
-             autocomplete="off" spellcheck="false">
-      <button type="button" class="catalog-search-clear" id="catalog-search-clear" hidden aria-label="Clear search">&times;</button>
+    <div class="catalog-controls">
+      <div class="catalog-search">
+        <span class="catalog-search-icon" aria-hidden="true">&#128269;</span>
+        <input type="search" id="catalog-search" class="catalog-search-input"
+               placeholder="Search by code, title, keyword or topic&hellip;" aria-label="Search courses"
+               autocomplete="off" spellcheck="false">
+        <button type="button" class="catalog-search-clear" id="catalog-search-clear" hidden aria-label="Clear search">&times;</button>
+      </div>
+      <div class="catalog-type">
+        <label class="catalog-type-label" for="catalog-type-select">Type</label>
+        <select id="catalog-type-select" class="catalog-type-select" aria-label="Filter by course type">
+          <option value="">All types</option>
+        </select>
+      </div>
     </div>
     <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
     <div class="catalog" id="catalog">
@@ -115,6 +123,7 @@
         const urlParams = new URLSearchParams(location.search);
         let activeCategory = urlParams.get('category') || '';
         let activeQuery = (urlParams.get('q') || '').trim();
+        let activeType = urlParams.get('type') || '';
 
         function renderPills() {
           let html = '<button type="button" class="catalog-filter-pill' +
@@ -156,6 +165,7 @@
              "CP72", or "t-levels" all narrow the grid. */
           const terms = activeQuery.toLowerCase().split(/\s+/).filter(Boolean);
           const visible = allCourses.filter((c) => {
+            if (activeType && (c.structureType || '') !== activeType) return false;
             if (activeCategory && (c.categories || []).indexOf(activeCategory) < 0) return false;
             if (terms.length && !terms.every((t) => (c._search || '').indexOf(t) >= 0)) return false;
             return true;
@@ -189,6 +199,35 @@
           };
           searchInput.addEventListener('input', applyQuery);
           searchClear.addEventListener('click', () => { searchInput.value = ''; applyQuery(); searchInput.focus(); });
+        }
+
+        /* ---------- Course-type dropdown ----------
+           Options are the distinct types actually present (from the sheet's
+           "Course type"), each with a count, so there are never empty choices. */
+        const typeSelect = document.getElementById('catalog-type-select');
+        if (typeSelect) {
+          const typeCounts = new Map();
+          for (const c of data.courses.filter((c) => !c.draft)) {
+            const t = c.structureType || (c.kind === 'pack' ? 'Worksheet pack' : 'Course');
+            typeCounts.set(t, (typeCounts.get(t) || 0) + 1);
+          }
+          const orderedTypes = Array.from(typeCounts.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+          let opts = '<option value="">All types</option>';
+          for (const [t, n] of orderedTypes) {
+            opts += '<option value="' + escapeHtml(t) + '"' + (t === activeType ? ' selected' : '') + '>' +
+              escapeHtml(t) + ' (' + n + ')</option>';
+          }
+          typeSelect.innerHTML = opts;
+          /* A type from the URL that no longer exists → fall back to All. */
+          if (activeType && !typeCounts.has(activeType)) activeType = '';
+          typeSelect.value = activeType;
+          typeSelect.addEventListener('change', () => {
+            activeType = typeSelect.value;
+            const u = new URL(location.href);
+            if (activeType) u.searchParams.set('type', activeType); else u.searchParams.delete('type');
+            history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash);
+            renderCards();
+          });
         }
 
         let totalScreens = 0;
