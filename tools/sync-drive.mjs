@@ -25,6 +25,7 @@ const ROOT_FOLDER_ID = '1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu'; // "LMS Project Asse
 const CONTENT_DIR = path.resolve('content');
 const COURSES_JSON = path.resolve('data', 'courses.json');
 const SHEETS_JSON = path.resolve('data', 'sheets.json');
+const COURSE_STRUCTURE_JSON = path.resolve('data', 'course-structure.json');
 const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
 
 /* Per-file content fingerprint ('content/<code>/<name>' -> short md5) so the
@@ -700,9 +701,94 @@ async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
   console.log(`\nAuto-discovery: ${added} new course(s), ${built} auto-built draft(s) from files, ${drafts} held as draft.`);
 }
 
+/* ---------- phase 3: publish catalogue metadata from the Course_structure sheet ----------
+ * A single "Course_structure" sheet in the LMS Project Assets root holds, per course:
+ *   Course code | Course title | Course type | Number of sheets | Hours of learning | Keywords
+ * This becomes data/course-structure.json, which the catalogue merges in to drive the
+ * course TYPE label and the text SEARCH (keywords). The sheet is the control surface.
+ *
+ * Per-row fallback: a BLANK cell never wipes good data — it keeps whatever is already in
+ * data/course-structure.json. Sheets/Hours fall back to the live values computed from
+ * courses.json. Fully guarded + non-fatal: a sheet/network problem leaves the existing
+ * file untouched and never fails the content sync. */
+const parseKeywords = (s) => String(s || '').split(/[;,]/).map((x) => x.trim()).filter(Boolean);
+
+async function buildCourseStructure() {
+  const children = await listChildren(ROOT_FOLDER_ID);
+  const sheet = children.find((c) => c.mimeType === 'application/vnd.google-apps.spreadsheet' && /course[_ -]?structure/i.test(c.name || ''));
+
+  let existing = {};
+  try { existing = (JSON.parse(fs.readFileSync(COURSE_STRUCTURE_JSON, 'utf8')) || {}).courses || {}; } catch (_) {}
+
+  /* Live sheets/hours computed from the published courses.json (authoritative counts). */
+  const byCode = {};
+  try {
+    const courses = (JSON.parse(fs.readFileSync(COURSES_JSON, 'utf8')) || {}).courses || [];
+    for (const c of courses) {
+      const code = String(c.id || c.code || '').toUpperCase();
+      if (!code) continue;
+      byCode[code] = {
+        kind: c.kind,
+        sheets: (c.screens || []).length,
+        hours: Math.round((c.screens || []).reduce((s, x) => s + (Number(x.hours) || 0), 0) * 10) / 10,
+      };
+    }
+  } catch (_) {}
+
+  /* Raw cells from the sheet, keyed by course code. */
+  const fromSheet = {};
+  if (sheet) {
+    try {
+      const res = await drive.files.export({ fileId: sheet.id, mimeType: 'text/csv' }, { responseType: 'text' });
+      const rows = parseCsv(typeof res.data === 'string' ? res.data : String(res.data));
+      let hi = rows.findIndex((r) => (r || []).some((c) => /^\s*course\s*code\s*$/i.test(String(c || ''))));
+      if (hi < 0) hi = 0;
+      const header = (rows[hi] || []).map((h) => String(h || '').trim().toLowerCase());
+      const col = (name) => header.indexOf(name);
+      const ci = { code: col('course code'), type: col('course type'), sheets: col('number of sheets'), hours: col('hours of learning'), keywords: col('keywords') };
+      for (const r of rows.slice(hi + 1)) {
+        const code = ci.code >= 0 ? String(r[ci.code] || '').trim().toUpperCase() : '';
+        if (!/^[A-Za-z]{2}\d{4}$/.test(code)) continue;
+        fromSheet[code] = {
+          type: ci.type >= 0 ? String(r[ci.type] || '').trim() : '',
+          sheets: ci.sheets >= 0 ? String(r[ci.sheets] || '').trim() : '',
+          hours: ci.hours >= 0 ? String(r[ci.hours] || '').trim() : '',
+          keywords: ci.keywords >= 0 ? parseKeywords(r[ci.keywords]) : [],
+        };
+      }
+    } catch (e) { console.warn('  ! Course_structure: could not read the sheet — ' + e.message + ' (keeping existing file)'); }
+  } else {
+    console.warn('  ! Course_structure sheet not found in the root folder — keeping existing data/course-structure.json');
+  }
+
+  const codes = new Set([...Object.keys(byCode), ...Object.keys(existing), ...Object.keys(fromSheet)]);
+  const out = {};
+  for (const code of [...codes].sort()) {
+    const s = fromSheet[code] || {}, e = existing[code] || {}, comp = byCode[code] || {};
+    const keywords = (s.keywords && s.keywords.length) ? s.keywords : (Array.isArray(e.keywords) ? e.keywords : []);
+    const type = s.type || e.type || (comp.kind === 'pack' ? 'Worksheet pack' : 'Course');
+    const sheets = (s.sheets && !isNaN(parseFloat(s.sheets))) ? parseInt(s.sheets, 10)
+      : (comp.sheets != null ? comp.sheets : (e.sheets != null ? e.sheets : null));
+    const hours = (s.hours && !isNaN(parseFloat(s.hours))) ? parseFloat(s.hours)
+      : (comp.hours != null ? comp.hours : (e.hours != null ? e.hours : null));
+    out[code] = { type, sheets, hours, keywords };
+  }
+
+  const payload = {
+    _note: "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. Rebuilt on each sync; a blank Keywords cell keeps the existing value. Powers the catalogue search + course type. Edit the sheet to change it.",
+    generatedAt: new Date().toISOString(),
+    source: 'Course_structure',
+    courses: out,
+  };
+  fs.writeFileSync(COURSE_STRUCTURE_JSON, JSON.stringify(payload, null, 2) + '\n');
+  console.log('\nCourse structure: ' + Object.keys(out).length + ' course(s) -> data/course-structure.json' + (sheet ? '' : ' (sheet missing — kept existing keywords)'));
+}
+
 async function main() {
   const driveFilesByCode = await downloadPhase();
   await generatePhase(driveFilesByCode);
+  /* Catalogue metadata is a bonus output — never let it fail the content sync. */
+  try { await buildCourseStructure(); } catch (e) { console.warn('Course structure step failed (non-fatal): ' + e.message); }
   console.log('\nSync complete.');
 }
 main().catch((e) => { console.error('SYNC FAILED:', e.message); process.exit(1); });

@@ -16,15 +16,18 @@
         <div class="meta" id="screen-meta">&nbsp;</div>
       </div>
       <div class="actions">
-        <button class="btn btn-secondary" id="prev-btn">&larr; Previous</button>
-        <button class="btn btn-secondary" id="next-btn">Next &rarr;</button>
-        <span class="actions-sep" aria-hidden="true"></span>
-        <button class="btn btn-secondary" id="print-btn" title="Print this screen">&#128424; Print</button>
-        <button class="btn btn-secondary" id="download-btn" title="Download this file">&#11015; Download</button>
-        <a class="btn btn-secondary" id="open-google-btn" target="_blank" rel="noopener" title="Open the original in Google" hidden>&#8599; Open in Google</a>
-        <button class="btn btn-secondary" id="download-course-btn" title="Download the whole course as a ZIP"><span>&#11015; Download course</span></button>
-        <span class="actions-sep" aria-hidden="true"></span>
-        <button class="btn btn-primary" id="complete-btn">Mark complete &amp; next</button>
+        <div class="options-menu">
+          <button class="btn btn-secondary" id="options-btn" type="button" aria-haspopup="true" aria-expanded="false" title="More options">&#9776; Options &#9662;</button>
+          <div class="options-dropdown" id="options-dropdown" role="menu" hidden>
+            <a class="opt-item" id="open-google-btn" role="menuitem" target="_blank" rel="noopener" title="Open the original in Google" hidden>&#8599; Open in Google</a>
+            <button class="opt-item" id="download-btn" role="menuitem" type="button" title="Download this file">&#11015; Download screen</button>
+            <button class="opt-item" id="print-btn" role="menuitem" type="button" title="Print this screen">&#128424; Print</button>
+            <button class="opt-item" id="download-course-btn" role="menuitem" type="button" title="Download the whole course as a ZIP">&#11015; Download course</button>
+          </div>
+        </div>
+        <button class="btn btn-secondary" id="prev-btn" type="button">&larr; Previous</button>
+        <button class="btn btn-secondary" id="next-btn" type="button">Next &rarr;</button>
+        <button class="btn btn-primary" id="complete-btn" type="button">Mark complete &amp; next</button>
       </div>
     </div>
     <div class="screen-stage" id="screen-stage">

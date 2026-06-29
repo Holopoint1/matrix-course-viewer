@@ -21,6 +21,8 @@
     downloadBtn: document.getElementById('download-btn'),
     openGoogleBtn: document.getElementById('open-google-btn'),
     downloadCourseBtn: document.getElementById('download-course-btn'),
+    optionsBtn: document.getElementById('options-btn'),
+    optionsDropdown: document.getElementById('options-dropdown'),
     completeBtn: document.getElementById('complete-btn')
   };
 
@@ -203,6 +205,21 @@
       } else {
         els.downloadCourseBtn.addEventListener('click', () => downloadCourseZip(course, els.downloadCourseBtn));
       }
+    }
+    /* "Options" dropdown — collapses the secondary actions (open in viewer,
+       download screen, print, download course) into one menu, leaving the bar
+       to Options · Previous · Next · Mark complete. */
+    if (els.optionsBtn && els.optionsDropdown) {
+      const menu = els.optionsDropdown;
+      const closeMenu = () => { menu.hidden = true; els.optionsBtn.setAttribute('aria-expanded', 'false'); };
+      els.optionsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (menu.hidden) { menu.hidden = false; els.optionsBtn.setAttribute('aria-expanded', 'true'); }
+        else closeMenu();
+      });
+      menu.addEventListener('click', () => closeMenu());          // an item ran — tidy up
+      document.addEventListener('click', (e) => { if (!menu.hidden && !e.target.closest('.options-menu')) closeMenu(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
     }
     /* Keyboard slide navigation: ← previous screen, → next screen.
        Ignored while typing in a field, with modifier keys, or when focus

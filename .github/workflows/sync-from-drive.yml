@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "drive-sync[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A content data/courses.json   # -A so pruned/renamed files are committed as deletions
+          git add -A content data/courses.json data/course-structure.json   # -A so pruned/renamed files are committed as deletions
           if git diff --staged --quiet; then
             echo "No changes to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"

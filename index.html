@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <title>Matrix Course Viewer</title>
   <meta name="description" content="Matrix TSL Course Viewer - browser-based courses for engineering education.">
-  <link rel="stylesheet" href="assets/styles.css?v=20260629b">
+  <link rel="stylesheet" href="assets/styles.css?v=20260629c">
 </head>
 <body data-no-sidebar>
   <section class="catalog-hero">
@@ -27,6 +27,13 @@
     <div class="catalog-heading">
       <h2>Courses</h2>
       <p>Browse the Flowcode &amp; E-blocks 3 curriculum.</p>
+    </div>
+    <div class="catalog-search">
+      <span class="catalog-search-icon" aria-hidden="true">&#128269;</span>
+      <input type="search" id="catalog-search" class="catalog-search-input"
+             placeholder="Search by code, title, keyword or topic&hellip;" aria-label="Search courses"
+             autocomplete="off" spellcheck="false">
+      <button type="button" class="catalog-search-clear" id="catalog-search-clear" hidden aria-label="Clear search">&times;</button>
     </div>
     <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
     <div class="catalog" id="catalog">
@@ -60,6 +67,26 @@
           if (window.MatrixCMS.mergeCourses) data.courses = window.MatrixCMS.mergeCourses(data.courses);
           data.courses = data.courses.map((c) => window.MatrixCMS.applyOverrides(c));
         }
+        /* Catalogue metadata from the Course_structure sheet (published to
+           data/course-structure.json by the sync). Adds per-course keywords +
+           a display type, which power the search box below. Non-fatal: if it's
+           missing, search still works on code/title/description/categories. */
+        let structure = {};
+        try {
+          const sr = await fetch('data/course-structure.json?t=' + Date.now());
+          if (sr.ok) { const sj = await sr.json(); structure = (sj && sj.courses) || {}; }
+        } catch (_) {}
+        for (const c of data.courses) {
+          const meta = structure[c.id] || structure[c.code] || {};
+          c.keywords = Array.isArray(meta.keywords) ? meta.keywords : [];
+          c.structureType = meta.type || (c.kind === 'pack' ? 'Worksheet pack' : 'Course');
+          /* Pre-build a lowercase search haystack so filtering is a cheap
+             substring test: code, title, description, categories, keywords, type. */
+          c._search = [
+            c.code, c.id, c.title, c.shortDescription,
+            (c.categories || []).join(' '), c.keywords.join(' '), c.structureType
+          ].filter(Boolean).join('  ').toLowerCase();
+        }
         /* Catalogue order: by course code (CO0001 first) so it never drifts when
            the sync re-adds a course at the end of courses.json. */
         data.courses.sort((a, b) => String(a.id || a.code || '').localeCompare(String(b.id || b.code || '')));
@@ -81,6 +108,7 @@
 
         const urlParams = new URLSearchParams(location.search);
         let activeCategory = urlParams.get('category') || '';
+        let activeQuery = (urlParams.get('q') || '').trim();
 
         function renderPills() {
           let html = '<button type="button" class="catalog-filter-pill' +
@@ -117,10 +145,19 @@
              Drive definition (packs are tagged "Pack" by the card renderer). Only
              drafts are withheld. */
           const allCourses = data.courses.filter((c) => !c.draft);
-          const visible = activeCategory
-            ? allCourses.filter((c) => (c.categories || []).indexOf(activeCategory) >= 0)
-            : allCourses;
+          /* Each search term must appear somewhere in the course's haystack
+             (code/title/description/categories/keywords/type) — so "aviation",
+             "CP72", or "t-levels" all narrow the grid. */
+          const terms = activeQuery.toLowerCase().split(/\s+/).filter(Boolean);
+          const visible = allCourses.filter((c) => {
+            if (activeCategory && (c.categories || []).indexOf(activeCategory) < 0) return false;
+            if (terms.length && !terms.every((t) => (c._search || '').indexOf(t) >= 0)) return false;
+            return true;
+          });
           if (visible.length === 0) {
+            emptyEl.textContent = activeQuery
+              ? 'No courses match “' + activeQuery + '”' + (activeCategory ? ' in this category.' : '.')
+              : 'No courses match this filter.';
             emptyEl.hidden = false;
             return;
           }
@@ -129,6 +166,24 @@
         }
 
         renderPills();
+
+        /* ---------- Live text search ---------- */
+        const searchInput = document.getElementById('catalog-search');
+        const searchClear = document.getElementById('catalog-search-clear');
+        if (searchInput) {
+          searchInput.value = activeQuery;
+          searchClear.hidden = !activeQuery;
+          const applyQuery = () => {
+            activeQuery = searchInput.value.trim();
+            searchClear.hidden = !activeQuery;
+            const u = new URL(location.href);
+            if (activeQuery) u.searchParams.set('q', activeQuery); else u.searchParams.delete('q');
+            history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash);
+            renderCards();
+          };
+          searchInput.addEventListener('input', applyQuery);
+          searchClear.addEventListener('click', () => { searchInput.value = ''; applyQuery(); searchInput.focus(); });
+        }
 
         let totalScreens = 0;
         for (const c of data.courses.filter((c) => c.kind !== 'pack' && !c.draft)) totalScreens += c.screens.length;
