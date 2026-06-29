@@ -269,7 +269,7 @@
               ${cats.length ? `<div class="card-cats">${cats.map((c) => `<span class="card-cat">${escapeHtml(c)}</span>`).join('')}</div>` : ''}
               <div class="meta">
                 ${screenCount > 0 ? `<span class="chip"><strong>${ready}</strong>/${screenCount} ${isPack ? 'worksheets' : 'ready'}</span>` : '<span class="chip chip-warn">Not yet split</span>'}
-                ${courseHours > 0 ? `<span class="chip"><strong>${courseHours.toFixed(0)}</strong>h</span>` : ''}
+                ${courseHours > 0 ? `<span class="chip"><strong>${Math.round(courseHours * 10) / 10}</strong>h</span>` : ''}
                 ${missing ? `<span class="chip chip-warn"><strong>${missing}</strong> missing</span>` : ''}
               </div>
               <div class="card-progress">

@@ -789,8 +789,12 @@ async function buildCourseStructure() {
       const col = (name) => header.indexOf(name);
       const ci = { code: col('course code'), title: col('course title'), type: col('course type'), sheets: col('number of sheets'), hours: col('hours of learning'), keywords: col('keywords'), description: col('description') };
       for (const r of rows.slice(hi + 1)) {
-        const code = ci.code >= 0 ? String(r[ci.code] || '').trim().toUpperCase() : '';
-        if (!/^[A-Za-z]{2}\d{4}$/.test(code)) continue;
+        /* Extract the course code with the SAME forgiving prefix match the
+           definition-file pipeline uses (codeOf) — so trailing edits like
+           "CO0001 " or "CO0001 (CPD)" still resolve to CO0001, rather than the
+           whole row being silently dropped. The code is the join key to the course. */
+        const code = ci.code >= 0 ? codeOf(String(r[ci.code] || '').trim()) : null;
+        if (!code) continue;
         fromSheet[code] = {
           title: ci.title >= 0 ? String(r[ci.title] || '').trim() : '',
           type: ci.type >= 0 ? String(r[ci.type] || '').trim() : '',
