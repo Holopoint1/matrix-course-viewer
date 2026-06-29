@@ -1786,8 +1786,8 @@
           "hours": 0,
           "src": "content/CO0004/CO0004 - opening.png",
           "path": "/CO0004 - Introduction to microcontrollers/media/CO0004 - opening.png",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "v": "40ba4a6298",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0004-s2",

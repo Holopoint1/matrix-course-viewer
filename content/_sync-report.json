@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-29T09:23:31.050Z",
+  "generatedAt": "2026-06-29T09:24:36.003Z",
   "summary": {
     "courses": 9,
     "screens": 204,
-    "displaying": 196,
-    "missing": 8,
+    "displaying": 197,
+    "missing": 7,
     "autofixed": 0,
     "downloadFailed": 0,
     "collisions": 0
@@ -99,12 +99,6 @@
       "stale": [],
       "missing": [
         {
-          "title": "Introduction to microcontrollers",
-          "asked": "CO0004 - opening.png",
-          "expectedIn": "CO0004",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0004 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "title": "Homework 6",
           "asked": "CP4807-H6.htm",
           "expectedIn": "CP4807",
@@ -126,9 +120,6 @@
       "CP2563_definition.xlsx",
       "CP2563 - definition.docx",
       "CP2563 - Content.docx"
-    ],
-    "CO0004": [
-      "opening.png"
     ],
     "CP4807": [
       "CP4807-2 (1).docx",
@@ -178,5 +169,10 @@
   "failed": [],
   "collisions": [],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CO0004",
+      "name": "opening.png"
+    }
+  ]
 }
