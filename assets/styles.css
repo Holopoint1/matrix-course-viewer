@@ -897,7 +897,10 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 }
 .catalog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  /* auto-FILL (not auto-fit) keeps the column tracks even when a section has a
+     single course — otherwise a lone card stretches to fill the whole row and
+     looks far bigger than cards in the other sections. */
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
   gap: 1.5rem;
 }
 .catalog-group-title {
