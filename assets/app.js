@@ -1655,6 +1655,41 @@
     htmlBlockify(doc.body || doc.documentElement, out, flags);
     return { xml: out.join(''), usesLists: !!flags.lists };
   }
+  /* The skeleton's <w:document> root must declare every namespace prefix used by
+     ANY body we splice in. Word docs with images/drawings use wp:/a:/pic:/mc:/v:
+     etc.; if the skeleton happens not to declare one of those, the merged
+     document.xml has an undeclared prefix and Word reports "unreadable content".
+     Merge a full standard prefix set into the skeleton's root tag (keeping any the
+     skeleton already declares). */
+  const OOXML_NS = {
+    'xmlns:wpc': 'http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas',
+    'xmlns:mc': 'http://schemas.openxmlformats.org/markup-compatibility/2006',
+    'xmlns:o': 'urn:schemas-microsoft-com:office:office',
+    'xmlns:r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
+    'xmlns:m': 'http://schemas.openxmlformats.org/officeDocument/2006/math',
+    'xmlns:v': 'urn:schemas-microsoft-com:vml',
+    'xmlns:wp14': 'http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing',
+    'xmlns:wp': 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing',
+    'xmlns:w10': 'urn:schemas-microsoft-com:office:word',
+    'xmlns:w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main',
+    'xmlns:w14': 'http://schemas.microsoft.com/office/word/2010/wordml',
+    'xmlns:wpg': 'http://schemas.microsoft.com/office/word/2010/wordprocessingGroup',
+    'xmlns:wpi': 'http://schemas.microsoft.com/office/word/2010/wordprocessingInk',
+    'xmlns:wne': 'http://schemas.microsoft.com/office/word/2006/wordml',
+    'xmlns:wps': 'http://schemas.microsoft.com/office/word/2010/wordprocessingShape',
+    'xmlns:a': 'http://schemas.openxmlformats.org/drawingml/2006/main',
+    'xmlns:pic': 'http://schemas.openxmlformats.org/drawingml/2006/picture'
+  };
+  function ensureDocNamespaces(skelDoc) {
+    const m = skelDoc.match(/<w:document\b([^>]*)>/);
+    if (!m) return skelDoc;
+    let attrs = m[1];
+    for (const k of Object.keys(OOXML_NS)) {
+      if (!new RegExp('(?:^|\\s)' + k.replace(':', '\\:') + '=').test(attrs)) attrs += ' ' + k + '="' + OOXML_NS[k] + '"';
+    }
+    if (!/\bmc:Ignorable=/.test(attrs)) attrs += ' mc:Ignorable="w14 wp14"';
+    return skelDoc.replace(/<w:document\b[^>]*>/, '<w:document' + attrs + '>');
+  }
   async function compileCourseDocx(items) {
     const JSZip = window.JSZip;
     const skelIdx = items.findIndex((it) => it.type === 'docx');
@@ -1664,7 +1699,7 @@
     let numXml = numFile ? await numFile.async('string') : '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"></w:numbering>';
     let relsXml = await skel.file('word/_rels/document.xml.rels').async('string');
     let ctXml = await skel.file('[Content_Types].xml').async('string');
-    const skelDoc = await skel.file('word/document.xml').async('string');
+    const skelDoc = ensureDocNamespaces(await skel.file('word/document.xml').async('string'));
     let mergedBody = '', abstracts = '', nums = '', relsAdd = '';
     const mediaAdds = []; const ctExt = {}; let relCounter = 0; let anyLists = false;
     for (let i = 0; i < items.length; i++) {
@@ -1678,17 +1713,39 @@
         const rXml = relsF ? await relsF.async('string') : '';
         const off = (i + 1) * 100000;
         let inner = docBodyInner(doc).replace(/(<w:numId\s+w:val=")(\d+)(")/g, (m, a, n, b) => a + (n === '0' ? '0' : (+n + off)) + b);
+        /* Inserted section breaks carry header/footer references to parts we don't
+           bring across — a dangling reference makes Word refuse the file, so drop them. */
+        inner = inner.replace(/<w:(?:headerReference|footerReference)\b[^>]*\/>/g, '');
         const refIds = new Set(); let mm; const re = /r:(?:embed|id|link)="([^"]+)"/g; while ((mm = re.exec(inner))) refIds.add(mm[1]);
         const relMap = {};
         for (const oldId of refIds) {
           const rx = new RegExp('<Relationship\\b[^>]*Id="' + oldId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"[^>]*/>');
           const rel = (rXml.match(rx) || [])[0]; if (!rel) continue;
           const rtype = (rel.match(/Type="([^"]+)"/) || [])[1] || ''; const target = (rel.match(/Target="([^"]+)"/) || [])[1] || ''; const mode = (rel.match(/TargetMode="([^"]+)"/) || [])[1] || '';
-          const newId = 'rIdC' + i + '_' + (relCounter++); relMap[oldId] = newId;
-          if (mode === 'External' || /^[a-z]+:\/\//i.test(target) || /^mailto:/i.test(target)) relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + escapeAttr(target) + '" TargetMode="External"/>';
-          else { const sp = normalizeZipPath('word/' + target.replace(/^\/+/, '')); const f = zip.file(sp); if (!f) continue; const ext = (sp.split('.').pop() || 'bin').toLowerCase(); const nm = 'media/c' + i + '_' + relCounter + '.' + ext; mediaAdds.push({ path: 'word/' + nm, data: await f.async('uint8array') }); relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + nm + '"/>'; if (MEDIA_MIME[ext]) ctExt[ext] = MEDIA_MIME[ext]; }
+          if (mode === 'External' || /^[a-z]+:\/\//i.test(target) || /^mailto:/i.test(target)) {
+            const newId = 'rIdC' + i + '_' + (relCounter++); relMap[oldId] = newId;
+            relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + escapeAttr(target) + '" TargetMode="External"/>';
+          } else {
+            const sp = normalizeZipPath('word/' + target.replace(/^\/+/, ''));
+            const ext = (sp.split('.').pop() || 'bin').toLowerCase();
+            /* Only carry IMAGES of a known type across — that guarantees every copied
+               part has a content type. Other internal parts (headers, footers, OLE
+               objects, charts) need their own parts/rels/content-types; copying them
+               naively is exactly what corrupts the file, so skip them and the
+               reference is stripped below rather than left dangling. */
+            if (!MEDIA_MIME[ext]) continue;
+            const f = zip.file(sp); if (!f) continue;
+            const newId = 'rIdC' + i + '_' + (relCounter++); relMap[oldId] = newId;
+            const nm = 'media/c' + i + '_' + relCounter + '.' + ext;
+            mediaAdds.push({ path: 'word/' + nm, data: await f.async('uint8array') });
+            relsAdd += '<Relationship Id="' + newId + '" Type="' + rtype + '" Target="' + nm + '"/>';
+            if (MEDIA_MIME[ext]) ctExt[ext] = MEDIA_MIME[ext];
+          }
         }
-        inner = inner.replace(/(r:(?:embed|id|link)=")([^"]+)(")/g, (m, a, id, b) => (relMap[id] ? a + relMap[id] + b : m));
+        /* Remap the references we kept; STRIP any we didn't carry. A leftover
+           r:id/r:embed pointing at a relationship that no longer exists is the
+           canonical cause of "Word found unreadable content". */
+        inner = inner.replace(/(\s)(r:(?:embed|id|link))="([^"]+)"/g, (m, sp, attr, id) => (relMap[id] ? sp + attr + '="' + relMap[id] + '"' : ''));
         mergedBody += inner;
         const nf = zip.file('word/numbering.xml');
         if (nf) { const nx = await nf.async('string'); (nx.match(/<w:abstractNum\b[\s\S]*?<\/w:abstractNum>/g) || []).forEach((bk) => abstracts += offsetDocNumbering(bk, off)); (nx.match(/<w:num\b(?![a-zA-Z])[\s\S]*?<\/w:num>/g) || []).forEach((bk) => nums += offsetDocNumbering(bk, off)); }
