@@ -1457,7 +1457,14 @@
       const t = effectiveType(screen);
       if (t === 'spreadsheet') return { url: wu, label: 'Open in Google Sheets' };
       if (t === 'powerpoint')  return { url: wu, label: 'Open in Google Slides' };
-      if (t === 'html' || t === 'document') return { url: wu, label: 'Open in Google Docs' };
+      if (t === 'document') return { url: wu, label: 'Open in Google Docs' };   // uploaded .docx renders in Drive
+      /* An .htm text screen with NO Word/Google-Doc version: its Drive link only
+         shows the raw HTML source (Drive can't render a standalone .htm as a doc),
+         so open the RENDERED page instead — the .htm is itself a styled web page.
+         To make it open in Google Docs, add a matching Word/Google-Doc version to
+         the course folder (e.g. "CO0001 – T levels.docx"); then it opens in Docs
+         like CPD objectives / syllabuses already do. */
+      if (t === 'html') return { url: vsrc(screen), label: 'Open page' };
     }
     return null;
   }
