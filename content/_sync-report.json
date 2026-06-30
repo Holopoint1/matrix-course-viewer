@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T09:46:26.038Z",
+  "generatedAt": "2026-06-30T09:51:34.122Z",
   "summary": {
     "courses": 9,
     "screens": 211,
@@ -7,13 +7,16 @@
     "missing": 0,
     "autofixed": 0,
     "stale": 0,
-    "unused": 31,
+    "unused": 33,
     "downloadFailed": 0,
-    "collisions": 1,
+    "collisions": 2,
     "collisionsAffecting": 0
   },
   "courses": {},
   "unusedMedia": {
+    "CO0004": [
+      "CO0004 - content.docx"
+    ],
     "CP0507": [
       "CP0507-Head.docx"
     ],
@@ -21,15 +24,18 @@
       "CP4807-head.docx",
       "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx"
     ],
+    "CO0003": [
+      "CO0003 - content.docx"
+    ],
     "CO0001": [
+      "CO0001 - content.docx",
       "CO0001 – How to deliver this course.docx",
       "CO0001 – syllabuses.docx",
       "CO0001 - CPD objectives.docx",
       "CO002-SOW.xlsx",
       "CO0001 – First lessons.HTM",
       "test.docx",
-      "Now try the worksheets.HTM",
-      "CO0001 - content.docx"
+      "Now try the worksheets.HTM"
     ],
     "CO0002": [
       "CO0002 - content.docx",
@@ -58,6 +64,12 @@
   },
   "failed": [],
   "collisions": [
+    {
+      "code": "CO0001",
+      "name": "CO0001 - content.docx",
+      "count": 2,
+      "used": false
+    },
     {
       "code": "CO0002",
       "name": "CO0002-LO.docx",
