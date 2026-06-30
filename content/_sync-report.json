@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T06:36:36.223Z",
+  "generatedAt": "2026-06-30T06:41:28.591Z",
   "summary": {
     "courses": 9,
     "screens": 210,
@@ -7,7 +7,7 @@
     "missing": 0,
     "autofixed": 0,
     "stale": 0,
-    "unused": 30,
+    "unused": 29,
     "downloadFailed": 0,
     "collisions": 1,
     "collisionsAffecting": 0
@@ -38,7 +38,6 @@
       "CO0002-H9.htm",
       "CO0002-marking scheme.htm",
       "Now try the worksheets.htm",
-      "CO002-SOW.xlsx",
       "CO0002-welcome.HTM",
       "CO0002-LO.HTM",
       "Now try the worksheets.HTM",
@@ -65,5 +64,10 @@
     }
   ],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CO0002",
+      "name": "CO002-SOW.xlsx"
+    }
+  ]
 }
