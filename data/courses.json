@@ -1797,7 +1797,7 @@
       "kind": "course",
       "title": "Digital Techniques for Aviation Technicians",
       "shortDescription": "Covers the digital electronics and microcontroller techniques aviation technicians need, mapped to EASA Part-66 module requirements. Combines logic fundamentals with practical, avionics-focused exercises.",
-      "estimatedHours": 44.5,
+      "estimatedHours": 44.6,
       "certificate": {
         "enabled": true,
         "templateName": "Digital Techniques for Aviation Technicians"
@@ -1806,10 +1806,10 @@
         {
           "id": "CO0003-s1",
           "type": "image",
-          "title": "Introduction to microcontrollers",
+          "title": "Digital Techniques for aviation",
           "hours": 0,
           "src": "content/CO0003/CO0003 - opening.png",
-          "path": "/CO0003 - Introduction to microcontrollers/media/CO0003 - opening.png",
+          "path": "CO0003 - Digital Techniques for Aviation Technicians/media/CO0003 - opening.png",
           "v": "c8a7e71f76",
           "webUrl": "https://drive.google.com/file/d/14MAlII0_AFdIfkwF8mXOv_eOZHq6OypR/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
@@ -1820,7 +1820,7 @@
           "title": "Welcome",
           "hours": 0.1,
           "src": "content/CO0003/CO0003-welcome.htm",
-          "path": "/CO0003 - Introduction to microcontrollers/media/CO0003-welcome.htm",
+          "path": "CO0003 - Digital Techniques for Aviation Technicians/media/CO0003-welcome.htm",
           "v": "a4b777bab6",
           "webUrl": "https://drive.google.com/file/d/1hzw4g1Z9Cj_qM0MrS8hEObMnIw9iEVsQ/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
@@ -1830,14 +1830,25 @@
           "type": "html",
           "title": "Learning objectives",
           "hours": 0.1,
-          "src": "content/CO0003/CO0003-LO.htm",
-          "path": "/CO0003 - Introduction to microcontrollers/media/CO0003-LO.htm",
+          "src": "content/CO0003/CO0003-Syllabus.htm",
+          "path": "CO0003 - Digital Techniques for Aviation Technicians/media/CO0003-Syllabus.htm",
           "v": "4f988ed800",
           "webUrl": "https://drive.google.com/file/d/18M2mByS9lRcKmW5aef72DLMzDYhjvrPy/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0003-s4",
+          "type": "sheet",
+          "title": "Syllabus",
+          "hours": 0.1,
+          "src": "content/CO0003/syllabus.xlsx",
+          "path": "CO0003 - Digital Techniques for Aviation Technicians/media/Syllabus.xlsx",
+          "v": "2c4be7870a",
+          "webUrl": "https://docs.google.com/spreadsheets/d/1IoUTB8_CfaIQccPk01DiuEskEi4fYlQK/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CO0003-s5",
           "type": "html",
           "title": "Equipment",
           "hours": 0.1,
@@ -1848,7 +1859,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s5",
+          "id": "CO0003-s6",
           "type": "youtube",
           "title": "Introducing E-blocks 3",
           "hours": 0.2,
@@ -1856,7 +1867,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s6",
+          "id": "CO0003-s7",
           "type": "youtube",
           "title": "Introducing Flowcode",
           "hours": 0.2,
@@ -1864,15 +1875,15 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s7",
+          "id": "CO0003-s8",
           "type": "pdf",
           "title": "E-blocks datasheet",
           "hours": 0.2,
-          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/03/CP9645-Eblocks-3-Datasheet-1.pdf",
+          "src": "https://www.matrixtsl.com/wp-content/uploads/2026/06/CP9645-Eblocks-3-Datasheet.pdf",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s8",
+          "id": "CO0003-s9",
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
@@ -1883,7 +1894,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s9",
+          "id": "CO0003-s10",
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
@@ -1894,7 +1905,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s10",
+          "id": "CO0003-s11",
           "type": "html",
           "title": "Getting started guide",
           "hours": 1,
@@ -1902,7 +1913,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s11",
+          "id": "CO0003-s12",
           "type": "document",
           "title": "First program",
           "hours": 1,
@@ -1913,7 +1924,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s12",
+          "id": "CO0003-s13",
           "type": "document",
           "title": "Performing calculations",
           "hours": 1,
@@ -1924,7 +1935,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s13",
+          "id": "CO0003-s14",
           "type": "document",
           "title": "Connection points",
           "hours": 2,
@@ -1935,7 +1946,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s14",
+          "id": "CO0003-s15",
           "type": "document",
           "title": "Digital inputs",
           "hours": 2,
@@ -1946,7 +1957,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s15",
+          "id": "CO0003-s16",
           "type": "html",
           "title": "Homework 1",
           "hours": 2,
@@ -1958,7 +1969,7 @@
           "wordUrl": "https://docs.google.com/document/d/1BOM0EfVVJ2A-4YQ_mnWZS8ZPj4SGbOFtLLkUxAw08a8/edit?usp=drivesdk"
         },
         {
-          "id": "CO0003-s16",
+          "id": "CO0003-s17",
           "type": "document",
           "title": "Making decisions",
           "hours": 2,
@@ -1969,7 +1980,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s17",
+          "id": "CO0003-s18",
           "type": "document",
           "title": "Macros / subroutines",
           "hours": 2,
@@ -1980,7 +1991,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s18",
+          "id": "CO0003-s19",
           "type": "document",
           "title": "Using prototype boards",
           "hours": 2,
@@ -1991,7 +2002,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s19",
+          "id": "CO0003-s20",
           "type": "document",
           "title": "Analogue inputs",
           "hours": 2,
@@ -2002,7 +2013,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s20",
+          "id": "CO0003-s21",
           "type": "document",
           "title": "Colour graphical displays",
           "hours": 2,
@@ -2013,7 +2024,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s21",
+          "id": "CO0003-s22",
           "type": "html",
           "title": "Homework 2",
           "hours": 2,
@@ -2024,7 +2035,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s22",
+          "id": "CO0003-s23",
           "type": "document",
           "title": "Light sensor",
           "hours": 2,
@@ -2035,7 +2046,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s23",
+          "id": "CO0003-s24",
           "type": "document",
           "title": "Analogue temperature sensor",
           "hours": 2,
@@ -2046,7 +2057,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s24",
+          "id": "CO0003-s25",
           "type": "html",
           "title": "Homework 3",
           "hours": 2,
@@ -2057,7 +2068,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s25",
+          "id": "CO0003-s26",
           "type": "html",
           "title": "Assessment 1",
           "hours": 2,
@@ -2068,7 +2079,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s26",
+          "id": "CO0003-s27",
           "type": "document",
           "title": "Digital temperature sensor",
           "hours": 2,
@@ -2079,7 +2090,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s27",
+          "id": "CO0003-s28",
           "type": "document",
           "title": "Digital accelerometer",
           "hours": 2,
@@ -2090,7 +2101,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s28",
+          "id": "CO0003-s29",
           "type": "html",
           "title": "Assessment 2",
           "hours": 2,
@@ -2101,7 +2112,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s29",
+          "id": "CO0003-s30",
           "type": "document",
           "title": "Basic DC motors",
           "hours": 2,
@@ -2112,7 +2123,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s30",
+          "id": "CO0003-s31",
           "type": "document",
           "title": "Full bridge motor control",
           "hours": 2,
@@ -2123,7 +2134,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s31",
+          "id": "CO0003-s32",
           "type": "document",
           "title": "Stepper motor control",
           "hours": 2,
@@ -2134,7 +2145,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0003-s32",
+          "id": "CO0003-s33",
           "type": "document",
           "title": "Servo motor control",
           "hours": 2,

@@ -1,18 +1,35 @@
 {
-  "generatedAt": "2026-06-30T13:06:44.546Z",
+  "generatedAt": "2026-06-30T13:09:56.554Z",
   "summary": {
     "courses": 9,
-    "screens": 211,
-    "displaying": 211,
+    "screens": 212,
+    "displaying": 212,
     "missing": 0,
-    "autofixed": 0,
+    "autofixed": 1,
     "stale": 0,
     "unused": 33,
     "downloadFailed": 0,
     "collisions": 2,
     "collisionsAffecting": 0
   },
-  "courses": {},
+  "courses": {
+    "CO0003": {
+      "title": "Digital Techniques for Aviation Technicians",
+      "stale": [],
+      "missing": [],
+      "autofixed": [
+        {
+          "id": "CO0003-s4",
+          "title": "Syllabus",
+          "asked": "Syllabus.xlsx",
+          "used": "syllabus.xlsx",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        }
+      ]
+    }
+  },
   "unusedMedia": {
     "CO0004": [
       "CO0004 - content.docx"
@@ -78,5 +95,10 @@
     }
   ],
   "canonCollisions": [],
-  "removed": []
+  "removed": [
+    {
+      "code": "CO0003",
+      "name": "CO0003-LO.htm"
+    }
+  ]
 }
