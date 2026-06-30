@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T06:41:28.591Z",
+  "generatedAt": "2026-06-30T06:46:34.674Z",
   "summary": {
     "courses": 9,
     "screens": 210,
@@ -64,10 +64,5 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0002",
-      "name": "CO002-SOW.xlsx"
-    }
-  ]
+  "removed": []
 }
