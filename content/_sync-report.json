@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T13:09:56.554Z",
+  "generatedAt": "2026-06-30T13:11:11.074Z",
   "summary": {
     "courses": 9,
     "screens": 212,
@@ -95,10 +95,5 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0003",
-      "name": "CO0003-LO.htm"
-    }
-  ]
+  "removed": []
 }
