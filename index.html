@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <title>Matrix Course Viewer</title>
   <meta name="description" content="Matrix TSL Course Viewer - browser-based courses for engineering education.">
-  <link rel="stylesheet" href="assets/styles.css?v=20260629d">
+  <link rel="stylesheet" href="assets/styles.css?v=20260630a">
 </head>
 <body data-no-sidebar>
   <section class="catalog-hero">
@@ -36,14 +36,7 @@
                autocomplete="off" spellcheck="false">
         <button type="button" class="catalog-search-clear" id="catalog-search-clear" hidden aria-label="Clear search">&times;</button>
       </div>
-      <div class="catalog-type">
-        <label class="catalog-type-label" for="catalog-type-select">Type</label>
-        <select id="catalog-type-select" class="catalog-type-select" aria-label="Filter by course type">
-          <option value="">All types</option>
-        </select>
-      </div>
     </div>
-    <div class="catalog-filter" id="catalog-filter" aria-label="Filter courses by category"></div>
     <div class="catalog" id="catalog">
       <p class="stage-loading">Loading courses&hellip;</p>
     </div>
@@ -105,83 +98,63 @@
            the sync re-adds a course at the end of courses.json. */
         data.courses.sort((a, b) => String(a.id || a.code || '').localeCompare(String(b.id || b.code || '')));
 
-        /* ---------- Build category filter pills ----------
-           Pills are derived from the actual `categories` arrays on each course.
-           A category only appears as a pill if at least one course is tagged
-           with it — no dead links possible. */
-        const filterRoot = document.getElementById('catalog-filter');
         const emptyEl = document.getElementById('catalog-empty');
-        const counts = new Map(); /* category -> course count */
-        for (const c of data.courses) {
-          for (const cat of (c.categories || [])) {
-            counts.set(cat, (counts.get(cat) || 0) + 1);
-          }
-        }
-        const orderedCats = Array.from(counts.entries())
-          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-
         const urlParams = new URLSearchParams(location.search);
-        let activeCategory = urlParams.get('category') || '';
         let activeQuery = (urlParams.get('q') || '').trim();
-        let activeType = urlParams.get('type') || '';
 
-        function renderPills() {
-          let html = '<button type="button" class="catalog-filter-pill' +
-            (activeCategory === '' ? ' active' : '') +
-            '" data-cat="">All <span class="pill-count">' + data.courses.length + '</span></button>';
-          for (const [cat, n] of orderedCats) {
-            html += '<button type="button" class="catalog-filter-pill' +
-              (cat === activeCategory ? ' active' : '') +
-              '" data-cat="' + escapeHtml(cat) + '">' +
-              escapeHtml(cat) + ' <span class="pill-count">' + n + '</span></button>';
-          }
-          filterRoot.innerHTML = html;
-          filterRoot.querySelectorAll('[data-cat]').forEach((btn) => {
-            btn.addEventListener('click', () => {
-              activeCategory = btn.dataset.cat;
-              const u = new URL(location.href);
-              if (activeCategory) u.searchParams.set('category', activeCategory);
-              else u.searchParams.delete('category');
-              history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash);
-              renderPills();
-              renderCards();
-              /* On phones the cards can sit below the fold; bring the filtered
-                 results into view so a tap visibly does something. */
-              if (window.matchMedia('(max-width: 720px)').matches && root.firstElementChild) {
-                root.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-              }
-            });
-          });
+        /* ---------- Course groupings (headings) ----------
+           Four sections, shown in this fixed order. A course's group comes from the
+           Course_structure sheet's "Course type" column (c.structureType). We also
+           fall back gracefully when the sheet still uses the old Course/Worksheet
+           pack values, so nothing is ever left ungrouped:
+             • a pack                         → Worksheet packs
+             • CPD in type / categories / title → CPD courses
+             • otherwise a full course        → Teacher centred courses (default)
+           To put a course under "Student centred courses" (or move one between
+           groups), set its Course type cell in the sheet to the heading text. */
+        const GROUP_ORDER = ['Student centred courses', 'Teacher centred courses', 'CPD courses', 'Worksheet packs'];
+        function courseGroup(c) {
+          const st = (c.structureType || '').toLowerCase();
+          if (/pack/.test(st)) return 'Worksheet packs';
+          if (/student/.test(st)) return 'Student centred courses';
+          if (/teacher/.test(st)) return 'Teacher centred courses';
+          if (/cpd/.test(st)) return 'CPD courses';
+          if (c.kind === 'pack') return 'Worksheet packs';
+          if ((c.categories || []).some((x) => /cpd/i.test(x)) || /\bcpd\b/i.test(c.title || '')) return 'CPD courses';
+          return 'Teacher centred courses';
         }
 
         function renderCards() {
           root.innerHTML = '';
-          /* Show every course AND worksheet pack that the sync published from a
-             Drive definition (packs are tagged "Pack" by the card renderer). Only
-             drafts are withheld. */
-          const allCourses = data.courses.filter((c) => !c.draft);
           /* Each search term must appear somewhere in the course's haystack
-             (code/title/description/categories/keywords/type) — so "aviation",
-             "CP72", or "t-levels" all narrow the grid. */
+             (code/title/description/categories/keywords/type). */
           const terms = activeQuery.toLowerCase().split(/\s+/).filter(Boolean);
-          const visible = allCourses.filter((c) => {
-            if (activeType && (c.structureType || '') !== activeType) return false;
-            if (activeCategory && (c.categories || []).indexOf(activeCategory) < 0) return false;
-            if (terms.length && !terms.every((t) => (c._search || '').indexOf(t) >= 0)) return false;
-            return true;
-          });
-          if (visible.length === 0) {
-            emptyEl.textContent = activeQuery
-              ? 'No courses match “' + activeQuery + '”' + (activeCategory ? ' in this category.' : '.')
-              : 'No courses match this filter.';
+          const visible = data.courses.filter((c) => !c.draft)
+            .filter((c) => !terms.length || terms.every((t) => (c._search || '').indexOf(t) >= 0));
+          if (!visible.length) {
+            emptyEl.textContent = activeQuery ? 'No courses match “' + activeQuery + '”.' : 'No courses yet.';
             emptyEl.hidden = false;
             return;
           }
           emptyEl.hidden = true;
-          for (const course of visible) renderCard(course, root);
+          /* Bucket the (already code-sorted) courses, then emit groups in
+             GROUP_ORDER, skipping any that are empty. */
+          const buckets = {};
+          for (const c of visible) { const g = courseGroup(c); (buckets[g] = buckets[g] || []).push(c); }
+          const extra = Object.keys(buckets).filter((g) => GROUP_ORDER.indexOf(g) < 0).sort();
+          for (const g of GROUP_ORDER.concat(extra)) {
+            const list = buckets[g];
+            if (!list || !list.length) continue;
+            const section = document.createElement('section');
+            section.className = 'catalog-group';
+            section.innerHTML = '<h2 class="catalog-group-title">' + escapeHtml(g) +
+              ' <span class="catalog-group-count">' + list.length + '</span></h2>' +
+              '<div class="catalog-grid"></div>';
+            const grid = section.querySelector('.catalog-grid');
+            for (const course of list) renderCard(course, grid);
+            root.appendChild(section);
+          }
         }
-
-        renderPills();
 
         /* ---------- Live text search ---------- */
         const searchInput = document.getElementById('catalog-search');
@@ -199,35 +172,6 @@
           };
           searchInput.addEventListener('input', applyQuery);
           searchClear.addEventListener('click', () => { searchInput.value = ''; applyQuery(); searchInput.focus(); });
-        }
-
-        /* ---------- Course-type dropdown ----------
-           Options are the distinct types actually present (from the sheet's
-           "Course type"), each with a count, so there are never empty choices. */
-        const typeSelect = document.getElementById('catalog-type-select');
-        if (typeSelect) {
-          const typeCounts = new Map();
-          for (const c of data.courses.filter((c) => !c.draft)) {
-            const t = c.structureType || (c.kind === 'pack' ? 'Worksheet pack' : 'Course');
-            typeCounts.set(t, (typeCounts.get(t) || 0) + 1);
-          }
-          const orderedTypes = Array.from(typeCounts.entries()).sort((a, b) => a[0].localeCompare(b[0]));
-          let opts = '<option value="">All types</option>';
-          for (const [t, n] of orderedTypes) {
-            opts += '<option value="' + escapeHtml(t) + '"' + (t === activeType ? ' selected' : '') + '>' +
-              escapeHtml(t) + ' (' + n + ')</option>';
-          }
-          typeSelect.innerHTML = opts;
-          /* A type from the URL that no longer exists → fall back to All. */
-          if (activeType && !typeCounts.has(activeType)) activeType = '';
-          typeSelect.value = activeType;
-          typeSelect.addEventListener('change', () => {
-            activeType = typeSelect.value;
-            const u = new URL(location.href);
-            if (activeType) u.searchParams.set('type', activeType); else u.searchParams.delete('type');
-            history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash);
-            renderCards();
-          });
         }
 
         let totalScreens = 0;
@@ -262,7 +206,7 @@
 
           card.innerHTML = `
             <div class="body">
-              <div class="card-tags"><span class="card-tag${isPack ? ' card-tag-pack' : ''}">${escapeHtml(course.structureType || (isPack ? 'Worksheet pack' : 'Course'))}</span>${hasCert ? '<span class="card-tag card-tag-cert" title="Includes certificate of completion">★ Certificate</span>' : ''}</div>
+              ${hasCert ? '<div class="card-tags"><span class="card-tag card-tag-cert" title="Includes certificate of completion">★ Certificate</span></div>' : ''}
               <span class="code">${escapeHtml(course.code)}</span>
               <h3><a class="card-title-link" href="dashboard.html?id=${course.id}">${escapeHtml(course.title)}</a></h3>
               <p>${escapeHtml(course.shortDescription)}</p>

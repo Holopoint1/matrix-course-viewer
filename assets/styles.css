@@ -324,7 +324,7 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   .stat-card { padding: 0.85rem 0.95rem 1rem; }
   .stat-card-num { font-size: 1.55rem; }
   .stat-card-lg .stat-card-num { font-size: 1.85rem; }
-  .catalog { grid-template-columns: 1fr; }
+  .catalog-grid { grid-template-columns: 1fr; }
 }
 
 /* ---------- Buttons ---------- */
@@ -888,10 +888,38 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   margin-top: 0;
 }
 
+/* The catalogue is now a stack of grouped sections (Student/Teacher/CPD/Packs);
+   each section holds its own card grid. */
 .catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+.catalog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
   gap: 1.5rem;
+}
+.catalog-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0.2rem 1rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 2px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--primary-dark);
+}
+.catalog-group-count {
+  font-family: var(--font-body, inherit);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  border-radius: 999px;
+  padding: 0.08rem 0.6rem;
 }
 
 /* Course-card category tags (small pills inside the card body) */
