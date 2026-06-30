@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-06-29T16:06:35.546Z",
+  "generatedAt": "2026-06-30T08:01:29.237Z",
   "summary": {
     "courses": 9,
-    "screens": 210,
-    "displaying": 210,
+    "screens": 211,
+    "displaying": 211,
     "missing": 0,
     "autofixed": 0,
     "stale": 0,
-    "unused": 30,
+    "unused": 31,
     "downloadFailed": 0,
     "collisions": 1,
     "collisionsAffecting": 0
@@ -32,13 +32,14 @@
       "CO0001 - content.docx"
     ],
     "CO0002": [
+      "CO0002 - content.docx",
+      "Now try the worksheets.htm",
+      "CO0002-marking scheme.htm",
+      "CO0002-H9.htm",
+      "CO0002-A3.htm",
       "Other resources.docx",
       "CO0002-LO.docx",
-      "CO0002-A3.htm",
-      "CO0002-H9.htm",
-      "CO0002-marking scheme.htm",
-      "Now try the worksheets.htm",
-      "CO002-SOW.xlsx",
+      "CO0002-LO.htm",
       "CO0002-welcome.HTM",
       "CO0002-LO.HTM",
       "Now try the worksheets.HTM",
