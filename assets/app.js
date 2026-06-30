@@ -1697,15 +1697,21 @@
     'xmlns:a': 'http://schemas.openxmlformats.org/drawingml/2006/main',
     'xmlns:pic': 'http://schemas.openxmlformats.org/drawingml/2006/picture'
   };
-  function ensureDocNamespaces(skelDoc) {
-    const m = skelDoc.match(/<w:document\b([^>]*)>/);
-    if (!m) return skelDoc;
-    let attrs = m[1];
-    for (const k of Object.keys(OOXML_NS)) {
-      if (!new RegExp('(?:^|\\s)' + k.replace(':', '\\:') + '=').test(attrs)) attrs += ' ' + k + '="' + OOXML_NS[k] + '"';
-    }
-    if (!/\bmc:Ignorable=/.test(attrs)) attrs += ' mc:Ignorable="w14 wp14"';
-    return skelDoc.replace(/<w:document\b[^>]*>/, '<w:document' + attrs + '>');
+  /* Union of namespace declarations across every merged doc. Word rejects a file as
+     "corrupted" the moment appended content uses a prefix (wp14, w15, w16se, drawing
+     namespaces…) the merged root never declared. The skeleton may declare far fewer
+     prefixes than the worksheets it absorbs, so we collect every source root's xmlns:*
+     and re-declare the union on the rebuilt document.xml AND numbering.xml. Seeded with
+     OOXML_NS so the common set is always present even if a source root is minimal. */
+  const OOXML_NS_SEED = (() => { const s = {}; for (const k of Object.keys(OOXML_NS)) s[k.slice(6)] = k + '="' + OOXML_NS[k] + '"'; return s; })();
+  function collectNs(openTag, into) {
+    const re = /xmlns:([A-Za-z0-9]+)="([^"]*)"/g; let m;
+    while ((m = re.exec(openTag || ''))) { if (!into[m[1]]) into[m[1]] = m[0]; }
+  }
+  function applyNs(openTag, into) {
+    const present = new Set([...(openTag.match(/xmlns:([A-Za-z0-9]+)=/g) || []).map((x) => x.match(/xmlns:([A-Za-z0-9]+)=/)[1])]);
+    const add = Object.keys(into).filter((p) => !present.has(p)).map((p) => into[p]);
+    return add.length ? openTag.replace(/^(<[A-Za-z0-9]+:[A-Za-z0-9]+)/, '$1 ' + add.join(' ')) : openTag;
   }
   async function compileCourseDocx(items) {
     const JSZip = window.JSZip;
@@ -1716,9 +1722,12 @@
     let numXml = numFile ? await numFile.async('string') : '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"></w:numbering>';
     let relsXml = await skel.file('word/_rels/document.xml.rels').async('string');
     let ctXml = await skel.file('[Content_Types].xml').async('string');
-    const skelDoc = ensureDocNamespaces(await skel.file('word/document.xml').async('string'));
+    const skelDoc = await skel.file('word/document.xml').async('string');
     let mergedBody = '', abstracts = '', nums = '', relsAdd = '';
     const mediaAdds = []; const ctExt = {}; let relCounter = 0; let anyLists = false;
+    const docNs = Object.assign({}, OOXML_NS_SEED), numNs = Object.assign({}, OOXML_NS_SEED);
+    collectNs((skelDoc.match(/<w:document\b[^>]*>/) || [''])[0], docNs);
+    collectNs((numXml.match(/<w:numbering\b[^>]*>/) || [''])[0], numNs);
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
       if (i > 0) mergedBody += PAGE_BREAK_XML;
@@ -1726,6 +1735,7 @@
         const zip = await JSZip.loadAsync(it.buf);
         const docF = zip.file('word/document.xml'); if (!docF) continue;
         const doc = await docF.async('string');
+        collectNs((doc.match(/<w:document\b[^>]*>/) || [''])[0], docNs);
         const relsF = zip.file('word/_rels/document.xml.rels');
         const rXml = relsF ? await relsF.async('string') : '';
         const off = (i + 1) * 100000;
@@ -1765,7 +1775,7 @@
         inner = inner.replace(/(\s)(r:(?:embed|id|link))="([^"]+)"/g, (m, sp, attr, id) => (relMap[id] ? sp + attr + '="' + relMap[id] + '"' : ''));
         mergedBody += inner;
         const nf = zip.file('word/numbering.xml');
-        if (nf) { const nx = await nf.async('string'); (nx.match(/<w:abstractNum\b[\s\S]*?<\/w:abstractNum>/g) || []).forEach((bk) => abstracts += offsetDocNumbering(bk, off)); (nx.match(/<w:num\b(?![a-zA-Z])[\s\S]*?<\/w:num>/g) || []).forEach((bk) => nums += offsetDocNumbering(bk, off)); }
+        if (nf) { const nx = await nf.async('string'); collectNs((nx.match(/<w:numbering\b[^>]*>/) || [''])[0], numNs); (nx.match(/<w:abstractNum\b[\s\S]*?<\/w:abstractNum>/g) || []).forEach((bk) => abstracts += offsetDocNumbering(bk, off)); (nx.match(/<w:num\b(?![a-zA-Z])[\s\S]*?<\/w:num>/g) || []).forEach((bk) => nums += offsetDocNumbering(bk, off)); }
       } else {
         const conv = htmlToBodyXml(it.html);
         if (conv.usesLists) anyLists = true;
@@ -1777,12 +1787,16 @@
         + '<w:abstractNum w:abstractNumId="' + HTM_DECIMAL_NUMID + '"><w:multiLevelType w:val="singleLevel"/><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum>';
       nums += '<w:num w:numId="' + HTM_BULLET_NUMID + '"><w:abstractNumId w:val="' + HTM_BULLET_NUMID + '"/></w:num><w:num w:numId="' + HTM_DECIMAL_NUMID + '"><w:abstractNumId w:val="' + HTM_DECIMAL_NUMID + '"/></w:num>';
     }
-    const numOpen = (numXml.match(/<w:numbering\b[^>]*>/) || ['<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'])[0];
+    /* An EMPTY skeleton numbering.xml has a SELF-CLOSED root (<w:numbering .../>); strip
+       the "/>" to a real open tag or the appended abstractNum/num become orphan root
+       elements ("multiple root elements" → corrupt). Then re-declare the namespace union. */
+    const numOpen = applyNs((numXml.match(/<w:numbering\b[^>]*>/) || ['<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'])[0].replace(/\s*\/>\s*$/, '>'), numNs);
     numXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' + numOpen + abstracts + nums + '</w:numbering>';
     const open = skelDoc.match(/<w:body[^>]*>/); const bStart = open.index + open[0].length; const bClose = skelDoc.lastIndexOf('</w:body>');
     let tail = skelDoc.slice(bStart, bClose); let sect = ''; const ls = tail.lastIndexOf('<w:sectPr');
     if (ls !== -1) { const e = tail.indexOf('</w:sectPr>', ls); if (e !== -1) sect = tail.slice(ls, e + 11); }
-    const newDoc = skelDoc.slice(0, bStart) + mergedBody + sect + skelDoc.slice(bClose);
+    let newDoc = skelDoc.slice(0, bStart) + mergedBody + sect + skelDoc.slice(bClose);
+    newDoc = newDoc.replace(/<w:document\b[^>]*>/, (m) => { let t = applyNs(m, docNs); if (!/mc:Ignorable=/.test(t)) t = t.replace(/^(<w:document)/, '$1 mc:Ignorable="w14 wp14"'); return t; });
     if (relsAdd) relsXml = relsXml.replace('</Relationships>', relsAdd + '</Relationships>');
     let ctAdd = '';
     for (const ext of Object.keys(ctExt)) if (!new RegExp('<Default\\s+Extension="' + ext + '"', 'i').test(ctXml)) ctAdd += '<Default Extension="' + ext + '" ContentType="' + ctExt[ext] + '"/>';
