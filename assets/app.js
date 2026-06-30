@@ -1449,6 +1449,16 @@
     if (/\/document\/d\//.test(wu))     return { url: wu, label: 'Open in Word' };
     if (/\/spreadsheets\/d\//.test(wu)) return { url: wu, label: 'Open in Google Sheets' };
     if (/\/presentation\/d\//.test(wu)) return { url: wu, label: 'Open in Google Slides' };
+    /* A non-native Drive file (e.g. an .htm worksheet, or an uploaded .docx/.xlsx)
+       — open it in Drive, where the learner can choose "Open with…" the matching
+       Google editor. Gives .htm screens the same open-the-original option the
+       Word-backed screens already have. Labelled by the screen's type. */
+    if (/drive\.google\.com\/file\//.test(wu)) {
+      const t = effectiveType(screen);
+      if (t === 'spreadsheet') return { url: wu, label: 'Open in Google Sheets' };
+      if (t === 'powerpoint')  return { url: wu, label: 'Open in Google Slides' };
+      if (t === 'html' || t === 'document') return { url: wu, label: 'Open in Google Docs' };
+    }
     return null;
   }
   function updateScreenActions(screen) {
