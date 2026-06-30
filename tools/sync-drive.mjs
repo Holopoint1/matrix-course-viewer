@@ -339,17 +339,14 @@ function realName(folderCode, name) {
   }
   if (entry.names.has(name)) return name;                // already exact
   const hits = entry.byCanon.get(canon(name));
-  if (!hits || !hits.length) {
-    /* Format-agnostic fallback: the sheet may name "X.htm" while the real file is the
-       SAME content in another format — e.g. a Google Doc exported to "X.docx", or a
-       Sheet exported to "X.xlsx". Match by BASE NAME (ignoring the extension), and use
-       it ONLY when exactly one file in this folder shares that base — so it can never
-       pick the wrong file. The viewer renders by the file's real type, so it just works. */
-    const stripExt = (s) => canon(s).replace(/\.[a-z0-9]+$/, '');
-    const wantBase = stripExt(name);
-    const byBase = [...entry.names].filter((n) => stripExt(n) === wantBase);
-    return byBase.length === 1 ? byBase[0] : null;
-  }
+  /* STRICT matching: resolve ONLY to the exact name or a trivially-equivalent
+     spelling (letter-case, en/em-dash vs hyphen, .htm↔.html, .jpg↔.jpeg,
+     .tif↔.tiff). There is no base-name / cross-extension fallback — a screen that
+     asks for "X.xlsx" can only ever resolve to a spreadsheet of that name, never a
+     same-named .htm/.docx/etc. Anything not present is reported MISSING so the Drive
+     filename (e.g. a CO002 vs CO0002 typo) gets corrected rather than silently
+     substituted with the wrong file. */
+  if (!hits || !hits.length) return null;
   if (hits.length === 1) return hits[0];
   /* >1 file shares one canon key (e.g. a hyphen vs en-dash twin, or .htm vs .html)
      — they may be byte-different siblings, so don't pick blindly. Rank by closeness
