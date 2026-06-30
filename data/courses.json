@@ -52,8 +52,9 @@
           "hours": 0.1,
           "src": "content/CO0002/BTEC National Unit 6 syllabus mapping.xlsx",
           "path": "/CO0002 - Introduction to microcontrollers/media/BTEC National Unit 6 syllabus mapping.xlsx",
-          "equipment": "Flowcode / E-blocks3",
-          "missing": true
+          "v": "bc18076119",
+          "webUrl": "https://docs.google.com/spreadsheets/d/14TVCyrQZBJs3bTR6tZiHzb9Gn-xOunPt/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s5",

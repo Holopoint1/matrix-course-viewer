@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-30T07:36:25.525Z",
+  "generatedAt": "2026-06-30T07:37:07.049Z",
   "summary": {
     "courses": 9,
     "screens": 211,
-    "displaying": 210,
-    "missing": 1,
+    "displaying": 211,
+    "missing": 0,
     "autofixed": 0,
     "stale": 0,
     "unused": 31,
@@ -12,22 +12,7 @@
     "collisions": 1,
     "collisionsAffecting": 0
   },
-  "courses": {
-    "CO0002": {
-      "title": "Introduction to Microcontrollers",
-      "stale": [],
-      "missing": [
-        {
-          "id": "CO0002-s4",
-          "title": "Syllabus",
-          "asked": "BTEC National Unit 6 syllabus mapping.xlsx",
-          "expectedIn": "CO0002",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0002 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
-    }
-  },
+  "courses": {},
   "unusedMedia": {
     "CP0507": [
       "CP0507-Head.docx"
