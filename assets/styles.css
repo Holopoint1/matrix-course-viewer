@@ -2876,6 +2876,13 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
 .options-dropdown .opt-item:focus-visible { background: var(--primary-50); color: var(--primary-dark); outline: none; }
 .options-dropdown .opt-item:disabled { opacity: 0.4; cursor: not-allowed; }
 .options-dropdown .opt-item[hidden] { display: none; }
+/* "Mark complete" + the show-asset-info checkbox sit under the downloads,
+   separated by a divider. */
+.options-dropdown #mark-course-btn { margin-top: 0.25rem; border-top: 1px solid var(--border); border-radius: 0; padding-top: 0.6rem; }
+.options-dropdown .opt-check input { margin: 0; flex: none; width: 15px; height: 15px; accent-color: var(--primary); cursor: pointer; }
+
+/* Show/hide the Title·Time·Type·Asset line under the screen title. */
+.hide-asset-info #screen-meta { display: none; }
 
 /* Screen stage */
 .screen-stage {

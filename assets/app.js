@@ -24,6 +24,8 @@
     downloadCourseBtn: document.getElementById('download-course-btn'),
     optionsBtn: document.getElementById('options-btn'),
     optionsDropdown: document.getElementById('options-dropdown'),
+    markCourseBtn: document.getElementById('mark-course-btn'),
+    assetInfoToggle: document.getElementById('asset-info-toggle'),
     completeBtn: document.getElementById('complete-btn')
   };
 
@@ -234,6 +236,27 @@
       document.addEventListener('click', (e) => { if (!menu.hidden && !e.target.closest('.options-menu')) closeMenu(); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
     }
+
+    /* Mark the whole course complete (Options menu). */
+    if (els.markCourseBtn) {
+      els.markCourseBtn.addEventListener('click', () => {
+        const total = course.screens.length;
+        if (!window.confirm('Mark all ' + total + ' screen' + (total === 1 ? '' : 's') + ' in this course as complete?')) return;
+        markAllComplete();
+      });
+    }
+
+    /* Show / hide the Title·Time·Type·Asset line — a per-browser preference. The
+       checkbox lives in the Options menu; toggling it doesn't close the menu. */
+    if (els.assetInfoToggle) {
+      els.assetInfoToggle.addEventListener('change', () => {
+        try { localStorage.setItem(ASSET_INFO_KEY, els.assetInfoToggle.checked ? '1' : '0'); } catch (_) {}
+        applyAssetInfoPref();
+      });
+      const lbl = els.assetInfoToggle.closest('label');
+      if (lbl) lbl.addEventListener('click', (e) => e.stopPropagation());
+    }
+    applyAssetInfoPref();
     /* Keyboard slide navigation: ← previous screen, → next screen.
        Ignored while typing in a field, with modifier keys, or when focus
        is inside an embed (the iframe captures the key itself anyway). */
@@ -1372,6 +1395,28 @@
   function toggleComplete(screenId) {
     setComplete(screenId, !isComplete(screenId));
   }
+  /* Mark every screen in the course complete in one go — set the whole progress
+     map, then render once (cheaper and calmer than firing per-screen completion
+     animations for each). Reports full completion to a SCORM host if present. */
+  function markAllComplete() {
+    const p = loadProgress();
+    for (const s of course.screens) { if (!p[s.id]) p[s.id] = { ts: Date.now() }; }
+    saveProgress(p);
+    renderProgress();
+    updateCompleteButton();
+    if (window.MatrixSCORM && window.MatrixSCORM.isActive && window.MatrixSCORM.isActive()) {
+      window.MatrixSCORM.screenComplete(course.screens.length, course.screens.length);
+      if (window.MatrixSCORM.courseComplete) window.MatrixSCORM.courseComplete();
+    }
+  }
+
+  /* ---- Asset-info line show/hide (per-browser preference) ---- */
+  const ASSET_INFO_KEY = 'matrix-lms:showAssetInfo';
+  function applyAssetInfoPref() {
+    const show = (function () { try { return localStorage.getItem(ASSET_INFO_KEY) !== '0'; } catch (_) { return true; } })();
+    document.body.classList.toggle('hide-asset-info', !show);
+    if (els.assetInfoToggle) els.assetInfoToggle.checked = show;
+  }
   function persistLastIndex(idx) {
     try { localStorage.setItem(indexKey(), String(idx)); } catch (_) {}
   }
@@ -1598,28 +1643,62 @@
   /* ---- HTML → OOXML (text screens) ---- */
   function htmlRunXml(text, fmt) {
     if (!text) return '';
-    const rpr = [];   // CT_RPr schema order: b, i, color, sz, u
+    /* CT_RPr requires this child order: b, i, strike, color, sz, u, vertAlign. */
+    const rpr = [];
     if (fmt.b) rpr.push('<w:b/>');
     if (fmt.i) rpr.push('<w:i/>');
-    if (fmt.link) rpr.push('<w:color w:val="0563C1"/>');
+    if (fmt.strike) rpr.push('<w:strike/>');
+    if (fmt.color) rpr.push('<w:color w:val="' + fmt.color + '"/>');
+    else if (fmt.link) rpr.push('<w:color w:val="0563C1"/>');
     if (fmt.sz) rpr.push('<w:sz w:val="' + fmt.sz + '"/>');
     if (fmt.u || fmt.link) rpr.push('<w:u w:val="single"/>');
+    if (fmt.vert) rpr.push('<w:vertAlign w:val="' + fmt.vert + '"/>');
     const pr = rpr.length ? '<w:rPr>' + rpr.join('') + '</w:rPr>' : '';
     return '<w:r>' + pr + '<w:t xml:space="preserve">' + escapeHtml(text) + '</w:t></w:r>';
+  }
+  /* CSS colour → "RRGGBB" (Word's rPr colour form). Handles #rgb, #rrggbb, rgb(). */
+  function cssColorToHex(c) {
+    c = String(c || '').trim().toLowerCase();
+    let m = c.match(/^#([0-9a-f]{6})$/); if (m) return m[1].toUpperCase();
+    m = c.match(/^#([0-9a-f]{3})$/); if (m) return (m[1][0] + m[1][0] + m[1][1] + m[1][1] + m[1][2] + m[1][2]).toUpperCase();
+    m = c.match(/^rgba?\(\s*(\d+)\D+(\d+)\D+(\d+)/); if (m) return [m[1], m[2], m[3]].map((n) => (+n).toString(16).padStart(2, '0')).join('').toUpperCase();
+    return null;
+  }
+  /* Character formatting comes from BOTH tags (<b>/<i>/<u>/<s>/<sup>/<sub>/<a>)
+     AND inline CSS (style="font-style:italic;text-decoration:underline;color:…"),
+     since Word-exported HTML usually uses the CSS form. Merge whatever this element
+     declares onto the inherited formatting. */
+  function elementFmt(el, fmt) {
+    const f = Object.assign({}, fmt);
+    const t = el.tagName;
+    if (t === 'B' || t === 'STRONG') f.b = true;
+    else if (t === 'I' || t === 'EM') f.i = true;
+    else if (t === 'U' || t === 'INS') f.u = true;
+    else if (t === 'S' || t === 'STRIKE' || t === 'DEL') f.strike = true;
+    else if (t === 'SUP') f.vert = 'superscript';
+    else if (t === 'SUB') f.vert = 'subscript';
+    else if (t === 'A') f.link = true;
+    else if (t === 'FONT') { const col = cssColorToHex(el.getAttribute && el.getAttribute('color')); if (col) f.color = col; }
+    const style = ((el.getAttribute && el.getAttribute('style')) || '').toLowerCase();
+    if (style) {
+      if (/font-weight\s*:\s*(?:bold(?:er)?|[6-9]00)/.test(style)) f.b = true;
+      if (/font-style\s*:\s*italic/.test(style)) f.i = true;
+      if (/text-decoration[^;]*underline/.test(style)) f.u = true;
+      if (/text-decoration[^;]*line-through/.test(style)) f.strike = true;
+      if (/vertical-align\s*:\s*super/.test(style)) f.vert = 'superscript';
+      else if (/vertical-align\s*:\s*sub/.test(style)) f.vert = 'subscript';
+      const cm = style.match(/(?:^|;)\s*color\s*:\s*(#[0-9a-f]{3,6}|rgba?\([^)]*\))/);
+      if (cm) { const hex = cssColorToHex(cm[1]); if (hex) f.color = hex; }
+    }
+    return f;
   }
   function htmlInlineRuns(node, fmt) {
     let out = '';
     for (const ch of Array.from(node.childNodes || [])) {
       if (ch.nodeType === 3) { out += htmlRunXml(ch.textContent.replace(/\s+/g, ' '), fmt); continue; }
       if (ch.nodeType !== 1) continue;
-      const t = ch.tagName;
-      if (t === 'BR') { out += '<w:r><w:br/></w:r>'; continue; }
-      const f = Object.assign({}, fmt);
-      if (t === 'B' || t === 'STRONG') f.b = true;
-      else if (t === 'I' || t === 'EM') f.i = true;
-      else if (t === 'U') f.u = true;
-      else if (t === 'A') f.link = true;
-      out += htmlInlineRuns(ch, f);
+      if (ch.tagName === 'BR') { out += '<w:r><w:br/></w:r>'; continue; }
+      out += htmlInlineRuns(ch, elementFmt(ch, fmt));
     }
     return out;
   }
