@@ -1,18 +1,33 @@
 {
-  "generatedAt": "2026-06-30T07:31:25.008Z",
+  "generatedAt": "2026-06-30T07:34:39.013Z",
   "summary": {
     "courses": 9,
-    "screens": 210,
+    "screens": 211,
     "displaying": 210,
-    "missing": 0,
+    "missing": 1,
     "autofixed": 0,
     "stale": 0,
-    "unused": 29,
+    "unused": 31,
     "downloadFailed": 0,
     "collisions": 1,
     "collisionsAffecting": 0
   },
-  "courses": {},
+  "courses": {
+    "CO0002": {
+      "title": "Introduction to Microcontrollers",
+      "stale": [],
+      "missing": [
+        {
+          "id": "CO0002-s4",
+          "title": "Syllabus",
+          "asked": "BTEC National Unit 6 syllabus mapping.xlsx",
+          "expectedIn": "CO0002",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0002 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        }
+      ],
+      "autofixed": []
+    }
+  },
   "unusedMedia": {
     "CP0507": [
       "CP0507-Head.docx"
@@ -32,12 +47,14 @@
       "CO0001 - content.docx"
     ],
     "CO0002": [
-      "Other resources.docx",
-      "CO0002-LO.docx",
+      "CO0002 - content.docx",
+      "Now try the worksheets.htm",
       "CO0002-A3.htm",
       "CO0002-H9.htm",
       "CO0002-marking scheme.htm",
-      "Now try the worksheets.htm",
+      "Other resources.docx",
+      "CO0002-LO.docx",
+      "CO0002-LO.htm",
       "CO0002-welcome.HTM",
       "CO0002-LO.HTM",
       "Now try the worksheets.HTM",

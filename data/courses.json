@@ -6,7 +6,7 @@
       "kind": "course",
       "title": "Introduction to Microcontrollers",
       "shortDescription": "A comprehensive introduction to microcontrollers and embedded systems using Flowcode. Builds from first principles through inputs, outputs and programming to complete working projects.",
-      "estimatedHours": 99.7,
+      "estimatedHours": 99.8,
       "certificate": {
         "enabled": true,
         "templateName": "Introduction to Microcontrollers"
@@ -30,35 +30,44 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002-welcome.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-welcome.htm",
-          "v": "9acb0aae7d",
+          "v": "6fd89cea36",
           "webUrl": "https://drive.google.com/file/d/1qkYCj6DiNXLMOsDs4Mt6mxhrZrmT0w2U/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s3",
           "type": "html",
-          "title": "Learning objectives",
+          "title": "Syllabus",
           "hours": 0.1,
-          "src": "content/CO0002/CO0002-LO.htm",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-LO.htm",
-          "v": "8a0fef16eb",
-          "webUrl": "https://drive.google.com/file/d/1MI0flQ9ArsNsc_ZoSEezsHL9SPFGluUP/view?usp=drivesdk",
-          "equipment": "Flowcode / E-blocks3",
-          "wordUrl": "https://docs.google.com/document/d/1Nj-wXgTz-658daYpjY6zo6R0IxSXDinnyZrYqvIi4Io/edit?usp=drivesdk"
+          "src": "content/CO0002/CO0002-Syllabus.htm",
+          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-Syllabus.htm",
+          "v": "9be2a0e943",
+          "webUrl": "https://drive.google.com/file/d/1TUDLP83RIGX08_iRiWkPDqv_tl7ZgCJL/view?usp=drivesdk",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
           "id": "CO0002-s4",
+          "type": "sheet",
+          "title": "Syllabus",
+          "hours": 0.1,
+          "src": "content/CO0002/BTEC National Unit 6 syllabus mapping.xlsx",
+          "path": "/CO0002 - Introduction to microcontrollers/media/BTEC National Unit 6 syllabus mapping.xlsx",
+          "equipment": "Flowcode / E-blocks3",
+          "missing": true
+        },
+        {
+          "id": "CO0002-s5",
           "type": "html",
           "title": "Scheme of work",
           "hours": 0.1,
           "src": "content/CO0002/CO0002-SOW.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-SOW.htm",
-          "v": "bd7aee58ca",
+          "v": "621b1b866b",
           "webUrl": "https://drive.google.com/file/d/17eu9dcwu4kBMXgFODpOYIFkV4oZfWYmA/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s5",
+          "id": "CO0002-s6",
           "type": "sheet",
           "title": "Scheme of work",
           "hours": 0.1,
@@ -69,18 +78,18 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s6",
+          "id": "CO0002-s7",
           "type": "html",
           "title": "Equipment",
           "hours": 0.1,
           "src": "content/CO0002/CO0002-Equip.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-Equip.htm",
-          "v": "b0855aca1c",
+          "v": "75e42fbe65",
           "webUrl": "https://drive.google.com/file/d/1Teo27qsM8WK1mgKxZaisDv6IqOjGfc4s/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s7",
+          "id": "CO0002-s8",
           "type": "youtube",
           "title": "Introducing E-blocks 3",
           "hours": 0.2,
@@ -88,7 +97,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s8",
+          "id": "CO0002-s9",
           "type": "youtube",
           "title": "Introducing Flowcode",
           "hours": 0.2,
@@ -96,7 +105,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s9",
+          "id": "CO0002-s10",
           "type": "pdf",
           "title": "E-blocks datasheet",
           "hours": 0.2,
@@ -104,7 +113,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s10",
+          "id": "CO0002-s11",
           "type": "powerpoint",
           "title": "Microcontroller basics 1",
           "hours": 0.3,
@@ -115,7 +124,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s11",
+          "id": "CO0002-s12",
           "type": "powerpoint",
           "title": "Microcontroller basics 2",
           "hours": 0.3,
@@ -126,7 +135,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s12",
+          "id": "CO0002-s13",
           "type": "html",
           "title": "Getting started guide",
           "hours": 1,
@@ -134,7 +143,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s13",
+          "id": "CO0002-s14",
           "type": "document",
           "title": "First program",
           "hours": 1,
@@ -145,7 +154,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s14",
+          "id": "CO0002-s15",
           "type": "document",
           "title": "Performing calculations",
           "hours": 1,
@@ -156,7 +165,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s15",
+          "id": "CO0002-s16",
           "type": "document",
           "title": "Connection points",
           "hours": 2,
@@ -167,7 +176,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s16",
+          "id": "CO0002-s17",
           "type": "document",
           "title": "Digital inputs",
           "hours": 2,
@@ -178,7 +187,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s17",
+          "id": "CO0002-s18",
           "type": "html",
           "title": "Homework 1",
           "hours": 2,
@@ -190,7 +199,7 @@
           "wordUrl": "https://docs.google.com/document/d/1BOM0EfVVJ2A-4YQ_mnWZS8ZPj4SGbOFtLLkUxAw08a8/edit?usp=drivesdk"
         },
         {
-          "id": "CO0002-s18",
+          "id": "CO0002-s19",
           "type": "document",
           "title": "Making decisions",
           "hours": 2,
@@ -201,7 +210,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s19",
+          "id": "CO0002-s20",
           "type": "document",
           "title": "Macros / subroutines",
           "hours": 2,
@@ -212,7 +221,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s20",
+          "id": "CO0002-s21",
           "type": "document",
           "title": "Using prototype boards",
           "hours": 2,
@@ -223,7 +232,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s21",
+          "id": "CO0002-s22",
           "type": "document",
           "title": "Analogue inputs",
           "hours": 2,
@@ -234,7 +243,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s22",
+          "id": "CO0002-s23",
           "type": "document",
           "title": "Colour graphical displays",
           "hours": 2,
@@ -245,7 +254,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s23",
+          "id": "CO0002-s24",
           "type": "html",
           "title": "Homework 2",
           "hours": 2,
@@ -256,7 +265,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s24",
+          "id": "CO0002-s25",
           "type": "document",
           "title": "Light sensor",
           "hours": 2,
@@ -267,7 +276,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s25",
+          "id": "CO0002-s26",
           "type": "document",
           "title": "Analogue temperature sensor",
           "hours": 2,
@@ -278,7 +287,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s26",
+          "id": "CO0002-s27",
           "type": "html",
           "title": "Homework 3",
           "hours": 2,
@@ -289,7 +298,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s27",
+          "id": "CO0002-s28",
           "type": "html",
           "title": "Assessment 1",
           "hours": 2,
@@ -300,7 +309,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s28",
+          "id": "CO0002-s29",
           "type": "document",
           "title": "Digital temperature sensor",
           "hours": 2,
@@ -311,7 +320,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s29",
+          "id": "CO0002-s30",
           "type": "document",
           "title": "Digital accelerometer",
           "hours": 2,
@@ -322,7 +331,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s30",
+          "id": "CO0002-s31",
           "type": "html",
           "title": "Homework 4",
           "hours": 2,
@@ -333,7 +342,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s31",
+          "id": "CO0002-s32",
           "type": "html",
           "title": "Assessment 2",
           "hours": 2,
@@ -344,7 +353,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s32",
+          "id": "CO0002-s33",
           "type": "html",
           "title": "Homework 5",
           "hours": 2,
@@ -355,7 +364,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s33",
+          "id": "CO0002-s34",
           "type": "document",
           "title": "Basic DC motors",
           "hours": 2,
@@ -366,7 +375,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s34",
+          "id": "CO0002-s35",
           "type": "document",
           "title": "Full bridge motor control",
           "hours": 2,
@@ -377,7 +386,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s35",
+          "id": "CO0002-s36",
           "type": "document",
           "title": "Stepper motor control",
           "hours": 2,
@@ -388,7 +397,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s36",
+          "id": "CO0002-s37",
           "type": "document",
           "title": "Servo motor control",
           "hours": 2,
@@ -399,7 +408,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s37",
+          "id": "CO0002-s38",
           "type": "html",
           "title": "Homework 6",
           "hours": 2,
@@ -410,7 +419,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s38",
+          "id": "CO0002-s39",
           "type": "document",
           "title": "Floats and INTs",
           "hours": 2,
@@ -421,7 +430,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s39",
+          "id": "CO0002-s40",
           "type": "document",
           "title": "Pin interrupts",
           "hours": 2,
@@ -432,7 +441,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s40",
+          "id": "CO0002-s41",
           "type": "document",
           "title": "Timer interrupts",
           "hours": 3,
@@ -443,7 +452,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s41",
+          "id": "CO0002-s42",
           "type": "html",
           "title": "Homework 7",
           "hours": 2,
@@ -454,7 +463,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s42",
+          "id": "CO0002-s43",
           "type": "document",
           "title": "Touch control systems",
           "hours": 4,
@@ -465,7 +474,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s43",
+          "id": "CO0002-s44",
           "type": "html",
           "title": "Homework 8",
           "hours": 2,
@@ -477,7 +486,7 @@
           "wordUrl": "https://docs.google.com/document/d/1QqwOaJVPD0M4VRFCePkRfrDeQqyQgRAXXPp24yBi4lA/edit?usp=drivesdk"
         },
         {
-          "id": "CO0002-s44",
+          "id": "CO0002-s45",
           "type": "document",
           "title": "Web mirror",
           "hours": 4,
@@ -488,7 +497,7 @@
           "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "CO0002-s45",
+          "id": "CO0002-s46",
           "type": "html",
           "title": "Project",
           "hours": 30,
@@ -1563,7 +1572,7 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002-Equip.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-Equip.htm",
-          "v": "b0855aca1c",
+          "v": "75e42fbe65",
           "webUrl": "https://drive.google.com/file/d/1Teo27qsM8WK1mgKxZaisDv6IqOjGfc4s/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -1687,7 +1696,7 @@
           "hours": 0.1,
           "src": "content/CO0002/Other resources.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/Other resources.htm",
-          "v": "18c9ba415a",
+          "v": "2466a07e3b",
           "webUrl": "https://drive.google.com/file/d/14CPqSFC06XTBg1qB2MQiZl9h52I3c5aC/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3",
           "wordUrl": "https://docs.google.com/document/d/1qKcUvSOWtRKUkmnK42AqBNQh5sOJlEiKRI-3fnj79lw/edit?usp=drivesdk"
@@ -1833,7 +1842,7 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002-Equip.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-Equip.htm",
-          "v": "b0855aca1c",
+          "v": "75e42fbe65",
           "webUrl": "https://drive.google.com/file/d/1Teo27qsM8WK1mgKxZaisDv6IqOjGfc4s/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
         },
@@ -2208,7 +2217,7 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002-Equip.htm",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-Equip.htm",
-          "v": "b0855aca1c",
+          "v": "75e42fbe65",
           "webUrl": "https://drive.google.com/file/d/1Teo27qsM8WK1mgKxZaisDv6IqOjGfc4s/view?usp=drivesdk",
           "equipment": "Flowcode / E-blocks3"
         },
