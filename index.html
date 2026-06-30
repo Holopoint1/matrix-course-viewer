@@ -36,6 +36,12 @@
                autocomplete="off" spellcheck="false">
         <button type="button" class="catalog-search-clear" id="catalog-search-clear" hidden aria-label="Clear search">&times;</button>
       </div>
+      <div class="catalog-type">
+        <label class="catalog-type-label" for="catalog-type-select">Course type</label>
+        <select id="catalog-type-select" class="catalog-type-select" aria-label="Filter by course type">
+          <option value="">All courses</option>
+        </select>
+      </div>
     </div>
     <div class="catalog" id="catalog">
       <p class="stage-loading">Loading courses&hellip;</p>
@@ -101,6 +107,7 @@
         const emptyEl = document.getElementById('catalog-empty');
         const urlParams = new URLSearchParams(location.search);
         let activeQuery = (urlParams.get('q') || '').trim();
+        let activeType = urlParams.get('type') || '';
 
         /* ---------- Course groupings (headings) ----------
            Four sections, shown in this fixed order. A course's group comes from the
@@ -130,6 +137,7 @@
              (code/title/description/categories/keywords/type). */
           const terms = activeQuery.toLowerCase().split(/\s+/).filter(Boolean);
           const visible = data.courses.filter((c) => !c.draft)
+            .filter((c) => !activeType || courseGroup(c) === activeType)
             .filter((c) => !terms.length || terms.every((t) => (c._search || '').indexOf(t) >= 0));
           if (!visible.length) {
             emptyEl.textContent = activeQuery ? 'No courses match “' + activeQuery + '”.' : 'No courses yet.';
@@ -172,6 +180,33 @@
           };
           searchInput.addEventListener('input', applyQuery);
           searchClear.addEventListener('click', () => { searchInput.value = ''; applyQuery(); searchInput.focus(); });
+        }
+
+        /* ---------- Course-type dropdown ----------
+           The four groups (Student/Teacher/CPD/Worksheet packs), in order, each
+           with a live count. Picking one shows just that group's section; "All
+           courses" shows every section. Empty groups never appear as choices. */
+        const typeSelect = document.getElementById('catalog-type-select');
+        if (typeSelect) {
+          const counts = {};
+          for (const c of data.courses.filter((c) => !c.draft)) { const g = courseGroup(c); counts[g] = (counts[g] || 0) + 1; }
+          const extra = Object.keys(counts).filter((g) => GROUP_ORDER.indexOf(g) < 0).sort();
+          let opts = '<option value="">All courses</option>';
+          for (const g of GROUP_ORDER.concat(extra)) {
+            if (!counts[g]) continue;
+            opts += '<option value="' + escapeHtml(g) + '"' + (g === activeType ? ' selected' : '') + '>' +
+              escapeHtml(g) + ' (' + counts[g] + ')</option>';
+          }
+          typeSelect.innerHTML = opts;
+          if (activeType && !counts[activeType]) activeType = '';   // a stale ?type= → All
+          typeSelect.value = activeType;
+          typeSelect.addEventListener('change', () => {
+            activeType = typeSelect.value;
+            const u = new URL(location.href);
+            if (activeType) u.searchParams.set('type', activeType); else u.searchParams.delete('type');
+            history.replaceState(null, '', u.pathname + (u.search ? u.search : '') + u.hash);
+            renderCards();
+          });
         }
 
         let totalScreens = 0;
