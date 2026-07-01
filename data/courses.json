@@ -17,10 +17,7 @@
           "type": "image",
           "title": "Introduction to microcontrollers",
           "hours": 0,
-          "src": "content/CO0002/CO0002 - opening.png",
-          "path": "/CO0002 - Introduction to microcontrollers/media/CO0002 - opening.png",
-          "v": "ae69e6e333",
-          "webUrl": "https://drive.google.com/file/d/1cDd27-n9Hc8rFq7DqzazxxtluAOq43_a/view?usp=drivesdk",
+          "src": "https://i0.wp.com/circuitcellar.com/wp-content/uploads/2016/11/Dobson-Matrix.jpg",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -74,7 +71,7 @@
           "hours": 0.1,
           "src": "content/CO0002/CO0002-SOW.xlsx",
           "path": "/CO0002 - Introduction to microcontrollers/media/CO0002-SOW.xlsx",
-          "v": "2101816cc8",
+          "v": "7b334c9ad0",
           "webUrl": "https://docs.google.com/spreadsheets/d/1G9ZfNqzKsTYRNp7KdbODNQgorXhxmRco/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
           "equipment": "Flowcode / E-blocks3"
         },
