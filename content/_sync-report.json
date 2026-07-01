@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T16:26:44.472Z",
+  "generatedAt": "2026-07-01T16:31:33.958Z",
   "summary": {
     "courses": 9,
     "screens": 212,
@@ -7,7 +7,7 @@
     "missing": 0,
     "autofixed": 1,
     "stale": 0,
-    "unused": 34,
+    "unused": 33,
     "downloadFailed": 0,
     "collisions": 2,
     "collisionsAffecting": 0
@@ -73,7 +73,6 @@
       "CO0002 - Equip.htm",
       "bits.docx",
       "CO0002 - SOW.htm",
-      "CO0002 - opening.png",
       "CO0002-H8.docx"
     ],
     "CP1972": [
