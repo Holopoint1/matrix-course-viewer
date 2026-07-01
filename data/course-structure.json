@@ -1,6 +1,6 @@
 {
   "_note": "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. Rebuilt on each sync; a blank Keywords cell keeps the existing value. Powers the catalogue search + course type. Edit the sheet to change it.",
-  "generatedAt": "2026-07-01T05:11:35.313Z",
+  "generatedAt": "2026-07-01T05:16:36.570Z",
   "source": "Course_structure",
   "courses": {
     "CO0001": {
