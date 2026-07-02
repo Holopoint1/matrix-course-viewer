@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-07-02T11:51:39.616Z",
+  "generatedAt": "2026-07-02T11:56:39.956Z",
   "summary": {
     "courses": 10,
-    "screens": 231,
-    "displaying": 231,
+    "screens": 232,
+    "displaying": 232,
     "missing": 0,
     "autofixed": 1,
     "stale": 0,
     "unused": 33,
     "downloadFailed": 0,
-    "collisions": 2,
-    "collisionsAffecting": 0
+    "collisions": 3,
+    "collisionsAffecting": 1
   },
   "courses": {
     "CO0003": {
@@ -81,6 +81,12 @@
   },
   "failed": [],
   "collisions": [
+    {
+      "code": "CO6930",
+      "name": "CO6930 - content.docx",
+      "count": 2,
+      "used": true
+    },
     {
       "code": "CO0001",
       "name": "CO0001 - content.docx",

@@ -2572,6 +2572,15 @@
         },
         {
           "id": "CO6930-s2",
+          "type": "document",
+          "title": "content",
+          "hours": 0,
+          "src": "content/CO6930/CO6930 - content.docx",
+          "webUrl": "https://docs.google.com/document/d/19TaNQSDQ6rcc2LfwRRl6l0skAtjMJR1a/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "fee383a18a"
+        },
+        {
+          "id": "CO6930-s3",
           "type": "spreadsheet",
           "title": "definition (live)",
           "hours": 0,
@@ -2580,7 +2589,7 @@
           "v": "0052313df0"
         },
         {
-          "id": "CO6930-s3",
+          "id": "CO6930-s4",
           "type": "html",
           "title": "Equip",
           "hours": 0,
@@ -2589,7 +2598,7 @@
           "v": "dc3a466df7"
         },
         {
-          "id": "CO6930-s4",
+          "id": "CO6930-s5",
           "type": "html",
           "title": "Handbook",
           "hours": 0,
@@ -2598,7 +2607,7 @@
           "v": "0485f7b08b"
         },
         {
-          "id": "CO6930-s5",
+          "id": "CO6930-s6",
           "type": "html",
           "title": "LO",
           "hours": 0,
@@ -2607,7 +2616,7 @@
           "v": "f4821b95c9"
         },
         {
-          "id": "CO6930-s6",
+          "id": "CO6930-s7",
           "type": "html",
           "title": "Safety",
           "hours": 0,
@@ -2616,7 +2625,7 @@
           "v": "080ec54e4a"
         },
         {
-          "id": "CO6930-s7",
+          "id": "CO6930-s8",
           "type": "html",
           "title": "W1",
           "hours": 0,
@@ -2625,7 +2634,7 @@
           "v": "c031259941"
         },
         {
-          "id": "CO6930-s8",
+          "id": "CO6930-s9",
           "type": "html",
           "title": "W10",
           "hours": 0,
@@ -2634,7 +2643,7 @@
           "v": "2612339eec"
         },
         {
-          "id": "CO6930-s9",
+          "id": "CO6930-s10",
           "type": "html",
           "title": "W11",
           "hours": 0,
@@ -2643,7 +2652,7 @@
           "v": "a3f23b9da5"
         },
         {
-          "id": "CO6930-s10",
+          "id": "CO6930-s11",
           "type": "html",
           "title": "W12",
           "hours": 0,
@@ -2652,7 +2661,7 @@
           "v": "c775ecbc06"
         },
         {
-          "id": "CO6930-s11",
+          "id": "CO6930-s12",
           "type": "html",
           "title": "W2",
           "hours": 0,
@@ -2661,7 +2670,7 @@
           "v": "3c29ccf547"
         },
         {
-          "id": "CO6930-s12",
+          "id": "CO6930-s13",
           "type": "html",
           "title": "W3",
           "hours": 0,
@@ -2670,7 +2679,7 @@
           "v": "663bf072b6"
         },
         {
-          "id": "CO6930-s13",
+          "id": "CO6930-s14",
           "type": "html",
           "title": "W4",
           "hours": 0,
@@ -2679,7 +2688,7 @@
           "v": "dd3c4bab7a"
         },
         {
-          "id": "CO6930-s14",
+          "id": "CO6930-s15",
           "type": "html",
           "title": "W5",
           "hours": 0,
@@ -2688,7 +2697,7 @@
           "v": "c225bb3f82"
         },
         {
-          "id": "CO6930-s15",
+          "id": "CO6930-s16",
           "type": "html",
           "title": "W6",
           "hours": 0,
@@ -2697,7 +2706,7 @@
           "v": "b393e59fdf"
         },
         {
-          "id": "CO6930-s16",
+          "id": "CO6930-s17",
           "type": "html",
           "title": "W7",
           "hours": 0,
@@ -2706,7 +2715,7 @@
           "v": "4ef396476a"
         },
         {
-          "id": "CO6930-s17",
+          "id": "CO6930-s18",
           "type": "html",
           "title": "W8",
           "hours": 0,
@@ -2715,7 +2724,7 @@
           "v": "33b3ec5e55"
         },
         {
-          "id": "CO6930-s18",
+          "id": "CO6930-s19",
           "type": "html",
           "title": "W9",
           "hours": 0,
@@ -2724,7 +2733,7 @@
           "v": "93ac7f8021"
         },
         {
-          "id": "CO6930-s19",
+          "id": "CO6930-s20",
           "type": "html",
           "title": "welcome",
           "hours": 0,
