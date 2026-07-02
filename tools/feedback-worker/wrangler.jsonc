@@ -1,0 +1,8 @@
+{
+  "name": "matrix-feedback",
+  "main": "src/index.js",
+  "compatibility_date": "2025-06-01",
+  "kv_namespaces": [
+    { "binding": "FEEDBACK", "id": "060e3ce1f3e243a49f1e6d0cf8786026" }
+  ]
+}

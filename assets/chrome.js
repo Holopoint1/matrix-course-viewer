@@ -33,18 +33,21 @@
      account button on the far right of the header is the single entry
      point, so the label isn't duplicated. */
   const NAV_LINKS = [
-    { href: 'index.html',   label: 'Courses',    match: ['index.html', ''] },
-    { href: 'support.html', label: 'Support',    match: ['support.html'] },
-    { href: 'files.html',   label: 'Tools',      match: ['files.html', 'preview.html', 'tools.html'] },
-    { href: 'admin.html',   label: 'Admin',      match: ['admin.html'] }
+    { href: 'index.html',    label: 'Courses',    match: ['index.html', ''] },
+    { href: 'support.html',  label: 'Support',    match: ['support.html'] },
+    { href: 'feedback.html', label: 'Feedback',   match: ['feedback.html'] },
+    { href: 'files.html',    label: 'Tools',      match: ['files.html', 'preview.html', 'tools.html'] },
+    { href: 'admin.html',    label: 'Admin',      match: ['admin.html', 'guide.html'] }
   ];
 
   const FOOTER_LINKS = [
-    { href: 'index.html',   label: 'Courses' },
-    { href: 'account.html', label: 'My Account' },
-    { href: 'files.html',   label: 'Tools' },
-    { href: 'support.html', label: 'Support' },
-    { href: 'admin.html',   label: 'Admin' },
+    { href: 'index.html',    label: 'Courses' },
+    { href: 'account.html',  label: 'My Account' },
+    { href: 'files.html',    label: 'Tools' },
+    { href: 'support.html',  label: 'Support' },
+    { href: 'feedback.html', label: 'Feedback' },
+    { href: 'admin.html',    label: 'Admin' },
+    { href: 'guide.html',    label: 'How to add a course' },
     { href: 'https://www.matrixtsl.com', label: 'matrixtsl.com', external: true },
     { href: 'https://www.flowcode.co.uk', label: 'flowcode.co.uk', external: true }
   ];
