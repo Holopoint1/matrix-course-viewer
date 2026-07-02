@@ -79,6 +79,11 @@
   <header class="site-header" id="site-header"></header>
 
   <main class="am-wrap">
+    <div class="htc-banner" id="htc-banner">
+      <span class="htc-ico">&#128218;</span>
+      <div class="htc-txt"><strong>Adding a course?</strong> <span>New Google&nbsp;Drive folder &rarr; add the files &amp; a definition sheet &rarr; row in Course_structure &rarr; Sync.</span></div>
+      <button class="btn btn-primary" id="htc-open" type="button">Open the guide &rarr;</button>
+    </div>
     <section class="am-main" id="dash"><p class="stage-loading">Loading live course health&hellip;</p></section>
   </main>
 
@@ -290,6 +295,99 @@
     load();
     timer = setInterval(load, REFRESH_MS);   /* live: re-pull the report + courses every minute */
   })();
+  </script>
+
+  <!-- ===== How to add a course (self-contained guide) ===== -->
+  <style>
+    .htc-banner { display:flex; align-items:center; gap:.9rem; background:linear-gradient(135deg,#eef4ff,#fff); border:1px solid #dbe6ff; border-left:4px solid #1d4ed8; border-radius:12px; padding:.85rem 1.1rem; margin:0 0 1.1rem; }
+    .htc-ico { font-size:1.6rem; line-height:1; }
+    .htc-txt { flex:1; font-size:.92rem; color:#334155; line-height:1.45; }
+    .htc-txt strong { color:#1740b0; }
+    @media (max-width:640px) { .htc-txt span { display:none; } }
+    .htc-overlay { position:fixed; inset:0; background:rgba(15,23,42,.55); display:none; align-items:flex-start; justify-content:center; z-index:1000; padding:2.4rem 1rem; overflow:auto; }
+    .htc-overlay.open { display:flex; }
+    .htc-card { background:#fff; max-width:780px; width:100%; border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,.3); }
+    .htc-head { display:flex; align-items:center; gap:.6rem; padding:1.1rem 1.4rem; border-bottom:1px solid #e2e8f0; position:sticky; top:0; background:#fff; border-radius:16px 16px 0 0; }
+    .htc-head h2 { margin:0; font-size:1.15rem; color:#0f172a; }
+    .htc-x { margin-left:auto; border:0; background:transparent; font-size:1.6rem; line-height:1; cursor:pointer; color:#64748b; }
+    .htc-body { padding:1.2rem 1.4rem 1.4rem; color:#0f172a; }
+    .htc-lead { color:#475569; line-height:1.6; margin:.1rem 0 1.3rem; font-size:.92rem; }
+    .htc-step { display:flex; gap:.9rem; margin:0 0 1.15rem; }
+    .htc-num { flex:none; width:30px; height:30px; border-radius:50%; background:#1d4ed8; color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:.9rem; }
+    .htc-step h3 { margin:.25rem 0 .35rem; font-size:.98rem; }
+    .htc-step p { margin:.15rem 0; font-size:.9rem; color:#475569; line-height:1.55; }
+    .htc-step code { background:#eef4ff; color:#1740b0; padding:.05rem .35rem; border-radius:4px; font-family:ui-monospace,Consolas,monospace; font-size:.85em; }
+    .htc-table { width:100%; border-collapse:collapse; margin:.55rem 0; font-size:.8rem; }
+    .htc-table th, .htc-table td { border:1px solid #e2e8f0; padding:.32rem .5rem; text-align:left; }
+    .htc-table th { background:#eef4ff; color:#1740b0; }
+    .htc-vals { font-size:.8rem; color:#64748b; margin:.35rem 0 0; }
+    .htc-tip { background:#fffaf0; border:1px solid #fed7aa; border-radius:10px; padding:.75rem 1rem; font-size:.86rem; color:#92400e; line-height:1.5; margin-top:.5rem; }
+    .htc-tip strong { color:#b45309; }
+    .htc-foot { padding:.9rem 1.4rem; border-top:1px solid #e2e8f0; display:flex; gap:.6rem; justify-content:flex-end; background:#fafbfc; border-radius:0 0 16px 16px; }
+  </style>
+  <div class="htc-overlay" id="htc-modal">
+    <div class="htc-card">
+      <div class="htc-head"><h2>&#128218; How to add a course</h2><button class="htc-x" id="htc-close" type="button" title="Close">&times;</button></div>
+      <div class="htc-body">
+        <p class="htc-lead">Everything lives in <strong>Google Drive</strong>. A course = a <strong>Drive folder</strong> + a <strong>definition sheet</strong> + a <strong>row in Course_structure</strong>. Add those, click <em>Sync from Drive now</em>, and it publishes to the site.</p>
+
+        <div class="htc-step"><div class="htc-num">1</div><div>
+          <h3>Create the course folder in Google Drive</h3>
+          <p>In the shared Drive (<code>LMS Project Assets</code>), make a new folder named with the course code and title, e.g. <code>CO0010 - Fire Safety Basics</code>. The code is <strong>two letters + four digits</strong>.</p>
+        </div></div>
+
+        <div class="htc-step"><div class="htc-num">2</div><div>
+          <h3>Add the content files</h3>
+          <p>Put the screen files in that folder &mdash; worksheets (<code>.docx</code>), images (<code>.png</code>/<code>.jpg</code>), PDFs, etc.</p>
+        </div></div>
+
+        <div class="htc-step"><div class="htc-num">3</div><div>
+          <h3>Create the definition sheet</h3>
+          <p>Add a Google Sheet named <code>&lt;CODE&gt; - definition</code> (e.g. <code>CO0010 - definition</code>). One row per screen, in order:</p>
+          <table class="htc-table">
+            <tr><th>Screen Type</th><th>Title</th><th>File</th><th>Hours</th><th>Equipment</th></tr>
+            <tr><td>worksheet</td><td>Intro to Fire Safety</td><td>intro.docx</td><td>0.5</td><td></td></tr>
+            <tr><td>image</td><td>Extinguisher chart</td><td>chart.png</td><td>0.2</td><td></td></tr>
+            <tr><td>youtube</td><td>Safety demo</td><td>https://youtu.be/&hellip;</td><td>0.3</td><td></td></tr>
+          </table>
+          <p class="htc-vals"><strong>Screen Type</strong> accepts: worksheet / document &middot; image &middot; pdf &middot; youtube &middot; spreadsheet &middot; powerpoint &middot; html. <strong>File</strong> is just the filename in the folder (or a full URL for YouTube).</p>
+        </div></div>
+
+        <div class="htc-step"><div class="htc-num">4</div><div>
+          <h3>Add a row to the Course_structure sheet</h3>
+          <p>Open the <code>Course_structure</code> sheet and add a row: <strong>Course Code, Course Title, Course Type, Number of Sheets, Hours of Learning, Keywords, Description</strong>. This drives the course card &mdash; its grouping, description and search.</p>
+        </div></div>
+
+        <div class="htc-step"><div class="htc-num">5</div><div>
+          <h3>Sync from Drive</h3>
+          <p>Back on this page, click <strong>&#128640; Sync from Drive now</strong> (top of the dashboard). It pulls everything from Drive and publishes to the site &mdash; takes ~1&ndash;2 minutes, then the page refreshes. <em>(It also syncs automatically every ~5 minutes.)</em></p>
+        </div></div>
+
+        <div class="htc-step"><div class="htc-num">6</div><div>
+          <h3>Check it&rsquo;s healthy</h3>
+          <p>The course now appears on the <a href="index.html" target="_blank">Courses page</a>. This dashboard shows its health &mdash; every screen should read <strong>&#9989; Displays</strong>.</p>
+        </div></div>
+
+        <div class="htc-tip"><strong>If a screen shows &#10060; Missing</strong> after syncing, a filename in your definition sheet doesn&rsquo;t match a file in the Drive folder. Fix the name (in the sheet or on the file) and sync again. Matching forgives case, hyphen-vs-en-dash and <code>.htm</code>/<code>.html</code>.</div>
+      </div>
+      <div class="htc-foot">
+        <button class="btn btn-secondary" id="htc-close2" type="button">Close</button>
+        <button class="btn btn-primary" id="htc-sync" type="button">&#128640; Sync from Drive now</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var ov = document.getElementById('htc-modal');
+      function open() { ov.classList.add('open'); }
+      function close() { ov.classList.remove('open'); }
+      document.getElementById('htc-open').addEventListener('click', open);
+      document.getElementById('htc-close').addEventListener('click', close);
+      document.getElementById('htc-close2').addEventListener('click', close);
+      ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+      document.getElementById('htc-sync').addEventListener('click', function () { close(); var ds = document.getElementById('dash-sync'); if (ds) ds.click(); });
+    })();
   </script>
 
 </body>
