@@ -73,17 +73,9 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # Commits pushed by the Actions token do NOT trigger the GitHub Pages build,
-      # so a sync-only change would never reach the live site. Request the Pages
-      # build explicitly (an API call isn't subject to that restriction). Best-effort.
-      - name: Trigger GitHub Pages rebuild
-        if: steps.commit.outputs.changed == 'true'
-        run: |
-          code=$(curl -sS -o /tmp/pages.json -w '%{http_code}' -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages/builds")
-          echo "Pages build request -> HTTP $code"; cat /tmp/pages.json 2>/dev/null || true
-          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
-            echo "::warning::Pages build trigger returned HTTP $code — the live site may lag; check Settings ▸ Pages."
-          fi
+      # NOTE: no manual Pages-build trigger here. This repo uses modern (Actions-
+      # based) GitHub Pages, where every push to main — including the sync bot's —
+      # already runs the "pages build and deployment" workflow automatically. The
+      # old legacy POST /pages/builds call created a SECOND, competing build for the
+      # same commit, and the two fought so the deploy step failed. Removing it (plus
+      # skipping no-op commits above) lets each push produce a single clean deploy.
