@@ -719,8 +719,10 @@ async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
       if (!existing || existing._source === 'auto-files') {
         try { if (await buildDraftFromFiles(folder, code, db, byId)) built++; }
         catch (e) { console.error(`  ! ${code}: auto-build failed — ${e.message}`); }
+        // Only flag as held-back when it isn't already a published course from
+        // another source (so a legacy published course isn't shown as "missing").
+        SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `No definition sheet found. Add a Google Sheet named “${code} - definition” listing the screens, then sync again.` });
       }
-      SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `No definition sheet found. Add a Google Sheet named “${code} - definition” listing the screens, then sync again.` });
       continue;
     }
 
