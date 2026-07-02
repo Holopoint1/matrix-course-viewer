@@ -81,7 +81,7 @@ async function listChildren(folderId) {
   do {
     const res = await drive.files.list({
       q: `'${folderId}' in parents and trashed=false`,
-      fields: 'nextPageToken, files(id,name,mimeType,md5Checksum,webViewLink)',
+      fields: 'nextPageToken, files(id,name,mimeType,md5Checksum,webViewLink,modifiedTime)',
       pageSize: 1000, pageToken,
       supportsAllDrives: true, includeItemsFromAllDrives: true,
     });
@@ -161,6 +161,12 @@ async function downloadPhase() {
     .filter((f) => f.mimeType === 'application/vnd.google-apps.folder' && codeOf(f.name));
   if (!folders.length) throw new Error('No course folders visible — is "LMS Project Assets" shared (Viewer) with the service account?');
   let downloaded = 0, skipped = 0, failed = 0;
+  /* Manifest of Google-native fileId → Drive modifiedTime. Google Docs have no md5
+     and re-export with slightly different bytes each run; without this they'd churn
+     content/ every sync and cancel the GitHub Pages build before it finishes. */
+  const MANIFEST = path.join(CONTENT_DIR, '_export-manifest.json');
+  let manifest = {}; try { manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8')) || {}; } catch (_) {}
+  const newManifest = {};
   for (const folder of folders) {
     const code = codeOf(folder.name);
     if (ONLY_COURSE && code !== ONLY_COURSE) continue;
@@ -181,9 +187,18 @@ async function downloadPhase() {
       const dest = path.join(CONTENT_DIR, code, name);
       const rel = 'content/' + code + '/' + name;
       if (f.webViewLink) DRIVE_LINKS[rel] = f.webViewLink;   // exact "Open in Google …" target
-      // real files: md5-skip when unchanged. Google-native files have no md5, so always re-export (keeps edits fresh).
+      // real files: md5-skip when unchanged.
       if (!GOOGLE_EXPORT[f.mimeType] && f.md5Checksum && f.md5Checksum === localMd5(dest)) {
         skipped++; CONTENT_VERSIONS[rel] = f.md5Checksum.slice(0, 10); continue;
+      }
+      // Google-native exports: skip re-export when the SOURCE is unchanged (judged by
+      // Drive modifiedTime), so an unchanged Google Doc stays byte-identical on disk
+      // instead of re-exporting to different bytes every run.
+      if (GOOGLE_EXPORT[f.mimeType]) {
+        newManifest[f.id] = f.modifiedTime || '';
+        if (f.modifiedTime && manifest[f.id] === f.modifiedTime && fs.existsSync(dest)) {
+          skipped++; const dv = versionFromDisk(dest); if (dv) CONTENT_VERSIONS[rel] = dv; continue;
+        }
       }
       try {
         const buf = await downloadWithRetry(f, dest); console.log(`  ✓ ${name}`); downloaded++;
@@ -198,6 +213,14 @@ async function downloadPhase() {
     pruneFolder(code, keep);
   }
   console.log(`\nDownload: ${downloaded} new/updated, ${skipped} unchanged, ${failed} failed, ${SYNC_ISSUES.collisions.length} collision(s).`);
+  /* Persist the manifest with SORTED keys so an unchanged run writes byte-identical
+     JSON (no spurious git diff). A scoped (ONLY_COURSE) run only saw one course, so
+     merge into the existing manifest rather than dropping every other course. */
+  try {
+    const merged = ONLY_COURSE ? { ...manifest, ...newManifest } : newManifest;
+    const sorted = {}; Object.keys(merged).sort().forEach((k) => { sorted[k] = merged[k]; });
+    fs.writeFileSync(MANIFEST, JSON.stringify(sorted) + '\n');
+  } catch (e) { console.warn('  ! could not write export manifest — ' + e.message); }
   return driveFilesByCode;
 }
 
@@ -943,7 +966,6 @@ async function buildCourseStructure() {
 
   const payload = {
     _note: "Catalogue metadata mirrored from the Google Sheet 'LMS Project Assets/Course_structure'. Rebuilt on each sync; a blank Keywords cell keeps the existing value. Powers the catalogue search + course type. Edit the sheet to change it.",
-    generatedAt: new Date().toISOString(),
     source: 'Course_structure',
     courses: out,
   };
