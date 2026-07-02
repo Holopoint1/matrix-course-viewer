@@ -33,7 +33,7 @@ const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
    ?v= and is never served stale). Plus sync issues surfaced to the admin report. */
 const CONTENT_VERSIONS = {};
 const DRIVE_LINKS = {};   // content/<code>/<name> -> Drive webViewLink (for "Open in Google …")
-const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [] };
+const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [], drafts: [] };
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
 /* Google-native docs can't be downloaded directly, but they CAN be exported to
    their Office equivalents — so a publisher can author a screen straight from a
@@ -626,12 +626,14 @@ function writeAccuracyReport(db, driveFilesByCode) {
       missing: totalMissing, autofixed: totalAutofixed, stale: totalStale, unused: totalUnused,
       downloadFailed: SYNC_ISSUES.failed.length,
       collisions: collisions.length, collisionsAffecting,
+      drafts: SYNC_ISSUES.drafts.length,
     },
     courses, unusedMedia,
     failed: SYNC_ISSUES.failed,
     collisions,
     canonCollisions: SYNC_ISSUES.canonCollisions,
     removed: SYNC_ISSUES.removed,   // content files deleted because they were not in Drive (their screen now shows missing)
+    drafts: SYNC_ISSUES.drafts,     // Drive folders found but NOT published (with a plain-English reason each)
   };
   fs.writeFileSync(path.join(CONTENT_DIR, '_sync-report.json'), JSON.stringify(report, null, 2) + '\n');
   const staleCount = Object.values(courses).reduce((n, c) => n + c.stale.length, 0);
@@ -682,7 +684,6 @@ async function buildDraftFromFiles(folder, code, db, byId) {
  * Publishing is OPT-IN: a discovered folder only goes live if its sheet says
  * Active: yes (or true/on/live/published). Anything else — including no Active
  * cell at all — is held back as a draft, so nothing appears by accident. */
-const PUBLISH_VALUES = ['yes', 'true', 'on', '1', 'live', 'published', 'active', 'y'];
 async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
   let added = 0, drafts = 0, built = 0;
   const folders = (await listChildren(ROOT_FOLDER_ID))
@@ -691,16 +692,35 @@ async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
     const code = codeOf(folder.name);
     if (registered.has(code)) continue;                       // a registered course always wins
     if (ONLY_COURSE && code !== ONLY_COURSE) continue;
+    const titleGuess = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim() || code;
+    /* Auto-publish only CO/CP course codes (the catalogue convention). Any other
+       code — e.g. a ZZ9999 test folder — is held back and surfaced in the admin,
+       never published by surprise. */
+    if (!/^(CO|CP)/i.test(code)) {
+      SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: 'Only course codes starting CO or CP publish automatically. Rename the Drive folder to a CO/CP code to publish it.' });
+      drafts++; console.log(`  · ${code}: held (not a CO/CP code)`);
+      continue;
+    }
     const children = await listChildren(folder.id);
     const def = children.find((c) => c.mimeType === 'application/vnd.google-apps.spreadsheet' && /definition/i.test(c.name || ''));
     if (!def) {
-      // No definition sheet → auto-build a draft from the files — but NEVER
-      // clobber a course that already exists from a real source (sheet/manual).
+      /* No Google-Sheet definition. If a publisher uploaded an EXCEL (.xlsx)
+         definition instead, we can't CSV-read it — tell them exactly how to fix
+         it rather than silently ignoring the folder. */
+      const xlsxDef = children.find((c) => /definition/i.test(c.name || '') && /\.xlsx?$/i.test(c.name || ''));
+      if (xlsxDef) {
+        SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `Its definition is an uploaded Excel file (“${xlsxDef.name}”). Open it in Google Sheets and use “Save as Google Sheets”, or recreate it as a Google Sheet named “${code} - definition”.` });
+        drafts++; console.log(`  · ${code}: held — definition is an .xlsx upload, not a Google Sheet`);
+        continue;
+      }
+      // No definition at all → auto-build a DRAFT from the files (stays off the
+      // public catalogue) — but NEVER clobber a course from a real source.
       const existing = byId[code] != null ? db.courses[byId[code]] : null;
       if (!existing || existing._source === 'auto-files') {
         try { if (await buildDraftFromFiles(folder, code, db, byId)) built++; }
         catch (e) { console.error(`  ! ${code}: auto-build failed — ${e.message}`); }
       }
+      SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `No definition sheet found. Add a Google Sheet named “${code} - definition” listing the screens, then sync again.` });
       continue;
     }
 
@@ -708,14 +728,36 @@ async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
     try {
       const res = await drive.files.export({ fileId: def.id, mimeType: 'text/csv' }, { responseType: 'text' });
       csv = typeof res.data === 'string' ? res.data : String(res.data);
-    } catch (err) { console.error(`  ! ${code}: cannot read "${def.name}" — ${err.message}`); continue; }
+    } catch (err) {
+      console.error(`  ! ${code}: cannot read "${def.name}" — ${err.message}`);
+      SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `Its definition sheet couldn’t be read (${err.message}). Check it’s shared with the sync service account.` });
+      continue;
+    }
 
     const rows = parseCsv(csv);
     const settings = parseSettings(rows, findHeaderRow(rows));
+    /* OPT-OUT publishing (bulletproof): a discovered "<CODE> - Title" folder with a
+       definition sheet goes LIVE by default. It is held back ONLY when explicitly
+       marked as not-live — "Active: no" (or draft/hidden/off/false/0). An unset
+       Active cell now PUBLISHES, so adding a course "just works". */
+    const HIDE_VALUES = ['no', 'false', 'off', '0', 'draft', 'hidden', 'unpublished', 'inactive', 'n'];
     const activeRaw = String(settings.active || settings.status || settings.published || '').trim().toLowerCase();
-    if (!PUBLISH_VALUES.includes(activeRaw)) { drafts++; console.log(`  · ${code}: held as draft (Active="${activeRaw || 'unset'}")`); continue; }
+    if (HIDE_VALUES.includes(activeRaw)) {
+      drafts++;
+      SYNC_ISSUES.drafts.push({ code, title: settings.title || titleGuess, reason: `Held back on purpose — its definition sheet says Active: “${activeRaw}”. Set Active: yes (or remove that cell) to publish.` });
+      console.log(`  · ${code}: held as draft (Active="${activeRaw}")`);
+      continue;
+    }
 
     const { screens, missing } = rowsToScreens(rows, code, driveFilesByCode);
+    /* A definition sheet with a header but no screen rows yet isn't a course —
+       hold it as a draft with a clear reason instead of publishing an empty card. */
+    if (!screens.length) {
+      drafts++;
+      SYNC_ISSUES.drafts.push({ code, title: settings.title || titleGuess, reason: 'Its definition sheet has no screen rows yet. Add at least one row (Screen Type + Title + File), then sync again.' });
+      console.log(`  · ${code}: held as draft (no screen rows)`);
+      continue;
+    }
     const titleFromFolder = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim();
     const title = settings.title || titleFromFolder || code;
     const certRaw = String(settings.certificate || settings.certificates || '').toLowerCase();

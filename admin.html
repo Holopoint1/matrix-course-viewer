@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Admin · Course health | Matrix Course Viewer</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260629a">
+  <link rel="stylesheet" href="assets/styles.css?v=20260702a">
   <style>
     #dash { max-width: 1080px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; color: #0f172a; }
     #dash .dash-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin-bottom: 0.4rem; }
@@ -198,6 +198,20 @@
         '<div class="stat ' + (fixed?'warn':'') + '"><div class="n">' + fixed + '</div><div class="l">Auto-fixed names</div></div>' +
         '<div class="stat ' + (unusedTotal?'warn':'') + '"><div class="n">' + unusedTotal + '</div><div class="l">Unused files</div></div>' +
         '</div>';
+
+      /* ---- held-back folders ----
+         Drive folders that synced but did NOT reach the courses page, each with a
+         plain-English reason. Makes "I added a course but it's not showing" obvious
+         to fix instead of a silent mystery. */
+      var drafts = report.drafts || [];
+      if (drafts.length) {
+        html += '<div class="hb hb-warn"><strong>📥 ' + drafts.length + ' Drive folder' + (drafts.length === 1 ? '' : 's') + ' not yet on the courses page</strong>' +
+          '<ul style="margin:.55rem 0 0;padding-left:1.15rem;line-height:1.6">' +
+          drafts.map(function (d) {
+            return '<li><strong>' + esc(d.code || '') + (d.title ? ' · ' + esc(d.title) : '') + '</strong> — ' + esc(d.reason || 'held as a draft') + '</li>';
+          }).join('') +
+          '</ul></div>';
+      }
 
       /* ---- per-course ---- */
       courses.forEach(function (c) {

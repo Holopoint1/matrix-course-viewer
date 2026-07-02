@@ -902,6 +902,9 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
      looks far bigger than cards in the other sections. */
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
   gap: 1.5rem;
+  /* Equal-height cards across the WHOLE grid (not just per row), so a course with a
+     longer/shorter description is never a taller/shorter card than the others. */
+  grid-auto-rows: 1fr;
 }
 .catalog-group-title {
   display: flex;
@@ -1084,7 +1087,14 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   color: var(--text-muted);
   font-size: 0.9rem;
   line-height: 1.55;
-  flex: 1;
+  /* Clamp to 3 lines so description length can't change the card height. The meta
+     block below uses margin-top:auto to pin the stats + progress + button to the
+     bottom, so every card lines up identically. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .course-card .meta {
   display: flex;
@@ -1093,6 +1103,9 @@ body.nav-open .site-header-hamburger span:nth-child(3) { transform: translateY(-
   color: var(--text-muted);
   margin-bottom: 1rem;
   flex-wrap: wrap;
+  /* Pin the stats + progress + button to the bottom of the (equal-height) card,
+     so every card's call-to-action lines up regardless of description length. */
+  margin-top: auto;
 }
 .course-card .meta .chip {
   display: inline-flex;
