@@ -1,0 +1,260 @@
+[
+  {
+    "order": 1,
+    "tagType": "HTML",
+    "filename": "CO6930-welcome.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "rig-layout-front.jpg",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 2,
+    "tagType": "HTML",
+    "filename": "CO6930-LO.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 3,
+    "tagType": "HTML",
+    "filename": "CO6930-Equip.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "rig-layout-front.jpg",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 4,
+    "tagType": "HTML",
+    "filename": "CO6930-W1.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "rig-layout-front.jpg",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 5,
+    "tagType": "HTML",
+    "filename": "CO6930-W2.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "rig-layout-front.jpg",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 6,
+    "tagType": "HTML",
+    "filename": "CO6930-W3.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "rig-layout-front.jpg",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 7,
+    "tagType": "HTML",
+    "filename": "CO6930-W4.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-inputs.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 8,
+    "tagType": "HTML",
+    "filename": "CO6930-W5.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-outputs.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 9,
+    "tagType": "HTML",
+    "filename": "CO6930-W6.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-inputs.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 10,
+    "tagType": "HTML",
+    "filename": "CO6930-W7.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-inputs.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 11,
+    "tagType": "HTML",
+    "filename": "CO6930-W8.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-analogues.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 12,
+    "tagType": "HTML",
+    "filename": "CO6930-W9.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-analogues.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 13,
+    "tagType": "HTML",
+    "filename": "CO6930-W10.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-outputs.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 14,
+    "tagType": "HTML",
+    "filename": "CO6930-W11.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-plc-outputs.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 15,
+    "tagType": "HTML",
+    "filename": "CO6930-W12.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-relay-circuit.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  },
+  {
+    "order": 16,
+    "tagType": "HTML",
+    "filename": "CO6930-Handbook.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "learner content",
+    "mediaRefs": []
+  },
+  {
+    "order": 17,
+    "tagType": "HTML",
+    "filename": "CO6930-Safety.htm",
+    "outputType": "Learner HTML",
+    "destination": "outputs/html/",
+    "classification": "assessment",
+    "mediaRefs": [
+      {
+        "tag": "image",
+        "filename": "schematic-power-distribution.png",
+        "status": "missing",
+        "exportPath": null
+      }
+    ]
+  }
+]

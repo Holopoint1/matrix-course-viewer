@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO6930-W9</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #1a1a2e; background: #f4f6fb; padding: 2rem 1rem 3rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #d0d9f0; border-radius: 8px; padding: 2.5rem 3rem; box-shadow: 0 4px 24px rgba(30,60,140,0.08); }
+    h1 { font-size: 1.8em; line-height: 1.2; margin: 0 0 0.6em; color: #0f2358; }
+    h2 { font-size: 1.25em; margin: 1.6em 0 0.4em; color: #1d4ed8; }
+    h3 { font-size: 1.08em; margin: 1.3em 0 0.3em; color: #2d4166; }
+    h4, h5, h6 { font-size: 1em; margin: 1.1em 0 0.3em; color: #2d4166; }
+    p { margin: 0 0 0.8em; }
+    ul, ol { margin: 0 0 0.8em; padding-left: 1.5em; }
+    li { margin-bottom: 0.35em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #c8d5f0; padding: 0.5em 0.75em; text-align: left; vertical-align: top; }
+    th { background: #e8eeff; font-weight: 700; }
+    tr:nth-child(even) td { background: #f7f9ff; }
+    a { color: #1d4ed8; }
+    img { max-width: 100%; height: auto; display: block; margin: 0.75em 0; border-radius: 4px; }
+    figure { margin: 1em 0; }
+    figcaption { font-size: 0.85em; color: #5a7099; margin-top: 0.3em; font-style: italic; }
+    video, audio { max-width: 100%; margin: 0.75em 0; display: block; }
+    code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.9em; background: #f0f4ff; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre  { background: #f0f4ff; border: 1px solid #cdd9f8; border-radius: 6px; padding: 1em; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    .ds-missing-media { display: inline-block; padding: 0.2em 0.5em; background: #fff0da; border: 1px solid #f0d9aa; border-radius: 4px; color: #a55a00; font-size: 0.85em; }
+    .ds-download { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.3em 0.7em; background: #e0eaff; border: 1px solid #b3caff; border-radius: 4px; color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    @media print { body { background: none; padding: 0; } .page { border: none; box-shadow: none; padding: 1cm 2cm; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Worksheet 9 – Temperature Sensor</h1><p>PLC analogue inputs — PT100 temperature transmitter (AI1)</p><p>A temperature sensor tracks heat levels in real time to maintain safe and efficient system operation. Common in automation and process control, it helps prevent overheating or freezing. Engineers must understand these sensors to detect faults, ensure accurate readings, and avoid equipment damage or shutdowns.</p><h2>Over To You</h2><p>1. Navigate to worksheet 9 on the HMI.</p><p>2. Place your fingers on the temperature probe on your training rig and observe how the 'Temp Sensor Raw' value changes.</p><p>3. Remove your fingers from the probe and add a scalar value of 10 by clicking on the '0.00' of the orange scalar box.</p><p>     – Observe how the blue scaled value changes</p><p>4. Add a scalar value of 10 by clicking on the '0.00' of the orange scalar box.</p><p>     – Observe how the blue scaled value changes</p><p>5. Add a scalar value of 1000</p><p>     – Observe how the blue scaled value should now be much higher</p><p>6. Adjust the scalar value until you get to a sensible ambient temperature value (20-40°C).</p><p>     – You can find the correct scalar value in the IO Screen of the Main Menu.</p><h2>So What?</h2><p>Temperature sensors keep equipment safe by preventing overheating and detecting faults.</p><p>Types of Temperature Sensors:</p><p>• Thermocouple – Measures temperature by detecting voltage changes.</p><p>• RTD – Measures temperature through changes in resistance.</p><p>• Thermistor – A resistor that changes with temperature and responds quickly.</p><p>We are using a PT100 sensor probe, attached to an electronic IFM evaluation unit. This converts the resistance from the RTD into a 0-10V analogue voltage signal, that the PLC reads.</p><p>The PLC can't read resistance directly, but it can easily read voltage. So this conversion lets the PLC monitor temperature using one of its analogue input channels.</p><p>In Siemens PLCs, a 0–10 V analogue input is typically converted into a raw digital value ranging from 0 to 27,648.</p><p>• 0 V = 0</p><p>• 10 V = 27,648</p><p>This raw value is then scaled in your PLC program (using a scalar) to give a real-world value, like temperature.</p><p>Scaled Value = Raw Value × Scalar</p><p>• 0 V → 0 → 0 × 0.0055 = 0 °C</p><p>• 2.5 V → 6,912 → 6,912 × 0.0055 ≈ 38 °C</p><p>• 5 V → 13,824 → 13,824 × 0.0055 ≈ 76 °C</p><p>• 7.5 V → 20,736 → 20,736 × 0.0055 ≈ 114 °C</p><p>• 10 V → 27,648 → 27,648 × 0.0055 ≈ 152 °C</p><p>If your PLC reads around 32,000, it's a fault. The maximum valid value is 27,648, so this usually means the sensor is disconnected, the voltage is too high, the input type is wrong, or there's a cable issue.</p><h2>Key Takeaways</h2><p>• A PT100 sensor measures temperature by changing resistance, which is converted into a 0–10 V signal for the PLC.</p><p>• The PLC reads this voltage as a raw value from 0 to 27,648, which must be scaled to display actual temperature.</p><p>• The scalar multiplies the raw value to produce a usable temperature reading in °C.</p><p>• A reading near 32,000 indicates a fault, like a disconnected sensor or wiring issue.</p><p>• Accurate scaling is essential to reflect real ambient temperatures, typically 20–40 °C in a classroom.</p><h2>Student Handbook</h2><p>Complete the Questions &amp; Answers in the Student Handbook relating to this worksheet.</p>
+  </div>
+</body>
+</html>

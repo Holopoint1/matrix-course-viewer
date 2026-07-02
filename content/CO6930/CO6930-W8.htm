@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO6930-W8</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #1a1a2e; background: #f4f6fb; padding: 2rem 1rem 3rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #d0d9f0; border-radius: 8px; padding: 2.5rem 3rem; box-shadow: 0 4px 24px rgba(30,60,140,0.08); }
+    h1 { font-size: 1.8em; line-height: 1.2; margin: 0 0 0.6em; color: #0f2358; }
+    h2 { font-size: 1.25em; margin: 1.6em 0 0.4em; color: #1d4ed8; }
+    h3 { font-size: 1.08em; margin: 1.3em 0 0.3em; color: #2d4166; }
+    h4, h5, h6 { font-size: 1em; margin: 1.1em 0 0.3em; color: #2d4166; }
+    p { margin: 0 0 0.8em; }
+    ul, ol { margin: 0 0 0.8em; padding-left: 1.5em; }
+    li { margin-bottom: 0.35em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #c8d5f0; padding: 0.5em 0.75em; text-align: left; vertical-align: top; }
+    th { background: #e8eeff; font-weight: 700; }
+    tr:nth-child(even) td { background: #f7f9ff; }
+    a { color: #1d4ed8; }
+    img { max-width: 100%; height: auto; display: block; margin: 0.75em 0; border-radius: 4px; }
+    figure { margin: 1em 0; }
+    figcaption { font-size: 0.85em; color: #5a7099; margin-top: 0.3em; font-style: italic; }
+    video, audio { max-width: 100%; margin: 0.75em 0; display: block; }
+    code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.9em; background: #f0f4ff; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre  { background: #f0f4ff; border: 1px solid #cdd9f8; border-radius: 6px; padding: 1em; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    .ds-missing-media { display: inline-block; padding: 0.2em 0.5em; background: #fff0da; border: 1px solid #f0d9aa; border-radius: 4px; color: #a55a00; font-size: 0.85em; }
+    .ds-download { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.3em 0.7em; background: #e0eaff; border: 1px solid #b3caff; border-radius: 4px; color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    @media print { body { background: none; padding: 0; } .page { border: none; box-shadow: none; padding: 1cm 2cm; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Worksheet 8 – Potentiometer</h1><p>PLC analogue inputs — potentiometer (AI0)</p><p>A potentiometer is an adjustable resistor used to create a variable voltage signal, typically between 0 and 10 V. In PLC systems, it's commonly used to set speeds, adjust levels, or simulate sensor values. Understanding how potentiometers work helps engineers control analogue inputs, scale values, and test system responses accurately.</p><h2>Over To You</h2><p>1. Navigate to worksheet 8 on the HMI.</p><p>2. Turn the potentiometer on your training rig down to 0 and observe the motor speed.</p><p>3. Slowly spin the potentiometer to the right, until the HMI screen shows 100%.</p><p>     – The motor should now be at full speed.</p><p>4. Click on the purple 'i' button next to the Potentiometer Scaled value.</p><p>5. In the new popup window, apply an offset of 50.</p><p>6. Now spin the potentiometer all the way to the 0 zero, fully left.</p><p>     – Observe what happens to the motor now as you spin the potentiometer.</p><p>7. Add an offset of -50 and repeat.</p><p>8. Remove the offset and now adjust the scalar value, change it from 100 to 10.</p><h2>So What?</h2><p>In industry, potentiometers are used to give operators direct control over speed, pressure, temperature or position. You'll find them on HMIs, control panels and test benches. Understanding how a potentiometer affects system response, especially how offsets and scaling change input behaviour, is critical when tuning systems or troubleshooting performance. If you don't understand how these settings impact the PLC's logic, you could misdiagnose a fault or incorrectly adjust a system. Real systems rarely use the full 0 to 10 V range, so knowing how to calibrate inputs in software is essential for reliable control.</p><p>This is an analogue input, meaning it sends a continuous voltage signal, usually between 0 and 10 V, to the PLC. To interpret this signal correctly, the PLC applies:</p><p>• Offset: Adds or subtracts a fixed number to the raw input. Example: A 2 V input with a +1 offset becomes 3 V. Useful for shifting the entire signal range up or down to correct for sensor drift.</p><p>• Scalar: Multiplies the input to stretch or compress the range. Example: A 5 V input with a scalar of 10 becomes 50 (5 × 10). This is how a 0–10 V input can be scaled to 0–100% or 0–1000 RPM.</p><p>These adjustments allow you to match the raw input signal to the real-world values your system needs.</p><h2>Key Takeaways</h2><p>• Potentiometers send a 0–10 V signal to the PLC's analogue input.</p><p>• The PLC uses this signal to control motor speed via PWM logic.</p><p>• Offset shifts the input up or down to adjust the control range.</p><p>• Scalar scales the input to match real-world values.</p><p>• Correct scaling is key for accurate system behaviour.</p><h2>Student Handbook</h2><p>Complete the Questions &amp; Answers in the Student Handbook relating to this worksheet.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO6930-W10</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #1a1a2e; background: #f4f6fb; padding: 2rem 1rem 3rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #d0d9f0; border-radius: 8px; padding: 2.5rem 3rem; box-shadow: 0 4px 24px rgba(30,60,140,0.08); }
+    h1 { font-size: 1.8em; line-height: 1.2; margin: 0 0 0.6em; color: #0f2358; }
+    h2 { font-size: 1.25em; margin: 1.6em 0 0.4em; color: #1d4ed8; }
+    h3 { font-size: 1.08em; margin: 1.3em 0 0.3em; color: #2d4166; }
+    h4, h5, h6 { font-size: 1em; margin: 1.1em 0 0.3em; color: #2d4166; }
+    p { margin: 0 0 0.8em; }
+    ul, ol { margin: 0 0 0.8em; padding-left: 1.5em; }
+    li { margin-bottom: 0.35em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #c8d5f0; padding: 0.5em 0.75em; text-align: left; vertical-align: top; }
+    th { background: #e8eeff; font-weight: 700; }
+    tr:nth-child(even) td { background: #f7f9ff; }
+    a { color: #1d4ed8; }
+    img { max-width: 100%; height: auto; display: block; margin: 0.75em 0; border-radius: 4px; }
+    figure { margin: 1em 0; }
+    figcaption { font-size: 0.85em; color: #5a7099; margin-top: 0.3em; font-style: italic; }
+    video, audio { max-width: 100%; margin: 0.75em 0; display: block; }
+    code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.9em; background: #f0f4ff; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre  { background: #f0f4ff; border: 1px solid #cdd9f8; border-radius: 6px; padding: 1em; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    .ds-missing-media { display: inline-block; padding: 0.2em 0.5em; background: #fff0da; border: 1px solid #f0d9aa; border-radius: 4px; color: #a55a00; font-size: 0.85em; }
+    .ds-download { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.3em 0.7em; background: #e0eaff; border: 1px solid #b3caff; border-radius: 4px; color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    @media print { body { background: none; padding: 0; } .page { border: none; box-shadow: none; padding: 1cm 2cm; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Worksheet 10 – Digital Outputs</h1><p>PLC outputs — LEDs, motor relay and PWM motor</p><p>Digital outputs are how a PLC controls external devices. These could be lights, motors, relays or solenoids. In this worksheet, you'll test a variety of output devices using buttons, sensors, and the HMI. This helps you understand how PLCs activate real-world hardware in response to logic conditions.</p><h2>Over To You</h2><p>1. Navigate to worksheet 10 on the HMI.</p><p>2. Press and hold the green push button I0.</p><p>     – Observe LED Q0 turn on only while the button is pressed.</p><p>3. Press the black button I1 once, making sure to release it.</p><p>     – Observe Q1 stay on even after releasing the button.</p><p>     – Press the red button I2 to turn it off.</p><p>4. Press the white latching button.</p><p>     – Observe LED Q2 turn on and stay on.</p><p>5. Turn the selector switch I4/I5 to the left, this will turn on input I4.</p><p>     – Observe the LED Q3 stay on.</p><p>6. Turn the selector switch I4/I5 to the right (turning on I5).</p><p>     – Observe the LED Q3 begin to flash.</p><p>7. Trigger the Proximity Sensor on and off</p><p>     – Observe how the LED Q4 reacts</p><p>8. Spin the potentiometer AI0 slowly.</p><p>     – Observe the LED Q5 react to the position of the potentiometer dial.</p><p>9. Put all the inputs back to their original off state</p><p>     – You'll need to press the red button I2 to turn off Q1</p><p>10. On the HMI, press the "Dance Mode" button.</p><p>     – Observe all 6 LEDs flash in a timed pattern or sequence.</p><h2>So What?</h2><p>As a maintenance apprentice, understanding digital outputs and how they operate is essential. This worksheet demonstrated that digital outputs can be triggered in many different ways; through buttons, switches, sensors, or even automated sequences from the PLC and HMI.</p><p>In industry, outputs are what actually make things happen: starting motors, energising relays, activating solenoids, opening valves, or turning on indicator lamps. Learning to recognise output sequences is especially valuable because real industrial processes rely heavily on precisely timed events.</p><p>The 'LED dance' might seem gimmicky, but real industrial systems often sequence valves and actuators in timed patterns just like this. Whether it's a conveyor diverter or a safety purge cycle, these principles apply across all kinds of machinery.</p><p>With this new understanding, you'll be better prepared to:</p><p>• Identify correct or incorrect equipment behaviour by observing output patterns.</p><p>• Diagnose faults by tracing output conditions back to the PLC logic.</p><p>• Confidently troubleshoot and correct problems with actuators, valves, motors, and indicator systems.</p><p>• Recognise typical output sequences, helping you quickly pinpoint maintenance issues or confirm normal operation.</p><p>In short, your ability to interpret and understand digital outputs and their sequencing will significantly boost your effectiveness in industrial maintenance environments.</p><h2>Key Takeaways</h2><p>• PLCs use digital outputs to control devices like lights, motors, and valves.</p><p>• Outputs can be triggered by buttons, switches, sensors, or analogue signals.</p><p>• Latching and selector switches show different ways outputs behave.</p><p>• Proximity sensors and potentiometers affect outputs based on detection or position.</p><p>• HMI "Dance Mode" simulates real-world output sequences.</p><p>• Recognising output patterns helps with fault finding and system checks.</p><h2>Student Handbook</h2><p>Complete the Questions &amp; Answers in the Student Handbook relating to this worksheet.</p>
+  </div>
+</body>
+</html>

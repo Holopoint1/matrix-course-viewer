@@ -2549,6 +2549,195 @@
       ],
       "courseType": "Course",
       "structureHours": 44.5
+    },
+    {
+      "id": "CO6930",
+      "code": "CO6930",
+      "kind": "course",
+      "title": "PLC Fundamentals",
+      "shortDescription": "",
+      "estimatedHours": 0,
+      "certificate": {
+        "enabled": false
+      },
+      "screens": [
+        {
+          "id": "CO6930-s1",
+          "type": "document",
+          "title": "content",
+          "hours": 0,
+          "src": "content/CO6930/CO6930 - content.docx",
+          "webUrl": "https://docs.google.com/document/d/19TaNQSDQ6rcc2LfwRRl6l0skAtjMJR1a/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "fee383a18a"
+        },
+        {
+          "id": "CO6930-s2",
+          "type": "spreadsheet",
+          "title": "definition (live)",
+          "hours": 0,
+          "src": "content/CO6930/CO6930 - definition (live).xlsx",
+          "webUrl": "https://docs.google.com/spreadsheets/d/1yt3SJYRYKW6sxmArLubaPRcyqba_L234/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "v": "0052313df0"
+        },
+        {
+          "id": "CO6930-s3",
+          "type": "html",
+          "title": "Equip",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-Equip.htm",
+          "webUrl": "https://drive.google.com/file/d/1SBZ53y8J2DfkqP5ptiRKAv8xywOy1EfH/view?usp=drivesdk",
+          "v": "dc3a466df7"
+        },
+        {
+          "id": "CO6930-s4",
+          "type": "html",
+          "title": "Handbook",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-Handbook.htm",
+          "webUrl": "https://drive.google.com/file/d/1odUUcQ6ps5-T3NCdDhn3Q7aovbgSqnMd/view?usp=drivesdk",
+          "v": "0485f7b08b"
+        },
+        {
+          "id": "CO6930-s5",
+          "type": "html",
+          "title": "LO",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-LO.htm",
+          "webUrl": "https://drive.google.com/file/d/1G1fwUD3_62QjaCRjwa_ZySqSPqMGQmWK/view?usp=drivesdk",
+          "v": "f4821b95c9"
+        },
+        {
+          "id": "CO6930-s6",
+          "type": "html",
+          "title": "Safety",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-Safety.htm",
+          "webUrl": "https://drive.google.com/file/d/1YiAodrgyDAspQLdqdC7B25HPf8fKemHh/view?usp=drivesdk",
+          "v": "080ec54e4a"
+        },
+        {
+          "id": "CO6930-s7",
+          "type": "html",
+          "title": "W1",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W1.htm",
+          "webUrl": "https://drive.google.com/file/d/1xbcqljpzZ58BVRS2MM-ogqQ3fazsJeyA/view?usp=drivesdk",
+          "v": "c031259941"
+        },
+        {
+          "id": "CO6930-s8",
+          "type": "html",
+          "title": "W10",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W10.htm",
+          "webUrl": "https://drive.google.com/file/d/1VS2M595IDG60cqWenH-Sv52k7pLe2Qrv/view?usp=drivesdk",
+          "v": "2612339eec"
+        },
+        {
+          "id": "CO6930-s9",
+          "type": "html",
+          "title": "W11",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W11.htm",
+          "webUrl": "https://drive.google.com/file/d/1lKm9PDYHOBM39vykOto-T-xm3Kh05WYx/view?usp=drivesdk",
+          "v": "a3f23b9da5"
+        },
+        {
+          "id": "CO6930-s10",
+          "type": "html",
+          "title": "W12",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W12.htm",
+          "webUrl": "https://drive.google.com/file/d/12Mab8wEYtHlHfHmcChYEtRXBZi72gFGQ/view?usp=drivesdk",
+          "v": "c775ecbc06"
+        },
+        {
+          "id": "CO6930-s11",
+          "type": "html",
+          "title": "W2",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W2.htm",
+          "webUrl": "https://drive.google.com/file/d/1AXVgZ4k0YffjMFyWkATfvAwkH4p_9c6h/view?usp=drivesdk",
+          "v": "3c29ccf547"
+        },
+        {
+          "id": "CO6930-s12",
+          "type": "html",
+          "title": "W3",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W3.htm",
+          "webUrl": "https://drive.google.com/file/d/1pRSSSlFr78f_WhS7idxtNTPMNbnt3gJw/view?usp=drivesdk",
+          "v": "663bf072b6"
+        },
+        {
+          "id": "CO6930-s13",
+          "type": "html",
+          "title": "W4",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W4.htm",
+          "webUrl": "https://drive.google.com/file/d/1EefAhJdIi8sJ0cBH58h4udW5_UhZXLD2/view?usp=drivesdk",
+          "v": "dd3c4bab7a"
+        },
+        {
+          "id": "CO6930-s14",
+          "type": "html",
+          "title": "W5",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W5.htm",
+          "webUrl": "https://drive.google.com/file/d/1A9oeHrW90L9Sb81pK8hO5oZzV3kHNiKP/view?usp=drivesdk",
+          "v": "c225bb3f82"
+        },
+        {
+          "id": "CO6930-s15",
+          "type": "html",
+          "title": "W6",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W6.htm",
+          "webUrl": "https://drive.google.com/file/d/1vEkR7w-xkiVtVf5eqOgG1zdWMuC756cP/view?usp=drivesdk",
+          "v": "b393e59fdf"
+        },
+        {
+          "id": "CO6930-s16",
+          "type": "html",
+          "title": "W7",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W7.htm",
+          "webUrl": "https://drive.google.com/file/d/1xopTPjtCPlN5B5fwvXUs2rXqhBRfYX15/view?usp=drivesdk",
+          "v": "4ef396476a"
+        },
+        {
+          "id": "CO6930-s17",
+          "type": "html",
+          "title": "W8",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W8.htm",
+          "webUrl": "https://drive.google.com/file/d/1W8l4u3suBhxqFPzyhD4pwsfPncKENYqg/view?usp=drivesdk",
+          "v": "33b3ec5e55"
+        },
+        {
+          "id": "CO6930-s18",
+          "type": "html",
+          "title": "W9",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-W9.htm",
+          "webUrl": "https://drive.google.com/file/d/1-Gcu-LImaiFQ0RKr4BXQ2XLdQ5qzfDHl/view?usp=drivesdk",
+          "v": "93ac7f8021"
+        },
+        {
+          "id": "CO6930-s19",
+          "type": "html",
+          "title": "welcome",
+          "hours": 0,
+          "src": "content/CO6930/CO6930-welcome.htm",
+          "webUrl": "https://drive.google.com/file/d/1n5yYdsfCsuoc5oKHG171j1dTwoavX0Nr/view?usp=drivesdk",
+          "v": "aace75064d"
+        }
+      ],
+      "categories": [],
+      "draft": true,
+      "_source": "auto-files",
+      "courseType": "Course",
+      "structureHours": 0
     }
   ]
 }

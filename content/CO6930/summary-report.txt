@@ -1,0 +1,78 @@
+Document Splitter — Output Summary
+===================================
+Source file: CO6930 - content.docx
+Media ZIP: 88 media files
+Detected blocks: 17
+Valid filenames: 17
+
+Filenames found:
+- CO6930-welcome.htm
+- CO6930-LO.htm
+- CO6930-Equip.htm
+- CO6930-W1.htm
+- CO6930-W2.htm
+- CO6930-W3.htm
+- CO6930-W4.htm
+- CO6930-W5.htm
+- CO6930-W6.htm
+- CO6930-W7.htm
+- CO6930-W8.htm
+- CO6930-W9.htm
+- CO6930-W10.htm
+- CO6930-W11.htm
+- CO6930-W12.htm
+- CO6930-Handbook.htm
+- CO6930-Safety.htm
+
+Warnings and errors:
+- [WARN] Missing media file: Block 1 (CO6930-welcome.htm) references rig-layout-front.jpg in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 3 (CO6930-Equip.htm) references rig-layout-front.jpg in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 4 (CO6930-W1.htm) references rig-layout-front.jpg in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 5 (CO6930-W2.htm) references rig-layout-front.jpg in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 6 (CO6930-W3.htm) references rig-layout-front.jpg in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 7 (CO6930-W4.htm) references schematic-plc-inputs.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 8 (CO6930-W5.htm) references schematic-plc-outputs.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 9 (CO6930-W6.htm) references schematic-plc-inputs.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 10 (CO6930-W7.htm) references schematic-plc-inputs.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 11 (CO6930-W8.htm) references schematic-plc-analogues.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 12 (CO6930-W9.htm) references schematic-plc-analogues.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 13 (CO6930-W10.htm) references schematic-plc-outputs.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 14 (CO6930-W11.htm) references schematic-plc-outputs.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 15 (CO6930-W12.htm) references schematic-relay-circuit.png in <image> but no matching media file is available.
+- [WARN] Missing media file: Block 17 (CO6930-Safety.htm) references schematic-power-distribution.png in <image> but no matching media file is available.
+
+Proposed outputs:
+- Block 1: CO6930-welcome.htm -> Learner HTML -> outputs/html/ (lines 2-11)
+- Block 2: CO6930-LO.htm -> Learner HTML -> outputs/html/ (lines 12-25)
+- Block 3: CO6930-Equip.htm -> Learner HTML -> outputs/html/ (lines 26-59)
+- Block 4: CO6930-W1.htm -> Learner HTML -> outputs/html/ (lines 60-86)
+- Block 5: CO6930-W2.htm -> Learner HTML -> outputs/html/ (lines 87-117)
+- Block 6: CO6930-W3.htm -> Learner HTML -> outputs/html/ (lines 118-145)
+- Block 7: CO6930-W4.htm -> Learner HTML -> outputs/html/ (lines 146-179)
+- Block 8: CO6930-W5.htm -> Learner HTML -> outputs/html/ (lines 180-215)
+- Block 9: CO6930-W6.htm -> Learner HTML -> outputs/html/ (lines 216-254)
+- Block 10: CO6930-W7.htm -> Learner HTML -> outputs/html/ (lines 255-289)
+- Block 11: CO6930-W8.htm -> Learner HTML -> outputs/html/ (lines 290-320)
+- Block 12: CO6930-W9.htm -> Learner HTML -> outputs/html/ (lines 321-364)
+- Block 13: CO6930-W10.htm -> Learner HTML -> outputs/html/ (lines 365-410)
+- Block 14: CO6930-W11.htm -> Learner HTML -> outputs/html/ (lines 411-443)
+- Block 15: CO6930-W12.htm -> Learner HTML -> outputs/html/ (lines 444-471)
+- Block 16: CO6930-Handbook.htm -> Learner HTML -> outputs/html/ (lines 472-557)
+- Block 17: CO6930-Safety.htm -> Learner HTML -> outputs/html/ (lines 558-587)
+
+Media summary:
+- Embedded images in DOCX: 0
+- Files loaded from ZIP: 88
+- Explicit media refs: 15
+- Matched media: 0
+- Missing refs: 15
+- Ambiguous refs: 0
+- Unused media files: 88
+
+SCORM readiness:
+- No SCORM specification found in this document.
+
+Output note:
+- HTML outputs are generated using mammoth.js for faithful formatting preservation.
+- DOCX outputs are real Word files assembled from the source document XML.
+- All matched media files are embedded inline in HTML outputs and included in the bundle ZIP.

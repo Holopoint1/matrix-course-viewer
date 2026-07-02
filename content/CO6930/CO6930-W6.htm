@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO6930-W6</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #1a1a2e; background: #f4f6fb; padding: 2rem 1rem 3rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #d0d9f0; border-radius: 8px; padding: 2.5rem 3rem; box-shadow: 0 4px 24px rgba(30,60,140,0.08); }
+    h1 { font-size: 1.8em; line-height: 1.2; margin: 0 0 0.6em; color: #0f2358; }
+    h2 { font-size: 1.25em; margin: 1.6em 0 0.4em; color: #1d4ed8; }
+    h3 { font-size: 1.08em; margin: 1.3em 0 0.3em; color: #2d4166; }
+    h4, h5, h6 { font-size: 1em; margin: 1.1em 0 0.3em; color: #2d4166; }
+    p { margin: 0 0 0.8em; }
+    ul, ol { margin: 0 0 0.8em; padding-left: 1.5em; }
+    li { margin-bottom: 0.35em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #c8d5f0; padding: 0.5em 0.75em; text-align: left; vertical-align: top; }
+    th { background: #e8eeff; font-weight: 700; }
+    tr:nth-child(even) td { background: #f7f9ff; }
+    a { color: #1d4ed8; }
+    img { max-width: 100%; height: auto; display: block; margin: 0.75em 0; border-radius: 4px; }
+    figure { margin: 1em 0; }
+    figcaption { font-size: 0.85em; color: #5a7099; margin-top: 0.3em; font-style: italic; }
+    video, audio { max-width: 100%; margin: 0.75em 0; display: block; }
+    code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.9em; background: #f0f4ff; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre  { background: #f0f4ff; border: 1px solid #cdd9f8; border-radius: 6px; padding: 1em; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    .ds-missing-media { display: inline-block; padding: 0.2em 0.5em; background: #fff0da; border: 1px solid #f0d9aa; border-radius: 4px; color: #a55a00; font-size: 0.85em; }
+    .ds-download { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.3em 0.7em; background: #e0eaff; border: 1px solid #b3caff; border-radius: 4px; color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    @media print { body { background: none; padding: 0; } .page { border: none; box-shadow: none; padding: 1cm 2cm; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Worksheet 6 – Normally Open vs Normally Closed</h1><p>PLC inputs — I0 (NO), I2 (NC) and selector switch wiring</p><p>Push buttons or control contacts can be normally open (NO) or normally closed (NC). An NO contact only sends a signal when pressed, while an NC contact is active until it's pressed. This difference helps ensure safe and reliable control in industrial automation systems.</p><h2>Over To You</h2><p>1. Navigate to worksheet 6 on the HMI.</p><p>2. Observe the state of the Inputs shown on screen (Green text means the input is on, White off).</p><p>3. Press &amp; hold the green button on the training rig labelled Input 0.</p><p>     – Observe the HMI screen show the input changing state.</p><p>4. Press &amp; hold the black button labelled Input 1.</p><p>     – Observe the HMI display I1 changing state as you press &amp; release.</p><p>5. Observe the current state of Input 2, the red push button on the HMI.</p><p>     – The input should be on even though you're not pressing the button.</p><p>     – Press Input 2 and observe the state of the Input on the HMI.</p><p>6. Press in Input I3 and observe the state change on the HMI.</p><p>7. Change the switch position of I4/I5, observe the inputs I4 and I5 turning on and off.</p><h2>So What?</h2><p>Inputs on HMI:</p><p>• I0 [NO]: Normally open. Off by default, turns on (green) when you press and hold the green button.</p><p>• I1 [NO]: Normally open. Off by default, turns on (green) only while you hold the black button.</p><p>• I2 [NC]: Normally closed. On (green) by default because it’s an NC input. Pressing the red button interrupts the circuit and the input turns off (white).</p><p>• I3 [NO]: Normally open, latching push button. Pressing it toggles its state. It stays on until pressed again to turn off.</p><p>• I4 [NO] and I5 [NO]: Controlled by a 3-position switch:</p><p>     – Left position: I4 on (green), I5 off (white).</p><p>     – Middle position: Both off (white).</p><p>     – Right position: I4 off (white), I5 on (green).</p><p>Understanding the difference between normally open (NO) and normally closed (NC) push buttons and contacts is critical in industrial automation.</p><p>In industrial maintenance, this knowledge isn't just about wiring, it's about reading and interpreting system status correctly. On I/O or mimic screens, you need to know whether an input should be on or off when the button is not pressed.</p><p>For NO contacts, the input will show off until pressed/closed; for NC contacts, the input is on until pressed/opened. If you don't understand this, you might think there's a wiring fault or a problem with the input device. By knowing how these contacts work, you'll know what to expect and can quickly tell whether the system is behaving as designed or if there's an issue that needs fixing.</p><h2>Key Takeaways</h2><p>• NO vs. NC Contacts: Normally Open (NO) contacts are off until pressed, while Normally Closed (NC) contacts are on until pressed.</p><p>• Input Behaviour on HMI: Green means on, white means off. Knowing which is expected helps you spot faults quickly.</p><p>• Reading I/O States: For example, Input 2 (NC) stays on by default, while Inputs 0, 1, 3, 4, and 5 (NO) are off until action is taken.</p><p>• Why It Matters: In maintenance, you'll face real-world scenarios where misinterpreting these states can lead to downtime or unsafe conditions.</p><p>• Next Steps: Use this knowledge to troubleshoot, wire panels safely, and ensure the system operates as intended.</p><h2>Student Handbook</h2><p>Complete the Questions &amp; Answers in the Student Handbook relating to this worksheet.</p>
+  </div>
+</body>
+</html>

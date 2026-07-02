@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO6930-W11</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #1a1a2e; background: #f4f6fb; padding: 2rem 1rem 3rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #d0d9f0; border-radius: 8px; padding: 2.5rem 3rem; box-shadow: 0 4px 24px rgba(30,60,140,0.08); }
+    h1 { font-size: 1.8em; line-height: 1.2; margin: 0 0 0.6em; color: #0f2358; }
+    h2 { font-size: 1.25em; margin: 1.6em 0 0.4em; color: #1d4ed8; }
+    h3 { font-size: 1.08em; margin: 1.3em 0 0.3em; color: #2d4166; }
+    h4, h5, h6 { font-size: 1em; margin: 1.1em 0 0.3em; color: #2d4166; }
+    p { margin: 0 0 0.8em; }
+    ul, ol { margin: 0 0 0.8em; padding-left: 1.5em; }
+    li { margin-bottom: 0.35em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #c8d5f0; padding: 0.5em 0.75em; text-align: left; vertical-align: top; }
+    th { background: #e8eeff; font-weight: 700; }
+    tr:nth-child(even) td { background: #f7f9ff; }
+    a { color: #1d4ed8; }
+    img { max-width: 100%; height: auto; display: block; margin: 0.75em 0; border-radius: 4px; }
+    figure { margin: 1em 0; }
+    figcaption { font-size: 0.85em; color: #5a7099; margin-top: 0.3em; font-style: italic; }
+    video, audio { max-width: 100%; margin: 0.75em 0; display: block; }
+    code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.9em; background: #f0f4ff; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre  { background: #f0f4ff; border: 1px solid #cdd9f8; border-radius: 6px; padding: 1em; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    .ds-missing-media { display: inline-block; padding: 0.2em 0.5em; background: #fff0da; border: 1px solid #f0d9aa; border-radius: 4px; color: #a55a00; font-size: 0.85em; }
+    .ds-download { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.3em 0.7em; background: #e0eaff; border: 1px solid #b3caff; border-radius: 4px; color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    @media print { body { background: none; padding: 0; } .page { border: none; box-shadow: none; padding: 1cm 2cm; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Worksheet 11 – Motor PWM</h1><p>PLC outputs — PWM motor drive</p><p>Pulse Width Modulation (PWM) is a method used by PLCs to control motor speed by rapidly switching an output on and off. The ratio of on-time to off-time determines how much power the motor receives. This worksheet explores how PWM is used to vary the speed of a DC motor.</p><h2>Over To You</h2><p>1. Navigate to worksheet 11 on the HMI.</p><p>2. Set the potentiometer to 0 (rotate anticlockwise).</p><p>3. Start the program with the green start button.</p><p>4. Rotate the potentiometer clockwise.</p><p>     – Observe how the motor speed increases as you rotate.</p><p>5. Rotate the potentiometer from 100% to 0% a few times.</p><p>     – Observe how the Potentiometer Scaled value is graphed on the left.</p><p>     – Observe how the PWM Duty Cycle is displayed on the right.</p><h2>So What?</h2><p>You'll come across motors everywhere in industry: fans, pumps, conveyors. They don't always just run at full speed. That's where PWM comes in. It's how PLCs can vary motor speed without needing complex analogue output modules.</p><p>In real systems, a PLC uses PWM to control things like fan speed in HVAC systems, mixing rates in food production, or even soft-starting a conveyor belt. You need to understand that the duty cycle directly affects motor performance. 100% means fully on, 0% means off, and anything in between gives variable speed.</p><p>Reading the HMI helps you see what the PLC is doing, but more importantly, tracing how your input (the potentiometer) affects the output (the motor) builds your core diagnostic skills.</p><p>In the field, you'll be expected to:</p><p>• Scale and interpret analogue inputs</p><p>• Monitor PWM signals in software</p><p>• Fault-find speed control issues from the HMI or field wiring</p><p>This exercise shows you that controlling a motor isn't just about wiring it up. It's about understanding how software, inputs, and outputs all work together. That's what industrial automation is all about.</p><h2>Key Takeaways</h2><p>• PWM controls motor speed by switching outputs on and off quickly.</p><p>• Duty cycle (%) affects how fast the motor runs.</p><p>• The potentiometer sets the PWM level via a 0–10 V input.</p><p>• The HMI shows both the input value and PWM output.</p><p>• PWM is used in fans, pumps, and conveyors for speed control.</p><p>• Knowing how to read and scale PWM is vital for diagnostics.</p><h2>Student Handbook</h2><p>Complete the Questions &amp; Answers in the Student Handbook relating to this worksheet.</p>
+  </div>
+</body>
+</html>

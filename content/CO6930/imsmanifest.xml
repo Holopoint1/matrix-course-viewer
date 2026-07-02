@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="co6930---content-package"
+  version="1.0"
+  xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+  xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 ims_xml.xsd
+  http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata><schema>ADL SCORM</schema><schemaversion>1.2</schemaversion></metadata>
+  <organizations default="co6930---content-package-org">
+    <organization identifier="co6930---content-package-org">
+      <title>CO6930 - content</title>
+      <item identifier="item-1" identifierref="res-1"><title>CO6930-welcome.htm</title></item>
+      <item identifier="item-2" identifierref="res-2"><title>CO6930-LO.htm</title></item>
+      <item identifier="item-3" identifierref="res-3"><title>CO6930-Equip.htm</title></item>
+      <item identifier="item-4" identifierref="res-4"><title>CO6930-W1.htm</title></item>
+      <item identifier="item-5" identifierref="res-5"><title>CO6930-W2.htm</title></item>
+      <item identifier="item-6" identifierref="res-6"><title>CO6930-W3.htm</title></item>
+      <item identifier="item-7" identifierref="res-7"><title>CO6930-W4.htm</title></item>
+      <item identifier="item-8" identifierref="res-8"><title>CO6930-W5.htm</title></item>
+      <item identifier="item-9" identifierref="res-9"><title>CO6930-W6.htm</title></item>
+      <item identifier="item-10" identifierref="res-10"><title>CO6930-W7.htm</title></item>
+      <item identifier="item-11" identifierref="res-11"><title>CO6930-W8.htm</title></item>
+      <item identifier="item-12" identifierref="res-12"><title>CO6930-W9.htm</title></item>
+      <item identifier="item-13" identifierref="res-13"><title>CO6930-W10.htm</title></item>
+      <item identifier="item-14" identifierref="res-14"><title>CO6930-W11.htm</title></item>
+      <item identifier="item-15" identifierref="res-15"><title>CO6930-W12.htm</title></item>
+      <item identifier="item-16" identifierref="res-16"><title>CO6930-Handbook.htm</title></item>
+      <item identifier="item-17" identifierref="res-17"><title>CO6930-Safety.htm</title></item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="res-1" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-welcome.htm"><file href="generated/CO6930-welcome.htm" /></resource>
+    <resource identifier="res-2" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-LO.htm"><file href="generated/CO6930-LO.htm" /></resource>
+    <resource identifier="res-3" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-Equip.htm"><file href="generated/CO6930-Equip.htm" /></resource>
+    <resource identifier="res-4" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W1.htm"><file href="generated/CO6930-W1.htm" /></resource>
+    <resource identifier="res-5" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W2.htm"><file href="generated/CO6930-W2.htm" /></resource>
+    <resource identifier="res-6" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W3.htm"><file href="generated/CO6930-W3.htm" /></resource>
+    <resource identifier="res-7" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W4.htm"><file href="generated/CO6930-W4.htm" /></resource>
+    <resource identifier="res-8" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W5.htm"><file href="generated/CO6930-W5.htm" /></resource>
+    <resource identifier="res-9" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W6.htm"><file href="generated/CO6930-W6.htm" /></resource>
+    <resource identifier="res-10" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W7.htm"><file href="generated/CO6930-W7.htm" /></resource>
+    <resource identifier="res-11" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W8.htm"><file href="generated/CO6930-W8.htm" /></resource>
+    <resource identifier="res-12" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W9.htm"><file href="generated/CO6930-W9.htm" /></resource>
+    <resource identifier="res-13" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W10.htm"><file href="generated/CO6930-W10.htm" /></resource>
+    <resource identifier="res-14" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W11.htm"><file href="generated/CO6930-W11.htm" /></resource>
+    <resource identifier="res-15" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-W12.htm"><file href="generated/CO6930-W12.htm" /></resource>
+    <resource identifier="res-16" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-Handbook.htm"><file href="generated/CO6930-Handbook.htm" /></resource>
+    <resource identifier="res-17" type="webcontent" adlcp:scormtype="sco" href="generated/CO6930-Safety.htm"><file href="generated/CO6930-Safety.htm" /></resource>
+  </resources>
+</manifest>

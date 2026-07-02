@@ -1,0 +1,13 @@
+No SCORM specification found in this document.
+
+SCORM version: FOUND
+Launch file: FOUND
+Manifest data: FOUND
+Completion model: FOUND
+Tracking model: FOUND
+Navigation / sequencing: FOUND
+
+Media ZIP loaded: 88 media files
+Matched media files: 0
+Missing media refs: 15
+Ambiguous media refs: 0

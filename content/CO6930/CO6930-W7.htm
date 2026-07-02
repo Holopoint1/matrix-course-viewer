@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO6930-W7</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #1a1a2e; background: #f4f6fb; padding: 2rem 1rem 3rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #d0d9f0; border-radius: 8px; padding: 2.5rem 3rem; box-shadow: 0 4px 24px rgba(30,60,140,0.08); }
+    h1 { font-size: 1.8em; line-height: 1.2; margin: 0 0 0.6em; color: #0f2358; }
+    h2 { font-size: 1.25em; margin: 1.6em 0 0.4em; color: #1d4ed8; }
+    h3 { font-size: 1.08em; margin: 1.3em 0 0.3em; color: #2d4166; }
+    h4, h5, h6 { font-size: 1em; margin: 1.1em 0 0.3em; color: #2d4166; }
+    p { margin: 0 0 0.8em; }
+    ul, ol { margin: 0 0 0.8em; padding-left: 1.5em; }
+    li { margin-bottom: 0.35em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #c8d5f0; padding: 0.5em 0.75em; text-align: left; vertical-align: top; }
+    th { background: #e8eeff; font-weight: 700; }
+    tr:nth-child(even) td { background: #f7f9ff; }
+    a { color: #1d4ed8; }
+    img { max-width: 100%; height: auto; display: block; margin: 0.75em 0; border-radius: 4px; }
+    figure { margin: 1em 0; }
+    figcaption { font-size: 0.85em; color: #5a7099; margin-top: 0.3em; font-style: italic; }
+    video, audio { max-width: 100%; margin: 0.75em 0; display: block; }
+    code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.9em; background: #f0f4ff; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre  { background: #f0f4ff; border: 1px solid #cdd9f8; border-radius: 6px; padding: 1em; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    .ds-missing-media { display: inline-block; padding: 0.2em 0.5em; background: #fff0da; border: 1px solid #f0d9aa; border-radius: 4px; color: #a55a00; font-size: 0.85em; }
+    .ds-download { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.3em 0.7em; background: #e0eaff; border: 1px solid #b3caff; border-radius: 4px; color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    @media print { body { background: none; padding: 0; } .page { border: none; box-shadow: none; padding: 1cm 2cm; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Worksheet 7 – Proximity Switch</h1><p>PLC inputs — inductive proximity sensor (I6)</p><p>A proximity switch detects an object's presence without contact, making it ideal for automation, positioning and safety systems. Maintenance engineers should know how they work to troubleshoot misalignments or faults, otherwise false triggers can cause machine stoppages or safety hazards. We use inductive sensors to detect metal objects.</p><h2>Over To You</h2><p>1. Navigate to worksheet 7 on the HMI.</p><p>2. Locate the proximity sensor (I6) on your training system.</p><p>     – Ensure the proximity sensor is not currently triggered on. This can be verified by checking there is no LED turned on, on the physical sensor or by checking the HMI screen for worksheet 6. On the far right is the proximity sensor. If it's all white, with no green, then it is off.</p><p>     – If the sensor is triggered on, then turn it off by removing the metal it is currently detecting.</p><p>3. Start the program by clicking the green Raise button.</p><p>4. Watch as the Forging Press raises up from 0mm to 15000mm. Take note of the position of the two red locking pins at the top of each side of the press.</p><p>5. Press the Lock button on the screen to begin the locking sequence. This will lock the press in the air and allow maintenance to go underneath the press.</p><p>6. You should now see a fault on the screen as although we told the system to begin locking the Press, the system did not detect the locking chocks as engaged. This is because the system is waiting to detect the large metal locking pins using a proximity sensor.</p><p>7. Restart the system by clicking the Orange Reset button in the bottom right and get back to the locking stage.</p><p>     – This time, ensure you place a metal object in front of the proximity sensor after clicking the Lock button, to simulate the system detecting the locking pins as engaged.</p><p>8. Observe what happens to the red locking pins on the top of the press as you trigger the proximity sensor.</p><h2>So What?</h2><p>Proximity switches detect the presence of metal objects without physical contact, making them crucial for safety and reliability in automated systems. In this exercise, the inductive proximity sensor confirms that the locking pins on the forging press are properly engaged. If the sensor doesn't detect the pins, the system generates a fault and stops, preventing the press from moving into an unsafe state.</p><p>Types of proximity sensors:</p><p>• Inductive – detects metal objects only</p><p>• Capacitive – detects both metal and non-metal materials</p><p>• Photoelectric – uses light to detect objects</p><p>Maintenance engineers must know how these sensors function and how to diagnose common faults like misalignment, incorrect positioning, or false signals. During troubleshooting, engineers often simulate sensor detection using a separate metal object to verify the sensor is working correctly. Accurate positioning and regular verification of sensor operation ensure safe and efficient system performance, especially in safety-critical applications like mechanical locking.</p><p>In this hydraulic press simulation, the proximity sensor acts as a critical safety interlock. It verifies the press platen is correctly locked into position by the safety chocks before allowing the system's motors to idle. Without reliable proximity sensing, the press would not confirm a safe, mechanically locked state, potentially leaving the system at risk.</p><h2>Key Takeaways</h2><p>• Proximity sensors detect objects without physical contact, improving reliability and reducing wear.</p><p>• Inductive sensors specifically detect metal objects, ideal for safety interlocks.</p><p>• Misalignment, poor mounting, and wiring faults can cause false signals and system stoppages.</p><p>• Sensors are often manually triggered with metal objects during troubleshooting.</p><p>• Correct sensor selection, positioning, and regular checks are essential for safe operation.</p><p>By understanding proximity switches, maintenance engineers can prevent system failures, improve accuracy, and ensure safe and efficient machine operation.</p><h2>Student Handbook</h2><p>Complete the Questions &amp; Answers in the Student Handbook relating to this worksheet.</p>
+  </div>
+</body>
+</html>

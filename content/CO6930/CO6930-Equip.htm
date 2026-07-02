@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO6930-Equip</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.65; color: #1a1a2e; background: #f4f6fb; padding: 2rem 1rem 3rem; }
+    .page { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #d0d9f0; border-radius: 8px; padding: 2.5rem 3rem; box-shadow: 0 4px 24px rgba(30,60,140,0.08); }
+    h1 { font-size: 1.8em; line-height: 1.2; margin: 0 0 0.6em; color: #0f2358; }
+    h2 { font-size: 1.25em; margin: 1.6em 0 0.4em; color: #1d4ed8; }
+    h3 { font-size: 1.08em; margin: 1.3em 0 0.3em; color: #2d4166; }
+    h4, h5, h6 { font-size: 1em; margin: 1.1em 0 0.3em; color: #2d4166; }
+    p { margin: 0 0 0.8em; }
+    ul, ol { margin: 0 0 0.8em; padding-left: 1.5em; }
+    li { margin-bottom: 0.35em; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #c8d5f0; padding: 0.5em 0.75em; text-align: left; vertical-align: top; }
+    th { background: #e8eeff; font-weight: 700; }
+    tr:nth-child(even) td { background: #f7f9ff; }
+    a { color: #1d4ed8; }
+    img { max-width: 100%; height: auto; display: block; margin: 0.75em 0; border-radius: 4px; }
+    figure { margin: 1em 0; }
+    figcaption { font-size: 0.85em; color: #5a7099; margin-top: 0.3em; font-style: italic; }
+    video, audio { max-width: 100%; margin: 0.75em 0; display: block; }
+    code { font-family: Consolas, "Cascadia Code", monospace; font-size: 0.9em; background: #f0f4ff; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre  { background: #f0f4ff; border: 1px solid #cdd9f8; border-radius: 6px; padding: 1em; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    .ds-missing-media { display: inline-block; padding: 0.2em 0.5em; background: #fff0da; border: 1px solid #f0d9aa; border-radius: 4px; color: #a55a00; font-size: 0.85em; }
+    .ds-download { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.3em 0.7em; background: #e0eaff; border: 1px solid #b3caff; border-radius: 4px; color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    @media print { body { background: none; padding: 0; } .page { border: none; box-shadow: none; padding: 1cm 2cm; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Main Components</h1><p>IM6930 front panel: Siemens HMI and PLC, inputs, outputs, relay and RPM motors</p><p>Below are the main components of the PLC Fundamentals Trainer. Each part has been carefully selected to reflect real-world industrial systems and is fully integrated for hands-on learning.</p><h2>PLC — Siemens S7-1200 (CPU 1214C)</h2><p>Purpose: Central controller for logic, safety interlocks, and I/O processing.</p><p>• 14x Digital Inputs, 10x Digital Outputs (24VDC)</p><p>• 2x Analog Inputs (0–10V)</p><p>• Interfaces with HMI for setpoint, alarms, and diagnostics</p><h2>Unified HMI — Siemens Unified Basic Panel (MTP700)</h2><p>Purpose: Operator interface for real-time monitoring, fault display, and parameter input.</p><p>• 7" touch screen for flow setpoint input and system feedback</p><p>• Displays alarms, I/O status, values, and temperature cutoffs.</p><p>• Setup page allows editing of temperature cutout limits and viewing system state</p><h2>Motor — Geared DC Motor, 24 V DC, 30 RPM</h2><p>Purpose: Used to visually represent output activation and rotational speed in PLC-controlled systems.</p><p>• Operates on 24 V DC via relay or PWM output from the PLC</p><p>• Drives a red-and-white disc to provide a clear visual indication of motor speed</p><p>• Ideal for demonstrating output control, switching, and variable speed functionality in a safe, compact format</p><h2>Relay — WAGO Interface Relay, DIN Rail Mount, 24 V AC/DC Coil, 1-Pole (857-358)</h2><p>Purpose: Provides electrical isolation between the low-power PLC output and higher-power output devices.</p><p>• 24 V AC/DC coil, compatible with standard PLC output voltage</p><p>• 1-pole changeover (SPDT) contact rated up to 250 V AC / 6 A</p><p>• Includes integrated status indicator for visual feedback</p><h2>Proximity Sensor — Omron E2E-X16MB1T12 2M (Inductive, M12, PNP, NO)</h2><p>Purpose: Detects the presence of nearby metal objects without physical contact. Used to simulate safety interlocks or object detection in automated systems.</p><p>• Inductive sensor with 16 mm sensing distance, ideal for general object detection</p><h2>Temperature Transmitter — IFM TP9237 (Evaluation Unit for PT100/PT1000 Sensors)</h2><p>Purpose: Converts resistance signals from PT100 or PT1000 temperature sensors into a standard 0–10 V analogue output signal readable by a PLC.</p><p>• Compatible with both PT100 and PT1000 RTDs</p><p>• Provides a 0–10 V analogue output for temperature measurement</p><p>• Designed for use in industrial environments with robust housing and secure terminals</p>
+  </div>
+</body>
+</html>
