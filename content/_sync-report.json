@@ -1,18 +1,53 @@
 {
-  "generatedAt": "2026-07-02T12:31:35.420Z",
+  "generatedAt": "2026-07-02T12:35:02.374Z",
   "summary": {
     "courses": 10,
-    "screens": 232,
-    "displaying": 232,
+    "screens": 233,
+    "displaying": 233,
     "missing": 0,
-    "autofixed": 1,
+    "autofixed": 4,
     "stale": 0,
-    "unused": 33,
+    "unused": 32,
     "downloadFailed": 0,
     "collisions": 3,
-    "collisionsAffecting": 1
+    "collisionsAffecting": 1,
+    "drafts": 3
   },
   "courses": {
+    "CP0507": {
+      "title": "Motors and microcontrollers",
+      "stale": [],
+      "missing": [],
+      "autofixed": [
+        {
+          "id": "CP0507-s1",
+          "title": "Cover page",
+          "asked": "CP0507-head.docx",
+          "used": "CP0507-Head.docx",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CP0507-s2",
+          "title": "Contents",
+          "asked": "CP0507-cont.docx",
+          "used": "CP0507-Cont.docx",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CP0507-s3",
+          "title": "Preparation",
+          "asked": "CP0507-prep.docx",
+          "used": "CP0507-Prep.docx",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        }
+      ]
+    },
     "CO0003": {
       "title": "Digital Techniques for Aviation Technicians",
       "stale": [],
@@ -33,9 +68,6 @@
   "unusedMedia": {
     "CO0004": [
       "CO0004 - content.docx"
-    ],
-    "CP0507": [
-      "CP0507-Head.docx"
     ],
     "CP4807": [
       "CP4807-head.docx",
@@ -101,5 +133,22 @@
     }
   ],
   "canonCollisions": [],
-  "removed": []
+  "removed": [],
+  "drafts": [
+    {
+      "code": "CO6930",
+      "title": "PLC Fundamentals",
+      "reason": "Its definition is an uploaded Excel file (“CO6930 - definition (live).xlsx”). Open it in Google Sheets and use “Save as Google Sheets”, or recreate it as a Google Sheet named “CO6930 - definition”."
+    },
+    {
+      "code": "CP4807",
+      "title": "Introduction to microcontrollers",
+      "reason": "Its definition is an uploaded Excel file (“CP4807 - definition.xlsx”). Open it in Google Sheets and use “Save as Google Sheets”, or recreate it as a Google Sheet named “CP4807 - definition”."
+    },
+    {
+      "code": "CP1972",
+      "title": "Sensors and microcontrollers",
+      "reason": "Its definition is an uploaded Excel file (“CP1972 - definition.xlsx”). Open it in Google Sheets and use “Save as Google Sheets”, or recreate it as a Google Sheet named “CP1972 - definition”."
+    }
+  ]
 }
