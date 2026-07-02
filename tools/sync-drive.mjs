@@ -20,6 +20,7 @@ import { google } from 'googleapis';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import zlib from 'node:zlib';
 
 const ROOT_FOLDER_ID = '1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu'; // "LMS Project Assets" (sync rev 4 — re-run to re-flag removed files as missing)
 const CONTENT_DIR = path.resolve('content');
@@ -215,6 +216,76 @@ function parseCsv(text) {
   if (field !== '' || row.length) { row.push(field); rows.push(row); }
   return rows;
 }
+/* ---- minimal .xlsx reader (no dependency) ----
+   An uploaded Excel definition can't be CSV-exported by Drive (only Google-native
+   files can), so we read it ourselves: an .xlsx is a ZIP of XML. Unzip the parts
+   we need with Node's built-in zlib, then turn the first worksheet + shared strings
+   into rows[][] — the SAME shape parseCsv produces, so the rest of the pipeline
+   (settings block, screens) is identical whether the definition is a Google Sheet
+   or an Excel upload. */
+const xmlUnesc = (s) => String(s)
+  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'")
+  .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+  .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(+d))
+  .replace(/&amp;/g, '&');
+const colToIdx = (ref) => { const m = String(ref).match(/^([A-Z]+)/); if (!m) return 0; let n = 0; for (const ch of m[1]) n = n * 26 + (ch.charCodeAt(0) - 64); return n - 1; };
+function xlsxUnzip(buf) {
+  const out = {};
+  let eocd = -1;
+  for (let i = buf.length - 22; i >= 0; i--) { if (buf.readUInt32LE(i) === 0x06054b50) { eocd = i; break; } }
+  if (eocd < 0) return out;
+  const count = buf.readUInt16LE(eocd + 10);
+  let off = buf.readUInt32LE(eocd + 16);
+  for (let n = 0; n < count && off + 46 <= buf.length; n++) {
+    if (buf.readUInt32LE(off) !== 0x02014b50) break;
+    const method = buf.readUInt16LE(off + 10);
+    const compSize = buf.readUInt32LE(off + 20);
+    const nameLen = buf.readUInt16LE(off + 28);
+    const extraLen = buf.readUInt16LE(off + 30);
+    const commentLen = buf.readUInt16LE(off + 32);
+    const localOff = buf.readUInt32LE(off + 42);
+    const name = buf.toString('utf8', off + 46, off + 46 + nameLen);
+    const lhNameLen = buf.readUInt16LE(localOff + 26);
+    const lhExtraLen = buf.readUInt16LE(localOff + 28);
+    const dataStart = localOff + 30 + lhNameLen + lhExtraLen;
+    const comp = buf.subarray(dataStart, dataStart + compSize);
+    try { out[name] = method === 0 ? comp : zlib.inflateRawSync(comp); } catch { out[name] = Buffer.alloc(0); }
+    off += 46 + nameLen + extraLen + commentLen;
+  }
+  return out;
+}
+function xlsxToRows(buf) {
+  const files = xlsxUnzip(buf);
+  const ss = [];
+  const ssXml = files['xl/sharedStrings.xml'];
+  if (ssXml) {
+    const text = ssXml.toString('utf8'); let m; const siRe = /<si\b[^>]*>([\s\S]*?)<\/si>/g;
+    while ((m = siRe.exec(text))) { let s = '', t; const tRe = /<t\b[^>]*>([\s\S]*?)<\/t>/g; while ((t = tRe.exec(m[1]))) s += t[1]; ss.push(xmlUnesc(s)); }
+  }
+  const sheetKey = Object.keys(files).find((k) => /^xl\/worksheets\/sheet1\.xml$/i.test(k))
+    || Object.keys(files).find((k) => /^xl\/worksheets\/.*\.xml$/i.test(k));
+  const rows = [];
+  if (sheetKey && files[sheetKey]) {
+    const xml = files[sheetKey].toString('utf8'); let r; const rowRe = /<row\b[^>]*>([\s\S]*?)<\/row>/g;
+    while ((r = rowRe.exec(xml))) {
+      const cells = []; let c; const cRe = /<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g;
+      while ((c = cRe.exec(r[1]))) {
+        const attrs = c[1] || '', inner = c[2] || '';
+        const ref = (attrs.match(/\br="([A-Z]+\d+)"/) || [])[1];
+        const type = (attrs.match(/\bt="([^"]+)"/) || [])[1];
+        const at = ref ? colToIdx(ref) : cells.length;
+        let val = '';
+        if (type === 'inlineStr') { const t = inner.match(/<t\b[^>]*>([\s\S]*?)<\/t>/); val = t ? xmlUnesc(t[1]) : ''; }
+        else { const v = inner.match(/<v\b[^>]*>([\s\S]*?)<\/v>/); const raw = v ? v[1] : ''; val = type === 's' ? (ss[+raw] || '') : xmlUnesc(raw); }
+        cells[at] = val;
+      }
+      for (let i = 0; i < cells.length; i++) if (cells[i] == null) cells[i] = '';
+      rows.push(cells);
+    }
+  }
+  return rows;
+}
+
 const TYPE_MAP = { image: 'image', html: 'html', page: 'html', document: 'document', worksheet: 'document', doc: 'document', docx: 'document', youtube: 'youtube', video: 'youtube', pdf: 'pdf', powerpoint: 'powerpoint', slides: 'powerpoint', pptx: 'powerpoint', ppt: 'powerpoint', spreadsheet: 'spreadsheet' };
 const normType = (t) => { const k = String(t || '').trim().toLowerCase(); return TYPE_MAP[k] || (k || 'html'); };
 const cleanFile = (s) => String(s || '').replace(/^\s*["“”']\s*/, '').replace(/\s*["“”']\s*$/, '').trim();
@@ -677,15 +748,56 @@ async function buildDraftFromFiles(folder, code, db, byId) {
 }
 
 /* ---------- phase 2b: auto-discover unregistered course folders ----------
- * Any "<CODE> - Title" folder that (a) isn't already registered in sheets.json
- * and (b) contains a "<CODE> - definition" sheet becomes a course automatically.
- * Metadata comes from a settings block at the top of that sheet (Title,
- * Certificate, Categories, Kind, Active); Title falls back to the folder name.
- * Publishing is OPT-IN: a discovered folder only goes live if its sheet says
- * Active: yes (or true/on/live/published). Anything else — including no Active
- * cell at all — is held back as a draft, so nothing appears by accident. */
+ * Any "<CODE> - Title" folder (CO/CP) not already in sheets.json becomes a course
+ * automatically when it has a "<CODE> - definition" — either a native Google Sheet
+ * OR an uploaded Excel .xlsx (both are read here). Metadata comes from a settings
+ * block at the top (Title, Certificate, Categories, Kind, Active); Title falls back
+ * to the folder name.
+ * Publishing is OPT-OUT: a discovered folder goes LIVE by default, so adding a
+ * course "just works". It is held back only when explicitly marked Active: no
+ * (draft/hidden/off/false/0), when it has no screen rows yet, or when its code
+ * doesn't start CO/CP. Every held-back folder is recorded (with a reason) in the
+ * sync report so the admin can show exactly why it isn't live. */
 async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
   let added = 0, drafts = 0, built = 0;
+  const HIDE_VALUES = ['no', 'false', 'off', '0', 'draft', 'hidden', 'unpublished', 'inactive', 'n'];
+
+  /* rows[][] (from a Google-Sheet CSV OR an uploaded .xlsx) → publish or hold, with
+     identical rules for both formats. Returns 'published' | 'draft'.
+     OPT-OUT: a discovered course goes LIVE unless its settings block explicitly says
+     Active: no (draft/hidden/off/false/0), or it has no screen rows yet. */
+  function publishFromRows(code, rows, titleGuess) {
+    const settings = parseSettings(rows, findHeaderRow(rows));
+    const activeRaw = String(settings.active || settings.status || settings.published || '').trim().toLowerCase();
+    if (HIDE_VALUES.includes(activeRaw)) {
+      SYNC_ISSUES.drafts.push({ code, title: settings.title || titleGuess, reason: `Held back on purpose — its definition says Active: “${activeRaw}”. Set Active: yes (or remove that cell) to publish.` });
+      console.log(`  · ${code}: held as draft (Active="${activeRaw}")`);
+      return 'draft';
+    }
+    const { screens, missing } = rowsToScreens(rows, code, driveFilesByCode);
+    if (!screens.length) {
+      SYNC_ISSUES.drafts.push({ code, title: settings.title || titleGuess, reason: 'Its definition has no screen rows yet. Add at least one row (Screen Type + Title + File), then sync again.' });
+      console.log(`  · ${code}: held as draft (no screen rows)`);
+      return 'draft';
+    }
+    const title = settings.title || titleGuess || code;
+    const certRaw = String(settings.certificate || settings.certificates || '').toLowerCase();
+    const certEnabled = certRaw ? !['no', 'false', 'off', '0', 'none'].includes(certRaw) : true;
+    const cats = String(settings.categories || settings.category || '').split(',').map((s) => s.trim()).filter(Boolean);
+    const totalHours = screens.reduce((s, x) => s + (Number(x.hours) || 0), 0);
+    const course = {
+      id: code, code, kind: (settings.kind || 'course').toLowerCase(),
+      title, shortDescription: settings.description || '',
+      estimatedHours: Math.round(totalHours * 10) / 10,
+      certificate: Object.assign({ enabled: certEnabled }, certEnabled ? { templateName: title } : {}),
+      screens, categories: cats, _source: 'auto',
+    };
+    if (byId[code] != null) db.courses[byId[code]] = course; else { byId[code] = db.courses.length; db.courses.push(course); }
+    console.log(`\n${code} (auto-discovered): "${title}" — ${screens.length} screens${missing.length ? `, ${missing.length} missing file(s):` : ' (all files resolve ✓)'}`);
+    missing.forEach((m) => console.log(`  ⚠ ${m}`));
+    return 'published';
+  }
+
   const folders = (await listChildren(ROOT_FOLDER_ID))
     .filter((f) => f.mimeType === 'application/vnd.google-apps.folder' && codeOf(f.name));
   for (const folder of folders) {
@@ -702,84 +814,48 @@ async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
       continue;
     }
     const children = await listChildren(folder.id);
-    const def = children.find((c) => c.mimeType === 'application/vnd.google-apps.spreadsheet' && /definition/i.test(c.name || ''));
-    if (!def) {
-      /* No Google-Sheet definition. If a publisher uploaded an EXCEL (.xlsx)
-         definition instead, we can't CSV-read it — tell them exactly how to fix
-         it rather than silently ignoring the folder. */
-      const xlsxDef = children.find((c) => /definition/i.test(c.name || '') && /\.xlsx?$/i.test(c.name || ''));
-      if (xlsxDef) {
-        SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `Its definition is an uploaded Excel file (“${xlsxDef.name}”). Open it in Google Sheets and use “Save as Google Sheets”, or recreate it as a Google Sheet named “${code} - definition”.` });
-        drafts++; console.log(`  · ${code}: held — definition is an .xlsx upload, not a Google Sheet`);
+
+    /* Definition source, in priority order:
+       1) a native Google Sheet named "…definition" (CSV-exported), else
+       2) an uploaded Excel "…definition.xlsx" (read directly with the built-in
+          reader) — so a publisher who works in Excel doesn't have to convert it. */
+    const gDef = children.find((c) => c.mimeType === 'application/vnd.google-apps.spreadsheet' && /definition/i.test(c.name || ''));
+    const xDef = !gDef && children.find((c) => /definition/i.test(c.name || '') && /\.xlsx$/i.test(c.name || ''));
+
+    let rows = null;
+    if (gDef) {
+      try {
+        const res = await drive.files.export({ fileId: gDef.id, mimeType: 'text/csv' }, { responseType: 'text' });
+        rows = parseCsv(typeof res.data === 'string' ? res.data : String(res.data));
+      } catch (err) {
+        drafts++; console.error(`  ! ${code}: cannot read "${gDef.name}" — ${err.message}`);
+        SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `Its Google-Sheet definition couldn’t be read (${err.message}). Check it’s shared with the sync service account.` });
         continue;
       }
-      // No definition at all → auto-build a DRAFT from the files (stays off the
-      // public catalogue) — but NEVER clobber a course from a real source.
+    } else if (xDef) {
+      try {
+        const res = await drive.files.get({ fileId: xDef.id, alt: 'media', supportsAllDrives: true }, { responseType: 'arraybuffer' });
+        rows = xlsxToRows(Buffer.from(res.data));
+      } catch (err) {
+        drafts++; console.error(`  ! ${code}: cannot read "${xDef.name}" — ${err.message}`);
+        SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `Its Excel definition (“${xDef.name}”) couldn’t be read (${err.message}).` });
+        continue;
+      }
+    }
+
+    if (!rows) {
+      /* No definition at all → auto-build a DRAFT from the files (off the catalogue),
+         never clobbering a course already published from a real source. */
       const existing = byId[code] != null ? db.courses[byId[code]] : null;
       if (!existing || existing._source === 'auto-files') {
         try { if (await buildDraftFromFiles(folder, code, db, byId)) built++; }
         catch (e) { console.error(`  ! ${code}: auto-build failed — ${e.message}`); }
-        // Only flag as held-back when it isn't already a published course from
-        // another source (so a legacy published course isn't shown as "missing").
-        SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `No definition sheet found. Add a Google Sheet named “${code} - definition” listing the screens, then sync again.` });
+        SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `No definition found. Add a Google Sheet (or an Excel file) named “${code} - definition” listing the screens, then sync again.` });
       }
       continue;
     }
 
-    let csv;
-    try {
-      const res = await drive.files.export({ fileId: def.id, mimeType: 'text/csv' }, { responseType: 'text' });
-      csv = typeof res.data === 'string' ? res.data : String(res.data);
-    } catch (err) {
-      console.error(`  ! ${code}: cannot read "${def.name}" — ${err.message}`);
-      SYNC_ISSUES.drafts.push({ code, title: titleGuess, reason: `Its definition sheet couldn’t be read (${err.message}). Check it’s shared with the sync service account.` });
-      continue;
-    }
-
-    const rows = parseCsv(csv);
-    const settings = parseSettings(rows, findHeaderRow(rows));
-    /* OPT-OUT publishing (bulletproof): a discovered "<CODE> - Title" folder with a
-       definition sheet goes LIVE by default. It is held back ONLY when explicitly
-       marked as not-live — "Active: no" (or draft/hidden/off/false/0). An unset
-       Active cell now PUBLISHES, so adding a course "just works". */
-    const HIDE_VALUES = ['no', 'false', 'off', '0', 'draft', 'hidden', 'unpublished', 'inactive', 'n'];
-    const activeRaw = String(settings.active || settings.status || settings.published || '').trim().toLowerCase();
-    if (HIDE_VALUES.includes(activeRaw)) {
-      drafts++;
-      SYNC_ISSUES.drafts.push({ code, title: settings.title || titleGuess, reason: `Held back on purpose — its definition sheet says Active: “${activeRaw}”. Set Active: yes (or remove that cell) to publish.` });
-      console.log(`  · ${code}: held as draft (Active="${activeRaw}")`);
-      continue;
-    }
-
-    const { screens, missing } = rowsToScreens(rows, code, driveFilesByCode);
-    /* A definition sheet with a header but no screen rows yet isn't a course —
-       hold it as a draft with a clear reason instead of publishing an empty card. */
-    if (!screens.length) {
-      drafts++;
-      SYNC_ISSUES.drafts.push({ code, title: settings.title || titleGuess, reason: 'Its definition sheet has no screen rows yet. Add at least one row (Screen Type + Title + File), then sync again.' });
-      console.log(`  · ${code}: held as draft (no screen rows)`);
-      continue;
-    }
-    const titleFromFolder = String(folder.name).replace(/^[A-Za-z]{2}\d{4}\s*[-–—:]*\s*/, '').trim();
-    const title = settings.title || titleFromFolder || code;
-    const certRaw = String(settings.certificate || settings.certificates || '').toLowerCase();
-    const certEnabled = certRaw ? !['no', 'false', 'off', '0', 'none'].includes(certRaw) : true;
-    const cats = String(settings.categories || settings.category || '').split(',').map((s) => s.trim()).filter(Boolean);
-    const totalHours = screens.reduce((s, x) => s + (Number(x.hours) || 0), 0);
-    const course = {
-      id: code, code, kind: (settings.kind || 'course').toLowerCase(),
-      title,
-      shortDescription: settings.description || '',
-      estimatedHours: Math.round(totalHours * 10) / 10,
-      certificate: Object.assign({ enabled: certEnabled }, certEnabled ? { templateName: title } : {}),
-      screens,
-      categories: cats,
-      _source: 'auto',
-    };
-    if (byId[code] != null) db.courses[byId[code]] = course; else { byId[code] = db.courses.length; db.courses.push(course); }
-    added++;
-    console.log(`\n${code} (auto-discovered): "${title}" — ${screens.length} screens${missing.length ? `, ${missing.length} missing file(s):` : ' (all files resolve ✓)'}`);
-    missing.forEach((m) => console.log(`  ⚠ ${m}`));
+    if (publishFromRows(code, rows, titleGuess) === 'published') added++; else drafts++;
   }
   console.log(`\nAuto-discovery: ${added} new course(s), ${built} auto-built draft(s) from files, ${drafts} held as draft.`);
 }
