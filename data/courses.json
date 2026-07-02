@@ -650,150 +650,172 @@
     {
       "id": "CP1972",
       "code": "CP1972",
-      "kind": "pack",
+      "kind": "course",
       "title": "Sensors and Microcontrollers",
       "shortDescription": "A worksheet pack exploring how microcontrollers read the world through sensors — analog and digital inputs, temperature and light sensing, and data acquisition.",
-      "estimatedHours": 22,
+      "estimatedHours": 25,
       "certificate": {
         "enabled": true,
-        "templateName": "Sensors and Microcontrollers"
+        "templateName": "Sensors and microcontrollers"
       },
       "screens": [
         {
-          "id": "cp1972-s01",
+          "id": "CP1972-s1",
           "type": "document",
-          "title": "Preparation",
-          "hours": 0.5,
-          "equipment": "Flowcode / E-blocks3",
-          "src": "content/CP1972/CP1972-Prep.docx",
-          "webUrl": "https://docs.google.com/document/d/184DNCDclT_IBtL0Mmrxn8JRpf9wFruGi/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "18c29a79fd"
+          "title": "Cover page",
+          "hours": 1,
+          "src": "content/CP1972/CP1972-Head.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-Head.docx",
+          "v": "e402afe6eb",
+          "webUrl": "https://docs.google.com/document/d/1XWftSPxzUlUxUzDCo1ifGXArVibU7VeK/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp1972-s02",
+          "id": "CP1972-s2",
           "type": "document",
           "title": "Contents",
-          "hours": 0.1,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 1,
           "src": "content/CP1972/CP1972-Cont.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-Cont.docx",
+          "v": "c9e2d290aa",
           "webUrl": "https://docs.google.com/document/d/1ayAJ-NgeoG1E__Jasl-K18OK73FlhVef/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "c9e2d290aa"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp1972-s03",
+          "id": "CP1972-s3",
           "type": "document",
-          "title": "Worksheet 1 — Analogue inputs",
+          "title": "Preparation",
+          "hours": 1,
+          "src": "content/CP1972/CP1972-Prep.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-Prep.docx",
+          "v": "18c29a79fd",
+          "webUrl": "https://docs.google.com/document/d/184DNCDclT_IBtL0Mmrxn8JRpf9wFruGi/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP1972-s4",
+          "type": "document",
+          "title": "Analogue inputs",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-1.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
+          "v": "4ab88441c0",
           "webUrl": "https://docs.google.com/document/d/1x44YaQKln15Sc62YN6SrF6r3kVM89WgO/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "4ab88441c0"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp1972-s04",
+          "id": "CP1972-s5",
           "type": "document",
-          "title": "Worksheet 2 — Light sensor",
+          "title": "Light sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-2.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
+          "v": "1aa2d68aa8",
           "webUrl": "https://docs.google.com/document/d/1msO7iVrO_UvtnGY9YvxgfOgGctVcyzuj/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "1aa2d68aa8"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp1972-s05",
+          "id": "CP1972-s6",
           "type": "document",
-          "title": "Worksheet 3 — Analogue temperature sensor",
+          "title": "Analogue temperature sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-3.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
+          "v": "88abb78f5a",
           "webUrl": "https://docs.google.com/document/d/1zRaGyZM54M3vPZfjMNvUYRbcGzmi17QA/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "88abb78f5a"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp1972-s06",
+          "id": "CP1972-s7",
           "type": "document",
-          "title": "Worksheet 4 — Digital temperature sensor",
+          "title": "Digital temperature sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-4.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-4.docx",
+          "v": "7eb606513f",
           "webUrl": "https://docs.google.com/document/d/1JGopebcC8B8biD4RHlwjHIO9A3bOEpXX/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "7eb606513f"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp1972-s07",
+          "id": "CP1972-s8",
           "type": "document",
-          "title": "Worksheet 5 — Digital accelerometer",
+          "title": "Digital accelerometer",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-5.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-5.docx",
+          "v": "d76f6673b2",
           "webUrl": "https://docs.google.com/document/d/1GRLgpi51Aioix0UXOWW7qz8L4SlFbLMR/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "d76f6673b2"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp1972-s08",
+          "id": "CP1972-s9",
           "type": "document",
-          "title": "Worksheet 6 — Floats and INTs",
+          "title": "Floats and INTs",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-6.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-6.docx",
+          "v": "08521a8284",
           "webUrl": "https://docs.google.com/document/d/1UXMVRNqvm15atfvBI6ZM73jUsuJrQw8O/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "08521a8284"
+          "equipment": "Flowcode / E-blocks4"
         },
         {
-          "id": "cp1972-s09",
+          "id": "CP1972-s10",
           "type": "document",
-          "title": "Worksheet 7 — Thermocouples",
+          "title": "Thermocouple",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-7.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-7.docx",
+          "v": "979554f176",
           "webUrl": "https://docs.google.com/document/d/1xEMW7jZmrCRAnChuRpqVtdKQlPnGHjgY/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "979554f176"
+          "equipment": "Flowcode / E-blocks4"
         },
         {
-          "id": "cp1972-s10",
+          "id": "CP1972-s11",
           "type": "document",
-          "title": "Worksheet 8 — Flow sensors",
+          "title": "Flow sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-8.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-8.docx",
+          "v": "2a466d179d",
           "webUrl": "https://docs.google.com/document/d/1AqqetdPCHqlDyAFznBGN5P4tOv3bAZm9/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "2a466d179d"
+          "equipment": "Flowcode / E-blocks5"
         },
         {
-          "id": "cp1972-s11",
+          "id": "CP1972-s12",
           "type": "document",
-          "title": "Worksheet 9 — Compressive force sensors",
+          "title": "Compressive force sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-9.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-9.docx",
+          "v": "be7204a49b",
           "webUrl": "https://docs.google.com/document/d/14syz6L2PcGUiBlqDCHxYcjuBMKjv3pYw/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "be7204a49b"
+          "equipment": "Flowcode / E-blocks6"
         },
         {
-          "id": "cp1972-s12",
+          "id": "CP1972-s13",
           "type": "document",
-          "title": "Worksheet 10 — Cantilever strain sensors",
+          "title": "Strain sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-10.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-10.docx",
+          "v": "b6c7c8a308",
           "webUrl": "https://docs.google.com/document/d/1JkSbGcRHPc1mJXmd_U71eoQjvt8iRycZ/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "b6c7c8a308"
+          "equipment": "Flowcode / E-blocks7"
         },
         {
-          "id": "cp1972-s13",
+          "id": "CP1972-s14",
           "type": "document",
-          "title": "Worksheet 11 — Pressure sensors",
+          "title": "Pressure sensor",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP1972/CP1972-11.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-11.docx",
+          "v": "ad72d55f81",
           "webUrl": "https://docs.google.com/document/d/1vZLi7ngGYkw9k1izh7aNc1jyoUwH9fjY/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "ad72d55f81"
+          "equipment": "Flowcode / E-blocks8"
         }
       ],
-      "categories": [
-        "Sensors",
-        "Microcontrollers"
-      ],
+      "categories": [],
+      "_source": "auto",
       "keywords": [
         "sensors",
         "analog sensors",
@@ -1073,138 +1095,293 @@
     {
       "id": "CP4807",
       "code": "CP4807",
-      "kind": "pack",
+      "kind": "course",
       "title": "Introduction to Microcontrollers",
       "shortDescription": "A curriculum worksheet pack introducing microcontrollers and embedded systems from the ground up — beginner-friendly exercises covering the core fundamentals.",
-      "estimatedHours": 17,
+      "estimatedHours": 53,
       "certificate": {
-        "enabled": false
+        "enabled": true,
+        "templateName": "Introduction to microcontrollers"
       },
       "screens": [
         {
-          "id": "cp4807-s01",
+          "id": "CP4807-s1",
+          "type": "document",
+          "title": "Cover page",
+          "hours": 1,
+          "src": "content/CP4807/CP4807-head.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-head.docx",
+          "v": "9a4c71e73c",
+          "webUrl": "https://docs.google.com/document/d/1ny58BaB5B-twcfvgQtZehfSGnlZVsm52/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s2",
+          "type": "document",
+          "title": "Preparation",
+          "hours": 1,
+          "src": "content/CP4807/CP4807-prep.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-prep.docx",
+          "v": "20534a54b1",
+          "webUrl": "https://docs.google.com/document/d/1SGq_W2rB1zA03_6LiUrId1O417H42CCW/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s3",
           "type": "document",
           "title": "First program",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP4807/CP4807-1.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-1.docx",
+          "v": "2bdc461b87",
           "webUrl": "https://docs.google.com/document/d/1p950pHqBimFA2W9pNC29z7qhnOku-qUB/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "2bdc461b87"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s02",
+          "id": "CP4807-s4",
           "type": "document",
           "title": "Performing calculations",
           "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP4807/CP4807-2.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-2.docx",
+          "v": "edcf063caf",
           "webUrl": "https://docs.google.com/document/d/1GvE3kYb8i6NLXEPm90ieurU719MiiFx8/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "edcf063caf"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s03",
+          "id": "CP4807-s5",
           "type": "document",
           "title": "Connection points",
-          "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 2,
           "src": "content/CP4807/CP4807-3.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-3.docx",
+          "v": "c08bfcc235",
           "webUrl": "https://docs.google.com/document/d/1Zop9EDIyXxYBmIOeqqER_C9O1CyVwCQy/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "c08bfcc235"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s04",
+          "id": "CP4807-s6",
           "type": "document",
           "title": "Digital inputs",
-          "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 2,
           "src": "content/CP4807/CP4807-4.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-4.docx",
+          "v": "62abf5df19",
           "webUrl": "https://docs.google.com/document/d/1W9viJVSBTT2oarHTnWtr8qsvN4-HC5ek/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "62abf5df19"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s05",
+          "id": "CP4807-s7",
           "type": "document",
           "title": "Making decisions",
-          "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 2,
           "src": "content/CP4807/CP4807-5.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-5.docx",
+          "v": "46e8b641e0",
           "webUrl": "https://docs.google.com/document/d/1pI0mUUnDCBRqucyx9vUIeCYf05jIru2Q/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "36277fbcd6"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s06",
+          "id": "CP4807-s8",
           "type": "document",
           "title": "Macros / subroutines",
-          "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 2,
           "src": "content/CP4807/CP4807-6.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-6.docx",
+          "v": "d8ceaad90b",
           "webUrl": "https://docs.google.com/document/d/1LlyTgTdQPSWriTRcSdb1XFiOGRSaDwW_/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "d8ceaad90b"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s07",
+          "id": "CP4807-s9",
           "type": "document",
           "title": "Using prototype boards",
-          "hours": 1,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 2,
           "src": "content/CP4807/CP4807-7.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-7.docx",
+          "v": "792edb073d",
           "webUrl": "https://docs.google.com/document/d/1NBJaRW8NrZglM_0FOCdqdNAnHF68qpy1/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "792edb073d"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s08",
+          "id": "CP4807-s10",
+          "type": "document",
+          "title": "Analogue inputs",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-1.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-1.docx",
+          "v": "4ab88441c0",
+          "webUrl": "https://docs.google.com/document/d/1x44YaQKln15Sc62YN6SrF6r3kVM89WgO/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s11",
           "type": "document",
           "title": "Colour graphical displays",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP4807/CP4807-8.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-8.docx",
+          "v": "f0e99ed51a",
           "webUrl": "https://docs.google.com/document/d/18YTSNkboADpSObr8zP-wSgWjNEy4ZYMx/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "f0e99ed51a"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s09",
+          "id": "CP4807-s12",
+          "type": "document",
+          "title": "Light sensor",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-2.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-2.docx",
+          "v": "1aa2d68aa8",
+          "webUrl": "https://docs.google.com/document/d/1msO7iVrO_UvtnGY9YvxgfOgGctVcyzuj/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s13",
+          "type": "document",
+          "title": "Analogue temperature sensor",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-3.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-3.docx",
+          "v": "88abb78f5a",
+          "webUrl": "https://docs.google.com/document/d/1zRaGyZM54M3vPZfjMNvUYRbcGzmi17QA/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s14",
+          "type": "document",
+          "title": "Digital temperature sensor",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-4.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-4.docx",
+          "v": "7eb606513f",
+          "webUrl": "https://docs.google.com/document/d/1JGopebcC8B8biD4RHlwjHIO9A3bOEpXX/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s15",
+          "type": "document",
+          "title": "Digital accelerometer",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-5.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-5.docx",
+          "v": "d76f6673b2",
+          "webUrl": "https://docs.google.com/document/d/1GRLgpi51Aioix0UXOWW7qz8L4SlFbLMR/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s16",
+          "type": "document",
+          "title": "Basic DC motors",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-1.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-1.docx",
+          "v": "27a5b6c2ed",
+          "webUrl": "https://docs.google.com/document/d/1z294nnSDGiQfeaGHtdes7epL8A_ZIQr4/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s17",
+          "type": "document",
+          "title": "Full bridge motor control",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-2.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-2.docx",
+          "v": "7ab20c4412",
+          "webUrl": "https://docs.google.com/document/d/1YbWM8EtqhpYCmmXKCYCy-JpGo_qFBC2R/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s18",
+          "type": "document",
+          "title": "Stepper motor control",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-3.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-3.docx",
+          "v": "5726cfb197",
+          "webUrl": "https://docs.google.com/document/d/1TO9L5U9qL-GipJFZfsr3UKRH8JMRguOp/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s19",
+          "type": "document",
+          "title": "Servo motor control",
+          "hours": 2,
+          "src": "content/CP0507/CP0507-4.docx",
+          "path": "/CP0507 - Motors and microcontrollers/CP0507-4.docx",
+          "v": "b2a906bf52",
+          "webUrl": "https://docs.google.com/document/d/1ojd_U0UOrhDauia_dzXCuTVnyb8kFG90/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s20",
+          "type": "document",
+          "title": "Floats and INTs",
+          "hours": 2,
+          "src": "content/CP1972/CP1972-6.docx",
+          "path": "/CP1972 - Sensors and microcontrollers/CP1972-6.docx",
+          "v": "08521a8284",
+          "webUrl": "https://docs.google.com/document/d/1UXMVRNqvm15atfvBI6ZM73jUsuJrQw8O/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s21",
           "type": "document",
           "title": "Pin interrupts",
           "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
           "src": "content/CP4807/CP4807-9.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-9.docx",
+          "v": "5b0066cc48",
           "webUrl": "https://docs.google.com/document/d/1yPxOdbQ5WuqoKNuzNGEm2FPvD08n42nJ/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "5b0066cc48"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s10",
+          "id": "CP4807-s22",
           "type": "document",
           "title": "Timer interrupts",
-          "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 3,
           "src": "content/CP4807/CP4807-10.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-10.docx",
+          "v": "778bd53f25",
           "webUrl": "https://docs.google.com/document/d/1zP0Uq8hQpw7LxHfERDe8tCgl8pKdqlHU/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "778bd53f25"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s11",
+          "id": "CP4807-s23",
           "type": "document",
           "title": "Touch control systems",
-          "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 4,
           "src": "content/CP4807/CP4807-11.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-11.docx",
+          "v": "9c83e9b8c0",
           "webUrl": "https://docs.google.com/document/d/1JzfYX1xGnFelCgxN7094mtSi2kzh715G/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "9c83e9b8c0"
+          "equipment": "Flowcode / E-blocks3"
         },
         {
-          "id": "cp4807-s12",
+          "id": "CP4807-s24",
           "type": "document",
           "title": "Web mirror",
-          "hours": 2,
-          "equipment": "Flowcode / E-blocks3",
+          "hours": 4,
           "src": "content/CP4807/CP4807-12.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-12.docx",
+          "v": "183203f43f",
           "webUrl": "https://docs.google.com/document/d/1RQJF_g0Tl7lG7fM0i6RvCJ6qRDcN1YjK/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "183203f43f"
+          "equipment": "Flowcode / E-blocks3"
+        },
+        {
+          "id": "CP4807-s25",
+          "type": "document",
+          "title": "Teacher's notes",
+          "hours": 4,
+          "src": "content/CP4807/CP4807-TN.docx",
+          "path": "/CP4807 - Introduction to microcontrollers/CP4807-TN.docx",
+          "v": "7cacb9c729",
+          "webUrl": "https://docs.google.com/document/d/1hdq3EMztBVmVfSxwitYo7HNXbAhQkYYc/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
         }
       ],
-      "categories": [
-        "Curriculum pack"
-      ],
+      "categories": [],
+      "_source": "auto",
       "keywords": [
         "introduction",
         "microcontrollers",
@@ -2572,197 +2749,228 @@
       "kind": "course",
       "title": "PLC Fundamentals",
       "shortDescription": "",
-      "estimatedHours": 0,
+      "estimatedHours": 14.3,
       "certificate": {
-        "enabled": false
+        "enabled": true,
+        "templateName": "PLC Fundamentals"
       },
       "screens": [
         {
           "id": "CO6930-s1",
-          "type": "document",
-          "title": "content",
-          "hours": 0,
-          "src": "content/CO6930/CO6930 - content.docx",
-          "webUrl": "https://docs.google.com/document/d/19TaNQSDQ6rcc2LfwRRl6l0skAtjMJR1a/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "fee383a18a"
+          "type": "html",
+          "title": "Welcome",
+          "hours": 0.1,
+          "src": "content/CO6930/CO6930-welcome.htm",
+          "path": "CO6930-welcome.htm",
+          "v": "aace75064d",
+          "webUrl": "https://drive.google.com/file/d/1n5yYdsfCsuoc5oKHG171j1dTwoavX0Nr/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s2",
-          "type": "document",
-          "title": "content",
-          "hours": 0,
-          "src": "content/CO6930/CO6930 - content.docx",
-          "webUrl": "https://docs.google.com/document/d/19TaNQSDQ6rcc2LfwRRl6l0skAtjMJR1a/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "fee383a18a"
+          "type": "html",
+          "title": "Learning objectives",
+          "hours": 0.1,
+          "src": "content/CO6930/CO6930-LO.htm",
+          "path": "CO6930-LO.htm",
+          "v": "f4821b95c9",
+          "webUrl": "https://drive.google.com/file/d/1G1fwUD3_62QjaCRjwa_ZySqSPqMGQmWK/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s3",
-          "type": "spreadsheet",
-          "title": "definition (live)",
-          "hours": 0,
-          "src": "content/CO6930/CO6930 - definition (live).xlsx",
-          "webUrl": "https://docs.google.com/spreadsheets/d/1yt3SJYRYKW6sxmArLubaPRcyqba_L234/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "v": "2bc1c60dc2"
+          "type": "html",
+          "title": "Equipment",
+          "hours": 0.2,
+          "src": "content/CO6930/CO6930-Equip.htm",
+          "path": "CO6930-Equip.htm",
+          "v": "dc3a466df7",
+          "webUrl": "https://drive.google.com/file/d/1SBZ53y8J2DfkqP5ptiRKAv8xywOy1EfH/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s4",
-          "type": "html",
-          "title": "Equip",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-Equip.htm",
-          "webUrl": "https://drive.google.com/file/d/1SBZ53y8J2DfkqP5ptiRKAv8xywOy1EfH/view?usp=drivesdk",
-          "v": "dc3a466df7"
+          "type": "youtube",
+          "title": "Trainer overview",
+          "hours": 0.2,
+          "src": "https://www.youtube.com/watch?v=9OaTz8f3sac",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s5",
-          "type": "html",
-          "title": "Handbook",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-Handbook.htm",
-          "webUrl": "https://drive.google.com/file/d/1odUUcQ6ps5-T3NCdDhn3Q7aovbgSqnMd/view?usp=drivesdk",
-          "v": "0485f7b08b"
+          "type": "pdf",
+          "title": "PLC Fundamentals worksheets (PDF)",
+          "hours": 0.3,
+          "src": "https://matrixtsl.github.io/IM6930/docs/CP2388%20%E2%80%93%20PLC%20Fundamentals%20for%20Maintenance%20Engineers.pdf",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s6",
           "type": "html",
-          "title": "LO",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-LO.htm",
-          "webUrl": "https://drive.google.com/file/d/1G1fwUD3_62QjaCRjwa_ZySqSPqMGQmWK/view?usp=drivesdk",
-          "v": "f4821b95c9"
+          "title": "Worksheet 1 – Simple PLC Systems",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W1.htm",
+          "path": "CO6930-W1.htm",
+          "v": "c031259941",
+          "webUrl": "https://drive.google.com/file/d/1xbcqljpzZ58BVRS2MM-ogqQ3fazsJeyA/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s7",
-          "type": "html",
-          "title": "Safety",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-Safety.htm",
-          "webUrl": "https://drive.google.com/file/d/1YiAodrgyDAspQLdqdC7B25HPf8fKemHh/view?usp=drivesdk",
-          "v": "080ec54e4a"
+          "type": "youtube",
+          "title": "Worksheet 2 overview",
+          "hours": 0.2,
+          "src": "https://www.youtube.com/watch?v=CPwaUnomzc8",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s8",
           "type": "html",
-          "title": "W1",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W1.htm",
-          "webUrl": "https://drive.google.com/file/d/1xbcqljpzZ58BVRS2MM-ogqQ3fazsJeyA/view?usp=drivesdk",
-          "v": "c031259941"
+          "title": "Worksheet 2 – Complex PLC Systems",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W2.htm",
+          "path": "CO6930-W2.htm",
+          "v": "3c29ccf547",
+          "webUrl": "https://drive.google.com/file/d/1AXVgZ4k0YffjMFyWkATfvAwkH4p_9c6h/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s9",
           "type": "html",
-          "title": "W10",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W10.htm",
-          "webUrl": "https://drive.google.com/file/d/1VS2M595IDG60cqWenH-Sv52k7pLe2Qrv/view?usp=drivesdk",
-          "v": "2612339eec"
+          "title": "Worksheet 3 – HMIs",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W3.htm",
+          "path": "CO6930-W3.htm",
+          "v": "663bf072b6",
+          "webUrl": "https://drive.google.com/file/d/1pRSSSlFr78f_WhS7idxtNTPMNbnt3gJw/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s10",
           "type": "html",
-          "title": "W11",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W11.htm",
-          "webUrl": "https://drive.google.com/file/d/1lKm9PDYHOBM39vykOto-T-xm3Kh05WYx/view?usp=drivesdk",
-          "v": "a3f23b9da5"
+          "title": "Worksheet 4 – Emergency Stops",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W4.htm",
+          "path": "CO6930-W4.htm",
+          "v": "dd3c4bab7a",
+          "webUrl": "https://drive.google.com/file/d/1EefAhJdIi8sJ0cBH58h4udW5_UhZXLD2/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s11",
           "type": "html",
-          "title": "W12",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W12.htm",
-          "webUrl": "https://drive.google.com/file/d/12Mab8wEYtHlHfHmcChYEtRXBZi72gFGQ/view?usp=drivesdk",
-          "v": "c775ecbc06"
+          "title": "Worksheet 5 – Status LED",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W5.htm",
+          "path": "CO6930-W5.htm",
+          "v": "c225bb3f82",
+          "webUrl": "https://drive.google.com/file/d/1A9oeHrW90L9Sb81pK8hO5oZzV3kHNiKP/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s12",
           "type": "html",
-          "title": "W2",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W2.htm",
-          "webUrl": "https://drive.google.com/file/d/1AXVgZ4k0YffjMFyWkATfvAwkH4p_9c6h/view?usp=drivesdk",
-          "v": "3c29ccf547"
+          "title": "Worksheet 6 – Normally Open vs Normally Closed",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W6.htm",
+          "path": "CO6930-W6.htm",
+          "v": "b393e59fdf",
+          "webUrl": "https://drive.google.com/file/d/1vEkR7w-xkiVtVf5eqOgG1zdWMuC756cP/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s13",
           "type": "html",
-          "title": "W3",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W3.htm",
-          "webUrl": "https://drive.google.com/file/d/1pRSSSlFr78f_WhS7idxtNTPMNbnt3gJw/view?usp=drivesdk",
-          "v": "663bf072b6"
+          "title": "Worksheet 7 – Proximity Switch",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W7.htm",
+          "path": "CO6930-W7.htm",
+          "v": "4ef396476a",
+          "webUrl": "https://drive.google.com/file/d/1xopTPjtCPlN5B5fwvXUs2rXqhBRfYX15/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s14",
           "type": "html",
-          "title": "W4",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W4.htm",
-          "webUrl": "https://drive.google.com/file/d/1EefAhJdIi8sJ0cBH58h4udW5_UhZXLD2/view?usp=drivesdk",
-          "v": "dd3c4bab7a"
+          "title": "Worksheet 8 – Potentiometer",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W8.htm",
+          "path": "CO6930-W8.htm",
+          "v": "33b3ec5e55",
+          "webUrl": "https://drive.google.com/file/d/1W8l4u3suBhxqFPzyhD4pwsfPncKENYqg/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s15",
           "type": "html",
-          "title": "W5",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W5.htm",
-          "webUrl": "https://drive.google.com/file/d/1A9oeHrW90L9Sb81pK8hO5oZzV3kHNiKP/view?usp=drivesdk",
-          "v": "c225bb3f82"
+          "title": "Worksheet 9 – Temperature Sensor",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W9.htm",
+          "path": "CO6930-W9.htm",
+          "v": "93ac7f8021",
+          "webUrl": "https://drive.google.com/file/d/1-Gcu-LImaiFQ0RKr4BXQ2XLdQ5qzfDHl/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s16",
           "type": "html",
-          "title": "W6",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W6.htm",
-          "webUrl": "https://drive.google.com/file/d/1vEkR7w-xkiVtVf5eqOgG1zdWMuC756cP/view?usp=drivesdk",
-          "v": "b393e59fdf"
+          "title": "Worksheet 10 – Digital Outputs",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W10.htm",
+          "path": "CO6930-W10.htm",
+          "v": "2612339eec",
+          "webUrl": "https://drive.google.com/file/d/1VS2M595IDG60cqWenH-Sv52k7pLe2Qrv/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s17",
           "type": "html",
-          "title": "W7",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W7.htm",
-          "webUrl": "https://drive.google.com/file/d/1xopTPjtCPlN5B5fwvXUs2rXqhBRfYX15/view?usp=drivesdk",
-          "v": "4ef396476a"
+          "title": "Worksheet 11 – Motor PWM",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W11.htm",
+          "path": "CO6930-W11.htm",
+          "v": "a3f23b9da5",
+          "webUrl": "https://drive.google.com/file/d/1lKm9PDYHOBM39vykOto-T-xm3Kh05WYx/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s18",
           "type": "html",
-          "title": "W8",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W8.htm",
-          "webUrl": "https://drive.google.com/file/d/1W8l4u3suBhxqFPzyhD4pwsfPncKENYqg/view?usp=drivesdk",
-          "v": "33b3ec5e55"
+          "title": "Worksheet 12 – Relays",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-W12.htm",
+          "path": "CO6930-W12.htm",
+          "v": "c775ecbc06",
+          "webUrl": "https://drive.google.com/file/d/12Mab8wEYtHlHfHmcChYEtRXBZi72gFGQ/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s19",
           "type": "html",
-          "title": "W9",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-W9.htm",
-          "webUrl": "https://drive.google.com/file/d/1-Gcu-LImaiFQ0RKr4BXQ2XLdQ5qzfDHl/view?usp=drivesdk",
-          "v": "93ac7f8021"
+          "title": "Student handbook",
+          "hours": 1,
+          "src": "content/CO6930/CO6930-Handbook.htm",
+          "path": "CO6930-Handbook.htm",
+          "v": "0485f7b08b",
+          "webUrl": "https://drive.google.com/file/d/1odUUcQ6ps5-T3NCdDhn3Q7aovbgSqnMd/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         },
         {
           "id": "CO6930-s20",
           "type": "html",
-          "title": "welcome",
-          "hours": 0,
-          "src": "content/CO6930/CO6930-welcome.htm",
-          "webUrl": "https://drive.google.com/file/d/1n5yYdsfCsuoc5oKHG171j1dTwoavX0Nr/view?usp=drivesdk",
-          "v": "aace75064d"
+          "title": "Safety note",
+          "hours": 0.2,
+          "src": "content/CO6930/CO6930-Safety.htm",
+          "path": "CO6930-Safety.htm",
+          "v": "080ec54e4a",
+          "webUrl": "https://drive.google.com/file/d/1YiAodrgyDAspQLdqdC7B25HPf8fKemHh/view?usp=drivesdk",
+          "equipment": "IM6930 PLC Fundamentals Trainer"
         }
       ],
       "categories": [],
-      "draft": true,
-      "_source": "auto-files",
+      "_source": "auto",
       "courseType": "Course",
-      "structureHours": 0
+      "structureHours": 14.3
     }
   ]
 }
