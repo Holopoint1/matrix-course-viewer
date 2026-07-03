@@ -56,7 +56,7 @@
     <div class="hero-inner">
       <span class="eyebrow">Admin guide</span>
       <h1>How to add a course</h1>
-      <p>Everything lives in Google Drive. Add a folder, its files and a definition, click <em>Sync from Drive now</em>, and the course publishes to the site — usually in a couple of minutes.</p>
+      <p>Everything lives in Google Drive. Add a folder, its files, and a definition, then sync. The course goes live in a couple of minutes.</p>
     </div>
   </section>
 
@@ -72,96 +72,96 @@
       <a href="#reference">Reference</a>
     </div>
 
-    <p class="gd-lead">A course is three things in Google Drive: a <strong>folder</strong> (named with the course code), the <strong>content files</strong> inside it, and a <strong>definition</strong> that lists the screens in order. Add those, then sync. New <code>CO</code>/<code>CP</code> courses publish automatically — no hidden switches.</p>
+    <p class="gd-lead">A course is three things in Google Drive: a <strong>folder</strong> named with the course code, the <strong>content files</strong> inside it, and a <strong>definition</strong> that lists the screens in order. Add those, then sync. CO and CP courses go live on their own.</p>
 
     <h2 id="how" class="gd-section" style="border:0;padding:0;margin-top:.6rem">How it works</h2>
-    <p style="margin:.3rem 0 .2rem;color:#334155;line-height:1.6">You only ever touch <strong>Google Drive</strong>. From there it's automatic — the site pulls your changes in and publishes them, so there's no uploading to the website and no code to write.</p>
+    <p style="margin:.3rem 0 .2rem;color:#334155;line-height:1.6">You only ever touch <strong>Google Drive</strong>. Everything after that runs on its own.</p>
     <div class="gd-flow">
       <div class="gd-flow-node">
         <div class="gd-flow-ico">📁</div>
         <h3>Google Drive</h3>
-        <p>You add a course folder, its files, and a definition sheet.</p>
+        <p>You add a course folder, its files, and a definition.</p>
         <span class="gd-flow-tag you">You do this</span>
       </div>
       <div class="gd-flow-arrow"><b>→</b><small>sync reads Drive</small></div>
       <div class="gd-flow-node">
         <div class="gd-flow-ico">⚙️</div>
         <h3>GitHub</h3>
-        <p>Every ~5 min the sync reads Drive, stores the files, and builds the course list.</p>
+        <p>The sync reads Drive, stores the files, and builds the course list.</p>
         <span class="gd-flow-tag auto">Automatic</span>
       </div>
       <div class="gd-flow-arrow"><b>→</b><small>publishes</small></div>
       <div class="gd-flow-node">
         <div class="gd-flow-ico">🎓</div>
         <h3>Courses page</h3>
-        <p>Your new or updated course appears live for learners.</p>
+        <p>The course goes live for learners.</p>
         <span class="gd-flow-tag done">Result</span>
       </div>
     </div>
-    <p class="gd-tip" style="margin-top:.9rem">💡 The takeaway: <strong>edit in Drive, and the site updates itself.</strong> Add or change a file in a course folder and it flows through automatically — usually within a couple of minutes. Nothing is uploaded to the website by hand.</p>
+    <p class="gd-tip" style="margin-top:.9rem">💡 Edit in Drive. The site updates itself, usually within a couple of minutes. You never upload to the website by hand.</p>
 
     <h2 id="steps" class="gd-section">The 6 steps</h2>
 
     <div class="gd-step"><div class="gd-num">1</div><div class="gd-step-body">
-      <h2>Create the course folder — start from the template</h2>
-      <p>There's a ready-made <code>TEMPLATE: Course structure</code> folder in the shared Drive <code>LMS Project Assets</code>. It holds the three pieces every course needs: a <strong><code>media</code> folder</strong>, a <strong>definition spreadsheet</strong>, and a <strong><code>welcome.html</code></strong> page.</p>
-      <p class="gd-warn">⚠️ Google Drive <strong>can't copy a whole folder</strong>, so build your new course folder from the template's parts instead:</p>
+      <h2>Create the course folder from the template</h2>
+      <p>The <code>TEMPLATE: Course structure</code> folder in <code>LMS Project Assets</code> has the three pieces every course needs: a <strong><code>media</code> folder</strong>, a <strong>definition spreadsheet</strong>, and a <strong><code>welcome.html</code></strong> page.</p>
+      <p class="gd-warn">⚠️ Google Drive can't copy a whole folder. Build yours from the template's parts:</p>
       <ol style="line-height:1.7;color:#334155;padding-left:1.3rem;margin:.4rem 0 .6rem">
-        <li>In <code>LMS Project Assets</code>, create a <strong>new folder</strong> (right-click → <em>New folder</em>).</li>
-        <li>Open <code>TEMPLATE: Course structure</code>, right-click the <strong>definition spreadsheet</strong> → <strong>Make a copy</strong>, then move the copy into your new folder. Do the same for <strong><code>welcome.html</code></strong>.</li>
-        <li>Inside your new folder, create a <strong><code>media</code></strong> subfolder for the content files.</li>
+        <li>In <code>LMS Project Assets</code>, create a <strong>new folder</strong>.</li>
+        <li>In <code>TEMPLATE: Course structure</code>, right-click the <strong>definition spreadsheet</strong> and pick <strong>Make a copy</strong>. Move the copy into your folder. Do the same for <strong><code>welcome.html</code></strong>.</li>
+        <li>Add a <strong><code>media</code></strong> subfolder for the content files.</li>
       </ol>
-      <p>Then <strong>name the folder with the course code and title</strong>, e.g. <code>CO0010 - Fire Safety Basics</code>:</p>
+      <p>Name the folder with the course code and title, like <code>CO0010 - Fire Safety Basics</code>.</p>
       <ul class="gd-list">
-        <li>The code is <strong>two letters + four digits</strong> at the very start of the name — that's how the system recognises a course.</li>
-        <li>Use <code>CO…</code> for a full course (gets a certificate) or <code>CP…</code> for a worksheet pack (no certificate).</li>
-        <li><strong>Only <code>CO</code> and <code>CP</code> folders are tracked and uploaded to the site</strong> — anything else (the template itself, a <code>ZZ…</code> test) is ignored, which is why the template is safe to leave in place.</li>
+        <li>The code is <strong>two letters and four digits</strong> at the start of the name. That's how the system spots a course.</li>
+        <li><code>CO</code> is a full course with a certificate. <code>CP</code> is a worksheet pack without one.</li>
+        <li>Only <code>CO</code> and <code>CP</code> folders go to the site. Anything else, including the template, is ignored.</li>
       </ul>
     </div></div>
 
     <div class="gd-step"><div class="gd-num">2</div><div class="gd-step-body">
       <h2>Add your content files</h2>
-      <p>Drop the screen files into the <code>media</code> folder — worksheets (<code>.docx</code>), images (<code>.png</code>/<code>.jpg</code>/<code>.svg</code>), PDFs and HTML pages. (They can also sit in the folder root; the whole folder is scanned either way, and you reference each file by its name.)</p>
-      <p>A file only becomes a screen once you <strong>list it in the definition</strong> (Step 3). The template's definition — and any existing course's — is a worked example of how the rows point at each file, so copy that pattern.</p>
-      <p class="gd-note">You can also author a screen straight from a <strong>Google Doc/Sheet/Slides</strong> — the sync exports it to <code>.docx</code>/<code>.xlsx</code>/<code>.pptx</code> automatically.</p>
+      <p>Put your files in the <code>media</code> folder: worksheets (<code>.docx</code>), images, PDFs, HTML pages. The whole folder is scanned, so the root works too. You reference each file by its name.</p>
+      <p>A file becomes a screen once you list it in the definition (Step 3). Copy the pattern from the template's definition, or any existing course's.</p>
+      <p class="gd-note">You can also author a screen as a <strong>Google Doc, Sheet, or Slides</strong>. The sync exports it to <code>.docx</code>, <code>.xlsx</code>, or <code>.pptx</code>.</p>
     </div></div>
 
     <div class="gd-step"><div class="gd-num">3</div><div class="gd-step-body">
       <h2>Add the definition</h2>
-      <p>The definition is a small table that lists the screens, one row each, in order. You already copied the template's definition in Step 1 — just <strong>edit its rows</strong> and name it with <strong>“definition” in the title</strong>, e.g. <code>CO0010 - definition</code>. It can be either:</p>
+      <p>The definition is a small table: one row per screen, in order. You copied the template's version in Step 1, so just edit its rows. Give it a name with <strong>“definition”</strong> in it, like <code>CO0010 - definition</code>. It can be:</p>
       <ul class="gd-list">
         <li>a <strong>Google Sheet</strong>, or</li>
-        <li>an uploaded <strong>Excel <code>.xlsx</code></strong> file — <em>both work</em>, so use whichever you prefer.</li>
+        <li>an uploaded <strong>Excel (<code>.xlsx</code>)</strong> file. Both work.</li>
       </ul>
-      <p>See <a href="#definition">the definition sheet</a> below for the exact columns.</p>
+      <p>See <a href="#definition">the definition sheet</a> below for the columns.</p>
     </div></div>
 
     <div class="gd-step"><div class="gd-num">4</div><div class="gd-step-body">
       <h2>Add a row to Course_structure</h2>
-      <p>Open the <code>Course_structure</code> sheet in the Drive root and add a row for the course. This drives the <strong>catalogue card</strong> — its section, description and search. See <a href="#structure">Course_structure</a> below. <em>(Optional — skip it and the course still appears, using the folder name.)</em></p>
+      <p>Add a row for the course to the <code>Course_structure</code> sheet in the Drive root. It sets the catalogue card: section, description, and search. This is optional. Skip it and the course still appears under its folder name.</p>
     </div></div>
 
     <div class="gd-step"><div class="gd-num">5</div><div class="gd-step-body">
       <h2>Sync from Drive</h2>
-      <p>Go to the <a href="admin.html">Admin dashboard</a> and click <strong>🚀 Sync from Drive now</strong>. It pulls everything from Drive, matches each file, and publishes — usually 1–2 minutes, then the page refreshes. <em>(It also syncs automatically every ~5 minutes.)</em></p>
+      <p>On the <a href="admin.html">Admin dashboard</a>, click <strong>🚀 Sync from Drive now</strong>. It pulls from Drive, matches each file, and publishes in a minute or two. It also syncs on its own every 5 minutes.</p>
     </div></div>
 
     <div class="gd-step"><div class="gd-num">6</div><div class="gd-step-body">
       <h2>Check it's healthy</h2>
-      <p>The course now appears on the <a href="index.html">Courses page</a>. The <a href="admin.html">Admin dashboard</a> shows its health — every screen should read <strong>✅ Displays</strong>. If any say <strong>❌ Missing</strong>, see <a href="#trouble">Troubleshooting</a>.</p>
+      <p>The course appears on the <a href="index.html">Courses page</a>. The <a href="admin.html">Admin dashboard</a> shows its health. Every screen should read <strong>✅ Displays</strong>. For any <strong>❌ Missing</strong>, see <a href="#trouble">Troubleshooting</a>.</p>
     </div></div>
 
     <!-- Definition -->
     <div class="gd-section" id="definition">
-      <h2>The definition sheet — columns</h2>
-      <p>One row per screen, in the order they should appear. A header row names the columns (they can be in any order):</p>
+      <h2>The definition sheet</h2>
+      <p>One row per screen, in order. A header row names the columns. They can be in any order.</p>
       <table class="gd-table">
         <tr><th>Column</th><th>What it is</th></tr>
-        <tr><td><strong>Screen type</strong></td><td>How the screen is shown — see <a href="#reference">screen types</a>.</td></tr>
-        <tr><td><strong>Title</strong></td><td>The screen's name in the sidebar. (If blank, it's derived from the file name.)</td></tr>
-        <tr><td><strong>File</strong></td><td>The file for this screen — see below.</td></tr>
-        <tr><td><strong>Hours</strong></td><td>Guided learning hours for the screen (used to total the course time). Optional.</td></tr>
-        <tr><td><strong>Equipment</strong></td><td>Any kit needed. Optional — shown as a note.</td></tr>
+        <tr><td><strong>Screen type</strong></td><td>How the screen shows. See <a href="#reference">screen types</a>.</td></tr>
+        <tr><td><strong>Title</strong></td><td>The screen's name in the sidebar. Blank uses the file name.</td></tr>
+        <tr><td><strong>File</strong></td><td>The file for this screen. See below.</td></tr>
+        <tr><td><strong>Hours</strong></td><td>Guided learning hours. Optional. Totals the course time.</td></tr>
+        <tr><td><strong>Equipment</strong></td><td>Any kit needed. Optional. Shown as a note.</td></tr>
       </table>
       <p class="gd-tsq">Example</p>
       <table class="gd-table">
@@ -172,65 +172,65 @@
       </table>
       <p class="gd-tsq">What goes in the “File” column</p>
       <ul class="gd-list">
-        <li>Just the <strong>file name</strong> as it is in the folder — <code>intro.docx</code>.</li>
-        <li>Or the <strong>full Drive path</strong> — <code>LMS Project Assets/CO0010 - Fire Safety Basics/intro.docx</code>.</li>
-        <li>Or a <strong>web link</strong> for a YouTube/external screen — <code>https://youtu.be/…</code>.</li>
+        <li>The <strong>file name</strong> as it is in the folder: <code>intro.docx</code>.</li>
+        <li>The <strong>full Drive path</strong>: <code>LMS Project Assets/CO0010 - Fire Safety Basics/intro.docx</code>.</li>
+        <li>A <strong>web link</strong> for a YouTube or external screen: <code>https://youtu.be/…</code>.</li>
       </ul>
-      <p class="gd-note">Matching is forgiving: it ignores case, hyphen-vs-en-dash “–”, and <code>.htm</code>/<code>.html</code> differences. So a small typo still finds the right file — but the file must actually be in the folder.</p>
+      <p class="gd-note">Matching ignores case, hyphen vs en-dash “–”, and <code>.htm</code> vs <code>.html</code>. A small typo still finds the file. The file just has to be in the folder.</p>
     </div>
 
     <!-- Course_structure -->
     <div class="gd-section" id="structure">
-      <h2>Course_structure — the catalogue card</h2>
-      <p>One row per course in the <code>Course_structure</code> sheet (Drive root). It controls how the course appears on the Courses page:</p>
+      <h2>Course_structure</h2>
+      <p>One row per course, in the <code>Course_structure</code> sheet in the Drive root. It sets how the course looks on the Courses page.</p>
       <table class="gd-table">
         <tr><th>Column</th><th>Drives</th></tr>
-        <tr><td>Course code</td><td>Which course the row belongs to (e.g. <code>CO0010</code>).</td></tr>
-        <tr><td>Course title</td><td>The card + page title.</td></tr>
-        <tr><td>Course type</td><td>Which section it's grouped under (Student-centred, Teacher-centred, CPD, Worksheet packs).</td></tr>
+        <tr><td>Course code</td><td>Which course the row is for, like <code>CO0010</code>.</td></tr>
+        <tr><td>Course title</td><td>The card and page title.</td></tr>
+        <tr><td>Course type</td><td>The section it sits under: Student-centred, Teacher-centred, CPD, or Worksheet packs.</td></tr>
         <tr><td>Keywords</td><td>Extra words the search box matches.</td></tr>
         <tr><td>Description</td><td>The short blurb on the card.</td></tr>
-        <tr><td>Number of sheets / Hours of learning</td><td>Shown on the card (fall back to the live totals if blank).</td></tr>
+        <tr><td>Number of sheets / Hours of learning</td><td>Shown on the card. Blank uses the live totals.</td></tr>
       </table>
-      <p class="gd-note">A <strong>blank cell never wipes</strong> good data — it keeps whatever was there before, so partial edits are safe.</p>
+      <p class="gd-note">A blank cell never wipes good data. It keeps what was there before.</p>
     </div>
 
     <!-- Hide a draft -->
     <div class="gd-section" id="hide">
-      <h2>Hiding a work-in-progress</h2>
-      <p>New CO/CP courses publish by default. To keep one <strong>off the site</strong> while you build it, add a settings row above the header in its definition:</p>
+      <h2>Hiding a draft</h2>
+      <p>CO and CP courses publish by default. To keep one off the site while you build it, add a settings row above the header in its definition:</p>
       <table class="gd-table">
         <tr><td><code>Active</code></td><td><code>no</code></td></tr>
       </table>
-      <p>Set <code>Active: no</code> (or <code>draft</code>/<code>hidden</code>) to hold it back; set <code>Active: yes</code> or remove the row to publish. Held-back folders are listed in the Admin dashboard so you always know what's waiting.</p>
+      <p><code>Active: no</code> (or <code>draft</code>, or <code>hidden</code>) holds it back. <code>Active: yes</code>, or removing the row, publishes it. Held-back folders show in the Admin dashboard.</p>
     </div>
 
     <!-- Troubleshooting -->
     <div class="gd-section" id="trouble">
-      <h2>Troubleshooting — “my course isn't showing”</h2>
-      <p>The <a href="admin.html">Admin dashboard</a> tells you exactly why. The usual causes:</p>
+      <h2>Troubleshooting</h2>
+      <p>The <a href="admin.html">Admin dashboard</a> tells you why. The usual causes:</p>
 
       <p class="gd-tsq">A screen says ❌ Missing</p>
-      <p>A file named in the definition isn't in the Drive folder. Add the file (exact name) to that folder, or fix the name in the definition, then sync. The site never shows a stale copy — a missing file honestly reads “missing” until the real one is added.</p>
+      <p>A file named in the definition isn't in the Drive folder. Add it under the exact name, or fix the name in the definition, then sync. The site never shows a stale copy. It reads “missing” until the real file is there.</p>
 
       <p class="gd-tsq">The whole course isn't on the Courses page</p>
       <ul class="gd-list">
-        <li><strong>No definition found</strong> — add a Google Sheet or Excel file with “definition” in its name.</li>
-        <li><strong>Held back — Active: no</strong> — its definition is marked not-live; set <code>Active: yes</code> or remove that cell.</li>
-        <li><strong>No screen rows yet</strong> — the definition has a header but no rows; add at least one.</li>
-        <li><strong>Not a CO/CP code</strong> — only CO/CP codes publish automatically; rename the folder.</li>
+        <li><strong>No definition found.</strong> Add a Google Sheet or Excel file with “definition” in its name.</li>
+        <li><strong>Held back.</strong> Its definition says <code>Active: no</code>. Set <code>Active: yes</code> or remove that cell.</li>
+        <li><strong>No screen rows yet.</strong> The definition has a header but no rows. Add at least one.</li>
+        <li><strong>Not a CO or CP code.</strong> Rename the folder.</li>
       </ul>
-      <p class="gd-warn">Every one of these is listed for you in the Admin dashboard under <strong>“Drive folders not yet on the courses page”</strong>, each with the fix — so it's never a mystery.</p>
+      <p class="gd-warn">The Admin dashboard lists each of these under <strong>“Drive folders not yet on the courses page”</strong>, with the fix.</p>
     </div>
 
     <!-- Reference -->
     <div class="gd-section" id="reference">
-      <h2>Reference — screen types</h2>
+      <h2>Screen types</h2>
       <table class="gd-table">
         <tr><th>Type</th><th>Use for</th></tr>
-        <tr><td><code>worksheet</code> / <code>document</code></td><td>Word documents (<code>.docx</code>) — the main worksheet screens.</td></tr>
+        <tr><td><code>worksheet</code> / <code>document</code></td><td>Word documents (<code>.docx</code>). The main worksheet screens.</td></tr>
         <tr><td><code>html</code> / <code>page</code></td><td>An HTML page (<code>.htm</code>/<code>.html</code>).</td></tr>
-        <tr><td><code>image</code></td><td>A picture (<code>.png</code>/<code>.jpg</code>/<code>.svg</code>…).</td></tr>
+        <tr><td><code>image</code></td><td>A picture (<code>.png</code>/<code>.jpg</code>/<code>.svg</code>).</td></tr>
         <tr><td><code>pdf</code></td><td>A PDF document.</td></tr>
         <tr><td><code>youtube</code> / <code>video</code></td><td>A YouTube link in the File column.</td></tr>
         <tr><td><code>powerpoint</code></td><td>A slideshow (<code>.pptx</code>).</td></tr>
