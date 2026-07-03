@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T09:07:55.402Z",
+  "generatedAt": "2026-07-03T09:14:23.665Z",
   "summary": {
     "courses": 10,
     "screens": 247,
@@ -12,7 +12,7 @@
     "collisions": 3,
     "collisionsAffecting": 0,
     "drafts": 0,
-    "namingIssues": 0
+    "namingIssues": 1
   },
   "courses": {
     "CP0507": {
@@ -244,5 +244,11 @@
     }
   ],
   "drafts": [],
-  "namingIssues": []
+  "namingIssues": [
+    {
+      "folder": "CO00010 - TEST COURSE",
+      "guess": "CO0010",
+      "reason": "Its code is malformed — it must have exactly four digits (this has 5). Right now the sync reads it as “CO0001” — which may be a different course. Rename the folder to “CO0010 - TEST COURSE”."
+    }
+  ]
 }
