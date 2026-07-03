@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-03T11:49:17.213Z",
+  "generatedAt": "2026-07-03T12:16:01.994Z",
   "summary": {
     "courses": 11,
-    "screens": 254,
+    "screens": 255,
     "displaying": 254,
-    "missing": 0,
+    "missing": 1,
     "autofixed": 4,
     "stale": 0,
     "unused": 33,
@@ -64,6 +64,20 @@
           ]
         }
       ]
+    },
+    "CO0022": {
+      "title": "TEST COURSE",
+      "stale": [],
+      "missing": [
+        {
+          "id": "CO0022-s8",
+          "title": "Screen 8",
+          "asked": "undefined",
+          "expectedIn": "CO0022",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0022 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        }
+      ],
+      "autofixed": []
     }
   },
   "unusedMedia": {
