@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T03:40:59.325Z",
+  "generatedAt": "2026-07-03T09:01:27.264Z",
   "summary": {
     "courses": 10,
     "screens": 247,
@@ -66,6 +66,16 @@
     }
   },
   "unusedMedia": {
+    "CO0001": [
+      "CO0001 - content.docx",
+      "CO0001 – How to deliver this course.docx",
+      "CO0001 – syllabuses.docx",
+      "CO0001 - CPD objectives.docx",
+      "CO002-SOW.xlsx",
+      "CO0001 – First lessons.HTM",
+      "test.docx",
+      "Now try the worksheets.HTM"
+    ],
     "CO6930": [
       "CO6930 - content.docx"
     ],
@@ -77,16 +87,6 @@
     ],
     "CO0003": [
       "CO0003 - content.docx"
-    ],
-    "CO0001": [
-      "CO0001 - content.docx",
-      "CO0001 – How to deliver this course.docx",
-      "CO0001 – syllabuses.docx",
-      "CO0001 - CPD objectives.docx",
-      "CO002-SOW.xlsx",
-      "CO0001 – First lessons.HTM",
-      "test.docx",
-      "Now try the worksheets.HTM"
     ],
     "CO0002": [
       "CO0002 - content.docx",
@@ -132,6 +132,115 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [],
+  "removed": [
+    {
+      "code": "CO0001",
+      "name": "BTEC unit 6 mapping for intro to micros.xlsx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 - CPD objectives.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 - CPD objectives.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 - content.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 - opening.png"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – BTEC.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – Datasheet.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – Digital Techniques.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – First lessons.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – Flowcode at home.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – How to deliver this course.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – How to deliver this course.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – Over to you.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – Presentations.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – T levels.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – syllabuses.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – syllabuses.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO0001 – videos.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO002-SOW.xlsx"
+    },
+    {
+      "code": "CO0001",
+      "name": "Digital techniques mapping.xlsx"
+    },
+    {
+      "code": "CO0001",
+      "name": "Now try the worksheets.HTM"
+    },
+    {
+      "code": "CO0001",
+      "name": "T levels mapping.xlsx"
+    },
+    {
+      "code": "CO0001",
+      "name": "test.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "CO00010 TEST.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "Copy of Europe Institutions.xlsx"
+    },
+    {
+      "code": "CO0001",
+      "name": "Scotland tour 2026.docx"
+    },
+    {
+      "code": "CO0001",
+      "name": "test.jpg"
+    }
+  ],
   "drafts": []
 }
