@@ -69,7 +69,7 @@
       <p class="fb-msg" id="fb-msg"></p>
     </div>
 
-    <div class="fb-list-head"><h2>Recent feedback</h2><span class="n" id="fb-total">0</span></div>
+    <div class="fb-list-head"><h2>All feedback</h2><span class="n" id="fb-total">0</span></div>
     <div id="fb-list"><p class="fb-empty">Loading…</p></div>
 
     <div class="fb-mod" id="fb-mod"><a id="fb-mod-link">Site owner? Enable moderation</a></div>
@@ -86,6 +86,7 @@
       var tokens = function () { try { return JSON.parse(localStorage.getItem(TOKENS_KEY) || '{}'); } catch (e) { return {}; } };
       var saveTokens = function (t) { localStorage.setItem(TOKENS_KEY, JSON.stringify(t)); };
       var adminKey = function () { return localStorage.getItem(ADMIN_KEY) || ''; };
+      var lastPosts = [];   // last rendered list, so a just-posted item can be shown instantly
 
       /* Owner moderation: visiting ?admin=KEY once stores the key locally and unlocks
          "delete any post". It's only as strong as keeping the key private. */
@@ -102,6 +103,7 @@
       }
 
       function render(posts) {
+        lastPosts = posts || [];
         var mine = tokens(), admin = adminKey();
         $('fb-total').textContent = posts.length;
         var modOn = !!admin;
@@ -147,7 +149,11 @@
             var t = tokens(); t[res.j.id] = res.j.token; saveTokens(t);   // remember it's mine → I can delete it
             $('fb-text').value = ''; updateCount();
             msg.className = 'fb-msg ok'; msg.textContent = '✓ Thanks — your feedback is posted.';
-            load();
+            // Show it immediately below the form (KV storage can lag a second before
+            // the server list includes it), then reconcile with the server shortly after.
+            var np = res.j.post || { id: res.j.id, text: text, name: name, createdAt: Date.now() };
+            render([np].concat(lastPosts.filter(function (p) { return p.id !== np.id; })));
+            setTimeout(load, 2500);
           })
           .catch(function (e) { msg.className = 'fb-msg err'; msg.textContent = e.message; })
           .then(function () { btn.disabled = false; btn.textContent = 'Post feedback'; });
@@ -179,6 +185,7 @@
         if (k) { localStorage.setItem(ADMIN_KEY, k.trim()); load(); }
       });
       load();
+      setInterval(load, 30000);   // pick up others' feedback without a manual refresh
     })();
   </script>
   <script src="assets/sidebar.js?v=20260629c"></script>
