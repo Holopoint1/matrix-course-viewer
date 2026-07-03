@@ -35,7 +35,6 @@
   const NAV_LINKS = [
     { href: 'index.html',    label: 'Courses',    match: ['index.html', ''] },
     { href: 'support.html',  label: 'Support',    match: ['support.html'] },
-    { href: 'feedback.html', label: 'Feedback',   match: ['feedback.html'] },
     { href: 'files.html',    label: 'Tools',      match: ['files.html', 'preview.html', 'tools.html'] },
     { href: 'admin.html',    label: 'Admin',      match: ['admin.html', 'guide.html'] }
   ];
@@ -45,7 +44,6 @@
     { href: 'account.html',  label: 'My Account' },
     { href: 'files.html',    label: 'Tools' },
     { href: 'support.html',  label: 'Support' },
-    { href: 'feedback.html', label: 'Feedback' },
     { href: 'admin.html',    label: 'Admin' },
     { href: 'guide.html',    label: 'How to add a course' },
     { href: 'https://www.matrixtsl.com', label: 'matrixtsl.com', external: true },

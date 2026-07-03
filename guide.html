@@ -58,25 +58,32 @@
     <h2 id="steps" class="gd-section" style="border:0;padding:0;margin-top:0">The 6 steps</h2>
 
     <div class="gd-step"><div class="gd-num">1</div><div class="gd-step-body">
-      <h2>Create the course folder in Google Drive</h2>
-      <p>In the shared Drive <code>LMS Project Assets</code>, make a new folder named with the <strong>course code and title</strong>, for example <code>CO0010 - Fire Safety Basics</code>.</p>
+      <h2>Create the course folder — start from the template</h2>
+      <p>There's a ready-made <code>TEMPLATE: Course structure</code> folder in the shared Drive <code>LMS Project Assets</code>. It holds the three pieces every course needs: a <strong><code>media</code> folder</strong>, a <strong>definition spreadsheet</strong>, and a <strong><code>welcome.html</code></strong> page.</p>
+      <p class="gd-warn">⚠️ Google Drive <strong>can't copy a whole folder</strong>, so build your new course folder from the template's parts instead:</p>
+      <ol style="line-height:1.7;color:#334155;padding-left:1.3rem;margin:.4rem 0 .6rem">
+        <li>In <code>LMS Project Assets</code>, create a <strong>new folder</strong> (right-click → <em>New folder</em>).</li>
+        <li>Open <code>TEMPLATE: Course structure</code>, right-click the <strong>definition spreadsheet</strong> → <strong>Make a copy</strong>, then move the copy into your new folder. Do the same for <strong><code>welcome.html</code></strong>.</li>
+        <li>Inside your new folder, create a <strong><code>media</code></strong> subfolder for the content files.</li>
+      </ol>
+      <p>Then <strong>name the folder with the course code and title</strong>, e.g. <code>CO0010 - Fire Safety Basics</code>:</p>
       <ul class="gd-list">
         <li>The code is <strong>two letters + four digits</strong> at the very start of the name — that's how the system recognises a course.</li>
         <li>Use <code>CO…</code> for a full course (gets a certificate) or <code>CP…</code> for a worksheet pack (no certificate).</li>
-        <li>Only <strong>CO</strong> and <strong>CP</strong> codes publish automatically — other codes (like a <code>ZZ…</code> test) are held back on purpose.</li>
+        <li><strong>Only <code>CO</code> and <code>CP</code> folders are tracked and uploaded to the site</strong> — anything else (the template itself, a <code>ZZ…</code> test) is ignored, which is why the template is safe to leave in place.</li>
       </ul>
-      <p class="gd-tip">💡 Fastest start: <strong>duplicate the <code>TEMPLATE</code> folder</strong> and rename it — the structure is ready-made.</p>
     </div></div>
 
     <div class="gd-step"><div class="gd-num">2</div><div class="gd-step-body">
-      <h2>Add the content files</h2>
-      <p>Drop the screen files into the folder — worksheets (<code>.docx</code>), images (<code>.png</code>/<code>.jpg</code>/<code>.svg</code>), PDFs, and HTML pages. They can sit in the folder root or a <code>media/</code> subfolder; the whole folder is scanned.</p>
+      <h2>Add your content files</h2>
+      <p>Drop the screen files into the <code>media</code> folder — worksheets (<code>.docx</code>), images (<code>.png</code>/<code>.jpg</code>/<code>.svg</code>), PDFs and HTML pages. (They can also sit in the folder root; the whole folder is scanned either way, and you reference each file by its name.)</p>
+      <p>A file only becomes a screen once you <strong>list it in the definition</strong> (Step 3). The template's definition — and any existing course's — is a worked example of how the rows point at each file, so copy that pattern.</p>
       <p class="gd-note">You can also author a screen straight from a <strong>Google Doc/Sheet/Slides</strong> — the sync exports it to <code>.docx</code>/<code>.xlsx</code>/<code>.pptx</code> automatically.</p>
     </div></div>
 
     <div class="gd-step"><div class="gd-num">3</div><div class="gd-step-body">
       <h2>Add the definition</h2>
-      <p>The definition is a small table that lists the screens, one row each, in order. Name it with <strong>“definition” in the title</strong>, e.g. <code>CO0010 - definition</code>. It can be either:</p>
+      <p>The definition is a small table that lists the screens, one row each, in order. You already copied the template's definition in Step 1 — just <strong>edit its rows</strong> and name it with <strong>“definition” in the title</strong>, e.g. <code>CO0010 - definition</code>. It can be either:</p>
       <ul class="gd-list">
         <li>a <strong>Google Sheet</strong>, or</li>
         <li>an uploaded <strong>Excel <code>.xlsx</code></strong> file — <em>both work</em>, so use whichever you prefer.</li>
@@ -194,6 +201,6 @@
 
   <script src="assets/sidebar.js?v=20260629c"></script>
   <script src="assets/cms-overrides.js?v=20260623"></script>
-  <script src="assets/chrome.js?v=20260702c"></script>
+  <script src="assets/chrome.js?v=20260703a"></script>
 </body>
 </html>
