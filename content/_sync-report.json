@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-03T11:16:22.672Z",
+  "generatedAt": "2026-07-03T11:49:17.213Z",
   "summary": {
-    "courses": 10,
-    "screens": 247,
-    "displaying": 247,
+    "courses": 11,
+    "screens": 254,
+    "displaying": 254,
     "missing": 0,
     "autofixed": 4,
     "stale": 0,
@@ -12,7 +12,7 @@
     "collisions": 3,
     "collisionsAffecting": 0,
     "drafts": 0,
-    "namingIssues": 1
+    "namingIssues": 0
   },
   "courses": {
     "CP0507": {
@@ -67,6 +67,28 @@
     }
   },
   "unusedMedia": {
+    "CO6930": [
+      "CO6930 - content.docx"
+    ],
+    "CO0004": [
+      "CO0004 - content.docx"
+    ],
+    "CP4807": [
+      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx"
+    ],
+    "CO0003": [
+      "CO0003 - content.docx"
+    ],
+    "CO0001": [
+      "CO0001 - content.docx",
+      "CO0001 – How to deliver this course.docx",
+      "CO0001 – syllabuses.docx",
+      "CO0001 - CPD objectives.docx",
+      "CO002-SOW.xlsx",
+      "CO0001 – First lessons.HTM",
+      "test.docx",
+      "Now try the worksheets.HTM"
+    ],
     "CO0002": [
       "CO0002 - content.docx",
       "CO0002-A3.docx",
@@ -89,28 +111,6 @@
       "bits.docx",
       "CO0002 - SOW.htm",
       "CO0002-H8.docx"
-    ],
-    "CO6930": [
-      "CO6930 - content.docx"
-    ],
-    "CO0004": [
-      "CO0004 - content.docx"
-    ],
-    "CP4807": [
-      "CP4807 - Introduction to microcontrollers 05 04 26 (1).docx"
-    ],
-    "CO0003": [
-      "CO0003 - content.docx"
-    ],
-    "CO0001": [
-      "CO0001 - content.docx",
-      "CO0001 – How to deliver this course.docx",
-      "CO0001 – syllabuses.docx",
-      "CO0001 - CPD objectives.docx",
-      "CO002-SOW.xlsx",
-      "CO0001 – First lessons.HTM",
-      "test.docx",
-      "Now try the worksheets.HTM"
     ]
   },
   "failed": [],
@@ -135,198 +135,7 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0002",
-      "name": "BTEC National Unit 6 syllabus mapping.xlsx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002 - Equip.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002 - Equip.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002 - SOW.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002 - content.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002 - opening.png"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-A1.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-A2.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-A3.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-A3.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-Equip.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H1.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H1.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H2.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H3.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H4.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H5.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H5.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H6.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H7.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H8.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H8.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-H9.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-LO.HTM"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-LO.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-LO.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-P1.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-SOW.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-SOW.xlsx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-Syllabus.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-marking scheme.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-welcome.HTM"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO0002-welcome.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "Microcontroller basics 1 24 02 26.pptx"
-    },
-    {
-      "code": "CO0002",
-      "name": "Microcontroller basics 2 24 02 26.pptx"
-    },
-    {
-      "code": "CO0002",
-      "name": "Now try the worksheets.HTM"
-    },
-    {
-      "code": "CO0002",
-      "name": "Now try the worksheets.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "Now try the worksheets.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "Other resources.HTM"
-    },
-    {
-      "code": "CO0002",
-      "name": "Other resources.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "Other resources.htm"
-    },
-    {
-      "code": "CO0002",
-      "name": "bits.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "CO00022 TEST.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "Copy of Europe Institutions.xlsx"
-    },
-    {
-      "code": "CO0002",
-      "name": "Scotland tour 2026.docx"
-    },
-    {
-      "code": "CO0002",
-      "name": "test.jpg"
-    }
-  ],
+  "removed": [],
   "drafts": [],
-  "namingIssues": [
-    {
-      "folder": "CO00022 - TEST COURSE",
-      "guess": "CO0022",
-      "reason": "Its code is malformed — it must have exactly four digits (this has 5). Right now the sync reads it as “CO0002” — which may be a different course. Rename the folder to “CO0022 - TEST COURSE”."
-    }
-  ]
+  "namingIssues": []
 }
