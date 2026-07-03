@@ -45,7 +45,7 @@ const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: 
    plain-English diagnosis + a best-guess corrected code for such a folder, or null
    when the folder clearly isn't a course attempt (so TEMPLATE/mapping_docs/etc.
    are never flagged). Deliberately tolerant so it catches many variations. */
-function diagnoseCourseFolder(name, hasDefinition) {
+function diagnoseCourseFolder(name, hasDefinition, codeMatch) {
   const head = String(name).split(/\s*[-–—:]\s*/)[0].trim();     // the code token, before " - Title"
   const compact = head.replace(/\s+/g, '');
   // "looks like a course-code attempt": short, starts with a letter, mixes letters+digits.
@@ -72,10 +72,17 @@ function diagnoseCourseFolder(name, hasDefinition) {
   if (!problems.length) problems.push('it doesn’t match the two-letters-plus-four-digits format');
 
   const fixTo = guess ? ' Rename the folder to “' + guess + (title ? ' - ' + title : ' - …') + '”.' : ' Rename it to two letters (CO or CP) + four digits, e.g. “CO0010 - …”.';
+  /* When the malformed code still partly matches, the sync mis-reads it as another
+     code (e.g. "CO00010" → "CO0001"), which can collide with a real course — call
+     that out explicitly. */
+  const collision = (codeMatch && codeMatch !== guess)
+    ? ' Right now the sync reads it as “' + codeMatch + '”' + (codeMatch === 'CO0001' || codeMatch.length === 6 ? ' — which may be a different course' : '') + '.'
+    : '';
+  const opener = codeMatch ? 'Its code is malformed' : 'Its name isn’t a valid course code, so the sync skips this folder';
   return {
     folder: name,
     guess,
-    reason: 'Its name isn’t a valid course code, so the sync skips this folder — ' + problems.join('; ') + '.' + fixTo,
+    reason: opener + ' — ' + problems.join('; ') + '.' + collision + fixTo,
   };
 }
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
@@ -889,10 +896,16 @@ async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
   const NON_COURSE_FOLDER = /^(template|mapping[_ -]?docs|media|assets|images?|shared|archive|backups?|course[_ -]?structure|_)/i;
   if (!ONLY_COURSE) {
     for (const f of rootFolders) {
-      if (codeOf(f.name) || NON_COURSE_FOLDER.test(String(f.name).trim())) continue;
+      const nm = String(f.name).trim();
+      if (NON_COURSE_FOLDER.test(nm)) continue;
+      const headTok = nm.split(/\s*[-–—:]\s*/)[0].trim();   // keep internal spaces — "CO 0010" is NOT valid
+      // Skip ONLY when the code token is EXACTLY two letters + four digits. A near-miss
+      // that still loosely matches — "CO00010" (5 digits) reads as "CO0001" and collides,
+      // or "CO 0010" (a space) fails codeOf entirely — must NOT be skipped.
+      if (/^[A-Za-z]{2}\d{4}$/.test(headTok)) continue;
       let hasDef = false;
       try { hasDef = (await listChildren(f.id)).some((c) => /definition/i.test(c.name || '')); } catch (_) {}
-      const diag = diagnoseCourseFolder(f.name, hasDef);
+      const diag = diagnoseCourseFolder(f.name, hasDef, codeOf(f.name));
       if (diag) { SYNC_ISSUES.namingIssues.push(diag); console.log(`  ⚠ naming issue: "${f.name}" — suggest ${diag.guess || 'CO/CP + 4 digits'}`); }
     }
   }
