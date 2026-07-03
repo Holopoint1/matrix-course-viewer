@@ -31,6 +31,24 @@
     .gd-tsq { font-weight: 700; color: #0f172a; margin: 1rem 0 .2rem; }
     .gd-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 2rem; }
     ul.gd-list { line-height: 1.7; color: #334155; }
+    /* --- how-it-works flowchart --- */
+    .gd-flow { display: flex; align-items: stretch; justify-content: center; gap: .2rem; flex-wrap: nowrap; margin: 1.1rem 0 .3rem; }
+    .gd-flow-node { flex: 1 1 0; min-width: 0; background: #fff; border: 1px solid var(--primary-100); border-radius: 14px; padding: 1.1rem .8rem 1rem; text-align: center; box-shadow: 0 1px 3px rgba(15,23,42,.06); }
+    .gd-flow-ico { width: 54px; height: 54px; margin: 0 auto .55rem; border-radius: 50%; background: var(--primary-50); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; }
+    .gd-flow-node h3 { margin: 0 0 .25rem; font-size: 1rem; color: var(--primary-dark); }
+    .gd-flow-node p { margin: 0 0 .6rem; font-size: .8rem; line-height: 1.45; color: #475569; }
+    .gd-flow-tag { display: inline-block; font-size: .64rem; text-transform: uppercase; letter-spacing: .5px; font-weight: 800; border-radius: 999px; padding: .14rem .6rem; }
+    .gd-flow-tag.you { color: #166534; background: #dcfce7; }
+    .gd-flow-tag.auto { color: var(--primary-dark); background: var(--primary-50); }
+    .gd-flow-tag.done { color: #92400e; background: #fef3c7; }
+    .gd-flow-arrow { flex: 0 0 auto; align-self: center; display: flex; flex-direction: column; align-items: center; gap: .15rem; padding: 0 .1rem; }
+    .gd-flow-arrow b { font-size: 1.5rem; line-height: 1; color: var(--primary); }
+    .gd-flow-arrow small { font-size: .6rem; color: #64748b; text-transform: uppercase; letter-spacing: .3px; max-width: 66px; line-height: 1.2; text-align: center; }
+    @media (max-width: 640px) {
+      .gd-flow { flex-direction: column; align-items: stretch; gap: .15rem; }
+      .gd-flow-arrow { flex-direction: row; gap: .4rem; padding: .15rem 0; }
+      .gd-flow-arrow b { transform: rotate(90deg); }
+    }
   </style>
 </head>
 <body data-no-sidebar>
@@ -45,6 +63,7 @@
   <main class="gd-wrap">
     <div class="gd-toc">
       <strong>On this page</strong>
+      <a href="#how">How it works</a>
       <a href="#steps">The 6 steps</a>
       <a href="#definition">The definition sheet</a>
       <a href="#structure">Course_structure</a>
@@ -55,7 +74,33 @@
 
     <p class="gd-lead">A course is three things in Google Drive: a <strong>folder</strong> (named with the course code), the <strong>content files</strong> inside it, and a <strong>definition</strong> that lists the screens in order. Add those, then sync. New <code>CO</code>/<code>CP</code> courses publish automatically — no hidden switches.</p>
 
-    <h2 id="steps" class="gd-section" style="border:0;padding:0;margin-top:0">The 6 steps</h2>
+    <h2 id="how" class="gd-section" style="border:0;padding:0;margin-top:.6rem">How it works</h2>
+    <p style="margin:.3rem 0 .2rem;color:#334155;line-height:1.6">You only ever touch <strong>Google Drive</strong>. From there it's automatic — the site pulls your changes in and publishes them, so there's no uploading to the website and no code to write.</p>
+    <div class="gd-flow">
+      <div class="gd-flow-node">
+        <div class="gd-flow-ico">📁</div>
+        <h3>Google Drive</h3>
+        <p>You add a course folder, its files, and a definition sheet.</p>
+        <span class="gd-flow-tag you">You do this</span>
+      </div>
+      <div class="gd-flow-arrow"><b>→</b><small>sync reads Drive</small></div>
+      <div class="gd-flow-node">
+        <div class="gd-flow-ico">⚙️</div>
+        <h3>GitHub</h3>
+        <p>Every ~5 min the sync reads Drive, stores the files, and builds the course list.</p>
+        <span class="gd-flow-tag auto">Automatic</span>
+      </div>
+      <div class="gd-flow-arrow"><b>→</b><small>publishes</small></div>
+      <div class="gd-flow-node">
+        <div class="gd-flow-ico">🎓</div>
+        <h3>Courses page</h3>
+        <p>Your new or updated course appears live for learners.</p>
+        <span class="gd-flow-tag done">Result</span>
+      </div>
+    </div>
+    <p class="gd-tip" style="margin-top:.9rem">💡 The takeaway: <strong>edit in Drive, and the site updates itself.</strong> Add or change a file in a course folder and it flows through automatically — usually within a couple of minutes. Nothing is uploaded to the website by hand.</p>
+
+    <h2 id="steps" class="gd-section">The 6 steps</h2>
 
     <div class="gd-step"><div class="gd-num">1</div><div class="gd-step-body">
       <h2>Create the course folder — start from the template</h2>
