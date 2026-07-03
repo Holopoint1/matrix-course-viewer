@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T09:21:15.234Z",
+  "generatedAt": "2026-07-03T09:26:18.511Z",
   "summary": {
     "courses": 10,
     "screens": 247,
@@ -7,7 +7,7 @@
     "missing": 0,
     "autofixed": 4,
     "stale": 0,
-    "unused": 32,
+    "unused": 33,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -91,6 +91,7 @@
     ],
     "CO0002": [
       "CO0002 - content.docx",
+      "CO0002-A3.docx",
       "CO0002-H5.docx",
       "Now try the worksheets.htm",
       "CO0002-marking scheme.htm",
