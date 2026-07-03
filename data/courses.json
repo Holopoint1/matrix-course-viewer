@@ -3054,14 +3054,6 @@
           "path": "test.jpg",
           "v": "6ac98f353b",
           "webUrl": "https://drive.google.com/file/d/1TaNeiQXkIcw23rpLSH6_En268L6jsK_9/view?usp=drivesdk"
-        },
-        {
-          "id": "CO0022-s8",
-          "type": "1",
-          "title": "Screen 8",
-          "hours": 0,
-          "src": "content/CO0022/undefined",
-          "missing": true
         }
       ],
       "categories": [],
