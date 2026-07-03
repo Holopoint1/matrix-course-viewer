@@ -34,7 +34,50 @@ const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
    ?v= and is never served stale). Plus sync issues surfaced to the admin report. */
 const CONTENT_VERSIONS = {};
 const DRIVE_LINKS = {};   // content/<code>/<name> -> Drive webViewLink (for "Open in Google …")
-const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [], drafts: [] };
+const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [], drafts: [], namingIssues: [] };
+
+/* ---- failsafe: diagnose a course-code typo in a root folder name ----
+   A folder is only treated as a course when its name starts with a valid code
+   (two letters + four digits, e.g. CO0010). A near-miss — "C000010" (digit 0 for
+   letter O), "CO001" (too few digits), "CO 0010" (a space), "COO010" (letter O for
+   a 0), a single leading letter, etc. — is otherwise SILENTLY ignored, so the
+   publisher gets no clue why their course never appeared. This returns a
+   plain-English diagnosis + a best-guess corrected code for such a folder, or null
+   when the folder clearly isn't a course attempt (so TEMPLATE/mapping_docs/etc.
+   are never flagged). Deliberately tolerant so it catches many variations. */
+function diagnoseCourseFolder(name, hasDefinition) {
+  const head = String(name).split(/\s*[-–—:]\s*/)[0].trim();     // the code token, before " - Title"
+  const compact = head.replace(/\s+/g, '');
+  // "looks like a course-code attempt": short, starts with a letter, mixes letters+digits.
+  const codey = /^[A-Za-z][A-Za-z0-9]{2,8}$/.test(compact) && /\d/.test(compact);
+  if (!codey && !hasDefinition) return null;                      // not a course → don't flag
+  const U = compact.toUpperCase();
+  const first2 = U.slice(0, 2).replace(/0/g, 'O');               // letters expected here: 0→O
+  const digits = U.slice(2).replace(/O/g, '0').replace(/[^0-9]/g, ''); // digits expected: O→0
+  const startsCOCP = /^C[OP]$/.test(first2);
+  const d4 = digits.length === 4 ? digits : (digits.length > 4 ? digits.slice(-4) : digits.padStart(4, '0'));
+  const title = name.split(/\s*[-–—:]\s*/).slice(1).join(' - ').trim();
+  const guess = startsCOCP ? first2 + d4 : null;
+
+  const problems = [];
+  if (/\s/.test(head)) problems.push('there’s a space inside the code (write it as one word, e.g. CO0010)');
+  const lead = (U.match(/^[A-Z]+/) || [''])[0];
+  if (lead.length < 2) {
+    if (/^.0/.test(U)) problems.push('the 2nd character is the digit “0” — it should be the letter “O” (as in CO), which is next to P on the keyboard');
+    else problems.push('it needs two letters at the start');
+  }
+  if (startsCOCP && /O/.test(U.slice(2))) problems.push('a letter “O” in the number part should be the digit “0”');
+  if (!startsCOCP) problems.push('course codes start with CO or CP');
+  if (digits.length !== 4) problems.push('it must have exactly four digits (this has ' + digits.length + ')');
+  if (!problems.length) problems.push('it doesn’t match the two-letters-plus-four-digits format');
+
+  const fixTo = guess ? ' Rename the folder to “' + guess + (title ? ' - ' + title : ' - …') + '”.' : ' Rename it to two letters (CO or CP) + four digits, e.g. “CO0010 - …”.';
+  return {
+    folder: name,
+    guess,
+    reason: 'Its name isn’t a valid course code, so the sync skips this folder — ' + problems.join('; ') + '.' + fixTo,
+  };
+}
 const GOOGLE_NATIVE = /^application\/vnd\.google-apps\./;
 /* Google-native docs can't be downloaded directly, but they CAN be exported to
    their Office equivalents — so a publisher can author a screen straight from a
@@ -721,6 +764,7 @@ function writeAccuracyReport(db, driveFilesByCode) {
       downloadFailed: SYNC_ISSUES.failed.length,
       collisions: collisions.length, collisionsAffecting,
       drafts: SYNC_ISSUES.drafts.length,
+      namingIssues: SYNC_ISSUES.namingIssues.length,
     },
     courses, unusedMedia,
     failed: SYNC_ISSUES.failed,
@@ -728,7 +772,18 @@ function writeAccuracyReport(db, driveFilesByCode) {
     canonCollisions: SYNC_ISSUES.canonCollisions,
     removed: SYNC_ISSUES.removed,   // content files deleted because they were not in Drive (their screen now shows missing)
     drafts: SYNC_ISSUES.drafts,     // Drive folders found but NOT published (with a plain-English reason each)
+    namingIssues: SYNC_ISSUES.namingIssues,  // folders whose name isn't a valid course code (with a fix each)
   };
+  /* Keep generatedAt STABLE when the findings are unchanged, so an unchanged sync
+     writes a byte-identical report (no spurious commit that would churn Pages), yet
+     a report whose FINDINGS changed (a new naming issue, draft, missing file…) DOES
+     differ and gets committed → the admin sees it. */
+  try {
+    const prev = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, '_sync-report.json'), 'utf8'));
+    const a = Object.assign({}, report); delete a.generatedAt;
+    const b = Object.assign({}, prev); delete b.generatedAt;
+    if (JSON.stringify(a) === JSON.stringify(b) && prev.generatedAt) report.generatedAt = prev.generatedAt;
+  } catch (_) {}
   fs.writeFileSync(path.join(CONTENT_DIR, '_sync-report.json'), JSON.stringify(report, null, 2) + '\n');
   const staleCount = Object.values(courses).reduce((n, c) => n + c.stale.length, 0);
   const orphanCount = Object.values(unusedMedia).reduce((n, a) => n + a.length, 0);
@@ -821,8 +876,27 @@ async function autoDiscoverPhase(db, byId, registered, driveFilesByCode = {}) {
     return 'published';
   }
 
-  const folders = (await listChildren(ROOT_FOLDER_ID))
-    .filter((f) => f.mimeType === 'application/vnd.google-apps.folder' && codeOf(f.name));
+  const rootFolders = (await listChildren(ROOT_FOLDER_ID))
+    .filter((f) => f.mimeType === 'application/vnd.google-apps.folder');
+  const folders = rootFolders.filter((f) => codeOf(f.name));
+
+  /* FAILSAFE (2026-07-03): a folder whose name ISN'T a valid course code is normally
+     skipped silently. Scan those; if one looks like a mis-typed course attempt (or
+     holds a "…definition"), record a diagnosed naming issue for the admin — so a
+     "C000010"-style typo tells the publisher exactly what to fix. Known non-course
+     folders (TEMPLATE, mapping_docs, media, _-prefixed, the structure sheet) are
+     never flagged. Skipped on scoped (ONLY_COURSE) runs. */
+  const NON_COURSE_FOLDER = /^(template|mapping[_ -]?docs|media|assets|images?|shared|archive|backups?|course[_ -]?structure|_)/i;
+  if (!ONLY_COURSE) {
+    for (const f of rootFolders) {
+      if (codeOf(f.name) || NON_COURSE_FOLDER.test(String(f.name).trim())) continue;
+      let hasDef = false;
+      try { hasDef = (await listChildren(f.id)).some((c) => /definition/i.test(c.name || '')); } catch (_) {}
+      const diag = diagnoseCourseFolder(f.name, hasDef);
+      if (diag) { SYNC_ISSUES.namingIssues.push(diag); console.log(`  ⚠ naming issue: "${f.name}" — suggest ${diag.guess || 'CO/CP + 4 digits'}`); }
+    }
+  }
+
   for (const folder of folders) {
     const code = codeOf(folder.name);
     if (registered.has(code)) continue;                       // a registered course always wins

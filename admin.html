@@ -199,6 +199,21 @@
         '<div class="stat ' + (unusedTotal?'warn':'') + '"><div class="n">' + unusedTotal + '</div><div class="l">Unused files</div></div>' +
         '</div>';
 
+      /* ---- naming-issue failsafe ----
+         Folders whose NAME isn't a valid course code — the sync can't even see them
+         as courses, so the course is entirely missing with no other signal. Most
+         severe, shown first and in red, with the exact fix. */
+      var naming = report.namingIssues || [];
+      if (naming.length) {
+        html += '<div class="hb hb-warn" style="border-color:#fecaca;background:#fef2f2;color:#991b1b"><strong>🚫 ' + naming.length + ' Drive folder' + (naming.length === 1 ? ' has' : 's have') + ' a course-code naming problem</strong>' +
+          '<div style="font-weight:400;margin:.2rem 0 .1rem;font-size:12.5px">These aren’t recognised as courses and won’t appear until the folder is renamed to a valid code — two letters (CO or CP) + four digits, e.g. <code>CO0010</code>.</div>' +
+          '<ul style="margin:.5rem 0 0;padding-left:1.15rem;line-height:1.6">' +
+          naming.map(function (n) {
+            return '<li><strong>' + esc(n.folder || '') + '</strong> — ' + esc(n.reason || '') + '</li>';
+          }).join('') +
+          '</ul></div>';
+      }
+
       /* ---- held-back folders ----
          Drive folders that synced but did NOT reach the courses page, each with a
          plain-English reason. Makes "I added a course but it's not showing" obvious

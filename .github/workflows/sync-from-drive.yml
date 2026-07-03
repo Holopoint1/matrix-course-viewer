@@ -57,15 +57,15 @@ jobs:
           git config user.name "drive-sync[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A content data/courses.json data/course-structure.json   # -A so pruned/renamed files are committed as deletions
-          # Skip a commit when the ONLY change is the sync report's timestamp.
-          # The report's generatedAt changes every run, so committing it each 5-min
-          # cron cycle churned GitHub Pages and cancelled its builds before they
-          # finished (deploys silently stopped). Commit only on real content/course
-          # changes; the report still rides along whenever something real changed.
-          SUBSTANTIVE=$(git diff --staged --name-only | grep -v '^content/_sync-report\.json$' || true)
-          if [ -z "$SUBSTANTIVE" ]; then
-            echo "No substantive changes (only the sync report) — skipping commit to let Pages build."
-            git reset -q
+          # Commit whenever ANYTHING actually changed. The old churn sources are gone:
+          # Google-native docs no longer re-export every run (modifiedTime manifest),
+          # course-structure.json has no timestamp, and _sync-report.json keeps a
+          # STABLE generatedAt unless its findings change — so an unchanged sync
+          # produces no diff (no commit, so Pages isn't churned), while a real change
+          # OR a new report finding (a naming issue / held-back folder) commits and
+          # reaches the live admin.
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "Sync from Drive (content + courses.json)"
