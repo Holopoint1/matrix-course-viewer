@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T12:21:03.064Z",
+  "generatedAt": "2026-07-04T23:22:43.160Z",
   "summary": {
     "courses": 11,
     "screens": 254,
@@ -11,12 +11,12 @@
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
-    "drafts": 0,
+    "drafts": 1,
     "namingIssues": 0
   },
   "courses": {
     "CP0507": {
-      "title": "Motors and microcontrollers",
+      "title": "Motors and Microcontrollers",
       "stale": [],
       "missing": [],
       "autofixed": [
@@ -136,6 +136,12 @@
   ],
   "canonCollisions": [],
   "removed": [],
-  "drafts": [],
+  "drafts": [
+    {
+      "code": "CP0507",
+      "title": "Motors and microcontrollers",
+      "reason": "Its Google-Sheet definition couldn’t be read ({\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal Error\",\n    \"errors\": [\n      {\n        \"message\": \"Internal Error\",\n        \"domain\": \"global\",\n        \"reason\": \"internalError\"\n      }\n    ]\n  }\n}\n). Check it’s shared with the sync service account."
+    }
+  ],
   "namingIssues": []
 }
