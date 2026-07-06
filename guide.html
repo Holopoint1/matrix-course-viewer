@@ -61,6 +61,8 @@
       .gd-flow-arrow { flex-direction: row; gap: .4rem; padding: .15rem 0; }
       .gd-flow-arrow b { transform: rotate(90deg); }
     }
+    .gd-drive-btn { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1rem; background: #fff; color: var(--primary-dark); font-weight: 700; font-size: .95rem; text-decoration: none; padding: .6rem 1.1rem; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s; }
+    .gd-drive-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,.24); text-decoration: none; }
   </style>
 </head>
 <body data-no-sidebar>
@@ -69,6 +71,7 @@
       <span class="eyebrow">Admin guide</span>
       <h1>How to add a course</h1>
       <p>Everything lives in Google Drive. Add a folder, its files, and a definition, then sync. The course goes live in a couple of minutes.</p>
+      <a class="gd-drive-btn" href="https://drive.google.com/drive/folders/1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu?usp=sharing" target="_blank" rel="noopener">📂 Open the course Google&nbsp;Drive <span aria-hidden="true">↗</span></a>
     </div>
   </section>
 
@@ -122,7 +125,7 @@
         <p>The <code>TEMPLATE: Course structure</code> folder in <code>LMS Project Assets</code> has the three pieces every course needs: a <strong><code>media</code> folder</strong>, a <strong>definition spreadsheet</strong>, and a <strong><code>welcome.html</code></strong> page.</p>
         <p class="gd-warn">⚠️ Google Drive can't copy a whole folder. Build yours from the template's parts:</p>
         <ol style="line-height:1.7;color:#334155;padding-left:1.3rem;margin:.4rem 0 .6rem">
-          <li>In <code>LMS Project Assets</code>, create a <strong>new folder</strong>.</li>
+          <li>In <a href="https://drive.google.com/drive/folders/1MejJoVtqL2O7PxNwc3HYbrN_PmwqlFYu?usp=sharing" target="_blank" rel="noopener"><code>LMS Project Assets</code></a> (opens in Drive), create a <strong>new folder</strong>.</li>
           <li>In <code>TEMPLATE: Course structure</code>, right-click the <strong>definition spreadsheet</strong> and pick <strong>Make a copy</strong>. Move the copy into your folder. Do the same for <strong><code>welcome.html</code></strong>.</li>
           <li>Add a <strong><code>media</code></strong> subfolder for the content files.</li>
         </ol>
