@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-13T14:30:50.237Z",
+  "generatedAt": "2026-07-13T15:48:19.051Z",
   "summary": {
     "courses": 11,
     "screens": 285,
@@ -307,12 +307,7 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0005",
-      "name": "syllabus.xlsx"
-    }
-  ],
+  "removed": [],
   "drafts": [],
   "namingIssues": [
     {
