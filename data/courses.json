@@ -3060,6 +3060,378 @@
       "_source": "auto",
       "courseType": "Course",
       "structureHours": 4.5
+    },
+    {
+      "id": "CO0005",
+      "code": "CO0005",
+      "kind": "course",
+      "title": "Electrical Machines",
+      "shortDescription": "",
+      "estimatedHours": 33.6,
+      "certificate": {
+        "enabled": true,
+        "templateName": "Electrical Machines"
+      },
+      "screens": [
+        {
+          "id": "CO0005-s1",
+          "type": "image",
+          "title": "Modern Electrical Machines",
+          "hours": 0,
+          "src": "content/CO0005/CO0005-opening.png",
+          "path": "/CO0005-Modern Electrical Machines/media/CO0005-opening.png",
+          "v": "972cea24f3",
+          "webUrl": "https://drive.google.com/file/d/152n0KGHH_pQ8YehkE8m9SbSYB2TRSUOU/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
+        },
+        {
+          "id": "CO0005-s2",
+          "type": "html",
+          "title": "Objectives",
+          "hours": 0.1,
+          "src": "content/CO0005/CO0005-objectives.htm",
+          "path": "/CO0005-Electrical Machines/media/CO0005-objectives.htm",
+          "v": "938e521ffa",
+          "webUrl": "https://drive.google.com/file/d/1Yvu7eefzoLkHgmqvuj-p4yB37joevi3L/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
+        },
+        {
+          "id": "CO0005-s3",
+          "type": "html",
+          "title": "Syllabus",
+          "hours": 0.1,
+          "src": "content/CO0005/CO0005-syllabus.htm",
+          "path": "/CO0005-Electrical Machines/media/CO0005-syllabus.htm",
+          "v": "087d8e3b2c",
+          "webUrl": "https://drive.google.com/file/d/1nqflowh5mgIVKKJVfkyV2M3271Z-Nd6u/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
+        },
+        {
+          "id": "CO0005-s4",
+          "type": "sheet",
+          "title": "Syllabus",
+          "hours": 0.1,
+          "src": "content/CO0005/CO0005-Syllabus.xlsx",
+          "path": "/CO0005-Electrical Machines/media/CO0005-Syllabus.xlsx",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s5",
+          "type": "html",
+          "title": "Equipment",
+          "hours": 0.1,
+          "src": "content/CO0005/CO0005-Equipment.htm",
+          "path": "/CO0005-Modern Electrical Machines/media/CO0005-Equipment.htm",
+          "v": "839ed30313",
+          "webUrl": "https://drive.google.com/file/d/1DdMs0rfj41QuRnY6ogR0SObJ1sk-6ZtC/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
+        },
+        {
+          "id": "CO0005-s6",
+          "type": "html",
+          "title": "Machine information",
+          "hours": 0.1,
+          "src": "content/CO0005/Machine information.pdf",
+          "path": "/CPXXXX-Modern Electrical Machines/Machine information.pdf",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s7",
+          "type": "html",
+          "title": "How to deliver this course",
+          "hours": 0.1,
+          "src": "content/CO0005/How to deliver this course.htm",
+          "path": "/CO0005-Electrical Machines/media/How to deliver this course.htm",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s8",
+          "type": "youtube",
+          "title": "Magnets, lines of flux, toroid, solenoid",
+          "hours": 0.2,
+          "src": "https://youtu.be/ERLT2Kc6iYw?si=iJIngIFvHRHNJUnC"
+        },
+        {
+          "id": "CO0005-s9",
+          "type": "youtube",
+          "title": "MMF, Field strngth, flux density, reluctance",
+          "hours": 0.2,
+          "src": "https://youtu.be/JtQIpy0n4TA?si=YJTyNumKyRpRt-O7"
+        },
+        {
+          "id": "CO0005-s10",
+          "type": "youtube",
+          "title": "Magnetic circuits",
+          "hours": 0.2,
+          "src": "https://youtu.be/zNlmCiVThB4?si=BfgDoegUVERIQ_ty"
+        },
+        {
+          "id": "CO0005-s11",
+          "type": "youtube",
+          "title": "Analysis of magnetic circuits",
+          "hours": 0.2,
+          "src": "https://youtu.be/HRGsgPCZFXg?si=Gdq726D5o23BQRRB"
+        },
+        {
+          "id": "CO0005-s12",
+          "type": "youtube",
+          "title": "Magnetisation curves, hysterisis",
+          "hours": 0.2,
+          "src": "https://youtu.be/UOPxWW-PZwY?si=fhNGvBZ-8O95KZXT"
+        },
+        {
+          "id": "CO0005-s13",
+          "type": "youtube",
+          "title": "Faraday's law, Lenz's law, eddy currents",
+          "hours": 0.2,
+          "src": "https://youtu.be/8bRoBX6LjY8?si=C8zWpLHqGInsQ-5h"
+        },
+        {
+          "id": "CO0005-s14",
+          "type": "youtube",
+          "title": "Force on a conductor",
+          "hours": 1.2,
+          "src": "https://youtu.be/-YtLSgFsLyo?si=WwCZKngCdo7ZPf63"
+        },
+        {
+          "id": "CO0005-s15",
+          "type": "youtube",
+          "title": "Induced voltage",
+          "hours": 2.2,
+          "src": "https://youtu.be/yrwGbdsrhGE?si=rggIQihoC-jDjfqE"
+        },
+        {
+          "id": "CO0005-s16",
+          "type": "youtube",
+          "title": "Ideal transformers",
+          "hours": 3.2,
+          "src": "https://youtu.be/lEi4-Sf_lxs?si=OPuQTV41-5oVN5qe"
+        },
+        {
+          "id": "CO0005-s17",
+          "type": "youtube",
+          "title": "Ideal transformers and real transformers",
+          "hours": 4.2,
+          "src": "https://youtu.be/qV7S6TZi6Lo?si=sK7KgDUHty5K3a1Q"
+        },
+        {
+          "id": "CO0005-s18",
+          "type": "document",
+          "title": "Getting started",
+          "hours": 1,
+          "src": "content/CO0005/WS1.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS1.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s19",
+          "type": "document",
+          "title": "Understanding Torque and mass",
+          "hours": 1,
+          "src": "content/CO0005/WS2.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS2.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s20",
+          "type": "document",
+          "title": "Understanding the DC power supply",
+          "hours": 1,
+          "src": "content/CO0005/WS3.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS3.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s21",
+          "type": "document",
+          "title": "DC motor characteristics 1",
+          "hours": 1,
+          "src": "content/CO0005/WS4.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS4.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s22",
+          "type": "html",
+          "title": "DC motor characteristics 2",
+          "hours": 1,
+          "src": "content/CO0005/WS5.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS5.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s23",
+          "type": "document",
+          "title": "Permanent magnet generator (Dynamo)",
+          "hours": 1,
+          "src": "content/CO0005/WS6.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS6.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s24",
+          "type": "document",
+          "title": "Shunt and series motor basics",
+          "hours": 1,
+          "src": "content/CO0005/WS7.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS7.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s25",
+          "type": "document",
+          "title": "Shunt wound motor characteristics",
+          "hours": 1,
+          "src": "content/CO0005/WS8.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS8.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s26",
+          "type": "document",
+          "title": "Series wound motor characteristics",
+          "hours": 1,
+          "src": "content/CO0005/WS9.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS9.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s27",
+          "type": "document",
+          "title": "Universal motor",
+          "hours": 1,
+          "src": "content/CO0005/WS10.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS10.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s28",
+          "type": "document",
+          "title": "Comparing shunt and series motors",
+          "hours": 1,
+          "src": "content/CO0005/WS11.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS11.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s29",
+          "type": "document",
+          "title": "Single-phase induction motor",
+          "hours": 1,
+          "src": "content/CO0005/WS12.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS12.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s30",
+          "type": "document",
+          "title": "Single-phase induction motor-cap start",
+          "hours": 1,
+          "src": "content/CO0005/WS13.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS13.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s31",
+          "type": "document",
+          "title": "Phase shift in induction motors",
+          "hours": 1,
+          "src": "content/CO0005/WS14.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS14.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s32",
+          "type": "document",
+          "title": "Variable frequency drive strategies",
+          "hours": 1,
+          "src": "content/CO0005/WS15.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS15.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s33",
+          "type": "document",
+          "title": "Three-phase induction motor characteristics",
+          "hours": 1,
+          "src": "content/CO0005/WS16.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS16.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s34",
+          "type": "document",
+          "title": "Three-phase induction motor drive strategies",
+          "hours": 1,
+          "src": "content/CO0005/WS17.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS17.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s35",
+          "type": "document",
+          "title": "Delta configuration",
+          "hours": 1,
+          "src": "content/CO0005/WS18.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS18.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s36",
+          "type": "document",
+          "title": "Understanding slip",
+          "hours": 1,
+          "src": "content/CO0005/WS19.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS19.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s37",
+          "type": "document",
+          "title": "Brushless DC motor",
+          "hours": 1,
+          "src": "content/CO0005/WS20.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS20.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        },
+        {
+          "id": "CO0005-s38",
+          "type": "document",
+          "title": "Three-phase generator",
+          "hours": 1,
+          "src": "content/CO0005/WS21.PDF",
+          "path": "/CPXXXX-Modern Electrical Machines/WS21.PDF",
+          "equipment": "Electrical Machines",
+          "missing": true
+        }
+      ],
+      "categories": [],
+      "_source": "auto",
+      "courseType": "Course",
+      "structureHours": 33.6
     }
   ]
 }

@@ -79,6 +79,14 @@
       ],
       "description": "A full microcontrollers and embedded systems course aligned to T-Level engineering qualifications, taking students from the basics through to applied programming projects."
     },
+    "CO0005": {
+      "title": "",
+      "type": "Course",
+      "sheets": 38,
+      "hours": 33.6,
+      "keywords": [],
+      "description": ""
+    },
     "CO0022": {
       "title": "",
       "type": "Course",
