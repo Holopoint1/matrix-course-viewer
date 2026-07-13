@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T23:26:06.093Z",
+  "generatedAt": "2026-07-13T13:06:04.104Z",
   "summary": {
     "courses": 11,
     "screens": 254,
@@ -7,7 +7,7 @@
     "missing": 0,
     "autofixed": 4,
     "stale": 0,
-    "unused": 33,
+    "unused": 58,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -67,6 +67,33 @@
     }
   },
   "unusedMedia": {
+    "CO0022": [
+      "software information.pdf",
+      "hardware information.pdf",
+      "machine information.pdf",
+      "ws21.pdf",
+      "ws20.pdf",
+      "ws19.pdf",
+      "ws18.pdf",
+      "ws17.pdf",
+      "ws16.pdf",
+      "ws15.pdf",
+      "ws14.pdf",
+      "ws13.pdf",
+      "ws12.pdf",
+      "ws11.pdf",
+      "ws10.pdf",
+      "ws9.pdf",
+      "ws8.pdf",
+      "ws7.pdf",
+      "ws6.pdf",
+      "ws5.pdf",
+      "ws4.pdf",
+      "ws3.pdf",
+      "ws2.pdf",
+      "ws1.pdf",
+      "relationships.pdf"
+    ],
     "CO6930": [
       "CO6930 - content.docx"
     ],

@@ -2977,12 +2977,12 @@
       "id": "CO0022",
       "code": "CO0022",
       "kind": "course",
-      "title": "TEST COURSE",
+      "title": "Electrical Machines",
       "shortDescription": "",
       "estimatedHours": 4.5,
       "certificate": {
         "enabled": true,
-        "templateName": "TEST COURSE"
+        "templateName": "Electrical Machines"
       },
       "screens": [
         {
