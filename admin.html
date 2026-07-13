@@ -194,6 +194,15 @@
         '<div class="stat ' + (unusedTotal?'warn':'') + '"><div class="n">' + unusedTotal + '</div><div class="l">Unused files</div></div>' +
         '</div>';
 
+      /* ---- auto-cleanup note ----
+         Courses removed this sync because their Drive folder was renamed/deleted —
+         reassures that the site self-cleans (no more "ghost" courses). */
+      var pruned = report.pruned || [];
+      if (pruned.length) {
+        html += '<div class="hb hb-ok">🧹 Cleaned up ' + pruned.length + ' course' + (pruned.length === 1 ? '' : 's') + ' no longer in Drive: ' +
+          pruned.map(function (p) { return '<strong>' + esc(p.code || '') + '</strong>' + (p.title ? ' (' + esc(p.title) + ')' : ''); }).join(', ') + '.</div>';
+      }
+
       /* ---- naming-issue failsafe ----
          Folders whose NAME isn't a valid course code — the sync can't even see them
          as courses, so the course is entirely missing with no other signal. Most

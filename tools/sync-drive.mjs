@@ -34,7 +34,7 @@ const ONLY_COURSE = (process.env.COURSE || '').trim().toUpperCase();
    ?v= and is never served stale). Plus sync issues surfaced to the admin report. */
 const CONTENT_VERSIONS = {};
 const DRIVE_LINKS = {};   // content/<code>/<name> -> Drive webViewLink (for "Open in Google …")
-const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [], drafts: [], namingIssues: [] };
+const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: [], drafts: [], namingIssues: [], pruned: [] };
 
 /* ---- failsafe: diagnose a course-code typo in a root folder name ----
    A folder is only treated as a course when its name starts with a valid code
@@ -48,8 +48,10 @@ const SYNC_ISSUES = { failed: [], collisions: [], canonCollisions: [], removed: 
 function diagnoseCourseFolder(name, hasDefinition, codeMatch) {
   const head = String(name).split(/\s*[-–—:]\s*/)[0].trim();     // the code token, before " - Title"
   const compact = head.replace(/\s+/g, '');
-  // "looks like a course-code attempt": short, starts with a letter, mixes letters+digits.
-  const codey = /^[A-Za-z][A-Za-z0-9]{2,8}$/.test(compact) && /\d/.test(compact);
+  // A code-like attempt: a short letter+digit token, OR a CO/CP folder with a
+  // placeholder number (e.g. "CPXXXX") — but never a real word like "Compressors".
+  const codey = (/^[A-Za-z][A-Za-z0-9]{2,8}$/.test(compact) && /\d/.test(compact))
+    || /^C[OP][X0-9OＯ]{2,7}$/i.test(compact);
   if (!codey && !hasDefinition) return null;                      // not a course → don't flag
   const U = compact.toUpperCase();
   const first2 = U.slice(0, 2).replace(/0/g, 'O');               // letters expected here: 0→O
@@ -57,7 +59,7 @@ function diagnoseCourseFolder(name, hasDefinition, codeMatch) {
   const startsCOCP = /^C[OP]$/.test(first2);
   const d4 = digits.length === 4 ? digits : (digits.length > 4 ? digits.slice(-4) : digits.padStart(4, '0'));
   const title = name.split(/\s*[-–—:]\s*/).slice(1).join(' - ').trim();
-  const guess = startsCOCP ? first2 + d4 : null;
+  const guess = (startsCOCP && digits.length > 0) ? first2 + d4 : null;
 
   const problems = [];
   if (/\s/.test(head)) problems.push('there’s a space inside the code (write it as one word, e.g. CO0010)');
@@ -67,6 +69,7 @@ function diagnoseCourseFolder(name, hasDefinition, codeMatch) {
     else problems.push('it needs two letters at the start');
   }
   if (startsCOCP && /O/.test(U.slice(2))) problems.push('a letter “O” in the number part should be the digit “0”');
+  if (/X/.test(U.slice(2))) problems.push('the “X”s are a placeholder — replace them with the four-digit course number');
   if (!startsCOCP) problems.push('course codes start with CO or CP');
   if (digits.length !== 4) problems.push('it must have exactly four digits (this has ' + digits.length + ')');
   if (!problems.length) problems.push('it doesn’t match the two-letters-plus-four-digits format');
@@ -649,10 +652,48 @@ async function generatePhase(driveFilesByCode = {}) {
     }
   }
 
+  /* Auto-prune orphans: a course whose Drive folder no longer exists (renamed or
+     deleted) is dropped from courses.json AND its stale content/<code>/ files are
+     deleted — so the published site can never keep showing a "ghost" course that's
+     gone from Drive. Skipped on scoped (ONLY_COURSE) runs, and self-guarded against a
+     glitchy Drive listing wiping everything. */
+  if (!ONLY_COURSE) pruneOrphans(db, Object.keys(driveFilesByCode), registered);
+
   writeAccuracyReport(db, driveFilesByCode);
 
   fs.writeFileSync(COURSES_JSON, JSON.stringify(db, null, 2) + '\n');
   console.log('\nWrote data/courses.json');
+}
+
+/* Remove courses (and their content/<code>/ files) whose Drive folder is gone, so a
+   renamed/deleted course can't linger as a ghost on the published site. "keep" = every
+   valid Drive course folder this run + every registered (sheets.json) course. */
+function pruneOrphans(db, liveCodes, registered) {
+  const keep = new Set([...(liveCodes || []), ...(registered || [])].map((c) => String(c).toUpperCase()));
+  // Safety: if the Drive listing came back suspiciously thin, DON'T prune — a
+  // transient glitch must never delete real courses.
+  if (keep.size < 3 && db.courses.length > 5) { console.warn(`  ! prune skipped — only ${keep.size} live folder(s) seen (possible Drive glitch)`); return; }
+
+  const before = db.courses.length;
+  const removed = [];
+  db.courses = db.courses.filter((c) => {
+    const code = String(c.id || c.code || '').toUpperCase();
+    if (keep.has(code)) return true;
+    removed.push({ code, title: c.title || '' });
+    return false;
+  });
+
+  // Delete stale content/<code>/ folders on disk (course-code dirs no longer live).
+  let dirs = []; try { dirs = fs.readdirSync(CONTENT_DIR, { withFileTypes: true }); } catch (_) {}
+  for (const d of dirs) {
+    if (!d.isDirectory() || d.name.startsWith('_')) continue;      // leave meta files
+    if (!/^[A-Za-z]{2}\d{4}$/.test(d.name)) continue;               // only clean course-code dirs
+    if (keep.has(d.name.toUpperCase())) continue;
+    try { fs.rmSync(path.join(CONTENT_DIR, d.name), { recursive: true, force: true }); console.log(`  🧹 pruned stale content/${d.name}/ (no Drive folder)`); if (!removed.some((r) => r.code === d.name.toUpperCase())) removed.push({ code: d.name.toUpperCase(), title: '' }); } catch (_) {}
+  }
+
+  removed.forEach((r) => SYNC_ISSUES.pruned.push(r));
+  if (removed.length) console.log(`\nPruned ${removed.length} orphaned course(s) [${before}→${db.courses.length} in catalogue]: ${removed.map((r) => r.code).join(', ')}`);
 }
 
 /* ---------- directory-accuracy report ----------
@@ -772,6 +813,7 @@ function writeAccuracyReport(db, driveFilesByCode) {
       collisions: collisions.length, collisionsAffecting,
       drafts: SYNC_ISSUES.drafts.length,
       namingIssues: SYNC_ISSUES.namingIssues.length,
+      pruned: SYNC_ISSUES.pruned.length,
     },
     courses, unusedMedia,
     failed: SYNC_ISSUES.failed,
@@ -780,6 +822,7 @@ function writeAccuracyReport(db, driveFilesByCode) {
     removed: SYNC_ISSUES.removed,   // content files deleted because they were not in Drive (their screen now shows missing)
     drafts: SYNC_ISSUES.drafts,     // Drive folders found but NOT published (with a plain-English reason each)
     namingIssues: SYNC_ISSUES.namingIssues,  // folders whose name isn't a valid course code (with a fix each)
+    pruned: SYNC_ISSUES.pruned,     // courses removed because their Drive folder is gone (renamed/deleted)
   };
   /* Keep generatedAt STABLE when the findings are unchanged, so an unchanged sync
      writes a byte-identical report (no spurious commit that would churn Pages), yet
@@ -1036,7 +1079,10 @@ async function buildCourseStructure() {
     console.warn('  ! Course_structure sheet not found in the root folder — keeping existing data/course-structure.json');
   }
 
-  const codes = new Set([...Object.keys(byCode), ...Object.keys(existing), ...Object.keys(fromSheet)]);
+  /* Only emit metadata for courses that ACTUALLY EXIST now (byCode = the live,
+     already-pruned courses.json). A stray sheet/legacy row for a deleted course
+     (e.g. CO0022) is dropped, so nothing orphaned lingers here either. */
+  const codes = new Set(Object.keys(byCode));
   const out = {};
   for (const code of [...codes].sort()) {
     const s = fromSheet[code] || {}, e = existing[code] || {}, comp = byCode[code] || {};
