@@ -3025,8 +3025,9 @@
           "hours": 0.1,
           "src": "content/CO0005/CO0005-Syllabus.xlsx",
           "path": "/CO0005-Electrical Machines/media/CO0005-Syllabus.xlsx",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "v": "b94cafecc7",
+          "webUrl": "https://docs.google.com/spreadsheets/d/1nWsSsiSTZrJvYH-kqhQIlonuDXF9-80e/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s5",

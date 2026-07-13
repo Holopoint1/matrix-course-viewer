@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-07-13T14:19:01.829Z",
+  "generatedAt": "2026-07-13T14:30:50.237Z",
   "summary": {
     "courses": 11,
     "screens": 285,
-    "displaying": 261,
-    "missing": 24,
+    "displaying": 262,
+    "missing": 23,
     "autofixed": 4,
     "stale": 0,
-    "unused": 35,
+    "unused": 34,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
     "drafts": 0,
     "namingIssues": 1,
-    "pruned": 2
+    "pruned": 0
   },
   "courses": {
     "CP0507": {
@@ -70,13 +70,6 @@
       "title": "Electrical Machines",
       "stale": [],
       "missing": [
-        {
-          "id": "CO0005-s4",
-          "title": "Syllabus",
-          "asked": "CO0005-Syllabus.xlsx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
         {
           "id": "CO0005-s6",
           "title": "Machine information",
@@ -244,8 +237,7 @@
   },
   "unusedMedia": {
     "CO0005": [
-      "CO0005-How to deliver this course.htm",
-      "syllabus.xlsx"
+      "CO0005-How to deliver this course.htm"
     ],
     "CO6930": [
       "CO6930 - content.docx"
@@ -315,23 +307,19 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [],
+  "removed": [
+    {
+      "code": "CO0005",
+      "name": "syllabus.xlsx"
+    }
+  ],
   "drafts": [],
   "namingIssues": [
     {
-      "folder": "CPXXXX-Electrical Machines",
+      "folder": "CPXXXX-Modern Electrical Machines",
       "guess": null,
       "reason": "Its name isn’t a valid course code, so the sync skips this folder — the “X”s are a placeholder — replace them with the four-digit course number; it must have exactly four digits (this has 0). Rename it to two letters (CO or CP) + four digits, e.g. “CO0010 - …”."
     }
   ],
-  "pruned": [
-    {
-      "code": "CO0022",
-      "title": "Electrical Machines"
-    },
-    {
-      "code": "ZZ9999",
-      "title": ""
-    }
-  ]
+  "pruned": []
 }
