@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-15T12:05:52.584Z",
+  "generatedAt": "2026-07-15T12:40:31.339Z",
   "summary": {
     "courses": 12,
     "screens": 327,
-    "displaying": 317,
-    "missing": 10,
-    "autofixed": 30,
+    "displaying": 323,
+    "missing": 4,
+    "autofixed": 33,
     "stale": 0,
     "unused": 37,
     "downloadFailed": 0,
@@ -78,20 +78,6 @@
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
-          "id": "CO0005-s29",
-          "title": "Homework 2",
-          "asked": "CO0005-homework2.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s32",
-          "title": "Transformers",
-          "asked": "CO0005-transformers.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "id": "CO0005-s33",
           "title": "Step it down",
           "asked": "ws6.PDF",
@@ -106,37 +92,9 @@
           "reason": "No file by this name in the CP1933 folder — but a matching file is in the CP1234 folder. Move it there, or point the row at the right folder."
         },
         {
-          "id": "CO0005-s35",
-          "title": "Homework 3",
-          "asked": "CO0005-homework3.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s44",
-          "title": "Homework 4",
-          "asked": "CO0005-homework4.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "id": "CO0005-s53",
           "title": "Project",
           "asked": "CO0005-project.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s54",
-          "title": "Project work",
-          "asked": "CO0005-project work.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s55",
-          "title": "Project homework",
-          "asked": "CO0005-project homework.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
@@ -278,6 +236,24 @@
           ]
         },
         {
+          "id": "CO0005-s29",
+          "title": "Homework 2",
+          "asked": "CO0005-homework2.htm",
+          "used": "CO0005-Homework2.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s35",
+          "title": "Homework 3",
+          "asked": "CO0005-homework3.htm",
+          "used": "CO0005-Homework3.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
           "id": "CO0005-s37",
           "title": "Single-phase induction motor",
           "asked": "WS12.PDF",
@@ -332,6 +308,15 @@
           ]
         },
         {
+          "id": "CO0005-s44",
+          "title": "Homework 4",
+          "asked": "CO0005-homework4.htm",
+          "used": "CO0005-Homework4.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
           "id": "CO0005-s45",
           "title": "Delta configuration",
           "asked": "WS18.PDF",
@@ -381,9 +366,9 @@
   },
   "unusedMedia": {
     "CO0005": [
+      "CO0005-How to deliver this course.htm",
       "CO0005-Homework 4.htm",
       "CO0005-Homework 2.htm",
-      "CO0005-How to deliver this course.htm",
       "CO0005-Homework 3.htm"
     ],
     "CO6930": [

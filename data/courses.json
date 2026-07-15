@@ -3091,7 +3091,7 @@
           "hours": 3,
           "src": "content/CO0005/CO0005-Homework1.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-homework1.htm",
-          "v": "9be77d6ecb",
+          "v": "221ca95072",
           "webUrl": "https://drive.google.com/file/d/1ywtUdT90D79akOUY9msRwiTpKkzzCzJC/view?usp=drivesdk"
         },
         {
@@ -3279,9 +3279,10 @@
           "type": "html",
           "title": "Homework 2",
           "hours": 3,
-          "src": "content/CO0005/CO0005-homework2.htm",
+          "src": "content/CO0005/CO0005-Homework2.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-homework2.htm",
-          "missing": true
+          "v": "229276ac06",
+          "webUrl": "https://drive.google.com/file/d/1A4FcPoRV8L-BSOa8Db-oDwkh2-7GUSFH/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s30",
@@ -3310,7 +3311,8 @@
           "hours": 2,
           "src": "content/CO0005/CO0005-transformers.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-transformers.htm",
-          "missing": true
+          "v": "f7517daca4",
+          "webUrl": "https://drive.google.com/file/d/1E8CqQYIpo174ecMyhQ7zApvPFS_DEKQi/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s33",
@@ -3337,9 +3339,10 @@
           "type": "html",
           "title": "Homework 3",
           "hours": 3,
-          "src": "content/CO0005/CO0005-homework3.htm",
+          "src": "content/CO0005/CO0005-Homework3.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-homework3.htm",
-          "missing": true
+          "v": "0b8a3f4d07",
+          "webUrl": "https://drive.google.com/file/d/1Hd2UPiASuti2jxYQmBkb5FcesWs2umig/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s36",
@@ -3432,9 +3435,10 @@
           "type": "html",
           "title": "Homework 4",
           "hours": 3,
-          "src": "content/CO0005/CO0005-homework4.htm",
+          "src": "content/CO0005/CO0005-Homework4.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-homework4.htm",
-          "missing": true
+          "v": "c160f2d2a9",
+          "webUrl": "https://drive.google.com/file/d/1jeE9dhCAKfAnlK-oCvu-ryImSR7WoOEG/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s45",
@@ -3538,8 +3542,9 @@
           "hours": 15,
           "src": "content/CO0005/CO0005-project work.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-project work.htm",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "v": "2899ed5735",
+          "webUrl": "https://drive.google.com/file/d/1SETA4M-60AJU9G05IaK6semOrTQZAcbw/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s55",
@@ -3548,7 +3553,8 @@
           "hours": 15,
           "src": "content/CO0005/CO0005-project homework.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-project homework.htm",
-          "missing": true
+          "v": "9d22a12184",
+          "webUrl": "https://drive.google.com/file/d/1vAhGlASUl4U0WZxHvv1Jzi2N9BcjS_aX/view?usp=drivesdk"
         }
       ],
       "categories": [],
