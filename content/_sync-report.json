@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-15T12:40:31.339Z",
+  "generatedAt": "2026-07-15T12:45:41.785Z",
   "summary": {
     "courses": 12,
     "screens": 327,
@@ -73,7 +73,7 @@
         {
           "id": "CO0005-s6",
           "title": "How this course is used",
-          "asked": "How to deliver this course.htm",
+          "asked": "Course delivery.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
@@ -366,7 +366,7 @@
   },
   "unusedMedia": {
     "CO0005": [
-      "CO0005-How to deliver this course.htm",
+      "CO0005-Course delivery.htm",
       "CO0005-Homework 4.htm",
       "CO0005-Homework 2.htm",
       "CO0005-Homework 3.htm"
@@ -439,7 +439,12 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [],
+  "removed": [
+    {
+      "code": "CO0005",
+      "name": "CO0005-How to deliver this course.htm"
+    }
+  ],
   "drafts": [
     {
       "code": "CP1234",
