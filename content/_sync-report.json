@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-15T11:46:06.027Z",
+  "generatedAt": "2026-07-15T11:53:45.865Z",
   "summary": {
     "courses": 11,
     "screens": 302,
-    "displaying": 247,
-    "missing": 55,
-    "autofixed": 4,
+    "displaying": 267,
+    "missing": 35,
+    "autofixed": 7,
     "stale": 0,
-    "unused": 58,
+    "unused": 39,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -71,421 +71,290 @@
       "stale": [],
       "missing": [
         {
-          "id": "CO0005-s1",
-          "title": "0",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s2",
-          "title": "Screen 2",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s3",
-          "title": "Screen 3",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s4",
-          "title": "Screen 4",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s5",
-          "title": "Screen 5",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "id": "CO0005-s6",
-          "title": "Screen 6",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s7",
-          "title": "Screen 7",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s8",
-          "title": "Screen 8",
-          "asked": "undefined",
+          "title": "How this course is used",
+          "asked": "How to deliver this course.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s9",
-          "title": "1",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s10",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Helath and safety",
+          "asked": "CO0005-healthandsafety.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s11",
-          "title": "3",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s12",
-          "title": "2",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s13",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Homework 1",
+          "asked": "CO0005-homework1.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s14",
-          "title": "0.2",
-          "asked": "undefined",
+          "title": "DC Machine construction",
+          "asked": "CO0005-machine construction.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s15",
-          "title": "Screen 15",
-          "asked": "undefined",
+          "title": "Machine information",
+          "asked": "Machine information.pdf",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s16",
-          "title": "Screen 16",
-          "asked": "undefined.docx",
+          "title": "Understanding Torque and mass",
+          "asked": "WS2.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s17",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
+          "title": "Getting started",
+          "asked": "WS1.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s18",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
+          "title": "Understanding the DC power supply",
+          "asked": "WS3.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s19",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
+          "title": "DC motor characteristics 1",
+          "asked": "WS4.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s20",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s21",
-          "title": "2",
-          "asked": "undefined",
+          "title": "DC motor characteristics 2",
+          "asked": "WS5.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s22",
-          "title": "0.3",
-          "asked": "Electrical Machines.docx",
+          "title": "Permanent magnet generator (Dynamo)",
+          "asked": "WS6.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s23",
-          "title": "0.3",
-          "asked": "Electrical Machines.docx",
+          "title": "Shunt and series motor basics",
+          "asked": "WS7.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s24",
-          "title": "0.4",
-          "asked": "Electrical Machines.docx",
+          "title": "Shunt wound motor characteristics",
+          "asked": "WS8.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s25",
-          "title": "0.4",
-          "asked": "Electrical Machines.docx",
+          "title": "Series wound motor characteristics",
+          "asked": "WS9.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s26",
-          "title": "0.2",
-          "asked": "Electrical Machines.docx",
+          "title": "Universal motor",
+          "asked": "WS10.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s27",
-          "title": "0.4",
-          "asked": "Electrical Machines.docx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s28",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Comparing shunt and series motors",
+          "asked": "WS11.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s29",
-          "title": "3",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s30",
-          "title": "2",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s31",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Homework 2",
+          "asked": "CO0005-homework2.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s32",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Transformers",
+          "asked": "CO0005-transformers.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s33",
-          "title": "0.5",
-          "asked": "Transformer add-on kit.docx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "title": "Step it down",
+          "asked": "ws6.PDF",
+          "expectedIn": "CP1933",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP1933 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s34",
-          "title": "0.5",
-          "asked": "Transformer add-on kit.docx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "title": "Step it up",
+          "asked": "ws7.PDF",
+          "expectedIn": "CP1933",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP1933 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s35",
-          "title": "3",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s36",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Homework 3",
+          "asked": "CO0005-homework3.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s37",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
+          "title": "Single-phase induction motor",
+          "asked": "WS12.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s38",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
+          "title": "Single-phase induction motor-cap start",
+          "asked": "WS13.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s39",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
+          "title": "Phase shift in induction motors",
+          "asked": "WS14.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s40",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s41",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Variable frequency drive strategies",
+          "asked": "WS15.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s42",
-          "title": "1",
-          "asked": "Electrical Machines.docx",
+          "title": "Three-phase induction motor characteristics",
+          "asked": "WS16.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s43",
-          "title": "1",
-          "asked": "Electrical Machines.docx",
+          "title": "Three-phase induction motor drive strategies",
+          "asked": "WS17.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s44",
-          "title": "3",
-          "asked": "undefined",
+          "title": "Homework 4",
+          "asked": "CO0005-homework4.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s45",
-          "title": "1",
-          "asked": "Electrical Machines.docx",
+          "title": "Delta configuration",
+          "asked": "WS18.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s46",
-          "title": "1",
-          "asked": "Electrical Machines.docx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s47",
-          "title": "2",
-          "asked": "Electrical Machines",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s48",
-          "title": "1",
-          "asked": "Electrical Machines",
+          "title": "Understanding slip",
+          "asked": "WS19.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s49",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
+          "title": "Brushless DC motor",
+          "asked": "WS20.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s50",
-          "title": "0.5",
-          "asked": "Electrical Machines.docx",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s51",
-          "title": "2",
-          "asked": "undefined",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s52",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Three-phase generator",
+          "asked": "WS21.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s53",
-          "title": "2",
-          "asked": "undefined",
+          "title": "Project",
+          "asked": "CO0005-project.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s54",
-          "title": "15",
-          "asked": "Electrical Machines",
+          "title": "Project work",
+          "asked": "CO0005-project work.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
           "id": "CO0005-s55",
-          "title": "15",
-          "asked": "undefined",
+          "title": "Project homework",
+          "asked": "CO0005-project homework.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
       ],
-      "autofixed": []
+      "autofixed": [
+        {
+          "id": "CO0005-s2",
+          "title": "Author",
+          "asked": "CO0005-author.htm",
+          "used": "CO0005-Author.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s12",
+          "title": "Electromagnetism in numbers",
+          "asked": "CO0005-electromagnetisminnumbers.htm",
+          "used": "CO0005-Electromagnetisminnumbers.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s51",
+          "title": "Assessment",
+          "asked": "CO0005-assessment.htm",
+          "used": "CO0005-Assessment.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        }
+      ]
     }
   },
   "unusedMedia": {
     "CO0005": [
       "CO0005-How to deliver this course.htm",
-      "CO0005-Equipment.htm",
-      "CO0005-syllabus.htm",
-      "CO0005-objectives.htm",
-      "CO0005-other electrical machines.htm",
-      "CO0005-AC motor control.htm",
-      "CO0005-power efficiency.htm",
       "CO0005-Homework 3.htm",
-      "CO0005-Electromagnetisminnumbers.htm",
-      "CO0005-induction motors.htm",
-      "CO0005-portfolio and project.htm",
       "CO0005-Homework 2.htm",
       "CO0005-Homework 4.htm",
-      "CO0005-Author.htm",
-      "CO0005-Three phase motors.htm",
-      "CO0005-DC motor.htm",
       "CO0005-healthand safety.htm",
-      "CO0005-speed torque applications.htm",
-      "CO0005-Electromagnetism.htm",
-      "CO0005-other DC machines.htm",
-      "CO0005-Assessment.htm",
-      "CO0005-Homework 1.htm",
-      "CO0005-speed control dc motors.htm",
-      "CO0005-Syllabus.xlsx",
-      "CO0005-opening.png"
+      "CO0005-Homework 1.htm"
     ],
     "CO6930": [
       "CO6930 - content.docx"
