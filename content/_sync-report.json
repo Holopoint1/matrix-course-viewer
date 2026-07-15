@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-15T12:04:27.760Z",
+  "generatedAt": "2026-07-15T12:05:52.584Z",
   "summary": {
     "courses": 12,
     "screens": 327,
-    "displaying": 316,
-    "missing": 11,
+    "displaying": 317,
+    "missing": 10,
     "autofixed": 30,
     "stale": 0,
     "unused": 37,
@@ -74,13 +74,6 @@
           "id": "CO0005-s6",
           "title": "How this course is used",
           "asked": "How to deliver this course.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s14",
-          "title": "DC Machine construction",
-          "asked": "CO0005-machine construction.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
@@ -388,10 +381,10 @@
   },
   "unusedMedia": {
     "CO0005": [
-      "CO0005-How to deliver this course.htm",
-      "CO0005-Homework 3.htm",
+      "CO0005-Homework 4.htm",
       "CO0005-Homework 2.htm",
-      "CO0005-Homework 4.htm"
+      "CO0005-How to deliver this course.htm",
+      "CO0005-Homework 3.htm"
     ],
     "CO6930": [
       "CO6930 - content.docx"

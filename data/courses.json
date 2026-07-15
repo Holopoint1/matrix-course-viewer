@@ -3071,7 +3071,7 @@
           "hours": 1,
           "src": "content/CO0005/CO0005-healthandsafety.htm",
           "path": "/CO0005-Modern Electrical Machines/media/CO0005-healthandsafety.htm",
-          "v": "0c8eca4d18",
+          "v": "5ba352a94a",
           "webUrl": "https://drive.google.com/file/d/1STaCX6UbaJG2wIX79CV3C9fTDt3URyKY/view?usp=drivesdk"
         },
         {
@@ -3091,7 +3091,7 @@
           "hours": 3,
           "src": "content/CO0005/CO0005-Homework1.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-homework1.htm",
-          "v": "bd602b1599",
+          "v": "9be77d6ecb",
           "webUrl": "https://drive.google.com/file/d/1ywtUdT90D79akOUY9msRwiTpKkzzCzJC/view?usp=drivesdk"
         },
         {
@@ -3121,7 +3121,8 @@
           "hours": 0.5,
           "src": "content/CO0005/CO0005-machine construction.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-machine construction.htm",
-          "missing": true
+          "v": "ca59bf8e7f",
+          "webUrl": "https://drive.google.com/file/d/1bI4OJ0wdK1Hb4aRE5n2n86kYp7ZT3UJi/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s15",
