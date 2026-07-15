@@ -3071,7 +3071,8 @@
           "hours": 1,
           "src": "content/CO0005/CO0005-healthandsafety.htm",
           "path": "/CO0005-Modern Electrical Machines/media/CO0005-healthandsafety.htm",
-          "missing": true
+          "v": "0c8eca4d18",
+          "webUrl": "https://drive.google.com/file/d/1STaCX6UbaJG2wIX79CV3C9fTDt3URyKY/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s10",
@@ -3088,9 +3089,10 @@
           "type": "html",
           "title": "Homework 1",
           "hours": 3,
-          "src": "content/CO0005/CO0005-homework1.htm",
+          "src": "content/CO0005/CO0005-Homework1.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-homework1.htm",
-          "missing": true
+          "v": "bd602b1599",
+          "webUrl": "https://drive.google.com/file/d/1ywtUdT90D79akOUY9msRwiTpKkzzCzJC/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s12",

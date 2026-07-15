@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-15T11:53:45.865Z",
+  "generatedAt": "2026-07-15T12:01:09.111Z",
   "summary": {
     "courses": 11,
     "screens": 302,
-    "displaying": 267,
-    "missing": 35,
-    "autofixed": 7,
+    "displaying": 269,
+    "missing": 33,
+    "autofixed": 8,
     "stale": 0,
-    "unused": 39,
+    "unused": 37,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -74,20 +74,6 @@
           "id": "CO0005-s6",
           "title": "How this course is used",
           "asked": "How to deliver this course.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s9",
-          "title": "Helath and safety",
-          "asked": "CO0005-healthandsafety.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s11",
-          "title": "Homework 1",
-          "asked": "CO0005-homework1.htm",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
@@ -327,6 +313,15 @@
           ]
         },
         {
+          "id": "CO0005-s11",
+          "title": "Homework 1",
+          "asked": "CO0005-homework1.htm",
+          "used": "CO0005-Homework1.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
           "id": "CO0005-s12",
           "title": "Electromagnetism in numbers",
           "asked": "CO0005-electromagnetisminnumbers.htm",
@@ -352,9 +347,7 @@
       "CO0005-How to deliver this course.htm",
       "CO0005-Homework 3.htm",
       "CO0005-Homework 2.htm",
-      "CO0005-Homework 4.htm",
-      "CO0005-healthand safety.htm",
-      "CO0005-Homework 1.htm"
+      "CO0005-Homework 4.htm"
     ],
     "CO6930": [
       "CO6930 - content.docx"
@@ -424,7 +417,16 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [],
+  "removed": [
+    {
+      "code": "CO0005",
+      "name": "CO0005-Homework 1.htm"
+    },
+    {
+      "code": "CO0005",
+      "name": "CO0005-healthand safety.htm"
+    }
+  ],
   "drafts": [],
   "namingIssues": [
     {
