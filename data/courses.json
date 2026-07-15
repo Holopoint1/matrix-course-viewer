@@ -3140,7 +3140,7 @@
           "title": "Understanding Torque and mass",
           "hours": 0,
           "src": "content/CP1234/ws2.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS2.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws2.PDF",
           "v": "73c7bb2dce",
           "webUrl": "https://drive.google.com/file/d/13fZz9ky7H1x0Rk-WN8avLeJuAnqp1PqF/view?usp=drivesdk"
         },
@@ -3150,7 +3150,7 @@
           "title": "Getting started",
           "hours": 0.5,
           "src": "content/CP1234/ws1.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS1.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws1.PDF",
           "v": "46be7f02f1",
           "webUrl": "https://drive.google.com/file/d/1m3tKcP5PpdfgltV9voznnH6CT7C2ZlRF/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3161,7 +3161,7 @@
           "title": "Understanding the DC power supply",
           "hours": 0.5,
           "src": "content/CP1234/ws3.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS3.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws3.PDF",
           "v": "bba647dc55",
           "webUrl": "https://drive.google.com/file/d/1u5i6dlPKaGWD6MLFGZuXt1KsNRrSojZe/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3172,7 +3172,7 @@
           "title": "DC motor characteristics 1",
           "hours": 0.5,
           "src": "content/CP1234/ws4.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS4.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws4.PDF",
           "v": "cfe41963cd",
           "webUrl": "https://drive.google.com/file/d/1bqKKD8LCf5UfxncUbteYE81UZpXBbusU/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3183,7 +3183,7 @@
           "title": "DC motor characteristics 2",
           "hours": 0.5,
           "src": "content/CP1234/ws5.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS5.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws5.PDF",
           "v": "9f19f704b7",
           "webUrl": "https://drive.google.com/file/d/1odrMMK5BD98zuO-LQUATzLbrGJy_iXTJ/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3204,7 +3204,7 @@
           "title": "Permanent magnet generator (Dynamo)",
           "hours": 0.3,
           "src": "content/CP1234/ws6.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS6.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws6.PDF",
           "v": "12ed1583ea",
           "webUrl": "https://drive.google.com/file/d/1Oetxeh2ZwFOX4XRjNh_XLjHKbt5Mw9ET/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3215,7 +3215,7 @@
           "title": "Shunt and series motor basics",
           "hours": 0.3,
           "src": "content/CP1234/ws7.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS7.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws7.PDF",
           "v": "e9308c06fe",
           "webUrl": "https://drive.google.com/file/d/1fK53FqrKZ5AtXryaHE7nTsNMs3OeRLke/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3226,7 +3226,7 @@
           "title": "Shunt wound motor characteristics",
           "hours": 0.4,
           "src": "content/CP1234/ws8.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS8.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws8.PDF",
           "v": "41c3e342b4",
           "webUrl": "https://drive.google.com/file/d/1eZmL3gWJo6KD52HAI4Z2Wzp--Kk4Uepv/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3237,7 +3237,7 @@
           "title": "Series wound motor characteristics",
           "hours": 0.4,
           "src": "content/CP1234/ws9.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS9.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws9.PDF",
           "v": "952b096124",
           "webUrl": "https://drive.google.com/file/d/1xf5HYnY3irDqbTHoWxfj2k3FwKJo0SNC/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3248,7 +3248,7 @@
           "title": "Universal motor",
           "hours": 0.2,
           "src": "content/CP1234/ws10.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS10.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws10.PDF",
           "v": "7a9e8a74b1",
           "webUrl": "https://drive.google.com/file/d/1wDxu0Siyv38C8WD9VdnXkGzM1-88l5tI/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3259,7 +3259,7 @@
           "title": "Comparing shunt and series motors",
           "hours": 0.4,
           "src": "content/CP1234/ws11.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS11.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws11.PDF",
           "v": "35d5ebef90",
           "webUrl": "https://drive.google.com/file/d/1oBORODPxajnieNYt9HSi16YCVZv6q-0p/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3360,7 +3360,7 @@
           "title": "Single-phase induction motor",
           "hours": 0.5,
           "src": "content/CP1234/ws12.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS12.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws12.PDF",
           "v": "72c9bd6f51",
           "webUrl": "https://drive.google.com/file/d/1HHG43TGttHmJJO4HqekmJGpMUfEJWuew/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3371,7 +3371,7 @@
           "title": "Single-phase induction motor-cap start",
           "hours": 0.5,
           "src": "content/CP1234/ws13.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS13.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws13.PDF",
           "v": "9e269e9e4c",
           "webUrl": "https://drive.google.com/file/d/1ECKW1zOWKBIIUf58JYqVd16RWOj0mTKV/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3382,7 +3382,7 @@
           "title": "Phase shift in induction motors",
           "hours": 0.5,
           "src": "content/CP1234/ws14.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS14.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws14.PDF",
           "v": "d43c2833ff",
           "webUrl": "https://drive.google.com/file/d/1zpIROKVIJzNNGa-SXJ70etwbBUDfThou/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3393,7 +3393,7 @@
           "title": "Variable frequency drive strategies",
           "hours": 0.5,
           "src": "content/CP1234/ws15.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS15.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws15.PDF",
           "v": "461e92bbac",
           "webUrl": "https://drive.google.com/file/d/1TqAkdgUL_5aVKS30TNAHTskhU4gGumdS/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3414,7 +3414,7 @@
           "title": "Three-phase induction motor characteristics",
           "hours": 1,
           "src": "content/CP1234/ws16.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS16.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws16.PDF",
           "v": "aff4db83b5",
           "webUrl": "https://drive.google.com/file/d/1svGjlf2gL2ZO7o0pV4yFEoUWWc-W_1Y4/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3425,7 +3425,7 @@
           "title": "Three-phase induction motor drive strategies",
           "hours": 1,
           "src": "content/CP1234/ws17.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS17.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws17.PDF",
           "v": "9629afde1a",
           "webUrl": "https://drive.google.com/file/d/1wnf6UoMxpswuwKLNvAxYhaQlslA1wPgo/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3446,7 +3446,7 @@
           "title": "Delta configuration",
           "hours": 1,
           "src": "content/CP1234/ws18.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS18.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws18.PDF",
           "v": "ef7957d9ac",
           "webUrl": "https://drive.google.com/file/d/1iH6F9SwKi6JZfY0v1XM5FHBKBKF25bC9/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3457,7 +3457,7 @@
           "title": "Understanding slip",
           "hours": 1,
           "src": "content/CP1234/ws19.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS19.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws19.PDF",
           "v": "ef94e64bd0",
           "webUrl": "https://drive.google.com/file/d/1RJ7AorpY9cAt8FpKbTO67mh9vBZfGat5/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3490,7 +3490,7 @@
           "title": "Brushless DC motor",
           "hours": 0.5,
           "src": "content/CP1234/ws20.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS20.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws20.PDF",
           "v": "693bd91911",
           "webUrl": "https://drive.google.com/file/d/1BoF4VDSRE__wBCzMciXNrhIVu-50kSfR/view?usp=drivesdk",
           "equipment": "Electrical Machines"
@@ -3501,7 +3501,7 @@
           "title": "Three-phase generator",
           "hours": 0.5,
           "src": "content/CP1234/ws21.pdf",
-          "path": "/CP1234-Modern Electrical Machines/WS21.PDF",
+          "path": "/CP1234-Modern Electrical Machines/ws21.PDF",
           "v": "94988a5b4d",
           "webUrl": "https://drive.google.com/file/d/14Kn1vgrGdbLRrbEpcXz_aWCdlHOK7lkR/view?usp=drivesdk",
           "equipment": "Electrical Machines"

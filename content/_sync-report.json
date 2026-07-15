@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-15T12:45:41.785Z",
+  "generatedAt": "2026-07-15T12:50:50.951Z",
   "summary": {
     "courses": 12,
     "screens": 327,
@@ -139,100 +139,100 @@
         {
           "id": "CO0005-s16",
           "title": "Understanding Torque and mass",
-          "asked": "WS2.PDF",
+          "asked": "ws2.PDF",
           "used": "ws2.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s17",
           "title": "Getting started",
-          "asked": "WS1.PDF",
+          "asked": "ws1.PDF",
           "used": "ws1.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s18",
           "title": "Understanding the DC power supply",
-          "asked": "WS3.PDF",
+          "asked": "ws3.PDF",
           "used": "ws3.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s19",
           "title": "DC motor characteristics 1",
-          "asked": "WS4.PDF",
+          "asked": "ws4.PDF",
           "used": "ws4.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s20",
           "title": "DC motor characteristics 2",
-          "asked": "WS5.PDF",
+          "asked": "ws5.PDF",
           "used": "ws5.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s22",
           "title": "Permanent magnet generator (Dynamo)",
-          "asked": "WS6.PDF",
+          "asked": "ws6.PDF",
           "used": "ws6.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s23",
           "title": "Shunt and series motor basics",
-          "asked": "WS7.PDF",
+          "asked": "ws7.PDF",
           "used": "ws7.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s24",
           "title": "Shunt wound motor characteristics",
-          "asked": "WS8.PDF",
+          "asked": "ws8.PDF",
           "used": "ws8.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s25",
           "title": "Series wound motor characteristics",
-          "asked": "WS9.PDF",
+          "asked": "ws9.PDF",
           "used": "ws9.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s26",
           "title": "Universal motor",
-          "asked": "WS10.PDF",
+          "asked": "ws10.PDF",
           "used": "ws10.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s27",
           "title": "Comparing shunt and series motors",
-          "asked": "WS11.PDF",
+          "asked": "ws11.PDF",
           "used": "ws11.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
@@ -256,55 +256,55 @@
         {
           "id": "CO0005-s37",
           "title": "Single-phase induction motor",
-          "asked": "WS12.PDF",
+          "asked": "ws12.PDF",
           "used": "ws12.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s38",
           "title": "Single-phase induction motor-cap start",
-          "asked": "WS13.PDF",
+          "asked": "ws13.PDF",
           "used": "ws13.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s39",
           "title": "Phase shift in induction motors",
-          "asked": "WS14.PDF",
+          "asked": "ws14.PDF",
           "used": "ws14.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s40",
           "title": "Variable frequency drive strategies",
-          "asked": "WS15.PDF",
+          "asked": "ws15.PDF",
           "used": "ws15.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s42",
           "title": "Three-phase induction motor characteristics",
-          "asked": "WS16.PDF",
+          "asked": "ws16.PDF",
           "used": "ws16.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s43",
           "title": "Three-phase induction motor drive strategies",
-          "asked": "WS17.PDF",
+          "asked": "ws17.PDF",
           "used": "ws17.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
@@ -319,37 +319,37 @@
         {
           "id": "CO0005-s45",
           "title": "Delta configuration",
-          "asked": "WS18.PDF",
+          "asked": "ws18.PDF",
           "used": "ws18.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s46",
           "title": "Understanding slip",
-          "asked": "WS19.PDF",
+          "asked": "ws19.PDF",
           "used": "ws19.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s49",
           "title": "Brushless DC motor",
-          "asked": "WS20.PDF",
+          "asked": "ws20.PDF",
           "used": "ws20.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
           "id": "CO0005-s50",
           "title": "Three-phase generator",
-          "asked": "WS21.PDF",
+          "asked": "ws21.PDF",
           "used": "ws21.pdf",
           "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+            "A small spelling/spacing difference, matched automatically."
           ]
         },
         {
@@ -439,12 +439,7 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0005",
-      "name": "CO0005-How to deliver this course.htm"
-    }
-  ],
+  "removed": [],
   "drafts": [
     {
       "code": "CP1234",
