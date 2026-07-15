@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-07-15T12:01:09.111Z",
+  "generatedAt": "2026-07-15T12:04:27.760Z",
   "summary": {
-    "courses": 11,
-    "screens": 302,
-    "displaying": 269,
-    "missing": 33,
-    "autofixed": 8,
+    "courses": 12,
+    "screens": 327,
+    "displaying": 316,
+    "missing": 11,
+    "autofixed": 30,
     "stale": 0,
     "unused": 37,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
-    "drafts": 0,
-    "namingIssues": 1,
+    "drafts": 1,
+    "namingIssues": 0,
     "pruned": 0
   },
   "courses": {
@@ -85,90 +85,6 @@
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
-          "id": "CO0005-s15",
-          "title": "Machine information",
-          "asked": "Machine information.pdf",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s16",
-          "title": "Understanding Torque and mass",
-          "asked": "WS2.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s17",
-          "title": "Getting started",
-          "asked": "WS1.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s18",
-          "title": "Understanding the DC power supply",
-          "asked": "WS3.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s19",
-          "title": "DC motor characteristics 1",
-          "asked": "WS4.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s20",
-          "title": "DC motor characteristics 2",
-          "asked": "WS5.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s22",
-          "title": "Permanent magnet generator (Dynamo)",
-          "asked": "WS6.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s23",
-          "title": "Shunt and series motor basics",
-          "asked": "WS7.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s24",
-          "title": "Shunt wound motor characteristics",
-          "asked": "WS8.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s25",
-          "title": "Series wound motor characteristics",
-          "asked": "WS9.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s26",
-          "title": "Universal motor",
-          "asked": "WS10.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s27",
-          "title": "Comparing shunt and series motors",
-          "asked": "WS11.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "id": "CO0005-s29",
           "title": "Homework 2",
           "asked": "CO0005-homework2.htm",
@@ -187,14 +103,14 @@
           "title": "Step it down",
           "asked": "ws6.PDF",
           "expectedIn": "CP1933",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP1933 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "reason": "No file by this name in the CP1933 folder — but a matching file is in the CP1234 folder. Move it there, or point the row at the right folder."
         },
         {
           "id": "CO0005-s34",
           "title": "Step it up",
           "asked": "ws7.PDF",
           "expectedIn": "CP1933",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CP1933 folder yet. Add it to that Drive folder, or correct the name in the definition."
+          "reason": "No file by this name in the CP1933 folder — but a matching file is in the CP1234 folder. Move it there, or point the row at the right folder."
         },
         {
           "id": "CO0005-s35",
@@ -204,79 +120,9 @@
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
         {
-          "id": "CO0005-s37",
-          "title": "Single-phase induction motor",
-          "asked": "WS12.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s38",
-          "title": "Single-phase induction motor-cap start",
-          "asked": "WS13.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s39",
-          "title": "Phase shift in induction motors",
-          "asked": "WS14.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s40",
-          "title": "Variable frequency drive strategies",
-          "asked": "WS15.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s42",
-          "title": "Three-phase induction motor characteristics",
-          "asked": "WS16.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s43",
-          "title": "Three-phase induction motor drive strategies",
-          "asked": "WS17.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "id": "CO0005-s44",
           "title": "Homework 4",
           "asked": "CO0005-homework4.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s45",
-          "title": "Delta configuration",
-          "asked": "WS18.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s46",
-          "title": "Understanding slip",
-          "asked": "WS19.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s49",
-          "title": "Brushless DC motor",
-          "asked": "WS20.PDF",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0005-s50",
-          "title": "Three-phase generator",
-          "asked": "WS21.PDF",
           "expectedIn": "CO0005",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         },
@@ -326,6 +172,204 @@
           "title": "Electromagnetism in numbers",
           "asked": "CO0005-electromagnetisminnumbers.htm",
           "used": "CO0005-Electromagnetisminnumbers.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s15",
+          "title": "Machine information",
+          "asked": "Machine information.pdf",
+          "used": "machine information.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s16",
+          "title": "Understanding Torque and mass",
+          "asked": "WS2.PDF",
+          "used": "ws2.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s17",
+          "title": "Getting started",
+          "asked": "WS1.PDF",
+          "used": "ws1.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s18",
+          "title": "Understanding the DC power supply",
+          "asked": "WS3.PDF",
+          "used": "ws3.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s19",
+          "title": "DC motor characteristics 1",
+          "asked": "WS4.PDF",
+          "used": "ws4.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s20",
+          "title": "DC motor characteristics 2",
+          "asked": "WS5.PDF",
+          "used": "ws5.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s22",
+          "title": "Permanent magnet generator (Dynamo)",
+          "asked": "WS6.PDF",
+          "used": "ws6.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s23",
+          "title": "Shunt and series motor basics",
+          "asked": "WS7.PDF",
+          "used": "ws7.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s24",
+          "title": "Shunt wound motor characteristics",
+          "asked": "WS8.PDF",
+          "used": "ws8.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s25",
+          "title": "Series wound motor characteristics",
+          "asked": "WS9.PDF",
+          "used": "ws9.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s26",
+          "title": "Universal motor",
+          "asked": "WS10.PDF",
+          "used": "ws10.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s27",
+          "title": "Comparing shunt and series motors",
+          "asked": "WS11.PDF",
+          "used": "ws11.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s37",
+          "title": "Single-phase induction motor",
+          "asked": "WS12.PDF",
+          "used": "ws12.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s38",
+          "title": "Single-phase induction motor-cap start",
+          "asked": "WS13.PDF",
+          "used": "ws13.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s39",
+          "title": "Phase shift in induction motors",
+          "asked": "WS14.PDF",
+          "used": "ws14.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s40",
+          "title": "Variable frequency drive strategies",
+          "asked": "WS15.PDF",
+          "used": "ws15.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s42",
+          "title": "Three-phase induction motor characteristics",
+          "asked": "WS16.PDF",
+          "used": "ws16.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s43",
+          "title": "Three-phase induction motor drive strategies",
+          "asked": "WS17.PDF",
+          "used": "ws17.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s45",
+          "title": "Delta configuration",
+          "asked": "WS18.PDF",
+          "used": "ws18.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s46",
+          "title": "Understanding slip",
+          "asked": "WS19.PDF",
+          "used": "ws19.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s49",
+          "title": "Brushless DC motor",
+          "asked": "WS20.PDF",
+          "used": "ws20.pdf",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s50",
+          "title": "Three-phase generator",
+          "asked": "WS21.PDF",
+          "used": "ws21.pdf",
           "reasons": [
             "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
           ]
@@ -417,23 +461,14 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [
+  "removed": [],
+  "drafts": [
     {
-      "code": "CO0005",
-      "name": "CO0005-Homework 1.htm"
-    },
-    {
-      "code": "CO0005",
-      "name": "CO0005-healthand safety.htm"
+      "code": "CP1234",
+      "title": "Modern Electrical Machines",
+      "reason": "No definition found. Add a Google Sheet (or an Excel file) named “CP1234 - definition” listing the screens, then sync again."
     }
   ],
-  "drafts": [],
-  "namingIssues": [
-    {
-      "folder": "CPXXXX-Modern Electrical Machines",
-      "guess": null,
-      "reason": "Its name isn’t a valid course code, so the sync skips this folder — the “X”s are a placeholder — replace them with the four-digit course number; it must have exactly four digits (this has 0). Rename it to two letters (CO or CP) + four digits, e.g. “CO0010 - …”."
-    }
-  ],
+  "namingIssues": [],
   "pruned": []
 }

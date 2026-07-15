@@ -2979,7 +2979,7 @@
       "kind": "course",
       "title": "Electrical Machines",
       "shortDescription": "",
-      "estimatedHours": 84.2,
+      "estimatedHours": 84.5,
       "certificate": {
         "enabled": true,
         "templateName": "Electrical Machines"
@@ -3118,7 +3118,7 @@
           "id": "CO0005-s14",
           "type": "html",
           "title": "DC Machine construction",
-          "hours": 0.2,
+          "hours": 0.5,
           "src": "content/CO0005/CO0005-machine construction.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-machine construction.htm",
           "missing": true
@@ -3128,58 +3128,64 @@
           "type": "html",
           "title": "Machine information",
           "hours": 0,
-          "src": "content/CO0005/Machine information.pdf",
-          "path": "/CPXXXX-Modern Electrical Machines/media/Machine information.pdf",
-          "missing": true
+          "src": "content/CP1234/machine information.pdf",
+          "path": "/CP1234-Modern Electrical Machines/Machine information.pdf",
+          "v": "ef1ed24670",
+          "webUrl": "https://drive.google.com/file/d/1uDKZ4y_IG_XljcSRqyLeiTQC1oKuimGL/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s16",
           "type": "document",
           "title": "Understanding Torque and mass",
           "hours": 0,
-          "src": "content/CO0005/WS2.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS2.PDF",
-          "missing": true
+          "src": "content/CP1234/ws2.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS2.PDF",
+          "v": "73c7bb2dce",
+          "webUrl": "https://drive.google.com/file/d/13fZz9ky7H1x0Rk-WN8avLeJuAnqp1PqF/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s17",
           "type": "document",
           "title": "Getting started",
           "hours": 0.5,
-          "src": "content/CO0005/WS1.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS1.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws1.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS1.PDF",
+          "v": "46be7f02f1",
+          "webUrl": "https://drive.google.com/file/d/1m3tKcP5PpdfgltV9voznnH6CT7C2ZlRF/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s18",
           "type": "document",
           "title": "Understanding the DC power supply",
           "hours": 0.5,
-          "src": "content/CO0005/WS3.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS3.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws3.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS3.PDF",
+          "v": "bba647dc55",
+          "webUrl": "https://drive.google.com/file/d/1u5i6dlPKaGWD6MLFGZuXt1KsNRrSojZe/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s19",
           "type": "document",
           "title": "DC motor characteristics 1",
           "hours": 0.5,
-          "src": "content/CO0005/WS4.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS4.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws4.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS4.PDF",
+          "v": "cfe41963cd",
+          "webUrl": "https://drive.google.com/file/d/1bqKKD8LCf5UfxncUbteYE81UZpXBbusU/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s20",
           "type": "document",
           "title": "DC motor characteristics 2",
           "hours": 0.5,
-          "src": "content/CO0005/WS5.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS5.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws5.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS5.PDF",
+          "v": "9f19f704b7",
+          "webUrl": "https://drive.google.com/file/d/1odrMMK5BD98zuO-LQUATzLbrGJy_iXTJ/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s21",
@@ -3196,60 +3202,66 @@
           "type": "document",
           "title": "Permanent magnet generator (Dynamo)",
           "hours": 0.3,
-          "src": "content/CO0005/WS6.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS6.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws6.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS6.PDF",
+          "v": "12ed1583ea",
+          "webUrl": "https://drive.google.com/file/d/1Oetxeh2ZwFOX4XRjNh_XLjHKbt5Mw9ET/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s23",
           "type": "document",
           "title": "Shunt and series motor basics",
           "hours": 0.3,
-          "src": "content/CO0005/WS7.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS7.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws7.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS7.PDF",
+          "v": "e9308c06fe",
+          "webUrl": "https://drive.google.com/file/d/1fK53FqrKZ5AtXryaHE7nTsNMs3OeRLke/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s24",
           "type": "document",
           "title": "Shunt wound motor characteristics",
           "hours": 0.4,
-          "src": "content/CO0005/WS8.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS8.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws8.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS8.PDF",
+          "v": "41c3e342b4",
+          "webUrl": "https://drive.google.com/file/d/1eZmL3gWJo6KD52HAI4Z2Wzp--Kk4Uepv/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s25",
           "type": "document",
           "title": "Series wound motor characteristics",
           "hours": 0.4,
-          "src": "content/CO0005/WS9.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS9.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws9.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS9.PDF",
+          "v": "952b096124",
+          "webUrl": "https://drive.google.com/file/d/1xf5HYnY3irDqbTHoWxfj2k3FwKJo0SNC/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s26",
           "type": "document",
           "title": "Universal motor",
           "hours": 0.2,
-          "src": "content/CO0005/WS10.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS10.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws10.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS10.PDF",
+          "v": "7a9e8a74b1",
+          "webUrl": "https://drive.google.com/file/d/1wDxu0Siyv38C8WD9VdnXkGzM1-88l5tI/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s27",
           "type": "document",
           "title": "Comparing shunt and series motors",
           "hours": 0.4,
-          "src": "content/CO0005/WS11.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS11.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws11.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS11.PDF",
+          "v": "35d5ebef90",
+          "webUrl": "https://drive.google.com/file/d/1oBORODPxajnieNYt9HSi16YCVZv6q-0p/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s28",
@@ -3343,40 +3355,44 @@
           "type": "document",
           "title": "Single-phase induction motor",
           "hours": 0.5,
-          "src": "content/CO0005/WS12.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS12.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws12.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS12.PDF",
+          "v": "72c9bd6f51",
+          "webUrl": "https://drive.google.com/file/d/1HHG43TGttHmJJO4HqekmJGpMUfEJWuew/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s38",
           "type": "document",
           "title": "Single-phase induction motor-cap start",
           "hours": 0.5,
-          "src": "content/CO0005/WS13.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS13.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws13.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS13.PDF",
+          "v": "9e269e9e4c",
+          "webUrl": "https://drive.google.com/file/d/1ECKW1zOWKBIIUf58JYqVd16RWOj0mTKV/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s39",
           "type": "document",
           "title": "Phase shift in induction motors",
           "hours": 0.5,
-          "src": "content/CO0005/WS14.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS14.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws14.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS14.PDF",
+          "v": "d43c2833ff",
+          "webUrl": "https://drive.google.com/file/d/1zpIROKVIJzNNGa-SXJ70etwbBUDfThou/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s40",
           "type": "document",
           "title": "Variable frequency drive strategies",
           "hours": 0.5,
-          "src": "content/CO0005/WS15.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS15.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws15.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS15.PDF",
+          "v": "461e92bbac",
+          "webUrl": "https://drive.google.com/file/d/1TqAkdgUL_5aVKS30TNAHTskhU4gGumdS/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s41",
@@ -3393,20 +3409,22 @@
           "type": "document",
           "title": "Three-phase induction motor characteristics",
           "hours": 1,
-          "src": "content/CO0005/WS16.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS16.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws16.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS16.PDF",
+          "v": "aff4db83b5",
+          "webUrl": "https://drive.google.com/file/d/1svGjlf2gL2ZO7o0pV4yFEoUWWc-W_1Y4/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s43",
           "type": "document",
           "title": "Three-phase induction motor drive strategies",
           "hours": 1,
-          "src": "content/CO0005/WS17.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS17.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws17.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS17.PDF",
+          "v": "9629afde1a",
+          "webUrl": "https://drive.google.com/file/d/1wnf6UoMxpswuwKLNvAxYhaQlslA1wPgo/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s44",
@@ -3422,20 +3440,22 @@
           "type": "document",
           "title": "Delta configuration",
           "hours": 1,
-          "src": "content/CO0005/WS18.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS18.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws18.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS18.PDF",
+          "v": "ef7957d9ac",
+          "webUrl": "https://drive.google.com/file/d/1iH6F9SwKi6JZfY0v1XM5FHBKBKF25bC9/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s46",
           "type": "document",
           "title": "Understanding slip",
           "hours": 1,
-          "src": "content/CO0005/WS19.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS19.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws19.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS19.PDF",
+          "v": "ef94e64bd0",
+          "webUrl": "https://drive.google.com/file/d/1RJ7AorpY9cAt8FpKbTO67mh9vBZfGat5/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s47",
@@ -3464,20 +3484,22 @@
           "type": "document",
           "title": "Brushless DC motor",
           "hours": 0.5,
-          "src": "content/CO0005/WS20.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS20.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws20.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS20.PDF",
+          "v": "693bd91911",
+          "webUrl": "https://drive.google.com/file/d/1BoF4VDSRE__wBCzMciXNrhIVu-50kSfR/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s50",
           "type": "document",
           "title": "Three-phase generator",
           "hours": 0.5,
-          "src": "content/CO0005/WS21.PDF",
-          "path": "/CPXXXX-Modern Electrical Machines/WS21.PDF",
-          "equipment": "Electrical Machines",
-          "missing": true
+          "src": "content/CP1234/ws21.pdf",
+          "path": "/CP1234-Modern Electrical Machines/WS21.PDF",
+          "v": "94988a5b4d",
+          "webUrl": "https://drive.google.com/file/d/14Kn1vgrGdbLRrbEpcXz_aWCdlHOK7lkR/view?usp=drivesdk",
+          "equipment": "Electrical Machines"
         },
         {
           "id": "CO0005-s51",
@@ -3531,7 +3553,250 @@
       "categories": [],
       "_source": "auto",
       "courseType": "Course",
-      "structureHours": 84.2
+      "structureHours": 84.5
+    },
+    {
+      "id": "CP1234",
+      "code": "CP1234",
+      "kind": "course",
+      "title": "Modern Electrical Machines",
+      "shortDescription": "",
+      "estimatedHours": 0,
+      "certificate": {
+        "enabled": false
+      },
+      "screens": [
+        {
+          "id": "CP1234-s1",
+          "type": "pdf",
+          "title": "hardware information",
+          "hours": 0,
+          "src": "content/CP1234/hardware information.pdf",
+          "webUrl": "https://drive.google.com/file/d/18xNEbGsxl92GO7YKdB5-FhxaU5vcqMVY/view?usp=drivesdk",
+          "v": "5941718a55"
+        },
+        {
+          "id": "CP1234-s2",
+          "type": "pdf",
+          "title": "machine information",
+          "hours": 0,
+          "src": "content/CP1234/machine information.pdf",
+          "webUrl": "https://drive.google.com/file/d/1uDKZ4y_IG_XljcSRqyLeiTQC1oKuimGL/view?usp=drivesdk",
+          "v": "ef1ed24670"
+        },
+        {
+          "id": "CP1234-s3",
+          "type": "pdf",
+          "title": "relationships",
+          "hours": 0,
+          "src": "content/CP1234/relationships.pdf",
+          "webUrl": "https://drive.google.com/file/d/1-v4FZH6uppmjeW2KGeCqZ1Mz1PL3MWOf/view?usp=drivesdk",
+          "v": "9b9635927f"
+        },
+        {
+          "id": "CP1234-s4",
+          "type": "pdf",
+          "title": "software information",
+          "hours": 0,
+          "src": "content/CP1234/software information.pdf",
+          "webUrl": "https://drive.google.com/file/d/105Kwg3LMklt8n3CjDM0QpYQ3nydgz78Z/view?usp=drivesdk",
+          "v": "d5547faf20"
+        },
+        {
+          "id": "CP1234-s5",
+          "type": "pdf",
+          "title": "ws1",
+          "hours": 0,
+          "src": "content/CP1234/ws1.pdf",
+          "webUrl": "https://drive.google.com/file/d/1m3tKcP5PpdfgltV9voznnH6CT7C2ZlRF/view?usp=drivesdk",
+          "v": "46be7f02f1"
+        },
+        {
+          "id": "CP1234-s6",
+          "type": "pdf",
+          "title": "ws10",
+          "hours": 0,
+          "src": "content/CP1234/ws10.pdf",
+          "webUrl": "https://drive.google.com/file/d/1wDxu0Siyv38C8WD9VdnXkGzM1-88l5tI/view?usp=drivesdk",
+          "v": "7a9e8a74b1"
+        },
+        {
+          "id": "CP1234-s7",
+          "type": "pdf",
+          "title": "ws11",
+          "hours": 0,
+          "src": "content/CP1234/ws11.pdf",
+          "webUrl": "https://drive.google.com/file/d/1oBORODPxajnieNYt9HSi16YCVZv6q-0p/view?usp=drivesdk",
+          "v": "35d5ebef90"
+        },
+        {
+          "id": "CP1234-s8",
+          "type": "pdf",
+          "title": "ws12",
+          "hours": 0,
+          "src": "content/CP1234/ws12.pdf",
+          "webUrl": "https://drive.google.com/file/d/1HHG43TGttHmJJO4HqekmJGpMUfEJWuew/view?usp=drivesdk",
+          "v": "72c9bd6f51"
+        },
+        {
+          "id": "CP1234-s9",
+          "type": "pdf",
+          "title": "ws13",
+          "hours": 0,
+          "src": "content/CP1234/ws13.pdf",
+          "webUrl": "https://drive.google.com/file/d/1ECKW1zOWKBIIUf58JYqVd16RWOj0mTKV/view?usp=drivesdk",
+          "v": "9e269e9e4c"
+        },
+        {
+          "id": "CP1234-s10",
+          "type": "pdf",
+          "title": "ws14",
+          "hours": 0,
+          "src": "content/CP1234/ws14.pdf",
+          "webUrl": "https://drive.google.com/file/d/1zpIROKVIJzNNGa-SXJ70etwbBUDfThou/view?usp=drivesdk",
+          "v": "d43c2833ff"
+        },
+        {
+          "id": "CP1234-s11",
+          "type": "pdf",
+          "title": "ws15",
+          "hours": 0,
+          "src": "content/CP1234/ws15.pdf",
+          "webUrl": "https://drive.google.com/file/d/1TqAkdgUL_5aVKS30TNAHTskhU4gGumdS/view?usp=drivesdk",
+          "v": "461e92bbac"
+        },
+        {
+          "id": "CP1234-s12",
+          "type": "pdf",
+          "title": "ws16",
+          "hours": 0,
+          "src": "content/CP1234/ws16.pdf",
+          "webUrl": "https://drive.google.com/file/d/1svGjlf2gL2ZO7o0pV4yFEoUWWc-W_1Y4/view?usp=drivesdk",
+          "v": "aff4db83b5"
+        },
+        {
+          "id": "CP1234-s13",
+          "type": "pdf",
+          "title": "ws17",
+          "hours": 0,
+          "src": "content/CP1234/ws17.pdf",
+          "webUrl": "https://drive.google.com/file/d/1wnf6UoMxpswuwKLNvAxYhaQlslA1wPgo/view?usp=drivesdk",
+          "v": "9629afde1a"
+        },
+        {
+          "id": "CP1234-s14",
+          "type": "pdf",
+          "title": "ws18",
+          "hours": 0,
+          "src": "content/CP1234/ws18.pdf",
+          "webUrl": "https://drive.google.com/file/d/1iH6F9SwKi6JZfY0v1XM5FHBKBKF25bC9/view?usp=drivesdk",
+          "v": "ef7957d9ac"
+        },
+        {
+          "id": "CP1234-s15",
+          "type": "pdf",
+          "title": "ws19",
+          "hours": 0,
+          "src": "content/CP1234/ws19.pdf",
+          "webUrl": "https://drive.google.com/file/d/1RJ7AorpY9cAt8FpKbTO67mh9vBZfGat5/view?usp=drivesdk",
+          "v": "ef94e64bd0"
+        },
+        {
+          "id": "CP1234-s16",
+          "type": "pdf",
+          "title": "ws2",
+          "hours": 0,
+          "src": "content/CP1234/ws2.pdf",
+          "webUrl": "https://drive.google.com/file/d/13fZz9ky7H1x0Rk-WN8avLeJuAnqp1PqF/view?usp=drivesdk",
+          "v": "73c7bb2dce"
+        },
+        {
+          "id": "CP1234-s17",
+          "type": "pdf",
+          "title": "ws20",
+          "hours": 0,
+          "src": "content/CP1234/ws20.pdf",
+          "webUrl": "https://drive.google.com/file/d/1BoF4VDSRE__wBCzMciXNrhIVu-50kSfR/view?usp=drivesdk",
+          "v": "693bd91911"
+        },
+        {
+          "id": "CP1234-s18",
+          "type": "pdf",
+          "title": "ws21",
+          "hours": 0,
+          "src": "content/CP1234/ws21.pdf",
+          "webUrl": "https://drive.google.com/file/d/14Kn1vgrGdbLRrbEpcXz_aWCdlHOK7lkR/view?usp=drivesdk",
+          "v": "94988a5b4d"
+        },
+        {
+          "id": "CP1234-s19",
+          "type": "pdf",
+          "title": "ws3",
+          "hours": 0,
+          "src": "content/CP1234/ws3.pdf",
+          "webUrl": "https://drive.google.com/file/d/1u5i6dlPKaGWD6MLFGZuXt1KsNRrSojZe/view?usp=drivesdk",
+          "v": "bba647dc55"
+        },
+        {
+          "id": "CP1234-s20",
+          "type": "pdf",
+          "title": "ws4",
+          "hours": 0,
+          "src": "content/CP1234/ws4.pdf",
+          "webUrl": "https://drive.google.com/file/d/1bqKKD8LCf5UfxncUbteYE81UZpXBbusU/view?usp=drivesdk",
+          "v": "cfe41963cd"
+        },
+        {
+          "id": "CP1234-s21",
+          "type": "pdf",
+          "title": "ws5",
+          "hours": 0,
+          "src": "content/CP1234/ws5.pdf",
+          "webUrl": "https://drive.google.com/file/d/1odrMMK5BD98zuO-LQUATzLbrGJy_iXTJ/view?usp=drivesdk",
+          "v": "9f19f704b7"
+        },
+        {
+          "id": "CP1234-s22",
+          "type": "pdf",
+          "title": "ws6",
+          "hours": 0,
+          "src": "content/CP1234/ws6.pdf",
+          "webUrl": "https://drive.google.com/file/d/1Oetxeh2ZwFOX4XRjNh_XLjHKbt5Mw9ET/view?usp=drivesdk",
+          "v": "12ed1583ea"
+        },
+        {
+          "id": "CP1234-s23",
+          "type": "pdf",
+          "title": "ws7",
+          "hours": 0,
+          "src": "content/CP1234/ws7.pdf",
+          "webUrl": "https://drive.google.com/file/d/1fK53FqrKZ5AtXryaHE7nTsNMs3OeRLke/view?usp=drivesdk",
+          "v": "e9308c06fe"
+        },
+        {
+          "id": "CP1234-s24",
+          "type": "pdf",
+          "title": "ws8",
+          "hours": 0,
+          "src": "content/CP1234/ws8.pdf",
+          "webUrl": "https://drive.google.com/file/d/1eZmL3gWJo6KD52HAI4Z2Wzp--Kk4Uepv/view?usp=drivesdk",
+          "v": "41c3e342b4"
+        },
+        {
+          "id": "CP1234-s25",
+          "type": "pdf",
+          "title": "ws9",
+          "hours": 0,
+          "src": "content/CP1234/ws9.pdf",
+          "webUrl": "https://drive.google.com/file/d/1xf5HYnY3irDqbTHoWxfj2k3FwKJo0SNC/view?usp=drivesdk",
+          "v": "952b096124"
+        }
+      ],
+      "categories": [],
+      "draft": true,
+      "_source": "auto-files",
+      "courseType": "Course",
+      "structureHours": 0
     }
   ]
 }

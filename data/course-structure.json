@@ -83,7 +83,7 @@
       "title": "",
       "type": "Course",
       "sheets": 55,
-      "hours": 84.2,
+      "hours": 84.5,
       "keywords": [],
       "description": ""
     },
@@ -113,6 +113,14 @@
         "pack"
       ],
       "description": "A worksheet pack on driving and controlling motors with microcontrollers — DC, stepper and servo motors, motor-control circuits and actuator projects."
+    },
+    "CP1234": {
+      "title": "",
+      "type": "Course",
+      "sheets": 25,
+      "hours": 0,
+      "keywords": [],
+      "description": ""
     },
     "CP1972": {
       "title": "Sensors and Microcontrollers",
