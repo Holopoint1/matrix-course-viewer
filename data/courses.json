@@ -2979,7 +2979,7 @@
       "kind": "course",
       "title": "Electrical Machines",
       "shortDescription": "",
-      "estimatedHours": 84.5,
+      "estimatedHours": 82.5,
       "certificate": {
         "enabled": true,
         "templateName": "Electrical Machines"
@@ -3529,15 +3529,6 @@
         {
           "id": "CO0005-s53",
           "type": "html",
-          "title": "Project",
-          "hours": 2,
-          "src": "content/CO0005/CO0005-project.htm",
-          "path": "/CO0005-Electrical Machines/media/CO0005-project.htm",
-          "missing": true
-        },
-        {
-          "id": "CO0005-s54",
-          "type": "html",
           "title": "Project work",
           "hours": 15,
           "src": "content/CO0005/CO0005-project work.htm",
@@ -3547,7 +3538,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s55",
+          "id": "CO0005-s54",
           "type": "html",
           "title": "Project homework",
           "hours": 15,
@@ -3560,7 +3551,7 @@
       "categories": [],
       "_source": "auto",
       "courseType": "Course",
-      "structureHours": 84.5
+      "structureHours": 82.5
     },
     {
       "id": "CP1234",

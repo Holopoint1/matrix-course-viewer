@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-15T12:50:50.951Z",
+  "generatedAt": "2026-07-15T13:00:05.676Z",
   "summary": {
     "courses": 12,
-    "screens": 327,
+    "screens": 326,
     "displaying": 323,
-    "missing": 4,
+    "missing": 3,
     "autofixed": 33,
     "stale": 0,
     "unused": 37,
@@ -90,13 +90,6 @@
           "asked": "ws7.PDF",
           "expectedIn": "CP1933",
           "reason": "No file by this name in the CP1933 folder — but a matching file is in the CP1234 folder. Move it there, or point the row at the right folder."
-        },
-        {
-          "id": "CO0005-s53",
-          "title": "Project",
-          "asked": "CO0005-project.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
       ],
       "autofixed": [
