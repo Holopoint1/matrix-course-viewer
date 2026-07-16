@@ -3002,7 +3002,7 @@
           "hours": 0,
           "src": "content/CO0005/CO0005-Author.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-author.htm",
-          "v": "d74a3dbb86",
+          "v": "7cd85cbfa5",
           "webUrl": "https://drive.google.com/file/d/1XVhSIRIrpk1URrK-IC3eXdTtFF8EdfmQ/view?usp=drivesdk"
         },
         {
@@ -3038,15 +3038,35 @@
         {
           "id": "CO0005-s6",
           "type": "html",
-          "title": "How this course is used",
+          "title": "Scheme of work",
           "hours": 0,
-          "src": "content/CO0005/CO0005-Course delivery.htm",
-          "path": "/CO0005-Electrical Machines/media/CO0005-Course delivery.htm",
-          "v": "8bbf8657db",
-          "webUrl": "https://drive.google.com/file/d/1Q4EFQCO1UULwmwQcdq2qcNkDWZsKmG2D/view?usp=drivesdk"
+          "src": "content/CO0005/CO0005-SOW.htm",
+          "path": "/CO0005-Electrical Machines/media/CO0005-SOW.htm",
+          "v": "ef54b1aa28",
+          "webUrl": "https://drive.google.com/file/d/1eh-UGFgC43QRYGhGCs7FcRvMG6Z73tTV/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s7",
+          "type": "html",
+          "title": "Scheme of Work",
+          "hours": 0,
+          "src": "content/CO0005/CO0005-SOW.xlsx",
+          "path": "/CO0005-Electrical Machines/media/CO0005-SOW.xlsx",
+          "v": "850d650ecb",
+          "webUrl": "https://docs.google.com/spreadsheets/d/1c4o_x_UBcfBNxMaN6qosx56etPkv1wIv/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
+        },
+        {
+          "id": "CO0005-s8",
+          "type": "sheet",
+          "title": "Syllabus",
+          "hours": 0,
+          "src": "content/CO0005/CO0005-syllabus.xlsx",
+          "path": "/CO0005-Electrical Machines/media/CO0005-Syllabus.xlsx",
+          "v": "2fcf089281",
+          "webUrl": "https://docs.google.com/spreadsheets/d/12I22zpwsZXepuu9--9pbMNdwUOcgnnyL/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
+        },
+        {
+          "id": "CO0005-s9",
           "type": "html",
           "title": "Equipment",
           "hours": 0,
@@ -3056,7 +3076,7 @@
           "webUrl": "https://drive.google.com/file/d/1DdMs0rfj41QuRnY6ogR0SObJ1sk-6ZtC/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s8",
+          "id": "CO0005-s10",
           "type": "html",
           "title": "Assessment",
           "hours": 0,
@@ -3066,7 +3086,7 @@
           "webUrl": "https://drive.google.com/file/d/1_mcewjDFUCBbXxo4QimzAS1w_a2SC6T4/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s9",
+          "id": "CO0005-s11",
           "type": "html",
           "title": "Helath and safety",
           "hours": 1,
@@ -3076,7 +3096,7 @@
           "webUrl": "https://drive.google.com/file/d/1STaCX6UbaJG2wIX79CV3C9fTDt3URyKY/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s10",
+          "id": "CO0005-s12",
           "type": "html",
           "title": "Basics of Electromagnetism",
           "hours": 0.1,
@@ -3086,7 +3106,7 @@
           "webUrl": "https://drive.google.com/file/d/1wDe-Qq8l-GQO3MNbVAEN8C9A0A2gMCuT/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s11",
+          "id": "CO0005-s13",
           "type": "powerpoint",
           "title": "Basics of Electromagnetism",
           "hours": 2,
@@ -3096,17 +3116,17 @@
           "webUrl": "https://docs.google.com/presentation/d/1qBMCLIKoHCXDeZ8l66LBfwawFHmqTkir/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
-          "id": "CO0005-s12",
+          "id": "CO0005-s14",
           "type": "html",
           "title": "Homework 1",
           "hours": 3,
           "src": "content/CO0005/CO0005-homework1.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-homework1.htm",
-          "v": "a13e008c07",
+          "v": "5f65cdfa66",
           "webUrl": "https://drive.google.com/file/d/12vjDtRCnE7gVi2ktmieptD6BEKle1DYf/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s13",
+          "id": "CO0005-s15",
           "type": "html",
           "title": "Electromagnetism in numbers",
           "hours": 2,
@@ -3116,7 +3136,7 @@
           "webUrl": "https://drive.google.com/file/d/1pB2CR4g2LsZ7YyOWzABJYxoUzaA24ki0/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s14",
+          "id": "CO0005-s16",
           "type": "html",
           "title": "DC motors",
           "hours": 2,
@@ -3126,7 +3146,7 @@
           "webUrl": "https://drive.google.com/file/d/1kshbSvJlhTBme1GjDXpUzHuv8gH1G-Kz/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s15",
+          "id": "CO0005-s17",
           "type": "html",
           "title": "DC Machine construction",
           "hours": 0.1,
@@ -3136,7 +3156,7 @@
           "webUrl": "https://drive.google.com/file/d/1M8gwmE2fr5rxyoEjaxXSeWkztbYqM3mD/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s16",
+          "id": "CO0005-s18",
           "type": "powerpoint",
           "title": "DC Machines",
           "hours": 2,
@@ -3146,19 +3166,19 @@
           "webUrl": "https://docs.google.com/presentation/d/1p2OrRdN4f4vOO17YV2dwZSxhXSv9Vke3/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
-          "id": "CO0005-s17",
+          "id": "CO0005-s19",
           "type": "html",
           "title": "Machine information",
           "hours": 0.1,
           "src": "content/CP1234/machine information.pdf",
-          "path": "/CP1234-Modern Electrical Machines/Machine information.pdf",
+          "path": "/CP1234-Modern Electrical Machines/machine information.pdf",
           "v": "ef1ed24670",
           "webUrl": "https://drive.google.com/file/d/1uDKZ4y_IG_XljcSRqyLeiTQC1oKuimGL/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s18",
+          "id": "CO0005-s20",
           "type": "document",
-          "title": "Understanding Torque and mass",
+          "title": "Understanding torque and mass",
           "hours": 0.5,
           "src": "content/CP1234/ws2.pdf",
           "path": "/CP1234-Modern Electrical Machines/ws2.PDF",
@@ -3167,7 +3187,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s19",
+          "id": "CO0005-s21",
           "type": "document",
           "title": "Getting started",
           "hours": 0.5,
@@ -3178,7 +3198,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s20",
+          "id": "CO0005-s22",
           "type": "document",
           "title": "Understanding the DC power supply",
           "hours": 0.5,
@@ -3189,7 +3209,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s21",
+          "id": "CO0005-s23",
           "type": "document",
           "title": "DC motor characteristics 1",
           "hours": 0.5,
@@ -3200,7 +3220,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s22",
+          "id": "CO0005-s24",
           "type": "document",
           "title": "DC motor characteristics 2",
           "hours": 0.5,
@@ -3211,7 +3231,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s23",
+          "id": "CO0005-s25",
           "type": "html",
           "title": "Other DC machines",
           "hours": 0.1,
@@ -3221,7 +3241,7 @@
           "webUrl": "https://drive.google.com/file/d/117jLx6NppYEjnvpyBnDjYbJOLEQYj9ua/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s24",
+          "id": "CO0005-s26",
           "type": "powerpoint",
           "title": "Shunt and Series motors.",
           "hours": 1,
@@ -3231,7 +3251,7 @@
           "webUrl": "https://docs.google.com/presentation/d/10G0xE3diYU3s3sd-I6ijSgB-035mSSzi/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
-          "id": "CO0005-s25",
+          "id": "CO0005-s27",
           "type": "document",
           "title": "Permanent magnet generator (Dynamo)",
           "hours": 0.3,
@@ -3242,7 +3262,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s26",
+          "id": "CO0005-s28",
           "type": "document",
           "title": "Shunt and series motor basics",
           "hours": 0.3,
@@ -3253,7 +3273,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s27",
+          "id": "CO0005-s29",
           "type": "document",
           "title": "Shunt wound motor characteristics",
           "hours": 0.4,
@@ -3264,7 +3284,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s28",
+          "id": "CO0005-s30",
           "type": "document",
           "title": "Series wound motor characteristics",
           "hours": 0.4,
@@ -3275,7 +3295,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s29",
+          "id": "CO0005-s31",
           "type": "document",
           "title": "Universal motor",
           "hours": 0.2,
@@ -3286,7 +3306,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s30",
+          "id": "CO0005-s32",
           "type": "document",
           "title": "Comparing shunt and series motors",
           "hours": 0.4,
@@ -3297,7 +3317,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s31",
+          "id": "CO0005-s33",
           "type": "html",
           "title": "Speed, torque and applications",
           "hours": 2,
@@ -3307,7 +3327,7 @@
           "webUrl": "https://drive.google.com/file/d/1dwG8HsvQLAEsSUgMIwfPTMw_rhLY_q0O/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s32",
+          "id": "CO0005-s34",
           "type": "html",
           "title": "Homework 2",
           "hours": 3,
@@ -3317,7 +3337,7 @@
           "webUrl": "https://drive.google.com/file/d/1aiJH0ndbEbu0u52OCAyhmq6Gi-D50_Fg/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s33",
+          "id": "CO0005-s35",
           "type": "html",
           "title": "Speed, torque and applications",
           "hours": 2,
@@ -3327,7 +3347,7 @@
           "webUrl": "https://drive.google.com/file/d/1bbXcjnIGYcCajwSlYymqWxCjOEhvGMuk/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s34",
+          "id": "CO0005-s36",
           "type": "html",
           "title": "Speed, torque and applications",
           "hours": 2,
@@ -3337,7 +3357,7 @@
           "webUrl": "https://drive.google.com/file/d/1FMbWoNR7gQMObr4DYgzYzBd78pTRmwlp/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s35",
+          "id": "CO0005-s37",
           "type": "html",
           "title": "Transformers",
           "hours": 2,
@@ -3347,7 +3367,7 @@
           "webUrl": "https://drive.google.com/file/d/1E8CqQYIpo174ecMyhQ7zApvPFS_DEKQi/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s36",
+          "id": "CO0005-s38",
           "type": "document",
           "title": "Step it down",
           "hours": 0.5,
@@ -3357,7 +3377,7 @@
           "missing": true
         },
         {
-          "id": "CO0005-s37",
+          "id": "CO0005-s39",
           "type": "document",
           "title": "Step it up",
           "hours": 0.5,
@@ -3367,7 +3387,7 @@
           "missing": true
         },
         {
-          "id": "CO0005-s38",
+          "id": "CO0005-s40",
           "type": "html",
           "title": "Homework 3",
           "hours": 3,
@@ -3377,7 +3397,7 @@
           "webUrl": "https://drive.google.com/file/d/108aOYZ4mTL_YYF8EFUmZAxOfiG7EOunR/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s39",
+          "id": "CO0005-s41",
           "type": "html",
           "title": "Induction motors",
           "hours": 2,
@@ -3387,7 +3407,7 @@
           "webUrl": "https://drive.google.com/file/d/1G8DxmVkXRFrhLvl3l5QxaHEMcYJSw9-s/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s40",
+          "id": "CO0005-s42",
           "type": "document",
           "title": "Single-phase induction motor",
           "hours": 0.5,
@@ -3398,7 +3418,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s41",
+          "id": "CO0005-s43",
           "type": "document",
           "title": "Single-phase induction motor-cap start",
           "hours": 0.5,
@@ -3409,7 +3429,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s42",
+          "id": "CO0005-s44",
           "type": "document",
           "title": "Phase shift in induction motors",
           "hours": 0.5,
@@ -3420,7 +3440,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s43",
+          "id": "CO0005-s45",
           "type": "document",
           "title": "Variable frequency drive strategies",
           "hours": 0.5,
@@ -3431,7 +3451,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s44",
+          "id": "CO0005-s46",
           "type": "html",
           "title": "Three phase motors",
           "hours": 2,
@@ -3441,7 +3461,7 @@
           "webUrl": "https://drive.google.com/file/d/1pv1YzdX9yBX4pn5ZsVjZO7rEjwNw8Pq8/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s45",
+          "id": "CO0005-s47",
           "type": "document",
           "title": "Three-phase induction motor characteristics",
           "hours": 1,
@@ -3452,7 +3472,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s46",
+          "id": "CO0005-s48",
           "type": "document",
           "title": "Three-phase induction motor drive strategies",
           "hours": 1,
@@ -3463,7 +3483,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s47",
+          "id": "CO0005-s49",
           "type": "html",
           "title": "Homework 4",
           "hours": 3,
@@ -3473,7 +3493,7 @@
           "webUrl": "https://drive.google.com/file/d/1jpcu2Hg730VG9pTEY-eI_VaNVcwJalLu/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s48",
+          "id": "CO0005-s50",
           "type": "document",
           "title": "Delta configuration",
           "hours": 1,
@@ -3484,7 +3504,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s49",
+          "id": "CO0005-s51",
           "type": "document",
           "title": "Understanding slip",
           "hours": 1,
@@ -3495,7 +3515,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s50",
+          "id": "CO0005-s52",
           "type": "html",
           "title": "Control circuits in AC motors",
           "hours": 2,
@@ -3506,7 +3526,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s51",
+          "id": "CO0005-s53",
           "type": "html",
           "title": "Other electrical machines",
           "hours": 1,
@@ -3517,7 +3537,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s52",
+          "id": "CO0005-s54",
           "type": "document",
           "title": "Brushless DC motor",
           "hours": 0.5,
@@ -3528,7 +3548,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s53",
+          "id": "CO0005-s55",
           "type": "document",
           "title": "Three-phase generator",
           "hours": 0.5,
@@ -3539,7 +3559,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s54",
+          "id": "CO0005-s56",
           "type": "html",
           "title": "Portfolio and project preparation",
           "hours": 2,
@@ -3549,7 +3569,7 @@
           "webUrl": "https://drive.google.com/file/d/1q6sI7kPzx4sx-recrw8WRelVSDIA2Ja-/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s55",
+          "id": "CO0005-s57",
           "type": "html",
           "title": "Project work",
           "hours": 15,
@@ -3560,7 +3580,7 @@
           "equipment": "Electrical Machines"
         },
         {
-          "id": "CO0005-s56",
+          "id": "CO0005-s58",
           "type": "html",
           "title": "Project homework",
           "hours": 15,
