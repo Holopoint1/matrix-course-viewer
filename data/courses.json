@@ -2979,7 +2979,7 @@
       "kind": "course",
       "title": "Electrical Machines",
       "shortDescription": "",
-      "estimatedHours": 82.5,
+      "estimatedHours": 95.5,
       "certificate": {
         "enabled": true,
         "templateName": "Electrical Machines"
@@ -3008,7 +3008,7 @@
         {
           "id": "CO0005-s3",
           "type": "html",
-          "title": "Objectives",
+          "title": "Course objectives",
           "hours": 0,
           "src": "content/CO0005/CO0005-objectives.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-objectives.htm",
@@ -3510,16 +3510,6 @@
         {
           "id": "CO0005-s51",
           "type": "html",
-          "title": "Assessment",
-          "hours": 2,
-          "src": "content/CO0005/CO0005-Assessment.htm",
-          "path": "/CO0005-Electrical Machines/media/CO0005-assessment.htm",
-          "v": "db924351a7",
-          "webUrl": "https://drive.google.com/file/d/1_mcewjDFUCBbXxo4QimzAS1w_a2SC6T4/view?usp=drivesdk"
-        },
-        {
-          "id": "CO0005-s52",
-          "type": "html",
           "title": "Portfolio and project preparation",
           "hours": 2,
           "src": "content/CO0005/CO0005-portfolio and project.htm",
@@ -3528,7 +3518,7 @@
           "webUrl": "https://drive.google.com/file/d/1q6sI7kPzx4sx-recrw8WRelVSDIA2Ja-/view?usp=drivesdk"
         },
         {
-          "id": "CO0005-s53",
+          "id": "CO0005-s52",
           "type": "html",
           "title": "Project work",
           "hours": 15,
@@ -3537,6 +3527,16 @@
           "v": "2899ed5735",
           "webUrl": "https://drive.google.com/file/d/1SETA4M-60AJU9G05IaK6semOrTQZAcbw/view?usp=drivesdk",
           "equipment": "Electrical Machines"
+        },
+        {
+          "id": "CO0005-s53",
+          "type": "html",
+          "title": "Project homework",
+          "hours": 15,
+          "src": "content/CO0005/CO0005-project homework.htm",
+          "path": "/CO0005-Electrical Machines/media/CO0005-project homework.htm",
+          "v": "9d22a12184",
+          "webUrl": "https://drive.google.com/file/d/1vAhGlASUl4U0WZxHvv1Jzi2N9BcjS_aX/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s54",
@@ -3552,7 +3552,7 @@
       "categories": [],
       "_source": "auto",
       "courseType": "Course",
-      "structureHours": 82.5
+      "structureHours": 95.5
     },
     {
       "id": "CP1234",

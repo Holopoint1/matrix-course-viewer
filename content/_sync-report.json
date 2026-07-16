@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-16T07:53:48.091Z",
+  "generatedAt": "2026-07-16T08:50:50.553Z",
   "summary": {
     "courses": 12,
     "screens": 326,
     "displaying": 324,
     "missing": 2,
-    "autofixed": 33,
+    "autofixed": 32,
     "stale": 0,
     "unused": 36,
     "downloadFailed": 0,
@@ -336,15 +336,6 @@
           "used": "ws21.pdf",
           "reasons": [
             "A small spelling/spacing difference, matched automatically."
-          ]
-        },
-        {
-          "id": "CO0005-s51",
-          "title": "Assessment",
-          "asked": "CO0005-assessment.htm",
-          "used": "CO0005-Assessment.htm",
-          "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
           ]
         }
       ]
