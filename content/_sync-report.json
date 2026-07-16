@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-16T10:35:45.835Z",
+  "generatedAt": "2026-07-16T10:43:00.911Z",
   "summary": {
     "courses": 12,
     "screens": 328,
     "displaying": 326,
     "missing": 2,
-    "autofixed": 29,
+    "autofixed": 30,
     "stale": 0,
-    "unused": 42,
+    "unused": 41,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -91,6 +91,15 @@
           "title": "Author",
           "asked": "CO0005-author.htm",
           "used": "CO0005-Author.htm",
+          "reasons": [
+            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
+          ]
+        },
+        {
+          "id": "CO0005-s5",
+          "title": "Syllabus",
+          "asked": "CO0005-Syllabus.xlsx",
+          "used": "CO0005-syllabus.xlsx",
           "reasons": [
             "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
           ]
@@ -317,7 +326,6 @@
   "unusedMedia": {
     "CO0005": [
       "CO0005-machine construction.htm",
-      "syllabus.xlsx",
       "CO0005-Homework2.htm",
       "CO0005-Homework1.htm",
       "CO0005-Homework3.htm",
@@ -394,7 +402,16 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [],
+  "removed": [
+    {
+      "code": "CO0005",
+      "name": "CO0005-Syllabus.xlsx"
+    },
+    {
+      "code": "CO0005",
+      "name": "syllabus.xlsx"
+    }
+  ],
   "drafts": [
     {
       "code": "CP1234",
