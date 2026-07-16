@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-16T10:25:54.658Z",
+  "generatedAt": "2026-07-16T10:35:45.835Z",
   "summary": {
     "courses": 12,
     "screens": 328,
-    "displaying": 325,
-    "missing": 3,
+    "displaying": 326,
+    "missing": 2,
     "autofixed": 29,
     "stale": 0,
     "unused": 42,
@@ -70,13 +70,6 @@
       "title": "Electrical Machines",
       "stale": [],
       "missing": [
-        {
-          "id": "CO0005-s15",
-          "title": "DC Machine construction",
-          "asked": "CO0005-DC machine construction.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
         {
           "id": "CO0005-s36",
           "title": "Step it down",

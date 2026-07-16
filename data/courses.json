@@ -3002,7 +3002,7 @@
           "hours": 0,
           "src": "content/CO0005/CO0005-Author.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-author.htm",
-          "v": "5a955e5e25",
+          "v": "d74a3dbb86",
           "webUrl": "https://drive.google.com/file/d/1XVhSIRIrpk1URrK-IC3eXdTtFF8EdfmQ/view?usp=drivesdk"
         },
         {
@@ -3082,7 +3082,7 @@
           "hours": 0.1,
           "src": "content/CO0005/CO0005-Electromagnetism.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-Electromagnetism.htm",
-          "v": "2eac3457f0",
+          "v": "e8670f2609",
           "webUrl": "https://drive.google.com/file/d/1wDe-Qq8l-GQO3MNbVAEN8C9A0A2gMCuT/view?usp=drivesdk"
         },
         {
@@ -3092,7 +3092,7 @@
           "hours": 2,
           "src": "content/CO0005/CO0005-electromagnetism_20_slides.pptx",
           "path": "/CO0005-Electrical Machines/media/CO0005-electromagnetism_20_slides.pptx",
-          "v": "9c67e62a4d",
+          "v": "1b8a0c9dfd",
           "webUrl": "https://docs.google.com/presentation/d/1qBMCLIKoHCXDeZ8l66LBfwawFHmqTkir/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
@@ -3132,7 +3132,8 @@
           "hours": 0.1,
           "src": "content/CO0005/CO0005-DC machine construction.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-DC machine construction.htm",
-          "missing": true
+          "v": "6b9587b10a",
+          "webUrl": "https://drive.google.com/file/d/1M8gwmE2fr5rxyoEjaxXSeWkztbYqM3mD/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s16",
@@ -3141,7 +3142,7 @@
           "hours": 2,
           "src": "content/CO0005/CO0005-DC_Electrical_Machines_20_Slides.pptx",
           "path": "/CO0005-Electrical Machines/media/CO0005-DC_Electrical_Machines_20_Slides.pptx",
-          "v": "0e680c37fe",
+          "v": "bf7ee21c68",
           "webUrl": "https://docs.google.com/presentation/d/1p2OrRdN4f4vOO17YV2dwZSxhXSv9Vke3/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
@@ -3216,7 +3217,7 @@
           "hours": 0.1,
           "src": "content/CO0005/CO0005-other DC machines.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-other DC machines.htm",
-          "v": "65f025e433",
+          "v": "d182130dc5",
           "webUrl": "https://drive.google.com/file/d/117jLx6NppYEjnvpyBnDjYbJOLEQYj9ua/view?usp=drivesdk"
         },
         {
@@ -3302,7 +3303,7 @@
           "hours": 2,
           "src": "content/CO0005/CO0005-power efficiency.htm",
           "path": "/CO0005-Electrical Machines/media/CO0005-power efficiency.htm",
-          "v": "e326ab6f29",
+          "v": "97c39e429d",
           "webUrl": "https://drive.google.com/file/d/1dwG8HsvQLAEsSUgMIwfPTMw_rhLY_q0O/view?usp=drivesdk"
         },
         {
