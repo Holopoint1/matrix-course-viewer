@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-16T08:51:58.262Z",
+  "generatedAt": "2026-07-16T09:35:47.945Z",
   "summary": {
     "courses": 12,
     "screens": 326,
@@ -7,7 +7,7 @@
     "missing": 2,
     "autofixed": 28,
     "stale": 0,
-    "unused": 40,
+    "unused": 41,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -307,6 +307,7 @@
   },
   "unusedMedia": {
     "CO0005": [
+      "CO0005-electromagnetism_20_slides.pptx",
       "CO0005-Homework2.htm",
       "CO0005-Homework1.htm",
       "CO0005-Homework3.htm",
