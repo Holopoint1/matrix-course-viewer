@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-16T08:50:50.553Z",
+  "generatedAt": "2026-07-16T08:51:58.262Z",
   "summary": {
     "courses": 12,
     "screens": 326,
     "displaying": 324,
     "missing": 2,
-    "autofixed": 32,
+    "autofixed": 28,
     "stale": 0,
-    "unused": 36,
+    "unused": 40,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -91,15 +91,6 @@
           "title": "Author",
           "asked": "CO0005-author.htm",
           "used": "CO0005-Author.htm",
-          "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
-          ]
-        },
-        {
-          "id": "CO0005-s11",
-          "title": "Homework 1",
-          "asked": "CO0005-homework1.htm",
-          "used": "CO0005-Homework1.htm",
           "reasons": [
             "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
           ]
@@ -222,24 +213,6 @@
           ]
         },
         {
-          "id": "CO0005-s29",
-          "title": "Homework 2",
-          "asked": "CO0005-homework2.htm",
-          "used": "CO0005-Homework2.htm",
-          "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
-          ]
-        },
-        {
-          "id": "CO0005-s35",
-          "title": "Homework 3",
-          "asked": "CO0005-homework3.htm",
-          "used": "CO0005-Homework3.htm",
-          "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
-          ]
-        },
-        {
           "id": "CO0005-s37",
           "title": "Single-phase induction motor",
           "asked": "ws12.PDF",
@@ -294,15 +267,6 @@
           ]
         },
         {
-          "id": "CO0005-s44",
-          "title": "Homework 4",
-          "asked": "CO0005-homework4.htm",
-          "used": "CO0005-Homework4.htm",
-          "reasons": [
-            "Capitalisation: the live site runs on Linux (case-sensitive), so “Equip.HTM” and “Equip.htm” are different files."
-          ]
-        },
-        {
           "id": "CO0005-s45",
           "title": "Delta configuration",
           "asked": "ws18.PDF",
@@ -343,6 +307,10 @@
   },
   "unusedMedia": {
     "CO0005": [
+      "CO0005-Homework2.htm",
+      "CO0005-Homework1.htm",
+      "CO0005-Homework3.htm",
+      "CO0005-Homework4.htm",
       "CO0005-Homework 4.htm",
       "CO0005-Homework 2.htm",
       "CO0005-Homework 3.htm"
