@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-15T13:00:05.676Z",
+  "generatedAt": "2026-07-16T07:53:48.091Z",
   "summary": {
     "courses": 12,
     "screens": 326,
-    "displaying": 323,
-    "missing": 3,
+    "displaying": 324,
+    "missing": 2,
     "autofixed": 33,
     "stale": 0,
-    "unused": 37,
+    "unused": 36,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -70,13 +70,6 @@
       "title": "Electrical Machines",
       "stale": [],
       "missing": [
-        {
-          "id": "CO0005-s6",
-          "title": "How this course is used",
-          "asked": "Course delivery.htm",
-          "expectedIn": "CO0005",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0005 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
         {
           "id": "CO0005-s33",
           "title": "Step it down",
@@ -359,7 +352,6 @@
   },
   "unusedMedia": {
     "CO0005": [
-      "CO0005-Course delivery.htm",
       "CO0005-Homework 4.htm",
       "CO0005-Homework 2.htm",
       "CO0005-Homework 3.htm"

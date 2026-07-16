@@ -3040,9 +3040,10 @@
           "type": "html",
           "title": "How this course is used",
           "hours": 0,
-          "src": "content/CO0005/Course delivery.htm",
-          "path": "/CO0005-Electrical Machines/media/Course delivery.htm",
-          "missing": true
+          "src": "content/CO0005/CO0005-Course delivery.htm",
+          "path": "/CO0005-Electrical Machines/media/CO0005-Course delivery.htm",
+          "v": "4f842fd652",
+          "webUrl": "https://drive.google.com/file/d/1Q4EFQCO1UULwmwQcdq2qcNkDWZsKmG2D/view?usp=drivesdk"
         },
         {
           "id": "CO0005-s7",
