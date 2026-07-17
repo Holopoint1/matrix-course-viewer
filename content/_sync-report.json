@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T13:31:45.527Z",
+  "generatedAt": "2026-07-17T13:36:39.984Z",
   "summary": {
     "courses": 13,
     "screens": 338,
@@ -422,12 +422,7 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [
-    {
-      "code": "CO0010",
-      "name": "media-20260717T132033Z-1-001.zip"
-    }
-  ],
+  "removed": [],
   "drafts": [
     {
       "code": "CP1234",
