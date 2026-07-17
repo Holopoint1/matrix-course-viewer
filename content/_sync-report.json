@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-17T13:26:08.829Z",
+  "generatedAt": "2026-07-17T13:31:45.527Z",
   "summary": {
     "courses": 13,
-    "screens": 337,
-    "displaying": 332,
+    "screens": 338,
+    "displaying": 333,
     "missing": 5,
     "autofixed": 29,
     "stale": 0,
-    "unused": 43,
+    "unused": 42,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -343,9 +343,6 @@
     }
   },
   "unusedMedia": {
-    "CO0010": [
-      "media-20260717T132033Z-1-001.zip"
-    ],
     "CO0005": [
       "CO0005-Course delivery.htm",
       "CO0005-machine construction.htm",
@@ -428,7 +425,7 @@
   "removed": [
     {
       "code": "CO0010",
-      "name": "TEMPLATE - definition.xlsx"
+      "name": "media-20260717T132033Z-1-001.zip"
     }
   ],
   "drafts": [
