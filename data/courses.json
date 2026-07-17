@@ -3846,7 +3846,7 @@
       "kind": "course",
       "title": "Structures",
       "shortDescription": "",
-      "estimatedHours": 6.3,
+      "estimatedHours": 6.4,
       "certificate": {
         "enabled": true,
         "templateName": "Structures"
@@ -3909,6 +3909,16 @@
         },
         {
           "id": "CO0010-s7",
+          "type": "document",
+          "title": "About the Author",
+          "hours": 0.1,
+          "src": "content/CO0010/Author.docx",
+          "path": "Author.docx",
+          "v": "563f399a61",
+          "webUrl": "https://docs.google.com/document/d/1vjau28bRkXz_lynx8jFlc-G8PYHpRla9/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
+        },
+        {
+          "id": "CO0010-s8",
           "type": "youtube",
           "title": "Understanding Bridge Loading",
           "hours": 0.1,
@@ -3916,7 +3926,7 @@
           "equipment": "Simple Suspension Bridge ST1111"
         },
         {
-          "id": "CO0010-s8",
+          "id": "CO0010-s9",
           "type": "document",
           "title": "All worksheets",
           "hours": 4,
@@ -3925,21 +3935,12 @@
           "v": "f0b700ec6d",
           "webUrl": "https://drive.google.com/file/d/1ghrRO0URJWborDqJk5mIXPkpiPPpIOII/view?usp=drivesdk",
           "equipment": "ST1111 - Simple Suspension Bridge"
-        },
-        {
-          "id": "CO0010-s9",
-          "type": "document",
-          "title": "undefined",
-          "hours": 0,
-          "src": "content/CO0010/undefined.docx",
-          "equipment": "undefined",
-          "missing": true
         }
       ],
       "categories": [],
       "_source": "auto",
       "courseType": "Course",
-      "structureHours": 6.3
+      "structureHours": 6.4
     }
   ]
 }
