@@ -3859,7 +3859,8 @@
           "hours": 0,
           "src": "content/CO0010/opening.png",
           "path": "opening.png",
-          "missing": true
+          "v": "dc21fc5efa",
+          "webUrl": "https://drive.google.com/file/d/1iwkoU8bqiPkoAvgXJ8o8XI8cy7NxAnt3/view?usp=drivesdk"
         },
         {
           "id": "CO0010-s2",
@@ -3935,6 +3936,14 @@
           "v": "f0b700ec6d",
           "webUrl": "https://drive.google.com/file/d/1ghrRO0URJWborDqJk5mIXPkpiPPpIOII/view?usp=drivesdk",
           "equipment": "ST1111 - Simple Suspension Bridge"
+        },
+        {
+          "id": "CO0010-s10",
+          "type": "image",
+          "title": "Title card",
+          "hours": 0,
+          "src": "content/CO0010/undefined",
+          "missing": true
         }
       ],
       "categories": [],

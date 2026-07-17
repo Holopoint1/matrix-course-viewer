@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-17T14:21:42.373Z",
+  "generatedAt": "2026-07-17T14:24:09.792Z",
   "summary": {
     "courses": 13,
-    "screens": 339,
-    "displaying": 334,
+    "screens": 340,
+    "displaying": 335,
     "missing": 5,
     "autofixed": 29,
     "stale": 0,
-    "unused": 44,
+    "unused": 45,
     "downloadFailed": 0,
     "collisions": 4,
     "collisionsAffecting": 0,
@@ -318,13 +318,6 @@
       "stale": [],
       "missing": [
         {
-          "id": "CO0010-s1",
-          "title": "Title card",
-          "asked": "opening.png",
-          "expectedIn": "CO0010",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
           "id": "CO0010-s4",
           "title": "Worksheet 1",
           "asked": "worksheet1.docx",
@@ -337,12 +330,22 @@
           "asked": "complete.html",
           "expectedIn": "CO0010",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        },
+        {
+          "id": "CO0010-s10",
+          "title": "Title card",
+          "asked": "undefined",
+          "expectedIn": "CO0010",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
       ],
       "autofixed": []
     }
   },
   "unusedMedia": {
+    "CO0010": [
+      "Welcome doc.docx"
+    ],
     "CO0005": [
       "CO0005-Assessment.docx",
       "CO0005-Author.docx",
