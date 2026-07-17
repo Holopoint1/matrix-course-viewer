@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T13:36:39.984Z",
+  "generatedAt": "2026-07-17T14:16:41.867Z",
   "summary": {
     "courses": 13,
     "screens": 338,
@@ -7,9 +7,9 @@
     "missing": 5,
     "autofixed": 29,
     "stale": 0,
-    "unused": 42,
+    "unused": 44,
     "downloadFailed": 0,
-    "collisions": 3,
+    "collisions": 4,
     "collisionsAffecting": 0,
     "drafts": 1,
     "namingIssues": 0,
@@ -344,6 +344,8 @@
   },
   "unusedMedia": {
     "CO0005": [
+      "CO0005-Assessment.docx",
+      "CO0005-Author.docx",
       "CO0005-Course delivery.htm",
       "CO0005-machine construction.htm",
       "CO0005-Homework2.htm",
@@ -402,6 +404,12 @@
   },
   "failed": [],
   "collisions": [
+    {
+      "code": "CO0005",
+      "name": "CO0005-Assessment.docx",
+      "count": 2,
+      "used": false
+    },
     {
       "code": "CO6930",
       "name": "CO6930 - content.docx",
