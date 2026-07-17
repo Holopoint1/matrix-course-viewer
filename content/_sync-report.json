@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-17T09:36:32.108Z",
+  "generatedAt": "2026-07-17T13:21:45.622Z",
   "summary": {
-    "courses": 12,
-    "screens": 330,
-    "displaying": 328,
-    "missing": 2,
+    "courses": 13,
+    "screens": 336,
+    "displaying": 331,
+    "missing": 5,
     "autofixed": 29,
     "stale": 0,
-    "unused": 42,
+    "unused": 43,
     "downloadFailed": 0,
     "collisions": 3,
     "collisionsAffecting": 0,
@@ -312,9 +312,40 @@
           ]
         }
       ]
+    },
+    "CO0010": {
+      "title": "Structures",
+      "stale": [],
+      "missing": [
+        {
+          "id": "CO0010-s1",
+          "title": "Title card",
+          "asked": "opening.png",
+          "expectedIn": "CO0010",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        },
+        {
+          "id": "CO0010-s4",
+          "title": "Worksheet 1",
+          "asked": "worksheet1.docx",
+          "expectedIn": "CO0010",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        },
+        {
+          "id": "CO0010-s5",
+          "title": "Finished",
+          "asked": "complete.html",
+          "expectedIn": "CO0010",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        }
+      ],
+      "autofixed": []
     }
   },
   "unusedMedia": {
+    "CO0010": [
+      "media-20260717T132033Z-1-001.zip"
+    ],
     "CO0005": [
       "CO0005-Course delivery.htm",
       "CO0005-machine construction.htm",

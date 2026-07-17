@@ -3837,6 +3837,79 @@
       "_source": "auto-files",
       "courseType": "Course",
       "structureHours": 0
+    },
+    {
+      "id": "CO0010",
+      "code": "CO0010",
+      "kind": "course",
+      "title": "Structures",
+      "shortDescription": "",
+      "estimatedHours": 2.2,
+      "certificate": {
+        "enabled": true,
+        "templateName": "Structures"
+      },
+      "screens": [
+        {
+          "id": "CO0010-s1",
+          "type": "image",
+          "title": "Title card",
+          "hours": 0,
+          "src": "content/CO0010/opening.png",
+          "path": "opening.png",
+          "missing": true
+        },
+        {
+          "id": "CO0010-s2",
+          "type": "html",
+          "title": "Welcome",
+          "hours": 0.25,
+          "src": "content/CO0010/welcome.html",
+          "path": "welcome.html",
+          "v": "73c94ec4f6",
+          "webUrl": "https://drive.google.com/file/d/1HSPLxj82KdACeiauwDburtsgfwZaPtoF/view?usp=drivesdk"
+        },
+        {
+          "id": "CO0010-s3",
+          "type": "youtube",
+          "title": "Intro video",
+          "hours": 0.5,
+          "src": "https://youtu.be/REPLACE_WITH_YOUR_VIDEO"
+        },
+        {
+          "id": "CO0010-s4",
+          "type": "document",
+          "title": "Worksheet 1",
+          "hours": 1,
+          "src": "content/CO0010/worksheet1.docx",
+          "path": "worksheet1.docx",
+          "missing": true
+        },
+        {
+          "id": "CO0010-s5",
+          "type": "html",
+          "title": "Finished",
+          "hours": 0.25,
+          "src": "content/CO0010/complete.html",
+          "path": "complete.html",
+          "missing": true
+        },
+        {
+          "id": "CO0010-s6",
+          "type": "sheet",
+          "title": "Digital Techniques mapping spreadsheet",
+          "hours": 0.2,
+          "src": "content/CO0001/Digital techniques mapping.xlsx",
+          "path": "/CO0001 - FC E-blocks CPD course/media/Digital techniques mapping.xlsx",
+          "v": "0e64fdc5a6",
+          "webUrl": "https://docs.google.com/spreadsheets/d/11qJELhW0XvlP4B3PiTQbHW6OYVKmgR5r/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "equipment": "Flowcode / E-blocks3"
+        }
+      ],
+      "categories": [],
+      "_source": "auto",
+      "courseType": "Course",
+      "structureHours": 2.2
     }
   ]
 }
