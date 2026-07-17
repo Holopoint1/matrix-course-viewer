@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-17T14:24:09.792Z",
+  "generatedAt": "2026-07-17T14:26:41.234Z",
   "summary": {
     "courses": 13,
-    "screens": 340,
-    "displaying": 335,
-    "missing": 5,
+    "screens": 335,
+    "displaying": 333,
+    "missing": 2,
     "autofixed": 29,
     "stale": 0,
-    "unused": 45,
+    "unused": 46,
     "downloadFailed": 0,
     "collisions": 4,
     "collisionsAffecting": 0,
@@ -312,39 +312,12 @@
           ]
         }
       ]
-    },
-    "CO0010": {
-      "title": "Structures",
-      "stale": [],
-      "missing": [
-        {
-          "id": "CO0010-s4",
-          "title": "Worksheet 1",
-          "asked": "worksheet1.docx",
-          "expectedIn": "CO0010",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0010-s5",
-          "title": "Finished",
-          "asked": "complete.html",
-          "expectedIn": "CO0010",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        },
-        {
-          "id": "CO0010-s10",
-          "title": "Title card",
-          "asked": "undefined",
-          "expectedIn": "CO0010",
-          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
-        }
-      ],
-      "autofixed": []
     }
   },
   "unusedMedia": {
     "CO0010": [
-      "Welcome doc.docx"
+      "Welcome doc.docx",
+      "welcome.html"
     ],
     "CO0005": [
       "CO0005-Assessment.docx",

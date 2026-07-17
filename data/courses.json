@@ -3846,7 +3846,7 @@
       "kind": "course",
       "title": "Structures",
       "shortDescription": "",
-      "estimatedHours": 6.4,
+      "estimatedHours": 4.3,
       "certificate": {
         "enabled": true,
         "templateName": "Structures"
@@ -3864,52 +3864,6 @@
         },
         {
           "id": "CO0010-s2",
-          "type": "html",
-          "title": "Welcome",
-          "hours": 0.25,
-          "src": "content/CO0010/welcome.html",
-          "path": "welcome.html",
-          "v": "73c94ec4f6",
-          "webUrl": "https://drive.google.com/file/d/1HSPLxj82KdACeiauwDburtsgfwZaPtoF/view?usp=drivesdk"
-        },
-        {
-          "id": "CO0010-s3",
-          "type": "youtube",
-          "title": "Intro video",
-          "hours": 0.5,
-          "src": "https://youtu.be/REPLACE_WITH_YOUR_VIDEO"
-        },
-        {
-          "id": "CO0010-s4",
-          "type": "document",
-          "title": "Worksheet 1",
-          "hours": 1,
-          "src": "content/CO0010/worksheet1.docx",
-          "path": "worksheet1.docx",
-          "missing": true
-        },
-        {
-          "id": "CO0010-s5",
-          "type": "html",
-          "title": "Finished",
-          "hours": 0.25,
-          "src": "content/CO0010/complete.html",
-          "path": "complete.html",
-          "missing": true
-        },
-        {
-          "id": "CO0010-s6",
-          "type": "sheet",
-          "title": "Digital Techniques mapping spreadsheet",
-          "hours": 0.2,
-          "src": "content/CO0001/Digital techniques mapping.xlsx",
-          "path": "/CO0001 - FC E-blocks CPD course/media/Digital techniques mapping.xlsx",
-          "v": "0e64fdc5a6",
-          "webUrl": "https://docs.google.com/spreadsheets/d/11qJELhW0XvlP4B3PiTQbHW6OYVKmgR5r/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
-          "equipment": "Flowcode / E-blocks3"
-        },
-        {
-          "id": "CO0010-s7",
           "type": "document",
           "title": "About the Author",
           "hours": 0.1,
@@ -3919,7 +3873,15 @@
           "webUrl": "https://docs.google.com/document/d/1vjau28bRkXz_lynx8jFlc-G8PYHpRla9/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
-          "id": "CO0010-s8",
+          "id": "CO0010-s3",
+          "type": "youtube",
+          "title": "Introduction to Structures",
+          "hours": 0.1,
+          "src": "https://youtu.be/y_pdy7oJNS8?si=-JAhAtCqQAGCLRmn",
+          "equipment": "Intro video"
+        },
+        {
+          "id": "CO0010-s4",
           "type": "youtube",
           "title": "Understanding Bridge Loading",
           "hours": 0.1,
@@ -3927,7 +3889,7 @@
           "equipment": "Simple Suspension Bridge ST1111"
         },
         {
-          "id": "CO0010-s9",
+          "id": "CO0010-s5",
           "type": "document",
           "title": "All worksheets",
           "hours": 4,
@@ -3936,20 +3898,12 @@
           "v": "f0b700ec6d",
           "webUrl": "https://drive.google.com/file/d/1ghrRO0URJWborDqJk5mIXPkpiPPpIOII/view?usp=drivesdk",
           "equipment": "ST1111 - Simple Suspension Bridge"
-        },
-        {
-          "id": "CO0010-s10",
-          "type": "image",
-          "title": "Title card",
-          "hours": 0,
-          "src": "content/CO0010/undefined",
-          "missing": true
         }
       ],
       "categories": [],
       "_source": "auto",
       "courseType": "Course",
-      "structureHours": 6.4
+      "structureHours": 4.3
     }
   ]
 }
