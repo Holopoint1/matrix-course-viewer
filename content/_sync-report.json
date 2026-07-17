@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-17T13:21:45.622Z",
+  "generatedAt": "2026-07-17T13:26:08.829Z",
   "summary": {
     "courses": 13,
-    "screens": 336,
-    "displaying": 331,
+    "screens": 337,
+    "displaying": 332,
     "missing": 5,
     "autofixed": 29,
     "stale": 0,
@@ -425,7 +425,12 @@
     }
   ],
   "canonCollisions": [],
-  "removed": [],
+  "removed": [
+    {
+      "code": "CO0010",
+      "name": "TEMPLATE - definition.xlsx"
+    }
+  ],
   "drafts": [
     {
       "code": "CP1234",
