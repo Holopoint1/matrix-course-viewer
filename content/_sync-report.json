@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-17T14:16:41.867Z",
+  "generatedAt": "2026-07-17T14:19:02.124Z",
   "summary": {
     "courses": 13,
-    "screens": 338,
+    "screens": 339,
     "displaying": 333,
-    "missing": 5,
+    "missing": 6,
     "autofixed": 29,
     "stale": 0,
-    "unused": 44,
+    "unused": 45,
     "downloadFailed": 0,
     "collisions": 4,
     "collisionsAffecting": 0,
@@ -337,12 +337,22 @@
           "asked": "complete.html",
           "expectedIn": "CO0010",
           "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
+        },
+        {
+          "id": "CO0010-s9",
+          "title": "undefined",
+          "asked": "undefined.docx",
+          "expectedIn": "CO0010",
+          "reason": "No file with this name (or a hyphen/case/extension variant) is in the CO0010 folder yet. Add it to that Drive folder, or correct the name in the definition."
         }
       ],
       "autofixed": []
     }
   },
   "unusedMedia": {
+    "CO0010": [
+      "Author.docx"
+    ],
     "CO0005": [
       "CO0005-Assessment.docx",
       "CO0005-Author.docx",
