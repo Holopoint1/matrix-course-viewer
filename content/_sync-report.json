@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T14:26:41.234Z",
+  "generatedAt": "2026-07-23T10:20:52.740Z",
   "summary": {
     "courses": 13,
     "screens": 335,
@@ -320,9 +320,9 @@
       "welcome.html"
     ],
     "CO0005": [
+      "CO0005-Course delivery.htm",
       "CO0005-Assessment.docx",
       "CO0005-Author.docx",
-      "CO0005-Course delivery.htm",
       "CO0005-machine construction.htm",
       "CO0005-Homework2.htm",
       "CO0005-Homework1.htm",
