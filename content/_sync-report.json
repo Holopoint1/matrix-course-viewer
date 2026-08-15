@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-15T22:59:07.465Z",
+  "generatedAt": "2026-08-15T23:02:28.539Z",
   "summary": {
     "courses": 13,
     "screens": 335,
@@ -11,7 +11,7 @@
     "downloadFailed": 0,
     "collisions": 4,
     "collisionsAffecting": 0,
-    "drafts": 2,
+    "drafts": 1,
     "namingIssues": 0,
     "pruned": 0
   },
@@ -408,11 +408,6 @@
   "canonCollisions": [],
   "removed": [],
   "drafts": [
-    {
-      "code": "CO0005",
-      "title": "Electrical Machines",
-      "reason": "Its Google-Sheet definition couldn’t be read ({\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal Error\",\n    \"errors\": [\n      {\n        \"message\": \"Internal Error\",\n        \"domain\": \"global\",\n        \"reason\": \"internalError\"\n      }\n    ]\n  }\n}\n). Check it’s shared with the sync service account."
-    },
     {
       "code": "CP1234",
       "title": "Modern Electrical Machines",
