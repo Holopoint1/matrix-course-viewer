@@ -851,7 +851,7 @@
           "src": "content/CP2563/CP2563-Head.docx",
           "path": "/CP2563 - Introduction to microcontrollers/CP2563-Head.docx",
           "v": "492a62e4b7",
-          "webUrl": "https://docs.google.com/document/d/1Rc1SVKYGNu5NV1asgGz3Mav59oNFR6zP/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "webUrl": "https://docs.google.com/document/d/1Rc1SVKYGNu5NV1asgGz3Mav59oNFR6zP/edit?usp=drivesdk&rtpof=true&sd=true",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -862,7 +862,7 @@
           "src": "content/CP2563/CP2563-Cont.docx",
           "path": "/CP2563 - Introduction to microcontrollers/CP2563-Cont.docx",
           "v": "3c87d5fd4a",
-          "webUrl": "https://docs.google.com/document/d/1aA4RFCAax3urF5i1KpA7zrO5UVH8oiiJ/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "webUrl": "https://docs.google.com/document/d/1aA4RFCAax3urF5i1KpA7zrO5UVH8oiiJ/edit?usp=drivesdk&rtpof=true&sd=true",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1415,7 +1415,7 @@
           "src": "content/CP7244/CP7244-Head.docx",
           "path": "/CP7244 - Introduction to microcontrollers/CP7244-Head.docx",
           "v": "818c762dba",
-          "webUrl": "https://docs.google.com/document/d/1C_1SoF-6KplMHK7LcxzHO6UuLUJMUbN-/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "webUrl": "https://docs.google.com/document/d/1C_1SoF-6KplMHK7LcxzHO6UuLUJMUbN-/edit?usp=drivesdk&rtpof=true&sd=true",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -1426,7 +1426,7 @@
           "src": "content/CP7244/CP7244-Cont.docx",
           "path": "/CP7244 - Introduction to microcontrollers/CP7244-Cont.docx",
           "v": "4d5fa89fbe",
-          "webUrl": "https://docs.google.com/document/d/12qjD3sLHpw2cpoc7PyZiGvez6x0eye_f/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true",
+          "webUrl": "https://docs.google.com/document/d/12qjD3sLHpw2cpoc7PyZiGvez6x0eye_f/edit?usp=drivesdk&rtpof=true&sd=true",
           "equipment": "Flowcode / E-blocks3"
         },
         {
@@ -3034,7 +3034,7 @@
           "src": "content/CO0005/CO0005-syllabus.xlsx",
           "path": "/CO0005-Electrical Machines/media/CO0005-Syllabus.xlsx",
           "v": "2fcf089281",
-          "webUrl": "https://docs.google.com/spreadsheets/d/12I22zpwsZXepuu9--9pbMNdwUOcgnnyL/edit?usp=drivesdk&rtpof=true&sd=true"
+          "webUrl": "https://docs.google.com/spreadsheets/d/12I22zpwsZXepuu9--9pbMNdwUOcgnnyL/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
           "id": "CO0005-s6",
@@ -3054,7 +3054,7 @@
           "src": "content/CO0005/CO0005-SOW.xlsx",
           "path": "/CO0005-Electrical Machines/media/CO0005-SOW.xlsx",
           "v": "850d650ecb",
-          "webUrl": "https://docs.google.com/spreadsheets/d/1c4o_x_UBcfBNxMaN6qosx56etPkv1wIv/edit?usp=drivesdk&rtpof=true&sd=true"
+          "webUrl": "https://docs.google.com/spreadsheets/d/1c4o_x_UBcfBNxMaN6qosx56etPkv1wIv/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
           "id": "CO0005-s8",
@@ -3105,7 +3105,7 @@
           "src": "content/CO0005/CO0005-electromagnetism_20_slides.pptx",
           "path": "/CO0005-Electrical Machines/media/CO0005-electromagnetism_20_slides.pptx",
           "v": "1b8a0c9dfd",
-          "webUrl": "https://docs.google.com/presentation/d/1qBMCLIKoHCXDeZ8l66LBfwawFHmqTkir/edit?usp=drivesdk&rtpof=true&sd=true"
+          "webUrl": "https://docs.google.com/presentation/d/1qBMCLIKoHCXDeZ8l66LBfwawFHmqTkir/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
           "id": "CO0005-s13",
@@ -3155,7 +3155,7 @@
           "src": "content/CO0005/CO0005-DC_Electrical_Machines_20_Slides.pptx",
           "path": "/CO0005-Electrical Machines/media/CO0005-DC_Electrical_Machines_20_Slides.pptx",
           "v": "bf7ee21c68",
-          "webUrl": "https://docs.google.com/presentation/d/1p2OrRdN4f4vOO17YV2dwZSxhXSv9Vke3/edit?usp=drivesdk&rtpof=true&sd=true"
+          "webUrl": "https://docs.google.com/presentation/d/1p2OrRdN4f4vOO17YV2dwZSxhXSv9Vke3/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
           "id": "CO0005-s18",
@@ -3240,7 +3240,7 @@
           "src": "content/CO0005/CO0005-Shunt and Series.pptx",
           "path": "/CO0005-Electrical Machines/media/CO0005-Shunt and series.pptx",
           "v": "725edc118a",
-          "webUrl": "https://docs.google.com/presentation/d/10G0xE3diYU3s3sd-I6ijSgB-035mSSzi/edit?usp=drivesdk&rtpof=true&sd=true"
+          "webUrl": "https://docs.google.com/presentation/d/10G0xE3diYU3s3sd-I6ijSgB-035mSSzi/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
         },
         {
           "id": "CO0005-s26",
@@ -3870,7 +3870,7 @@
           "src": "content/CO0010/Author.docx",
           "path": "Author.docx",
           "v": "563f399a61",
-          "webUrl": "https://docs.google.com/document/d/1vjau28bRkXz_lynx8jFlc-G8PYHpRla9/edit?usp=drivesdk&ouid=104786057093529978023&rtpof=true&sd=true"
+          "webUrl": "https://docs.google.com/document/d/1vjau28bRkXz_lynx8jFlc-G8PYHpRla9/edit?usp=drivesdk&rtpof=true&sd=true"
         },
         {
           "id": "CO0010-s3",
