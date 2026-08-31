@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-31T17:37:37.725Z",
+  "generatedAt": "2026-08-31T21:17:31.840Z",
   "summary": {
     "courses": 13,
     "screens": 335,
@@ -11,13 +11,13 @@
     "downloadFailed": 0,
     "collisions": 4,
     "collisionsAffecting": 0,
-    "drafts": 1,
+    "drafts": 2,
     "namingIssues": 0,
     "pruned": 0
   },
   "courses": {
     "CP0507": {
-      "title": "Motors and microcontrollers",
+      "title": "Motors and Microcontrollers",
       "stale": [],
       "missing": [],
       "autofixed": [
@@ -412,6 +412,11 @@
       "code": "CP1234",
       "title": "Modern Electrical Machines",
       "reason": "No definition found. Add a Google Sheet (or an Excel file) named “CP1234 - definition” listing the screens, then sync again."
+    },
+    {
+      "code": "CP0507",
+      "title": "Motors and microcontrollers",
+      "reason": "Its Google-Sheet definition couldn’t be read ({\n  \"error\": {\n    \"code\": 500,\n    \"message\": \"Internal Error\",\n    \"errors\": [\n      {\n        \"message\": \"Internal Error\",\n        \"domain\": \"global\",\n        \"reason\": \"internalError\"\n      }\n    ]\n  }\n}\n). Check it’s shared with the sync service account."
     }
   ],
   "namingIssues": [],
