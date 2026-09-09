@@ -25,8 +25,8 @@
     "CO0002": {
       "title": "Introduction to Microcontrollers",
       "type": "Course",
-      "sheets": 45,
-      "hours": 99.7,
+      "sheets": 46,
+      "hours": 99.8,
       "keywords": [
         "microcontrollers",
         "introduction",
@@ -44,8 +44,8 @@
     "CO0003": {
       "title": "Digital Techniques for Aviation Technicians",
       "type": "Course",
-      "sheets": 32,
-      "hours": 44.5,
+      "sheets": 33,
+      "hours": 44.6,
       "keywords": [
         "aviation",
         "aircraft",
@@ -106,8 +106,8 @@
     "CP0507": {
       "title": "Motors and Microcontrollers",
       "type": "Worksheet pack",
-      "sheets": 7,
-      "hours": 10.6,
+      "sheets": 8,
+      "hours": 10,
       "keywords": [
         "motors",
         "DC motors",
@@ -133,8 +133,8 @@
     "CP1972": {
       "title": "Sensors and Microcontrollers",
       "type": "Worksheet pack",
-      "sheets": 13,
-      "hours": 22.6,
+      "sheets": 14,
+      "hours": 25,
       "keywords": [
         "sensors",
         "analog sensors",
@@ -170,8 +170,8 @@
     "CP4807": {
       "title": "Introduction to Microcontrollers",
       "type": "Worksheet pack",
-      "sheets": 12,
-      "hours": 17,
+      "sheets": 25,
+      "hours": 53,
       "keywords": [
         "introduction",
         "microcontrollers",

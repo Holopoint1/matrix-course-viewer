@@ -528,7 +528,7 @@
         "curriculum"
       ],
       "courseType": "Course",
-      "structureHours": 99.7
+      "structureHours": 99.8
     },
     {
       "id": "CP0507",
@@ -646,7 +646,7 @@
         "pack"
       ],
       "courseType": "Worksheet pack",
-      "structureHours": 10.6
+      "structureHours": 10
     },
     {
       "id": "CP1972",
@@ -830,7 +830,7 @@
         "pack"
       ],
       "courseType": "Worksheet pack",
-      "structureHours": 22.6
+      "structureHours": 25
     },
     {
       "id": "CP2563",
@@ -1394,7 +1394,7 @@
         "pack"
       ],
       "courseType": "Worksheet pack",
-      "structureHours": 17
+      "structureHours": 53
     },
     {
       "id": "CP7244",
@@ -2369,7 +2369,7 @@
         "embedded systems"
       ],
       "courseType": "Course",
-      "structureHours": 44.5
+      "structureHours": 44.6
     },
     {
       "id": "CO0004",
