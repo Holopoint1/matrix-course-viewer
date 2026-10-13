@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T07:21:33.835Z",
+  "generatedAt": "2026-10-13T07:41:34.674Z",
   "summary": {
     "courses": 13,
     "screens": 335,
@@ -7,7 +7,7 @@
     "missing": 2,
     "autofixed": 29,
     "stale": 0,
-    "unused": 46,
+    "unused": 47,
     "downloadFailed": 0,
     "collisions": 4,
     "collisionsAffecting": 0,
@@ -320,6 +320,7 @@
       "welcome.html"
     ],
     "CO0005": [
+      "CO0005 - content.docx",
       "CO0005-Course delivery.htm",
       "CO0005-Assessment.docx",
       "CO0005-Author.docx",
