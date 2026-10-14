@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T08:42:23.564Z",
+  "generatedAt": "2026-10-14T08:46:01.408Z",
   "summary": {
     "courses": 13,
     "screens": 335,
@@ -396,7 +396,7 @@
     {
       "code": "CO0001",
       "name": "CO0001 - content.docx",
-      "count": 3,
+      "count": 2,
       "used": false
     },
     {
