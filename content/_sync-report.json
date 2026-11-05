@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-11-05T10:30:52.568Z",
+  "generatedAt": "2026-11-05T10:40:57.651Z",
   "summary": {
-    "courses": 13,
-    "screens": 335,
-    "displaying": 333,
+    "courses": 15,
+    "screens": 337,
+    "displaying": 335,
     "missing": 2,
     "autofixed": 29,
     "stale": 0,
-    "unused": 49,
+    "unused": 47,
     "downloadFailed": 0,
     "collisions": 4,
     "collisionsAffecting": 0,
-    "drafts": 3,
+    "drafts": 1,
     "namingIssues": 0,
     "pruned": 0
   },
@@ -315,12 +315,6 @@
     }
   },
   "unusedMedia": {
-    "CO0007": [
-      "welcome.html"
-    ],
-    "CO0006": [
-      "welcome.html"
-    ],
     "CO0010": [
       "Welcome doc.docx",
       "welcome.html"
@@ -415,16 +409,6 @@
   "canonCollisions": [],
   "removed": [],
   "drafts": [
-    {
-      "code": "CO0007",
-      "title": "Locktronics CPD Course",
-      "reason": "Held back on purpose — its definition says Active: “no”. Set Active: yes (or remove that cell) to publish."
-    },
-    {
-      "code": "CO0006",
-      "title": "Sysblocks CPD Course",
-      "reason": "Held back on purpose — its definition says Active: “no”. Set Active: yes (or remove that cell) to publish."
-    },
     {
       "code": "CP1234",
       "title": "Modern Electrical Machines",

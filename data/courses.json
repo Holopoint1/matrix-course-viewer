@@ -3904,6 +3904,70 @@
       "_source": "auto",
       "courseType": "Course",
       "structureHours": 4.3
+    },
+    {
+      "id": "CO0007",
+      "code": "CO0007",
+      "kind": "course",
+      "title": "Locktronics CPD Course",
+      "shortDescription": "",
+      "estimatedHours": 0.3,
+      "certificate": {
+        "enabled": true,
+        "templateName": "Locktronics CPD Course"
+      },
+      "screens": [
+        {
+          "id": "CO0007-s1",
+          "type": "html",
+          "title": "Welcome",
+          "hours": 0.25,
+          "src": "content/CO0007/welcome.html",
+          "path": "welcome.html",
+          "v": "12a55d3b8f",
+          "webUrl": "https://drive.google.com/file/d/15I381G7__BtGgJa-TEoFCoxH_my3CjgX/view?usp=drivesdk",
+          "equipment": "Locktronics"
+        }
+      ],
+      "categories": [
+        "CPD",
+        "Locktronics"
+      ],
+      "_source": "auto",
+      "courseType": "Course",
+      "structureHours": 0.3
+    },
+    {
+      "id": "CO0006",
+      "code": "CO0006",
+      "kind": "course",
+      "title": "Sysblocks CPD Course",
+      "shortDescription": "",
+      "estimatedHours": 0.3,
+      "certificate": {
+        "enabled": true,
+        "templateName": "Sysblocks CPD Course"
+      },
+      "screens": [
+        {
+          "id": "CO0006-s1",
+          "type": "html",
+          "title": "Welcome",
+          "hours": 0.25,
+          "src": "content/CO0006/welcome.html",
+          "path": "welcome.html",
+          "v": "cc500f6548",
+          "webUrl": "https://drive.google.com/file/d/1t-WH65Dsb_P_981LCCyUN3PqmSYtICFd/view?usp=drivesdk",
+          "equipment": "Sysblocks"
+        }
+      ],
+      "categories": [
+        "CPD",
+        "Sysblocks"
+      ],
+      "_source": "auto",
+      "courseType": "Course",
+      "structureHours": 0.3
     }
   ]
 }
